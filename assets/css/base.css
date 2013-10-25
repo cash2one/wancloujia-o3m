@@ -1,0 +1,27 @@
+body {
+    padding-top: 50px;
+}
+
+.sidebar {
+    top: 58px;
+    padding: 10px 0px;
+    position: fixed;
+    width: 228px;
+    background-color: #F7F5FA;
+}
+
+.sidebar li > a {
+    padding: 5px 20px;
+}
+
+.sidebar li.active a {
+    font-weight: bold;
+}
+
+.sidebar li.active a:hover {
+    background: transparent;
+}
+
+.main {
+    margin: 8px 8px 0px 240px;
+}

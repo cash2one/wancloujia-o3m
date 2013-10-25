@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block main %}
+<div class='main'>
+<form method="get" class="form form-inline" role="form" action="{{ request.path }}">
+    <div class="form-group"><input type="text" class="form-control" name="q"/></div>
+    <button type="submit" class="btn btn-primary">搜索</button>
+</form>
+    {% if query %}
+        {% for result in page.object_list %}
+            <p>
+                <a href="{{ result.object.get_absolute_url }}">{{ result.object.title }}</a>
+            </p>
+        {% empty %}
+        <p>没有找到相关数据</p>
+        {% endfor %}
+        {% if page.has_previous or page.has_next %}
+        <div>
+            {% if page.has_previous %}<a href="?q={{ query }}&amp;page={{ page.previous_page_number }}">{% endif %}&laquo; Previous{% if page.has_previous %}</a>{% endif %}
+            |
+            {% if page.has_next %}<a href="?q={{ query }}&amp;page={{ page.next_page_number }}">{% endif %}Next &raquo;{% if page.has_next %}</a>{% endif %}
+        </div>
+        {% endif %}
+    {% else %}
+        {# Show some example queries to run, maybe query syntax, something else? #}
+    {% endif %}
+</div>
+{% endblock %}
+

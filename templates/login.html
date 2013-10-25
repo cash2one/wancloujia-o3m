@@ -1,0 +1,52 @@
+{% extends "scaffolding.html" %}
+
+{% block content %}
+<form class='form form-inline' role='form'>
+    <input type="hidden" name='next' value="{{ request.GET.next }}"/>
+    <div class="form-group">
+        <label class="sr-only" for="username">用户名</label>
+        <input type="text" class="form-control" id="username" placeholder="用户名">
+    </div>
+    <div class="form-group">
+        <label class="sr-only" for="password">密码</label>
+        <input type="password" class="form-control" id="password" placeholder="密码">
+    </div>
+    <button id='submit' type="submit" class="btn btn-primary" data-loading-text="登录...">登录</button>
+</form>
+
+{% endblock %}
+
+{% block js %}
+{{ block.super }}
+<script type="text/javascript">
+$(function(){
+    var $form = $(".form");
+    $form.submit(function(e) {
+        e.preventDefault();
+
+        var self = this;
+        var params = {
+            username: this.username.value,
+            password: this.password.value
+        };
+        var $submit = $("#submit");
+        $submit.button('loading')
+        Dajaxice.framework.login(function(result) {
+            $submit.button('reset')
+
+            if(result.ret_code != 0) {
+                toast('error', result.ret_msg);
+                return;
+            }
+
+            window.location = self.next.value ? self.next.value : window.location;
+        }, params, { 
+            error_callback: function() {
+                $submit.button('reset')
+                toast('error', '操作失败，请稍后重试');
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

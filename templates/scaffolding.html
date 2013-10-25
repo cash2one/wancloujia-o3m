@@ -1,0 +1,32 @@
+{% load dajaxice_templatetags %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+    {% block css %}
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/bootstrap.min.css" />
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/style.css" />
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/jquery.pnotify.default.css" />
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/jquery.pnotify.default.icons.css" />
+    {% endblock %}
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/html5shiv.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+    {% block content %}{% endblock %}
+    {% block js %}
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.pnotify.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/toast.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/underscore-min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
+    {% dajaxice_js_import %}
+    {% endblock %}
+</body>
+</html>
