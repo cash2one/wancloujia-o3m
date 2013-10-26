@@ -1,26 +1,43 @@
 {% extends "scaffolding.html" %}
 
+{% block css %}
+{{ block.super }}
+<link rel="stylesheet" href="{{ STATIC_URL }}css/login.css" />
+{% endblock %}
+
 {% block content %}
-<form class='form form-inline' role='form'>
-    <input type="hidden" name='next' value="{{ request.GET.next }}"/>
-    <div class="form-group">
-        <label class="sr-only" for="username">用户名</label>
-        <input type="text" class="form-control" id="username" placeholder="用户名">
+<div class="container">
+    <div class="logo-head">
+        <img src="{{ STATIC_URL }}img/suning.png" class="logo"/> 
+        <p class="pull-right">苏宁 - 豌豆荚手机助手管理后台</p>
     </div>
-    <div class="form-group">
-        <label class="sr-only" for="password">密码</label>
-        <input type="password" class="form-control" id="password" placeholder="密码">
-    </div>
-    <button id='submit' type="submit" class="btn btn-primary" data-loading-text="登录...">登录</button>
-</form>
+    <form class='form' role='form'>
+        <input type="hidden" name='next' value="{{ request.GET.next }}"/>
+        <div class="form-group">
+            <label class="sr-only" for="username">用户名</label>
+            <input type="text" class="form-control" id="username" name="username" placeholder="用户名">
+        </div>
+        <div class="form-group">
+            <label class="sr-only" for="password">密码</label>
+            <input type="password" class="form-control" id="password" name="password" placeholder="密码">
+        </div>
+        <div class="submit-control">
+            <input type="checkbox" id="remember_me" name="remember_me" />
+            <label for="remember_me">两周内自动登录</label>
+            <button id='submit' type="submit" class="pull-right btn btn-primary" data-loading-text="登录...">登录</button>
+        </div>
+    </form>
+</div>
 
 {% endblock %}
 
 {% block js %}
 {{ block.super }}
+<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.placeholder.js"></script>
 <script type="text/javascript">
 $(function(){
     var $form = $(".form");
+    $(".form-group input").placeholder();
     $form.submit(function(e) {
         e.preventDefault();
 
