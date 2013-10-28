@@ -127,12 +127,17 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.static",
     "django.contrib.messages.context_processors.messages")
 
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'auth_remember.backend.AuthRememberBackend'
+)
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'auth_remember.middleware.AuthRememberMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -148,7 +153,8 @@ TEMPLATE_DIRS = (
 )
 
 CRONJOBS = [
-    ('00 00 * * *', 'ad.cron.update_index')
+    ('00 00 * * *', 'ad.cron.update_index'),
+    ('00 00 * * *', 'framework.cron.clear_expired_token')
 ]
 
 INSTALLED_APPS = (
@@ -170,8 +176,12 @@ INSTALLED_APPS = (
     'django_select2',
 	'dajaxice',
     'haystack',
-    'django_crontab'
+    'django_crontab',
+    'auth_remember'
 )
+
+AUTH_REMEMBER_COOKIE_NAME = 'remember_token'
+AUTH_REMEMBER_COOKIE_AGE = 86400 * 2
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
