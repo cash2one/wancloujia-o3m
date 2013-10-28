@@ -7,6 +7,7 @@ var toast = function(type, text, callback) {
         stack: false,
         closer: false,
         sticker: false,
+        styling: 'bootstrap',
         before_open: function(pnotify) {
             pnotify.css({
                 "top": ($(window).height() / 2) - (pnotify.height() / 2), 
