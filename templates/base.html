@@ -1,4 +1,5 @@
 {% extends "scaffolding.html" %}
+{% load perm_filters %}
 {% block css %}
 {{ block.super }}
 <link rel="stylesheet" href="{{ STATIC_URL }}css/base.css" />
@@ -6,7 +7,7 @@
 {% block content %}
 
 {% block navbar %}
-<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+<div class="navbar navbar-fixed-top" role="navigation">
     <div class="navbar-header">
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
             <span class="sr-only">Toggle navigation</span>
@@ -14,32 +15,11 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="#">Brand</a>
+        <a class="navbar-brand" href="#">&nbsp;</a>
+        <p class="navbar-text">苏宁豌豆荚手机助手管理后台</p>
     </div>
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse navbar-ex1-collapse">
-        <ul class="nav navbar-nav">
-            <li class="active"><a href="#">Link</a></li>
-            <li><a href="#">Link</a></li>
-            <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
-                <ul class="dropdown-menu">
-                    <li><a href="#">Action</a></li>
-                    <li><a href="#">Another action</a></li>
-                    <li><a href="#">Something else here</a></li>
-                    <li><a href="#">Separated link</a></li>
-                    <li><a href="#">One more separated link</a></li>
-                </ul>
-            </li>
-        </ul>
-        <!--
-        <form class="navbar-form navbar-left" role="search">
-            <div class="form-group">
-                <input type="text" class="form-control" placeholder="Search">
-            </div>
-            <button type="submit" class="btn btn-default">Submit</button>
-        </form>
-        -->
         <ul class="nav navbar-nav navbar-right">
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -56,12 +36,51 @@
 {% endblock %}<!-- navbar -->
 
 {% block sidebar %}
-<div class="sidebar affix">
+<div id="sidebar" class="sidebar affix">
     <div class="bs-sidebar hidden-print" role="complementary">
         <ul class="nav bs-sidenav">
-            <li class="active"><a href="#glyphicons">Glyphicons</a></li>
-            <li><a href="#dropdowns">Dropdowns</a></li>
-            <li><a href="#btn-groups">Button groups</a></li>
+            <li class="active"><a href="/dashboard">
+                <span class="glyphicon glyphicon-dashboard"></span>&nbsp;&nbsp;控制中心
+            </a></li>
+            {% if request.user|is_not_employee or request.user|in_group:"ad" or request.user|in_group:"audit" %}
+            <li><a href="">
+                <span class="glyphicon glyphicon-facetime-video"></span>&nbsp;&nbsp;广告管理
+            </a></li>
+            {% endif %}
+            {% if request.user|is_not_employee or request.user|in_group:"app" or request.user|in_group:"audit" %}
+            <li><a href="">
+                <span class="glyphicon glyphicon-circle-arrow-down"></span>&nbsp;&nbsp;应用管理
+            </a></li>
+            {% endif %}
+            {% if request.user|is_not_employee or request.user|in_group:"subject" or request.user|in_group:"audit" %}
+            <li><a href="">
+                <span class="glyphicon glyphicon-tags"></span>&nbsp;&nbsp;应用专题管理
+            </a></li>
+            {% endif %}
+            <li><a href="">
+                <span class="glyphicon glyphicon-phone-alt"></span>&nbsp;&nbsp;反馈管理
+            </a></li>
+            {% if request.user|is_not_employee %}
+            <li>
+                <a class="accordin-toggle" data-toggle="collapse" data-parent="#accordin" href="#sub">
+                    <span class="glyphicon glyphicon-wrench"></span>&nbsp;&nbsp;系统管理
+                </a>
+                <ul id="sub" class="nav collapse in">
+                    <li><a href="">组织管理</a></li>
+                    <li><a href="">用户组管理</a></li>
+                    <li><a href="">用户管理</a></li>
+                    <li><a href="">版本管理</a></li>
+                    <li><a href="">操作日志</a></li>
+                </ul>
+            </li>
+            {% endif %}
+
+            <li><a href="">
+                <span class="glyphicon glyphicon-th"></span>&nbsp;&nbsp;数据统计
+            </a></li>
+            <li><a href="/mgr/account">
+                <span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;账号管理
+            </a></li>
         </ul>
     </div>
 </div>

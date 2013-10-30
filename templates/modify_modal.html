@@ -1,0 +1,34 @@
+{% extends "modal.html" %}
+
+{% block title %}修改密码{% endblock %}
+
+{% block body %}
+<form role="form" class="form-horizontal">
+    <div class="form-group">
+        <label class="col-lg-2 control-label">
+            <span class="required">*</span>{{ f.origin.label }}
+        </label>
+        <div class="col-lg-9"> {{ f.origin }} </div>
+    </div>
+    <div class="form-group">
+        <label class="col-lg-2 control-label">
+            <span class="required">*</span>{{ f.password.label }}
+        </label>
+        <div class="col-lg-9">
+            {{ f.password }}
+            <span class="help-block">{{ f.password.help_text }}</span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-lg-2 control-label">
+            <span class="required">*</span>{{ f.confirm.label }}
+        </label>
+        <div class="col-lg-9"> {{ f.confirm }} </div>
+    </div>
+</form>
+{% endblock %}
+
+{% block foot %}
+    <button type="button" id="save" class="btn btn-primary" data-loading-text='保存...'>保存</button>
+    <button type="button" id="cancel" class="btn btn-default" data-loading-text='取消' data-dismiss="modal">取消</button>
+{% endblock %}

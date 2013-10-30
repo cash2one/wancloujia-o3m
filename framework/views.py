@@ -10,15 +10,15 @@ logger = logging.getLogger(__name__)
 @require_GET
 def welcome(request):
     if request.user.is_authenticated():
-        return redirect("/index")
+        return redirect("/dashboard")
     else:
         return render(request, "login.html") 
 
 @login_required
 @require_GET
-def index(request):
-    logger.debug('index')
-    return render(request, "index.html")
+def dashboard(request):
+    logger.debug('dashboard')
+    return render(request, "dashboard.html")
 
 @login_required
 @require_GET
