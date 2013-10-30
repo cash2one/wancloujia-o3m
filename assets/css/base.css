@@ -2,26 +2,94 @@ body {
     padding-top: 50px;
 }
 
+.navbar {
+    min-height: 40px;
+}
+
+.navbar .navbar-brand {
+    background: url(../img/logo.png) no-repeat center;
+    min-width: 175px;
+}
+
+.navbar.navbar-fixed-top {
+    background: #007fce;
+}
+
+.navbar {
+    border-color: #007fce;
+}
+
+.navbar {
+    color: #ccc;
+}
+
+.navbar .nav > li > a {
+    color: #ccc;
+}
+
+.navbar .nav .open>li>a, .navbar .nav .open>li>a:hover, .navbar .nav .open>li>a:focus {
+    background: #007fce;
+}
+
+.navbar .nav>li>a, .navbar .nav>li>a:hover, .navbar .nav>li>a:focus {
+    background: #007fce;
+}
+
+.open>a:hover, .open>a:focus {
+    background: #007fce;
+}
+
 .sidebar {
     top: 58px;
     padding: 10px 0px;
     position: fixed;
     width: 228px;
-    background-color: #F7F5FA;
+    background-color: #f4f8fb;
 }
 
 .sidebar li > a {
     padding: 5px 20px;
+    color: #5a6166;
 }
 
-.sidebar li.active a {
-    font-weight: bold;
+.sidebar li > a:hover {
+    background: #dbe3e6;
+    color: #333;
 }
 
 .sidebar li.active a:hover {
     background: transparent;
 }
 
+.sidebar li > a:hover {
+    border-right: 1px solid #333;
+}
+
+.sidebar li.active a {
+    font-weight: bold;
+    color: #007fce;
+    border-right: 1px solid #007fce;
+}
+
+.sidebar .nav li.active a:hover {
+    cursor: default;
+}
+
+.nav .nav {
+    background: #edf2f5;
+}
+.sidebar .nav .nav > li {
+    font-size: 13px;
+}
+
+.sidebar .nav .nav a {
+    padding-left: 50px;
+}
+
 .main {
     margin: 8px 8px 0px 240px;
+}
+
+span.required {
+    color: #b20;
 }

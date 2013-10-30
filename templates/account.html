@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+{% block css %}
+{{ block.super }}
+<link rel="stylesheet" href="{{ STATIC_URL }}css/account.css" />
+{% endblock %}
+
+{% block main %}
+<div class="main">
+    <div class="panel panel-default">
+        <div class="panel-heading">基本信息</div>
+        <div class="panel-body">
+            <table class="table table-hover table-bordered">
+                <tbody>
+                    <tr><td class="prop">用户名</td><td>{{ account.username }}</td></tr>
+                    <tr><td class="prop">真实姓名</td><td>{{ account.realname|default:"-" }}</td></tr>
+                    <tr><td class="prop">座机</td><td>{{ account.tel|default:"-" }}</td></tr>
+                    <tr><td class="prop">手机</td><td>{{ account.phone|default:"-" }}</td></tr>
+                    <tr><td class="prop">邮箱</td><td>{{ account.email|default:"-" }}</td></tr>
+                    <tr>
+                        <td class="prop" style="height: 100px">简介</td>
+                        <td>
+                            {{ account.introduce|default:"这个家伙很懒，ta什么都没有留下..." }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="prop">操作</td>
+                        <td>
+                            <button id="trigger_btn" data-loading-text="修改密码..." 
+                                    class="btn btn-primary" data-toggle="modal" 
+                                    href="#modify-password">修改密码</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">账号信息</div>
+        <div class="panel-body">
+            <table class="table table-hover table-bordered">
+                <tbody>
+                    <tr>
+                        <td class="prop">账号类型</td>
+                        {% if account.is_supersuer %}
+                        <td>超级管理员</td>
+                        {% elif account.is_staff %}
+                        <td>后台管理员</td>
+                        {% else %}
+                        <td>普通账号</td>
+                        {% endif %}
+                    </tr>
+                    {% if not account.is_staff and not account.is_superuser %}
+                    <tr>
+                        <td class="prop">所属用户组</td><td></td>
+                    </tr>
+                    <tr><td class="prop">所属机构</td><td></td></tr>
+                    <tr><td class="prop">已授权权限列表</td><td></td></tr>
+                    {% endif %}
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>
+{% include 'modify_modal.html' with modal_id='modify-password' f=form %}
+{% endblock %}
+
+{% block js %}
+{{ block.super }}
+<script type="text/javascript" src="{{ STATIC_URL }}js/parsley.min.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/i18n/messages.zh_cn.js"></script>
+<script type="text/javascript">
+$(function() {
+    var $modal = $("#modify-password");
+    var $form = $("form", $modal);
+    var form = $form[0];
+    var $triggerBtn = $("#trigger_btn");
+    var $saveBtn = $("#save");
+    var $cancelBtn = $("#cancel");
+    var options = {
+        successClass: 'has-success',
+        errorClass: 'has-error',
+        validateIfUnchanged: true,
+        validators: {
+            twice: function(val) {
+                return form.password.value == val;
+            }
+        }, messages: {
+            twice: '两次输入的密码不相同'
+        }, errors: {
+            classHandler: function(el) {
+                return el.parents(".form-group");
+            }
+        }
+    };
+
+    $modal.on('shown.bs.modal', function() {
+        $(form.origin).focus();
+    });
+
+    $form.parsley(options);
+
+    function reset() {
+        $saveBtn.button('reset');
+        $triggerBtn.button('reset');
+        $cancelBtn.button('reset');
+    }
+
+    function loading() {
+        $saveBtn.button('loading');
+        $triggerBtn.button('loading');
+        $cancelBtn.button('loading');
+    }
+    
+    $saveBtn.click(function() {
+        if (!$form.parsley('validate')) {
+            return;
+        }
+
+        loading();
+        Dajaxice.mgr.modify_password(function(data) {
+            reset();
+
+            if (data.ret_code != 0) {
+                toast('error', data.ret_msg);
+                return;
+            }
+
+            toast('success', '修改密码成功！');
+            $modal.modal('hide');
+            $form.parsley('destroy');
+            form.origin.value = '';
+            form.password.value = '';
+            form.confirm.value = '';
+            $form.parsley(options);
+
+        }, { form: $form.serialize(true) }, {
+            error_callback: function() {
+                reset();
+                toast('error', '网路异常，请稍后重试');
+            }
+        });
+    });
+});
+</script>
+{% endblock %}
