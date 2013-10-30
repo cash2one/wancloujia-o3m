@@ -39,9 +39,16 @@
 <div id="sidebar" class="sidebar affix">
     <div class="bs-sidebar hidden-print" role="complementary">
         <ul class="nav bs-sidenav">
-            <li class="active"><a href="/dashboard">
+            {% if active_tab == "dashboard" %}
+            <li class="active"><a>
                 <span class="glyphicon glyphicon-dashboard"></span>&nbsp;&nbsp;控制中心
             </a></li>
+            {% else %}
+            <li><a href="/dashboard">
+                <span class="glyphicon glyphicon-dashboard"></span>&nbsp;&nbsp;控制中心
+             </a></li>
+            {% endif %}
+
             {% if request.user|is_not_employee or request.user|in_group:"ad" or request.user|in_group:"audit" %}
             <li><a href="">
                 <span class="glyphicon glyphicon-facetime-video"></span>&nbsp;&nbsp;广告管理
@@ -69,7 +76,6 @@
                     <li><a href="">组织管理</a></li>
                     <li><a href="">用户组管理</a></li>
                     <li><a href="">用户管理</a></li>
-                    <li><a href="">版本管理</a></li>
                     <li><a href="">操作日志</a></li>
                 </ul>
             </li>
@@ -78,9 +84,16 @@
             <li><a href="">
                 <span class="glyphicon glyphicon-th"></span>&nbsp;&nbsp;数据统计
             </a></li>
+
+            {% if active_tab == 'account' %}
+            <li class="active">
+                <a><span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;账号管理</a>
+            </li>
+            {% else %}
             <li><a href="/mgr/account">
-                <span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;账号管理
+                    <span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;账号管理
             </a></li>
+            {% endif %}
         </ul>
     </div>
 </div>
