@@ -18,7 +18,7 @@ def welcome(request):
 @require_GET
 def dashboard(request):
     logger.debug('dashboard')
-    return render(request, "dashboard.html")
+    return render(request, "dashboard.html", {"active_tab": "dashboard"})
 
 @login_required
 @require_GET

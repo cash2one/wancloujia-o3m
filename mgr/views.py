@@ -13,7 +13,8 @@ logger = logging.getLogger(__name__)
 def account(request):
     return render(request, "account.html", {
         "account": cast_staff(request.user), 
-        "form": ModifyPasswordForm()
+        "form": ModifyPasswordForm(),
+        "active_tab": "account"
     })
 
 @login_required
