@@ -1,0 +1,331 @@
+{% extends "base.html" %}
+{% load render_table from django_tables2 %}
+{% load django_select2_tags %}
+
+{% block css %}
+{{ block.super }}
+{% import_django_select2_css %}
+{% endblock %}
+
+{% block main %}
+<div class="main">
+    <div class="toolbar">
+        <div class="btn-group">
+            <a type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                新增用户<span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu" role="menu">
+                <li><a data-toggle="modal" href="#add-edit-employee">新增普通用户</a></li>
+                {% if request.user.is_superuser %}
+                <li><a data-toggle="modal" href="#add-edit-admin">新增管理员</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">用户列表</div>
+        <div class="panel-body">
+            {% render_table table "table_template.html" %}
+        </div>
+    </div>
+</div>
+
+{% include "employee_modal.html" with modal_id="add-edit-employee" f=employeeForm %}
+
+{% if request.user.is_superuser %}
+{% include "admin_modal.html" with modal_id="add-edit-admin" f=adminForm %}
+{% endif %}
+
+{% include "reset_password_modal.html" with modal_id="reset-password" f=resetPasswordForm %}
+{% include "delete_user_modal.html" with modal_id="delete-user" %}
+{% endblock %}
+
+{% block js %}
+{{ block.super }}
+{% import_django_select2_js %}
+<script type="text/javascript" src="{{ STATIC_URL }}js/parsley.min.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/i18n/messages.zh_cn.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/suning_helper.js"></script>
+<script type="text/javascript">
+var parsley_options = $.extend({}, parsley.bs_options, {
+    validators: {
+        phone: function(val) {
+            return /^\d{11}$/.test(val);
+        }
+    }, messages: {
+        phone: '请输入正确的手机号码'
+    }
+});
+
+$(function() {
+    var $modal = $("#delete-user");
+    var $saveBtn = $(".save", $modal);
+    var $cancelBtn = $(".cancel", $modal);
+
+    var user = null;
+    $("table").on("click", ".delete", function() {
+        user = $(this.parentNode).data();
+        $(".user-name", $modal).html(user.username);
+        $modal.modal('show');
+    });
+
+    function loading() {
+        $saveBtn.button('loading');
+        $cancelBtn.button('loading');
+    }
+
+    function reset() {
+        $saveBtn.button('reset');
+        $cancelBtn.button('reset');
+    }
+
+    $saveBtn.click(function() {
+        loading();
+        Dajaxice.mgr.delete_user(function(data) {
+            reset();
+            if(data.ret_code != 0) {
+                toast('error', data.ret_msg);
+                return;
+            }
+
+            toast('success', '删除成功');
+            suning.reload(2000);
+        }, {id: user.id}, {
+            error_callback: function() {
+                reset();
+                toast('error', NETWORK_ERROR_MSG);
+            }
+        });
+    });
+});
+
+$(function() {
+    $("select").select2();
+});
+
+$(function() {
+    function bind(form, user) {
+        form.id.value = user.id;
+        form.username.value = user.username;
+        form.realname.value = user.realname;
+        form.phone.value = user.phone;
+        form.email.value = user.email;
+        form.tel.value = user.tel;
+        form.introduce.value = user.introduce;
+        $("[name=organization]").val(user.organization).trigger('change');
+
+        if(user.type == "employee") {
+            $("[name=groups]").val(user.groups).trigger('change');
+        }
+    }
+    
+    $("table").on('click', '.edit', function() {
+        var user = $(this.parentNode).data();
+        var $modal = user.type == "admin" ? $("#add-edit-admin") : $("#add-edit-employee");
+        bind($modal.find("form")[0], user);
+        $modal.modal('show');
+    });
+});
+
+$(function() {
+    var $modal = $("#reset-password");
+    var $form = $("form", $modal);
+    var form = $form[0];
+
+    var options = $.extend({}, parsley.bs_options, {
+        validators: {
+            equal: function(val) {
+                return form.password.value == val;
+            }
+        }, messages: {
+            equal: '两次输入的密码不相同'
+        }
+    });
+
+    $modal.on('show.bs.modal', function() {
+        $form.parsley(options);
+    });
+
+    $modal.on('hide.bs.modal', function() {
+        $form.parsley('destroy');
+    });
+
+    $("table").on('click', '.pwd', function() {
+        var userid = $(this.parentNode).data("id");
+        form.id.value = userid;
+        $modal.modal('show');
+    });
+    
+    $cancelBtn = $(".cancel", $modal);
+    $saveBtn = $(".save", $modal);
+    $saveBtn.click(function() {
+        $form.submit();
+    });
+
+    function loading() {
+        $saveBtn.button('loading');
+        $cancelBtn.button('loading');
+    }
+
+    function reset() {
+        $saveBtn.button('reset');
+        $cancelBtn.button('reset');
+    }
+
+    $form.submit(function(e) {
+        e.preventDefault();
+        if (!$form.parsley('validate')) {
+            return;
+        }
+        loading();
+        Dajaxice.mgr.reset_password(function(data) {
+            reset();
+            if(data.ret_code != 0) {
+                toast('error', data.ret_msg);
+            } else {
+                toast('success', '修改密码成功');
+                suning.reload(2000);
+            }
+        }, {form: $form.serialize(true)}, {
+            error_callback: function() {
+                reset();
+                toast('error', NETWORK_ERROR_MSG);
+            }
+        });
+    });
+});
+
+$(function() {
+    var $modal = $("#add-edit-admin");
+    if($modal.length == 0) {
+        return;
+    }
+    
+    var $form = $modal.find("form");
+    var form = $form[0];
+    var $saveBtn = $(".save", $modal);
+    var $cancelBtn = $(".cancel", $modal);
+
+    
+    $modal.on('show.bs.modal', function() {
+        $form.parsley(parsley_options);
+    });
+
+    $modal.on('hide.bs.modal', function() {
+        form.id.value = null;
+        form.username.value = null;
+        form.realname.value = null;
+        form.phone.value = null;
+        form.email.value = null;
+        form.introduce.value = null;
+        $form.parsley('destroy');
+    });
+
+    $saveBtn.click(function() {
+        $form.submit();
+    });
+
+    function loading() {
+        $saveBtn.button('loading');
+        $cancelBtn.button('loading');
+    }
+
+    function reset() {
+        $saveBtn.button('reset');
+        $cancelBtn.button('reset');
+    }
+
+    $form.submit(function(e) {
+        e.preventDefault();
+        if(!$form.parsley('validate')) {
+            return;
+        }
+        
+        var func = Dajaxice.mgr.add_edit_admin;
+        loading();
+        func(function(data) {
+            reset();
+            if(data.ret_code != 0) {
+                toast('error', data.ret_msg);
+                return;
+            }
+
+            toast('success', form.id.value == "" ? '新增管理员成功' : '管理员信息修改成功');
+            setTimeout(function() {
+                window.location.reload();
+            }, 2000);
+        }, { form: $form.serialize(true) }, {
+            error_callback: function() {
+                reset();
+                toast('error', NETWORK_ERROR_MSG);
+            }
+        });
+    });
+});
+
+$(function() {
+    var $modal = $("#add-edit-employee");
+    var $form = $modal.find("form");
+    var form = $form[0];
+    var $saveBtn = $(".save", $modal);
+    var $cancelBtn = $(".cancel", $modal);
+
+    $modal.on('show.bs.modal', function() {
+        $form.parsley(parsley_options);
+    });
+
+    $modal.on('hide.bs.modal', function() {
+        form.id.value = null;
+        form.username.value = null;
+        form.realname.value = null;
+        form.phone.value = null;
+        form.email.value = null;
+        form.introduce.value = null;
+        $("[name=organization]", form).val(null).trigger('change');
+        $("[name=groups]", form).val(null).trigger('change');
+        $form.parsley('destroy');
+    });
+
+    $saveBtn.click(function() {
+        $form.submit();
+    });
+
+    function loading() {
+        $saveBtn.button('loading');
+        $cancelBtn.button('loading');
+    }
+
+    function reset() {
+        $saveBtn.button('reset');
+        $cancelBtn.button('reset');
+    }
+
+    $form.submit(function(e) {
+        e.preventDefault();
+        if(!$form.parsley('validate')) {
+            return;
+        }
+        
+        var func = Dajaxice.mgr.add_edit_employee
+        loading();
+        func(function(data) {
+            reset();
+            if(data.ret_code != 0) {
+                toast('error', data.ret_msg);
+                return;
+            }
+
+            toast('success', form.id.value == '' ? '添加用户成功' : '修改用户信息成功');
+            suning.reload(2000);
+        }, { form: $form.serialize(true) }, {
+            error_callback: function() {
+                reset();
+                toast('error', NETWORK_ERROR_MSG);
+            }
+        });
+    });
+});
+</script>
+{% endblock %}
+

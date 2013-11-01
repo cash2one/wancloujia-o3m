@@ -51,9 +51,14 @@
                     </tr>
                     {% if not account.is_staff and not account.is_superuser %}
                     <tr>
-                        <td class="prop">所属用户组</td><td></td>
+                        <td class="prop">所属用户组</td>
+                        <td>
+                            {% if not account.groups.all|length == 0 %}
+                                {{ account.groups.all }}
+                            {% endif %}
+                        </td>
                     </tr>
-                    <tr><td class="prop">所属机构</td><td></td></tr>
+                    <tr><td class="prop">所属机构</td><td>{{ account.organization.name }}</td></tr>
                     <tr><td class="prop">已授权权限列表</td><td></td></tr>
                     {% endif %}
                 </tbody>
@@ -69,6 +74,7 @@
 {{ block.super }}
 <script type="text/javascript" src="{{ STATIC_URL }}js/parsley.min.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/i18n/messages.zh_cn.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/suning_helper.js"></script>
 <script type="text/javascript">
 $(function() {
     var $modal = $("#modify-password");
@@ -77,28 +83,22 @@ $(function() {
     var $triggerBtn = $("#trigger_btn");
     var $saveBtn = $("#save");
     var $cancelBtn = $("#cancel");
-    var options = {
-        successClass: 'has-success',
-        errorClass: 'has-error',
-        validateIfUnchanged: true,
+
+    var options = $.extend({}, parsley.bs_options, {
         validators: {
-            twice: function(val) {
-                return form.password.value == val;
+            equal: function(val, name) {
+                return form[name].value == val;
             }
         }, messages: {
-            twice: '两次输入的密码不相同'
-        }, errors: {
-            classHandler: function(el) {
-                return el.parents(".form-group");
-            }
+            equal: '两次输入的密码不相同'
         }
-    };
+    });
+    $form.parsley(options);
 
     $modal.on('shown.bs.modal', function() {
         $(form.origin).focus();
     });
 
-    $form.parsley(options);
 
     function reset() {
         $saveBtn.button('reset');
@@ -137,7 +137,7 @@ $(function() {
         }, { form: $form.serialize(true) }, {
             error_callback: function() {
                 reset();
-                toast('error', '网路异常，请稍后重试');
+                toast('error', NETWORK_ERROR_MSG);
             }
         });
     });
