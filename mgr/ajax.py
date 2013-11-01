@@ -92,6 +92,7 @@ def add_edit_employee(request, form):
             return simplejson.dumps({'ret_code': 1000, 'ret_msg': u'用户名重名'})
         employee.set_password(Staff.DEFAULT_PASSWORD)
         employee.save()
+        f.save_m2m()
         return _ok_json
     else:
         id = form["id"]
@@ -99,6 +100,7 @@ def add_edit_employee(request, form):
             return simplejson.dumps({'ret_code': 1000, 'ret_msg': u'用户名重名'})
         employee.pk = id
         employee.save()
+        f.save_m2m()
         return _ok_json
 
 

@@ -116,7 +116,7 @@ $(function() {
         $("[name=organization]").val(user.organization).trigger('change');
 
         if(user.type == "employee") {
-            $("[name=groups]").val(user.groups).trigger('change');
+            $("[name=groups]").val(user.groups.split(",")).trigger('change');
         }
     }
     
