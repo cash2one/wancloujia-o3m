@@ -1,0 +1,37 @@
+{% load mgr_filters %}
+{% load organization_filters %}
+{% load perm_filters %}
+
+<div class="btn-group btn-group-sm" 
+    data-id="{{ record.id }}"
+    data-username="{{ record.username }}"
+    data-realname="{{ record.realname }}"
+    data-phone="{{ record.phone }}"
+    data-email="{{ record.email }}"
+    data-introduce="{{ record.introduce }}"
+    data-tel="{{ record.tel }}"
+
+    {% if record.is_staff %}
+    data-type="admin"
+    {% else %}
+    data-type="employee"
+    {% endif %}
+
+    {% if record|is_employee %}
+    data-organization="{{ record|get_organization_id }}"
+        {% if request.user|is_not_employee %}
+        data-groups="{{ record|get_groups }}"
+        {% endif %}
+    {% endif %}
+
+    >
+    <button type="button"  class="btn btn-default edit" title="编辑">
+        <span class="glyphicon glyphicon-edit"></span>
+    </button>
+    <button type="button"  class="btn btn-default pwd" title="修改密码">
+        <span class="glyphicon glyphicon-lock"></span>
+    </button>
+    <button type="button"  class="btn btn-danger delete" title="删除">
+        <span class="glyphicon glyphicon-trash"></span>
+    </button>
+</div>

@@ -1,0 +1,7 @@
+{% if record.is_superuser %}
+超级管理员
+{% elif record.is_staff %}
+后台管理员
+{% else %}
+普通账号
+{% endif %}

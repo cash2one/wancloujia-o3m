@@ -1,0 +1,33 @@
+{% extends "django_tables2/table.html" %}
+{% load django_tables2 %}
+{% load table_filters %}
+
+{% block pagination %}
+<ul class="pagination">
+    <li {% if not table.page.has_previous %}class="disabled"{% endif %}>
+        {% if table.page.has_previous %}
+        <a href="{% querystring table.prefixed_page_field=table.page.previous_page_number %}">
+            &laquo;
+        </a>
+        {% else %}
+        <a href="#">&laquo;</a>
+        {% endif %}
+    </li>
+
+    {% for p in table|get_pages %}
+    <li {% if p == table.page.number %}class='active'{% endif %}>
+        <a href="{% querystring table.prefixed_page_field=p %}">{{ p }}</a>
+    </li>
+    {% endfor %}
+
+    <li {% if not table.page.has_next %}class="disabled"{% endif %}>
+        {% if table.page.has_next %}
+        <a href="{% querystring table.prefixed_page_field=table.page.next_page_number %}">
+            &raquo;
+        </a>
+        {% else %}
+        <a href="#">&raquo;</a>
+        {% endif %}
+    </li>
+</ul>
+{% endblock pagination %}

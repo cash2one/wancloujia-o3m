@@ -6,8 +6,14 @@ from mgr.models import Employee
 register = template.Library()
 
 @register.filter
+def is_employee(user):
+    return not user.is_staff and not user.is_superuser
+
+
+@register.filter
 def is_not_employee(user):
-    return ContentType.objects.get_for_id(user.id) != ContentType.objects.get_for_model(Employee)
+    return not is_employee(user)
+
 
 @register.filter
 def in_group(user, name):

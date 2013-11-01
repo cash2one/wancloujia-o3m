@@ -39,43 +39,49 @@
 <div id="sidebar" class="sidebar affix">
     <div class="bs-sidebar hidden-print" role="complementary">
         <ul class="nav bs-sidenav">
-            {% if active_tab == "dashboard" %}
-            <li class="active"><a>
-                <span class="glyphicon glyphicon-dashboard"></span>&nbsp;&nbsp;控制中心
-            </a></li>
-            {% else %}
-            <li><a href="/dashboard">
-                <span class="glyphicon glyphicon-dashboard"></span>&nbsp;&nbsp;控制中心
-             </a></li>
-            {% endif %}
+            <li {% if request.nav.active_tab == "dashboard" %}class="active"{% endif %}>
+                <a href="/dashboard">
+                    <span class="glyphicon glyphicon-dashboard"></span>&nbsp;&nbsp;控制面板
+                </a>
+            </li>
 
-            {% if request.user|is_not_employee or request.user|in_group:"ad" or request.user|in_group:"audit" %}
+            {% if request.user|is_not_employee %}
             <li><a href="">
                 <span class="glyphicon glyphicon-facetime-video"></span>&nbsp;&nbsp;广告管理
             </a></li>
             {% endif %}
-            {% if request.user|is_not_employee or request.user|in_group:"app" or request.user|in_group:"audit" %}
+
+            {% if request.user|is_not_employee %}
             <li><a href="">
                 <span class="glyphicon glyphicon-circle-arrow-down"></span>&nbsp;&nbsp;应用管理
             </a></li>
             {% endif %}
-            {% if request.user|is_not_employee or request.user|in_group:"subject" or request.user|in_group:"audit" %}
+
+            {% if request.user|is_not_employee %}
             <li><a href="">
                 <span class="glyphicon glyphicon-tags"></span>&nbsp;&nbsp;应用专题管理
             </a></li>
             {% endif %}
+
+            {% if request.user|is_not_employee %}
             <li><a href="">
                 <span class="glyphicon glyphicon-phone-alt"></span>&nbsp;&nbsp;反馈管理
             </a></li>
+            {% endif %}
+
             {% if request.user|is_not_employee %}
-            <li>
+            <li {% if request.nav.active_tab == "system" %}class="active"{% endif %}>
                 <a class="accordin-toggle" data-toggle="collapse" data-parent="#accordin" href="#sub">
                     <span class="glyphicon glyphicon-wrench"></span>&nbsp;&nbsp;系统管理
                 </a>
                 <ul id="sub" class="nav collapse in">
-                    <li><a href="">组织管理</a></li>
+                    <li {% if request.nav.sub_active_tab == "organization" %}class="active"{% endif %}>
+                        <a href="/mgr/organization/">组织管理</a>
+                    </li>
                     <li><a href="">用户组管理</a></li>
-                    <li><a href="">用户管理</a></li>
+                    <li {% if request.nav.sub_active_tab == "user" %}class="active"{% endif %}>
+                        <a href="/mgr/user">用户管理</a>
+                    </li>
                     <li><a href="">操作日志</a></li>
                 </ul>
             </li>
@@ -85,15 +91,11 @@
                 <span class="glyphicon glyphicon-th"></span>&nbsp;&nbsp;数据统计
             </a></li>
 
-            {% if active_tab == 'account' %}
-            <li class="active">
-                <a><span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;账号管理</a>
-            </li>
-            {% else %}
-            <li><a href="/mgr/account">
+            <li {% if request.nav.active_tab == 'account' %}class="active"{% endif %}>
+                <a href="/mgr/account">
                     <span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;账号管理
-            </a></li>
-            {% endif %}
+                </a>
+            </li>
         </ul>
     </div>
 </div>

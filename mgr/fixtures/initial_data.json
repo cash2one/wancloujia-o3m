@@ -1,33 +1,17 @@
 [{
     "model": "auth.Group",
     "pk": 1,
-    "fields": { "name": "app" }
+    "fields": { "name": "应用组" }
 }, {
     "model": "auth.Group",
     "pk": 2,
-    "fields": { "name": "audits" }
+    "fields": { "name": "审核组" }
 }, {
     "model": "auth.Group",
     "pk": 3,
-    "fields": { "name": "subject" }
+    "fields": { "name": "专题组" }
 }, {
     "model": "auth.Group",
     "pk": 4,
-    "fields": { "name": "ad" }
-}, {
-    "model": "mgr.CustomGroup",
-    "pk": 1,
-    "fields": { "verbose_name": "应用组" }
-}, {
-    "model": "mgr.CustomGroup",
-    "pk": 2,
-    "fields": { "verbose_name": "审查组" }
-}, {
-    "model": "mgr.CustomGroup",
-    "pk": 3,
-    "fields": { "verbose_name": "专题组" }
-}, {
-    "model": "mgr.CustomGroup",
-    "pk": 4,
-    "fields": { "verbose_name": "广告组" }
+    "fields": { "name": "广告组" }
 }]
