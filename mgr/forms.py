@@ -1,6 +1,7 @@
 # encoding: utf-8
 import re
 from django import forms
+from django.contrib.auth.models import Group
 from django.core.validators import RegexValidator
 from parsley.decorators import parsleyfy
 from models import Staff, Employee, Organization, Administrator, Company, Store
@@ -92,4 +93,12 @@ class StoreForm(forms.ModelForm):
     class Meta:
         model = Store
         fields = ('company', 'name')
+
+
+@parsleyfy
+class GroupForm(forms.ModelForm):
+
+    class Meta:
+        model = Group
+        fields = ('name', 'permissions')
 

@@ -8,8 +8,8 @@ from django_tables2.config import RequestConfig
 
 from haystack.query import SearchQuerySet
 from mgr.models import cast_staff, Staff, Company, Store
-from mgr.forms import ModifyPasswordForm, ResetPasswordForm, EmployeeForm, AdminForm, CompanyForm, StoreForm
-from mgr.tables import StaffTable, CompanyTable, StoreTable
+from mgr.forms import *
+from mgr.tables import *
 from framework.decorators import active_tab
 
 _PAGE_SIZE = 10
@@ -43,6 +43,18 @@ def organization(request):
         "storeForm": storeForm,
         "storeTable": storeTable
     });
+
+
+@require_GET
+@login_required
+@active_tab("system", "group")
+def group(request):
+    groupTable = GroupTable(Group.objects.all())
+    groupForm = GroupForm()
+    return render(request, "group.html", {
+        'groupTable': groupTable,
+        'groupForm': groupForm
+    }); 
 
 
 @login_required

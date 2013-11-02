@@ -3,6 +3,10 @@ from django.db import models
 from django.contrib.auth.models import User, Group
 from django.contrib.contenttypes.models import ContentType
 
+_built_in_group_names = [u"应用组", u"审核组", u"专题组", u"广告组"]
+def is_group_built_in(group):
+    return group.name in _built_in_group_names
+
 
 class Staff(User):
     real_type =  models.ForeignKey(ContentType, editable=False)
