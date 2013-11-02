@@ -4,5 +4,5 @@ register = template.Library()
 
 @register.filter
 def get_groups(user):
-    return ','.join([g.id for g in user.groups.all()])
+    return ','.join([str(g.id) for g in user.groups.all()])
     
