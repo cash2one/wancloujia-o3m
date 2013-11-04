@@ -1,5 +1,10 @@
 *.py[cod]
 *.sw*
+#Visual Studio project files
+*.sln
+*.suo
+*.pyproj
+*.pyproj.user
 
 suning/whoosh_index/*
 static/*
