@@ -1,5 +1,9 @@
 *.py[cod]
+data_backup.json
+
+#vim temp files
 *.sw*
+
 #Visual Studio project files
 *.sln
 *.suo
