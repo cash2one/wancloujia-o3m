@@ -134,7 +134,8 @@ def can_view_staff(user):
 def user(request):
     organizations = Organization.objects.all()
     if request.user.is_superuser:
-        query_set = Staff.objects.all()
+        #fixme 支持对root用户查看／编辑功能
+        query_set = Staff.objects.exclude(is_superuser=True)
     elif request.user.is_staff:
         query_set = Employee.objects.all()
     else:

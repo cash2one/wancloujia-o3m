@@ -65,14 +65,14 @@ def add_edit_admin(request, form):
 
     admin = f.save(commit=False)
     if form["id"] == '':
-        if Administrator.objects.filter(username=admin.username).exists():
+        if User.objects.filter(username=admin.username).exists():
             return simplejson.dumps({'ret_code': 1000, 'ret_msg': u'用户名重名'})
         admin.set_password(Staff.DEFAULT_PASSWORD)
         admin.save()
         return _ok_json
     else:
         id = form["id"]
-        if Administrator.objects.exclude(pk=id).filter(username=admin.username).exists():
+        if User.objects.exclude(pk=id).filter(username=admin.username).exists():
             return simplejson.dumps({'ret_code': 1000, 'ret_msg': u'用户名重名'})
         admin.pk = id 
         #fixme
@@ -92,7 +92,7 @@ def add_edit_employee(request, form):
 
     employee = f.save(commit=False)
     if form["id"] == '':
-        if Employee.objects.filter(username=employee.username).exists():
+        if User.objects.filter(username=employee.username).exists():
             return simplejson.dumps({'ret_code': 1000, 'ret_msg': u'用户名重名'})
         employee.set_password(Staff.DEFAULT_PASSWORD)
         employee.save()
@@ -100,7 +100,7 @@ def add_edit_employee(request, form):
         return _ok_json
     else:
         id = form["id"]
-        if Employee.objects.exclude(pk=id).filter(username=employee.username).exists():
+        if User.objects.exclude(pk=id).filter(username=employee.username).exists():
             return simplejson.dumps({'ret_code': 1000, 'ret_msg': u'用户名重名'})
         employee.pk = id
         #fixme
