@@ -13,12 +13,20 @@
 <div class="main">
     <div class="toolbar">
         <div class="btn-group">
-            <a type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+            <a type="button" 
+                {% if not request.user|can_add_organization %}
+                disabled='disabled'
+                {% endif %}
+                class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
                 新增组织<span class="caret"></span>
             </a>
             <ul class="dropdown-menu" role="menu">
+                {% if request.user.is_superuser or request.user.is_staff %}
                 <li><a data-toggle="modal" href="#add-edit-company">新增公司</a></li>
+                {% endif %}
+                {% if request.user.is_superuser or request.user.is_staff or perms.mgr.add_organization %}
                 <li><a data-toggle="modal" href="#add-edit-store">新增门店</a></li>
+                {% endif %}
             </ul>
         </div>
     </div>

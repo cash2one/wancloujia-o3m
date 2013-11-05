@@ -1,10 +1,11 @@
-{% load mgr_filters %}
+{% load organization_filters %}
+{% load qs_tags %}
 
 <div class="btn-group btn-group-sm" 
     {% if not record|is_group_built_in %}
     data-id="{{ record.pk }}" 
     data-name="{{ record.name }}" 
-    data-permissions="{{ record.permissions.all }}"
+    data-permissions='{% qs_attr record.permissions.all "pk" %}'
     {% endif %}
     >
     <button type="button"  

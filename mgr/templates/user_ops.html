@@ -1,6 +1,6 @@
-{% load mgr_filters %}
 {% load organization_filters %}
 {% load perm_filters %}
+{% load qs_tags %}
 
 <div class="btn-group btn-group-sm" 
     data-id="{{ record.id }}"
@@ -19,19 +19,35 @@
 
     {% if record|is_employee %}
     data-organization="{{ record|get_organization_id }}"
-        {% if request.user|is_not_employee %}
-        data-groups="{{ record|get_groups }}"
-        {% endif %}
+    data-groups='{% qs_attr record.groups.all "pk" %}'
+    data-permissions='{% qs_attr record.user_permissions.all "pk" %}'
     {% endif %}
-
     >
-    <button type="button"  class="btn btn-default edit" title="编辑">
+
+    <button type="button"  
+            {% if request.user|is_employee and not perms.mgr.change_staff %}
+            disabled='disabled'
+            {% endif %}
+            class="btn btn-default edit" title="编辑">
         <span class="glyphicon glyphicon-edit"></span>
     </button>
-    <button type="button"  class="btn btn-default pwd" title="修改密码">
+
+    <button type="button"  
+            {% if request.user|is_employee and not perms.mgr.change_staff %}
+            disabled='disabled'
+            {% endif %}
+            class="btn btn-default pwd" title="修改密码">
         <span class="glyphicon glyphicon-lock"></span>
     </button>
-    <button type="button"  class="btn btn-danger delete" title="删除">
+
+    <button type="button"  
+            {% if request.user|is_employee and not perms.mgr.delete_staff %}
+            disabled='disabled'
+            {% endif %}
+            {% if request.user.pk == record.pk %}
+            disabled='disabled'
+            {% endif %}
+            class="btn btn-danger delete" title="删除">
         <span class="glyphicon glyphicon-trash"></span>
     </button>
 </div>

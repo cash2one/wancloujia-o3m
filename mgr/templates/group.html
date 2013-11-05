@@ -50,9 +50,9 @@ $(function() {
 
     $("table").on("click", ".edit", function() {
         var group = $(this.parentNode).data();
-        form.id.value = company.id;
-        form.name.value = company.name;
-        // TODO add permissions
+        form.id.value = group.id;
+        form.name.value = group.name;
+        $(form.permissions).val(group.permissions.toString().split(',')).trigger('change');
         $modal.modal('show');
     });
 
@@ -108,7 +108,7 @@ $(function() {
     var $modal = $("#delete-group");
     $("table").on('click', '.delete', function() {
         group = $(this.parentNode).data();
-        $('.gropu-name', $modal).html(group.name);
+        $('.group-name', $modal).html(group.name);
         $modal.modal('show');
     });
 

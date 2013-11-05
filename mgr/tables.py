@@ -2,7 +2,7 @@
 import logging
 from django.contrib.auth.models import Group, User
 import django_tables2 as tables
-from models import cast_staff, Staff, Company, Store, is_group_built_in
+from models import *
 
 class StaffTable(tables.Table):
     groups = tables.Column(verbose_name=u"所属用户组", empty_values=())
@@ -74,11 +74,13 @@ class GroupTable(tables.Table):
 
     def render_permissions(self, record):
         permissions = record.permissions.all()
-        return ', '.join([p for p in permissions]) if len(permissions) > 0 else u'—'
+        if len(permissions) == 0:
+            return u'—'
+        return ', '.join([get_permission_name(p) for p in permissions])
     
     class Meta:
         model = Group
-        sortable = False
+        orderable = False
         attrs = {'class': 'table table-hover table-bordered companies'}
         fields = ('name', 'permissions')
         page_field = 'p'

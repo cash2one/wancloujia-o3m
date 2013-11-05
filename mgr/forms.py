@@ -1,10 +1,11 @@
 # encoding: utf-8
 import re
 from django import forms
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import Group, Permission
+from django.contrib.contenttypes.models import ContentType
 from django.core.validators import RegexValidator
 from parsley.decorators import parsleyfy
-from models import Staff, Employee, Organization, Administrator, Company, Store
+from models import *
 
 @parsleyfy
 class ModifyPasswordForm(forms.Form):
@@ -44,6 +45,7 @@ class TextInput(forms.TextInput):
 
 @parsleyfy
 class EmployeeForm(forms.ModelForm):
+    user_permissions = forms.MultipleChoiceField(label=u'授权权限', choices=get_available_permissions(), required=False)
 
     def clean_phone(self):
         phone = self.cleaned_data["phone"]
@@ -54,12 +56,10 @@ class EmployeeForm(forms.ModelForm):
     class Meta:
         model = Employee
         widgets = {
-            'introduce': forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
-            'user_permissions': forms.Textarea(attrs={'class': 'form-control', 'rows': 4})
+            'introduce': forms.Textarea(attrs={'class': 'form-control', 'rows': 4})
         }
         fields = ('id', 'username', 'realname', 'organization', 'phone', 'email', 
                   'tel', 'introduce', 'groups', 'user_permissions')
-
 
 @parsleyfy
 class AdminForm(forms.ModelForm):
@@ -97,8 +97,10 @@ class StoreForm(forms.ModelForm):
 
 @parsleyfy
 class GroupForm(forms.ModelForm):
+    permissions = forms.MultipleChoiceField(label=u'授权权限', choices=get_available_permissions())
+    name = forms.CharField(label=u'用户组名', max_length=80)
 
     class Meta:
         model = Group
-        fields = ('name', 'permissions')
+        fields = ('permissions',)
 

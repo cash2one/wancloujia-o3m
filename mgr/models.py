@@ -1,11 +1,15 @@
 # coding: utf-8
 from django.db import models
-from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import User, Group, Permission
 from django.contrib.contenttypes.models import ContentType
 
-_built_in_group_names = [u"应用组", u"审核组", u"专题组", u"广告组"]
+
+def get_built_in_group_names():
+    return [u"应用组", u"审核组", u"管理组", u"广告组"]
+
+
 def is_group_built_in(group):
-    return group.name in _built_in_group_names
+    return group.name in get_built_in_group_names()
 
 
 class Staff(User):
@@ -18,7 +22,7 @@ class Staff(User):
     DEFAULT_PASSWORD = 'suning'
 
     def cast(self):
-        return self.real_type.get_object_for_this_type(pk=self.id)
+        return self.real_type.get_object_for_this_type(pk=self.pk)
 
     def save(self, *args, **kwargs):
         if not self.id:
@@ -31,6 +35,9 @@ class Staff(User):
     def __unicode__(self):
         return self.username
 
+    def in_store(self):
+        raise NotImplementedError()
+
 
 def cast_staff(user):
     return Staff.objects.get(pk=user.id).cast()
@@ -38,6 +45,18 @@ def cast_staff(user):
 
 class Organization(models.Model):
     name = models.CharField(verbose_name=u'名称', max_length=200)
+    real_type = models.ForeignKey(ContentType, editable=False)
+
+    def save(self, *args, **kwargs):
+        if not self.id:
+            self.real_type = self._get_real_type()
+        super(Organization, self).save(*args, **kwargs)
+
+    def cast(self):
+        return self.real_type.get_object_for_this_type(pk=self.pk)
+
+    def _get_real_type(self):
+        return ContentType.objects.get_for_model(type(self))
 
     def __unicode__(self):
         return self.name
@@ -68,6 +87,9 @@ class Employee(Staff):
     def __unicode__(self):
         return self.username
 
+    def in_store(self):
+        return self.organization.real_type == ContentType.objects.get_for_model(Store)
+
 
 class Administrator(Staff):
 
@@ -81,6 +103,38 @@ class Administrator(Staff):
 
 class SuperUser(Staff):
     
+    def save(self, *args, **kwargs):
+        self.is_superuser = True
+        super(SuperUser, self).save(args, kwargs)
+
     def __unicode__(self):
         return self.username
+
+
+_available_permissions = None
+
+
+def get_available_permissions():
+    global _available_permissions
+    if _available_permissions is not None:
+        return _available_permissions
+
+    _organization_type = ContentType.objects.get_for_model(Organization)
+    _group_type = ContentType.objects.get_for_model(Group)
+    _staff_type = ContentType.objects.get_for_model(Staff)
+    _available_permissions = (
+        (Permission.objects.get(content_type=_organization_type, codename="add_organization").pk, u'添加组织'),
+        (Permission.objects.get(content_type=_organization_type, codename="change_organization").pk, u'编辑组织'),
+        (Permission.objects.get(content_type=_organization_type, codename="delete_organization").pk, u'删除组织'),
+        (Permission.objects.get(content_type=_staff_type, codename="add_staff").pk, u'添加用户'),
+        (Permission.objects.get(content_type=_staff_type, codename="change_staff").pk, u'编辑用户'),
+        (Permission.objects.get(content_type=_staff_type, codename="delete_staff").pk, u'删除用户')
+    )
+    return _available_permissions
+
+
+def get_permission_name(permission):
+    for p in get_available_permissions():
+        if p[0] == permission.pk: return p[1]
+    return None
 

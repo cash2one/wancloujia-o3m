@@ -1,4 +1,7 @@
 {% extends "base.html" %}
+{% load qs_tags %}
+{% load perm_filters %}
+
 {% block css %}
 {{ block.super }}
 <link rel="stylesheet" href="{{ STATIC_URL }}css/account.css" />
@@ -52,14 +55,13 @@
                     {% if not account.is_staff and not account.is_superuser %}
                     <tr>
                         <td class="prop">所属用户组</td>
-                        <td>
-                            {% if not account.groups.all|length == 0 %}
-                                {{ account.groups.all }}
-                            {% endif %}
-                        </td>
+                        <td>{% qs_attr account.groups.all "name" ", " %}</td>
                     </tr>
                     <tr><td class="prop">所属机构</td><td>{{ account.organization.name }}</td></tr>
-                    <tr><td class="prop">已授权权限列表</td><td></td></tr>
+                    <tr>
+                        <td class="prop">已授权权限列表</td>
+                        <td>{{ request.user|get_permissions }}</td>
+                    </tr>
                     {% endif %}
                 </tbody>
             </table>

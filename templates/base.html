@@ -69,22 +69,33 @@
             </a></li>
             {% endif %}
 
-            {% if request.user|is_not_employee %}
+            {% if request.user|is_not_employee or perms.mgr %}
             <li {% if request.nav.active_tab == "system" %}class="active"{% endif %}>
                 <a class="accordin-toggle" data-toggle="collapse" data-parent="#accordin" href="#sub">
                     <span class="glyphicon glyphicon-wrench"></span>&nbsp;&nbsp;系统管理
                 </a>
                 <ul id="sub" class="nav collapse in">
+                    {% if request.user|can_view_organization %}
                     <li {% if request.nav.sub_active_tab == "organization" %}class="active"{% endif %}>
                         <a href="/mgr/organization/">组织管理</a>
                     </li>
+                    {% endif %}
+
+                    {% if request.user|is_not_employee %}
                     <li {% if request.nav.sub_active_tab == "group" %}class="active"{% endif %}>
                         <a href="/mgr/group/">用户组管理</a>
                     </li>
+                    {% endif %}
+
+                    {% if request.user|can_view_staff %}
                     <li {% if request.nav.sub_active_tab == "user" %}class="active"{% endif %}>
                         <a href="/mgr/user/">用户管理</a>
                     </li>
+                    {% endif %}
+
+                    {% if request.user|is_not_employee %}
                     <li><a href="">操作日志</a></li>
+                    {% endif %}
                 </ul>
             </li>
             {% endif %}
