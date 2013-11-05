@@ -67,12 +67,16 @@ def add_edit_admin(request, form):
     if form["id"] == '':
         if Administrator.objects.filter(username=admin.username).exists():
             return simplejson.dumps({'ret_code': 1000, 'ret_msg': u'用户名重名'})
+        admin.set_password(Staff.DEFAULT_PASSWORD)
         admin.save()
         return _ok_json
     else:
-        if Administrator.objects.exclude(pk=form["id"]).filter(username=admin.username).exists():
+        id = form["id"]
+        if Administrator.objects.exclude(pk=id).filter(username=admin.username).exists():
             return simplejson.dumps({'ret_code': 1000, 'ret_msg': u'用户名重名'})
-        admin.pk = form["id"]
+        admin.pk = id 
+        #fixme
+        admin.password = Administrator.objects.get(pk=id).password
         admin.save()
         return _ok_json
 
@@ -99,6 +103,8 @@ def add_edit_employee(request, form):
         if Employee.objects.exclude(pk=id).filter(username=employee.username).exists():
             return simplejson.dumps({'ret_code': 1000, 'ret_msg': u'用户名重名'})
         employee.pk = id
+        #fixme
+        employee.password = Employee.objects.get(pk=id).password
         employee.save()
         f.save_m2m()
         return _ok_json
@@ -162,5 +168,40 @@ def delete_organization(request, id):
 @dajaxice_register(method='POST')
 def delete_user(request, id):
     User.objects.get(pk=id).delete()
+    return _ok_json
+
+
+@dajaxice_register(method='POST')
+@preprocess_form
+def add_edit_group(request, form):
+    f = GroupForm(form)
+    if not f.is_valid():
+        logger.warn("%s: form is invalid" % __name__)
+        logger.warn(f.errors)
+        return _invalid_data_json
+
+    group = f.save(commit=False)
+    group.name = f.cleaned_data["name"]
+    if form["id"] == '':
+        if Group.objects.filter(name=group.name).exists():
+            logger.debug("name: " + group.name)
+            logger.debug("exists? " + str(Group.objects.filter(name=group.name).exists()))
+            logger.debug("groups: "  + ", ".join([g.name for g in Group.objects.filter(name=group.name)]))
+            return simplejson.dumps({'ret_code': 1000, 'ret_msg': u'用户组名已存在'})
+        group.save()    
+        f.save_m2m()
+        return _ok_json
+    else:
+        id = form["id"]
+        if Group.objects.exclude(pk=id).filter(name=group.name).exists():
+            return simplejson.dumps({'ret_code': 1000, 'ret_msg': u'用户组名已存在'})
+        group.pk = id;
+        group.save()
+        f.save_m2m()
+        return _ok_json
+
+@dajaxice_register(method='POST')
+def delete_group(request, id):
+    Group.objects.get(pk=id).delete()
     return _ok_json
 

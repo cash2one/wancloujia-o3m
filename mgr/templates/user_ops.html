@@ -1,0 +1,53 @@
+{% load organization_filters %}
+{% load perm_filters %}
+{% load qs_tags %}
+
+<div class="btn-group btn-group-sm" 
+    data-id="{{ record.id }}"
+    data-username="{{ record.username }}"
+    data-realname="{{ record.realname }}"
+    data-phone="{{ record.phone }}"
+    data-email="{{ record.email }}"
+    data-introduce="{{ record.introduce }}"
+    data-tel="{{ record.tel }}"
+
+    {% if record.is_staff %}
+    data-type="admin"
+    {% else %}
+    data-type="employee"
+    {% endif %}
+
+    {% if record|is_employee %}
+    data-organization="{{ record|get_organization_id }}"
+    data-groups='{% qs_attr record.groups.all "pk" %}'
+    data-permissions='{% qs_attr record.user_permissions.all "pk" %}'
+    {% endif %}
+    >
+
+    <button type="button"  
+            {% if request.user|is_employee and not perms.mgr.change_staff %}
+            disabled='disabled'
+            {% endif %}
+            class="btn btn-default edit" title="编辑">
+        <span class="glyphicon glyphicon-edit"></span>
+    </button>
+
+    <button type="button"  
+            {% if request.user|is_employee and not perms.mgr.change_staff %}
+            disabled='disabled'
+            {% endif %}
+            class="btn btn-default pwd" title="修改密码">
+        <span class="glyphicon glyphicon-lock"></span>
+    </button>
+
+    <button type="button"  
+            {% if request.user|is_employee and not perms.mgr.delete_staff %}
+            disabled='disabled'
+            {% endif %}
+            {% if request.user.pk == record.pk %}
+            disabled='disabled'
+            {% endif %}
+            class="btn btn-danger delete" title="删除">
+        <span class="glyphicon glyphicon-trash"></span>
+    </button>
+</div>

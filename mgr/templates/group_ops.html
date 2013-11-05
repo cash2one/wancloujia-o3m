@@ -1,0 +1,22 @@
+{% load organization_filters %}
+{% load qs_tags %}
+
+<div class="btn-group btn-group-sm" 
+    {% if not record|is_group_built_in %}
+    data-id="{{ record.pk }}" 
+    data-name="{{ record.name }}" 
+    data-permissions='{% qs_attr record.permissions.all "pk" %}'
+    {% endif %}
+    >
+    <button type="button"  
+            {% if record|is_group_built_in %}disabled='disabled'{% endif %}
+            class="btn btn-default edit" title="编辑">
+        <span class="glyphicon glyphicon-edit"></span>
+    </button>
+    <button type="button" 
+            {% if record|is_group_built_in %}disabled='disabled'{% endif %}
+            class="btn btn-danger delete" title="删除">
+        <span class="glyphicon glyphicon-trash"></span>
+    </button>
+</div>
+

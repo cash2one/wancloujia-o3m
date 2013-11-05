@@ -1,0 +1,23 @@
+{% load perm_filters %}
+
+<div class="btn-group btn-group-sm" 
+    data-id="{{ record.pk }}" 
+    data-code="{{ record.code }}" 
+    data-name="{{ record.name}}">
+
+    <button type="button"  
+            {% if not request.user|can_change_company %}
+            disabled='disabled'
+            {% endif %}
+            class="btn btn-default edit" title="编辑">
+        <span class="glyphicon glyphicon-edit"></span>
+    </button>
+    <button type="button"  
+            {% if request.user|is_employee %}
+            disabled='disabled'
+            {% endif %}
+            class="btn btn-danger delete" title="删除">
+        <span class="glyphicon glyphicon-trash"></span>
+    </button>
+</div>
+
