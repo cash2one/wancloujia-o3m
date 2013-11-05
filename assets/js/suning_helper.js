@@ -17,6 +17,9 @@ window.parsley.bs_options = options;
 window.NETWORK_ERROR_MSG = '网路异常，请稍后重试';
 
 (function() {
+var RET_OK = 0;
+var RET_NOT_LOGIN = 1001;
+
 var suning = {
     reload: function(delay) {
         if (!delay) {
@@ -27,9 +30,34 @@ var suning = {
         setTimeout(function() {
             window.location.reload();
         }, delay);
+    },
+    
+    decorators: {
+        login_check: function(func) {
+            return function(data) {
+               if(data.ret_code == RET_NOT_LOGIN) {
+                   toast('error', '会话可能已过期，请重新登录');
+                   return;
+               }
+
+               func(data);
+            }
+        },
+
+        error_check: function(func) {
+            return function(data) {
+                if(data.ret_code != RET_OK) {
+                    toast('error', data.ret_msg);
+                    return;
+                }
+
+                func(data);
+            }
+        }
     }
 };
 
 window.suning = suning;
 })();
+
 

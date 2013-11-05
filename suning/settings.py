@@ -14,7 +14,7 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'suning_yangchen',                      # Or path to database file if using sqlite3.
+        'NAME': 'suning_test',                      # Or path to database file if using sqlite3.
         # The following settings are not used with sqlite3:
         'USER': 'root',
         'PASSWORD': 'nameLR9969',
@@ -98,6 +98,7 @@ STATICFILES_DIRS = (
 )
 
 LOGIN_URL = '/welcome'
+PERMISSION_DENIED_URL = '/permission_denied'
 
 # List of finder classes that know how to find static files in
 # various locations.

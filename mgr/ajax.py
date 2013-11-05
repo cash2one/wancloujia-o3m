@@ -1,10 +1,12 @@
 # coding: utf-8
 import logging
+
 from django.utils import simplejson
 from django.contrib.auth.models import User
 from dajaxice.decorators import dajaxice_register
 from dajaxice.utils import deserialize_form
-from framework.decorators import request_delay
+
+from framework.decorators import request_delay, check_login, response_error
 from forms import *
 from models import *
 from decorators import preprocess_form
@@ -15,13 +17,13 @@ _invalid_data_msg = u'数据出错，请检查'
 _invalid_data_json = simplejson.dumps({'ret_code': 1000, 'ret_msg': _invalid_data_msg})
 _ok_json = simplejson.dumps({'ret_code': 0})
 
-@dajaxice_register(method='POST')
-#@request_delay(3)
-def modify_password(request, form):
-    form = deserialize_form(form)
-    dict = map(lambda k: (k, form[k]), form)
-    logger.debug("form: " + str(dict))
 
+#@request_delay(3)
+@dajaxice_register(method='POST')
+#@response_error
+@check_login
+@preprocess_form
+def modify_password(request, form):
     f = ModifyPasswordForm(form)
     if not f.is_valid():
         logger.debug('modify_password: form is invalid')
@@ -39,7 +41,9 @@ def modify_password(request, form):
     user.save()
     return _ok_json
 
+
 @dajaxice_register(method='POST')
+@check_login
 @preprocess_form
 def reset_password(request, form):
     f = ResetPasswordForm(form)
@@ -55,6 +59,7 @@ def reset_password(request, form):
 
 
 @dajaxice_register(method='POST')
+@check_login
 @preprocess_form
 def add_edit_admin(request, form):
     f = AdminForm(form)
@@ -82,6 +87,7 @@ def add_edit_admin(request, form):
 
 
 @dajaxice_register(method='POST')
+@check_login
 @preprocess_form
 def add_edit_employee(request, form):
     f = EmployeeForm(form)
@@ -111,6 +117,7 @@ def add_edit_employee(request, form):
 
 
 @dajaxice_register(method='POST')
+@check_login
 @preprocess_form
 def add_edit_company(request, form):
     f = CompanyForm(form)
@@ -135,7 +142,9 @@ def add_edit_company(request, form):
         company.save()
         return _ok_json
 
+
 @dajaxice_register(method='POST')
+@check_login
 @preprocess_form
 def add_edit_store(request, form):
     f = StoreForm(form)
@@ -160,18 +169,21 @@ def add_edit_store(request, form):
         return _ok_json
 
 @dajaxice_register(method='POST')
+@check_login
 def delete_organization(request, id):
     Organization.objects.get(pk=id).delete()
     return _ok_json
 
 
 @dajaxice_register(method='POST')
+@check_login
 def delete_user(request, id):
     User.objects.get(pk=id).delete()
     return _ok_json
 
 
 @dajaxice_register(method='POST')
+@check_login
 @preprocess_form
 def add_edit_group(request, form):
     f = GroupForm(form)
@@ -200,7 +212,9 @@ def add_edit_group(request, form):
         f.save_m2m()
         return _ok_json
 
+
 @dajaxice_register(method='POST')
+@check_login
 def delete_group(request, id):
     Group.objects.get(pk=id).delete()
     return _ok_json
