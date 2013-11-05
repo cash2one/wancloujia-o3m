@@ -1,12 +1,15 @@
 import logging
 
 from django.contrib import auth
+from django.utils import simplejson
 from django.shortcuts import render, redirect
+from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_GET, require_POST
 from decorators import active_tab
 
 logger = logging.getLogger(__name__)
+
 
 @require_GET
 def welcome(request):
@@ -15,16 +18,24 @@ def welcome(request):
     else:
         return render(request, "login.html") 
 
-@login_required
+
 @require_GET
+@login_required
 @active_tab("dashboard")
 def dashboard(request):
     logger.debug('dashboard')
     return render(request, "dashboard.html")
 
-@login_required
+
 @require_GET
+@login_required
 def logout(request):
     auth.logout(request)
     return redirect("/welcome")
+
+
+@require_GET
+@login_required
+def permission_denied(request):
+    return render(request, "permission_denied.html")
 

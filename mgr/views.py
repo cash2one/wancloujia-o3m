@@ -6,8 +6,9 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.db.models.query import QuerySet
 from django.views.decorators.http import require_GET
 from django_tables2.config import RequestConfig
-
 from haystack.query import SearchQuerySet
+
+from suning import settings
 from mgr.models import cast_staff, Staff, Company, Store
 from mgr.forms import *
 from mgr.tables import *
@@ -73,7 +74,7 @@ def can_delete_store(user):
 
 @require_GET
 @login_required
-@user_passes_test(can_view_organization)
+@user_passes_test(can_view_organization, login_url=settings.PERMISSION_DENIED_URL)
 @active_tab("system", "organization")
 def organization(request):
     companyForm = CompanyForm()
@@ -108,6 +109,7 @@ def organization(request):
 
 @require_GET
 @login_required
+@user_passes_test(lambda u: u.is_staff or u.is_superuser, login_url=settings.PERMISSION_DENIED_URL)
 @active_tab("system", "group")
 def group(request):
     groupTable = GroupTable(Group.objects.all().order_by("-pk"))
@@ -129,12 +131,11 @@ def can_view_staff(user):
 
 @require_GET
 @login_required
-@user_passes_test(can_view_staff)
+@user_passes_test(can_view_staff, login_url=settings.PERMISSION_DENIED_URL)
 @active_tab("system", "user")
 def user(request):
     organizations = Organization.objects.all()
     if request.user.is_superuser:
-        #fixme 支持对root用户查看／编辑功能
         query_set = Staff.objects.exclude(is_superuser=True)
     elif request.user.is_staff:
         query_set = Employee.objects.all()

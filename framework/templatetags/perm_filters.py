@@ -5,7 +5,7 @@ from django import template
 from django.contrib.auth.models import User, Group
 from django.contrib.contenttypes.models import ContentType
 
-import mgr
+import mgr.views
 from mgr.models import Employee, Store, cast_staff, get_permission_name
 
 logger = logging.getLogger(__name__)

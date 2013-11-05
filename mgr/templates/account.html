@@ -78,6 +78,9 @@
 <script type="text/javascript" src="{{ STATIC_URL }}js/i18n/messages.zh_cn.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/suning_helper.js"></script>
 <script type="text/javascript">
+var login_check = suning.decorators.login_check;
+var error_check = suning.decorators.error_check;
+
 $(function() {
     var $modal = $("#modify-password");
     var $form = $("form", $modal);
@@ -101,7 +104,6 @@ $(function() {
         $(form.origin).focus();
     });
 
-
     function reset() {
         $saveBtn.button('reset');
         $triggerBtn.button('reset');
@@ -113,6 +115,13 @@ $(function() {
         $triggerBtn.button('loading');
         $cancelBtn.button('loading');
     }
+
+    var btn_check = function(func) {
+        return function(data) {
+            reset();
+            func(data);
+        }
+    }
     
     $saveBtn.click(function() {
         if (!$form.parsley('validate')) {
@@ -120,23 +129,20 @@ $(function() {
         }
 
         loading();
-        Dajaxice.mgr.modify_password(function(data) {
-            reset();
-
-            if (data.ret_code != 0) {
-                toast('error', data.ret_msg);
-                return;
+        Dajaxice.mgr.modify_password(
+            btn_check(
+            login_check(
+            error_check(
+            function(data) {
+                toast('success', '修改密码成功！');
+                $modal.modal('hide');
+                $form.parsley('destroy');
+                form.origin.value = '';
+                form.password.value = '';
+                form.confirm.value = '';
+                $form.parsley(options);
             }
-
-            toast('success', '修改密码成功！');
-            $modal.modal('hide');
-            $form.parsley('destroy');
-            form.origin.value = '';
-            form.password.value = '';
-            form.confirm.value = '';
-            $form.parsley(options);
-
-        }, { form: $form.serialize(true) }, {
+        ))), { form: $form.serialize(true) }, {
             error_callback: function() {
                 reset();
                 toast('error', NETWORK_ERROR_MSG);
