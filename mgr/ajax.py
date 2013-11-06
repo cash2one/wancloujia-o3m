@@ -1,10 +1,14 @@
 # coding: utf-8
 import logging
+import random
 
 from django.utils import simplejson
 from django.contrib.auth.models import User
+from django.core.mail import EmailMultiAlternatives
+from django.template import Context, loader
 from dajaxice.decorators import dajaxice_register
 from dajaxice.utils import deserialize_form
+from suning import settings
 
 from framework.decorators import request_delay, check_login, response_error
 from forms import *
@@ -58,6 +62,20 @@ def reset_password(request, form):
     return _ok_json
 
 
+def _notify(username, to_email, password):
+    link = "http://suning.wandoujia.com"
+    t = loader.get_template("notify.html")
+    content = t.render(Context({'username': username, 'password': password, 'link': link}))
+    from_email = "491320274@qq.com"
+    subject = u'苏宁豌豆荚手机助手后台账号已经开通'
+    msg = EmailMultiAlternatives(subject, content, from_email, (to_email,))
+    msg.attach_alternative(content, "text/html")  
+    try:
+        msg.send()
+    except Exception as e:
+        logger.exception(e)
+
+
 @dajaxice_register(method='POST')
 @check_login
 @preprocess_form
@@ -72,8 +90,10 @@ def add_edit_admin(request, form):
     if form["id"] == '':
         if User.objects.filter(username=admin.username).exists():
             return simplejson.dumps({'ret_code': 1000, 'ret_msg': u'用户名重名'})
-        admin.set_password(Staff.DEFAULT_PASSWORD)
+        password = str(random.randrange(100000, 999999))
+        admin.set_password(password)
         admin.save()
+        _notify(admin.username, admin.email, password)
         return _ok_json
     else:
         id = form["id"]
@@ -100,9 +120,11 @@ def add_edit_employee(request, form):
     if form["id"] == '':
         if User.objects.filter(username=employee.username).exists():
             return simplejson.dumps({'ret_code': 1000, 'ret_msg': u'用户名重名'})
-        employee.set_password(Staff.DEFAULT_PASSWORD)
+        password = str(random.randrange(100000, 999999))
+        employee.set_password(password)
         employee.save()
         f.save_m2m()
+        _notify(employee.username, employee.email, password)
         return _ok_json
     else:
         id = form["id"]

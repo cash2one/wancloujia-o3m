@@ -45,7 +45,9 @@ class TextInput(forms.TextInput):
 
 @parsleyfy
 class EmployeeForm(forms.ModelForm):
-    user_permissions = forms.MultipleChoiceField(label=u'授权权限', choices=get_available_permissions(), required=False)
+    user_permissions = forms.MultipleChoiceField(label=u'授权权限', required=False, 
+                                                 choices=get_available_permissions())
+    email = forms.EmailField(label=u'邮箱', required=True)
 
     def clean_phone(self):
         phone = self.cleaned_data["phone"]
@@ -63,6 +65,7 @@ class EmployeeForm(forms.ModelForm):
 
 @parsleyfy
 class AdminForm(forms.ModelForm):
+    email = forms.EmailField(label=u'邮箱', required=True)
 
     def clean_phone(self):
         phone = self.cleaned_data["phone"]

@@ -1,0 +1,21 @@
+{% load dajaxice_templatetags %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}苏宁豌豆荚手机助手管理后台{% endblock %}</title>
+    {% block css %}
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/bootstrap.min.css" />
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/style.css" />
+    {% endblock %}
+</head>
+<body>
+<p>
+    您的<a href="{{ link }}">苏宁豌豆荚手机后台</a>账号
+    &nbsp;<strong>{{ username }}</strong>&nbsp;已经开通，
+    初始密码为{{ password }}，请尽快<a href="{{ link }}">登录</a>更改密码。
+</p>
+</body>
+</html>

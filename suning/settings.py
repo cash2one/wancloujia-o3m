@@ -37,10 +37,14 @@ HAYSTACK_CONNECTIONS = {
     }
 }
 
+EMAIL_PORT="25"
+EMAIL_HOST="smtp.qq.com"
+EMAIL_HOST_USER="491320274"
+EMAIL_HOST_PASSWORD="bachisback1"
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = ['suning.limijiaoyin.com']
+ALLOWED_HOSTS = ['suning.wandoujia.com']
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name

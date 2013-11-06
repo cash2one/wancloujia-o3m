@@ -14,7 +14,6 @@
     <div class="toolbar">
         <a data-toggle="modal" class="btn btn-primary" href="#add-edit-group">新增用户组</a>
     </div>
-
     <div class="panel panel-default">
         <div class="panel-heading">
             用户组列表
@@ -71,6 +70,9 @@ $(function() {
     });
 
     $modal.on('hide.bs.modal', function() {
+        form.id.value = "";
+        form.name.value = "";
+        $(form.permissions).val("").trigger('change');
         $form.parsley('destroy');
     });
 
