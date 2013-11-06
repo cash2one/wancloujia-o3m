@@ -19,8 +19,6 @@ class Staff(User):
     tel = models.CharField(verbose_name=u'座机', max_length=20, blank=True)
     introduce = models.CharField(verbose_name=u'简介', max_length=200, blank=True)
 
-    DEFAULT_PASSWORD = 'suning'
-
     def cast(self):
         return self.real_type.get_object_for_this_type(pk=self.pk)
 

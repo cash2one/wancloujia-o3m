@@ -223,12 +223,12 @@ $(function() {
     });
 
     $modal.on('hide.bs.modal', function() {
-        form.id.value = null;
-        form.username.value = null;
-        form.realname.value = null;
-        form.phone.value = null;
-        form.email.value = null;
-        form.introduce.value = null;
+        form.id.value = "";
+        form.username.value = "";
+        form.realname.value = "";
+        form.phone.value = "";
+        form.email.value = "";
+        form.introduce.value = "";
         $form.parsley('destroy');
     });
 
@@ -286,14 +286,15 @@ $(function() {
     });
 
     $modal.on('hide.bs.modal', function() {
-        form.id.value = null;
-        form.username.value = null;
-        form.realname.value = null;
-        form.phone.value = null;
-        form.email.value = null;
-        form.introduce.value = null;
-        $("[name=organization]", form).val(null).trigger('change');
-        $("[name=groups]", form).val(null).trigger('change');
+        form.id.value = "";
+        form.username.value = "";
+        form.realname.value = "";
+        form.phone.value = "";
+        form.email.value = "";
+        form.introduce.value = "";
+        $("[name=organization]", form).val("").trigger('change');
+        $("[name=groups]", form).val("").trigger('change');
+        $("[name=user_permissions]", form).val("").trigger('change');
         $form.parsley('destroy');
     });
 
