@@ -1,11 +1,10 @@
+'''
 from haystack import indexes
 from models import AD
 
-class ADIndex(indexes.SearchIndex, indexes.Indexable):
-    text = indexes.CharField(document=True, use_template=True)
+class ADIndex(indexes.ModelSearchIndex, indexes.Indexable):
 
-    def get_model(self):
-        return AD
+    class Meta:
+        model = AD
 
-    def index_queryset(self, using=None):
-        return self.get_model().objects.all()
+'''

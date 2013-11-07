@@ -1,0 +1,177 @@
+{% extends "base.html" %}
+
+{% load render_table from django_tables2 %}
+{% load django_select2_tags %}
+{% load perm_filters %}
+
+{% block css %}
+{{ block.super }}
+{% import_django_select2_css %}
+<link rel="stylesheet" href="{{ STATIC_URL }}css/bootstrap-datetimepicker.min.css" />
+<link rel="stylesheet" href="{{ STATIC_URL }}css/bootstrap-datetimepicker.bs3-fix.css" />
+{% endblock %}
+
+{% block main %}
+<div class="main">
+    <div class="toolbar">
+        <a data-toggle="modal" class="btn btn-primary" href="#add-edit-ad"
+            {% if request.user|is_employee and not perms.ad.add_ad %}
+            disabled='disabled'
+            {% endif %}>
+            新增广告
+        </a>
+        <a data-toggle="modal" class="btn btn-primary" href="#reorder-ad"
+            {% if request.user|is_employee and not  perms.ad.change_ad %}
+            disabled='disabled'
+            {% endif %}>
+            调整顺序
+        </a>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            广告列表
+            {% include "search_form.html" with query='q' %}
+        </div>
+        <div class="panel-body"> 
+            {% render_table table "table_template.html" %}
+        </div>
+    </div>
+</div>
+
+{% include "ad_modal.html" with modal_id="add-edit-ad" f=form %}
+{% include "delete_modal.html" with modal_id="delete-ad" model_name="广告" %} 
+{% include "reorder_ad_modal.html" with modal_id="reorder-ad" %} 
+{% endblock %}
+
+{% block js %}
+{{ block.super }}
+{% import_django_select2_js %}
+<script type="text/javascript" src="{{ STATIC_URL }}js/parsley.min.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/i18n/messages.zh_cn.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/suning_helper.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap-datetimepicker.min.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/locales/bootstrap-datetimepicker.zh-CN.js" charset='utf-8'></script>
+<script type="text/javascript">
+$(function() {
+    $("select").select2();
+});
+
+var login_check = suning.decorators.login_check;
+var error_check = suning.decorators.error_check;
+
+/*
+$(function() {
+    var $modal = $("#add-edit-group");
+    var $form = $("form", $modal);
+    var form = $form[0];
+    var $saveBtn = $(".save", $modal);
+    var $cancelBtn = $(".cancel", $modal);
+
+    $("table").on("click", ".edit", function() {
+        var group = $(this.parentNode).data();
+        form.id.value = group.id;
+        form.name.value = group.name;
+        $(form.permissions).val(group.permissions.toString().split(',')).trigger('change');
+        $modal.modal('show');
+    });
+
+    function loading() {
+        $saveBtn.button('loading');
+        $cancelBtn.button('loading');
+    }
+
+    function reset() {
+        $saveBtn.button('reset');
+        $cancelBtn.button('reset');
+    }
+
+    $modal.on('show.bs.modal', function() {
+        $form.parsley(parsley.bs_options);
+    });
+
+    $modal.on('hide.bs.modal', function() {
+        form.id.value = "";
+        form.name.value = "";
+        $(form.permissions).val("").trigger('change');
+        $form.parsley('destroy');
+    });
+
+    $saveBtn.click(function() {
+        $form.submit();
+    });
+
+    $form.submit(function(e) {
+        e.preventDefault();
+        if (!$form.parsley('validate')) {
+            return;
+        }
+
+        loading(); 
+        Dajaxice.mgr.add_edit_group(function(data) {
+            reset();
+            if(data.ret_code != 0) {
+                toast('error', data.ret_msg);
+                return;
+            }
+
+            toast('success', !form.id.value ? '新增用户组成功' : '用户组信息修改成功');
+            suning.reload(2000);
+        }, {form: $form.serialize(true)}, {
+            error_callback: function() {
+                reset();
+                toast('error', NETWORK_ERROR_MSG);
+            }
+        });
+    });
+});
+*/
+
+$(function() {
+    var $modal = $("#delete-ad");
+    var ad = null;
+    $("table").on('click', '.delete', function() {
+        ad = $(this.parentNode).data();
+        $('.model-name', $modal).html(ad.name);
+        $modal.modal('show');
+    });
+
+    var $saveBtn = $('.save', $modal);
+    var $cancelBtn = $('.cancel', $modal);
+
+    function loading() {
+        $saveBtn.button('loading');
+        $cancelBtn.button('loading');
+    }
+
+    function reset() {
+        $saveBtn.button('reset');
+        $cancelBtn.button('reset');
+    }
+
+    function btn_check(func) {
+        return function(data) {
+            reset();
+            func(data);
+        }
+    }
+
+    $saveBtn.click(function() {
+        loading();
+        Dajaxice.mgr.delete_ad(
+            login_check(
+            error_check(
+            btn_check(
+            function(data) {
+                toast('success', '删除成功');
+                suning.reload(2000);
+            })))
+        ), {id: ad.id}, {
+            error_callback: function() {
+                reset();
+                toast('error', NETWORK_ERROR_MSG);
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

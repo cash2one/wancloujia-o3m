@@ -63,6 +63,8 @@ class Organization(models.Model):
 class Company(Organization):
     code = models.CharField(verbose_name=u'编码', max_length=20, unique=True)
 
+    #search = SphinxSearch()
+
     class Meta:
         verbose_name = '公司'
 
@@ -70,6 +72,8 @@ class Company(Organization):
 class Store(Organization):
     company = models.ForeignKey(Company, verbose_name=u'公司')
     code = models.CharField(verbose_name=u'编码', max_length=20, unique=True)
+
+    #search = SphinxSearch()
 
     class Meta:
         verbose_name = '门店'

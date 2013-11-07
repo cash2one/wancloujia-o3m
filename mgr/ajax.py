@@ -10,10 +10,9 @@ from dajaxice.decorators import dajaxice_register
 from dajaxice.utils import deserialize_form
 from suning import settings
 
-from framework.decorators import request_delay, check_login, response_error
+from suning.decorators import *
 from forms import *
 from models import *
-from decorators import preprocess_form
 
 logger = logging.getLogger(__name__)
 

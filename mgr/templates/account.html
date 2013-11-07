@@ -2,11 +2,6 @@
 {% load qs_tags %}
 {% load perm_filters %}
 
-{% block css %}
-{{ block.super }}
-<link rel="stylesheet" href="{{ STATIC_URL }}css/account.css" />
-{% endblock %}
-
 {% block main %}
 <div class="main">
     <div class="panel panel-default">
@@ -73,10 +68,6 @@
 {% endblock %}
 
 {% block js %}
-{{ block.super }}
-<script type="text/javascript" src="{{ STATIC_URL }}js/parsley.min.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}js/i18n/messages.zh_cn.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}js/suning_helper.js"></script>
 <script type="text/javascript">
 var login_check = suning.decorators.login_check;
 var error_check = suning.decorators.error_check;
