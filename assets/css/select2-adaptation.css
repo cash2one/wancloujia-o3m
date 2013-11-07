@@ -1,6 +1,6 @@
 /* adaptation for select2 */
 
-.select2-container.select2-container-multi {
+.form-group .select2-container.select2-container-multi {
     width: 100%;
 }
 
@@ -12,10 +12,14 @@
 }
 
 .select2-container.select2-dropdown-open > ul {
-    border-bottom-left-radius: 0px;
-    border-bottom-right-radius: 0px;
+    border-radius: 0px;
 }
 
 .select2-drop.select2-drop-multi.select2-drop-active {
     box-sizing: border-box;
+    
+}
+
+.form-group .select2-container.select2-container-multi .select2-choices {
+    min-height: 34px;
 }
