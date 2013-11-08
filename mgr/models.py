@@ -112,31 +112,3 @@ class SuperUser(Staff):
     def __unicode__(self):
         return self.username
 
-
-_available_permissions = None
-
-
-def get_available_permissions():
-    global _available_permissions
-    if _available_permissions is not None:
-        return _available_permissions
-
-    _organization_type = ContentType.objects.get_for_model(Organization)
-    _group_type = ContentType.objects.get_for_model(Group)
-    _staff_type = ContentType.objects.get_for_model(Staff)
-    _available_permissions = (
-        (Permission.objects.get(content_type=_organization_type, codename="add_organization").pk, u'添加组织'),
-        (Permission.objects.get(content_type=_organization_type, codename="change_organization").pk, u'编辑组织'),
-        (Permission.objects.get(content_type=_organization_type, codename="delete_organization").pk, u'删除组织'),
-        (Permission.objects.get(content_type=_staff_type, codename="add_staff").pk, u'添加用户'),
-        (Permission.objects.get(content_type=_staff_type, codename="change_staff").pk, u'编辑用户'),
-        (Permission.objects.get(content_type=_staff_type, codename="delete_staff").pk, u'删除用户')
-    )
-    return _available_permissions
-
-
-def get_permission_name(permission):
-    for p in get_available_permissions():
-        if p[0] == permission.pk: return p[1]
-    return None
-

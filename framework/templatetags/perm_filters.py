@@ -6,7 +6,8 @@ from django.contrib.auth.models import User, Group
 from django.contrib.contenttypes.models import ContentType
 
 import mgr.views
-from mgr.models import Employee, Store, cast_staff, get_permission_name
+from mgr.models import Employee, Store, cast_staff
+from suning.permissions import *
 
 logger = logging.getLogger(__name__)
 register = template.Library()

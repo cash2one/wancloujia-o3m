@@ -14,13 +14,12 @@ from ad.forms import ADForm
 from ad.tables import ADTable
 from suning.decorators import active_tab
 
+
 def can_view_ad(user):
     if user.is_superuser or user.is_staff:
         return True
 
-    return user.has_perm('ad.add_ad') or \
-            user.has_perm('ad.change_ad') or \
-            user.has_perm('ad.delete_ad')
+    return user.has_module_perms('ad')
 
 
 @require_GET
@@ -28,8 +27,13 @@ def can_view_ad(user):
 @user_passes_test(can_view_ad, login_url=settings.PERMISSION_DENIED_URL)
 @active_tab("ad")
 def ad(request):
-    table = ADTable(AD.objects.all())
-    RequestConfig(request, paginate={"per_page": settings.PAGINATION_PAGE_SIZE}).configure(table)
+    if request.GET.get("q"):
+        query = request.GET.get("q")
+        query_set = AD.objects.filter(Q(title__contains=query) | Q(desc__contains=query))
+    else:
+        query_set = AD.objects.all().order_by("position")
+    table = ADTable(query_set)
+    RequestConfig(request, paginate={"per_page": 5}).configure(table)
     return render(request, "ad.html", {
         "table": table,
         'form': ADForm()

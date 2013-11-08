@@ -22,3 +22,28 @@ def delete_ad(request, id):
     AD.objects.get(pk=id).delete()
     return _ok_json
 
+
+@dajaxice_register(method='POST')
+@check_login
+def add_edit_ad(request, form, visible):
+    form = deserialize_form(form)
+    f = ADForm(form)
+    if not f.is_valid():
+        logger.warn("%s: form is invalid" % __name__)
+        logger.warn(f.errors)
+        return _invalid_data_json
+
+    ad = f.save(commit=False)
+    ad.visible = visible
+    if form["id"] == "":
+        if AD.objects.filter(title=ad.title).exists():
+            return simplejson.dumps({'ret_code': 1000, 'field': 'title', 'error': u'广告标题已存在'})
+        ad.save()
+        return _ok_json
+    else:
+        ad.pk = form["id"]
+        if AD.objects.exclude(pk=ad.pk).filter(title=ad.title).exists():
+            return simplejson.dumps({'ret_code': 1000, 'field': 'title', 'error': u'广告标题已存在'})
+        ad.save()
+        return _ok_json
+

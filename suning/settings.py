@@ -85,8 +85,8 @@ USE_TZ = True
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.normpath(__file__)))
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/var/www/example.com/media/"
-#MEDIA_ROOT = '/data/media'
-MEDIA_ROOT = '/home/yangchen/media'
+MEDIA_ROOT = '/data/media'
+#MEDIA_ROOT = '/home/yangchen/media'
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
@@ -191,6 +191,7 @@ INSTALLED_APPS = (
     'mgr',
     'app',
     'django_tables2',
+    'ajax_upload',
     'django_select2',
 	'dajaxice',
     'dajax',

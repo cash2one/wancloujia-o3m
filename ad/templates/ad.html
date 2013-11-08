@@ -1,27 +1,37 @@
 {% extends "base.html" %}
 
 {% load render_table from django_tables2 %}
-{% load django_select2_tags %}
 {% load perm_filters %}
 
 {% block css %}
 {{ block.super }}
-{% import_django_select2_css %}
+<link rel="stylesheet" href="{{ STATIC_URL }}ajax_upload/css/ajax-upload-widget.css" />
 <link rel="stylesheet" href="{{ STATIC_URL }}css/bootstrap-datetimepicker.min.css" />
 <link rel="stylesheet" href="{{ STATIC_URL }}css/bootstrap-datetimepicker.bs3-fix.css" />
+<style type="text/css">
+.table.table-bordered>tbody>tr>td {
+    vertical-align: middle;
+}
+td.period {
+    width: 300px;
+}
+td.title, td.visible {
+    width: 100px;
+}
+</style>
 {% endblock %}
 
 {% block main %}
 <div class="main">
     <div class="toolbar">
-        <a data-toggle="modal" class="btn btn-primary" href="#add-edit-ad"
+        <a id="add_ad" class="btn btn-primary" href="#add-edit-ad"
             {% if request.user|is_employee and not perms.ad.add_ad %}
             disabled='disabled'
             {% endif %}>
             新增广告
         </a>
         <a data-toggle="modal" class="btn btn-primary" href="#reorder-ad"
-            {% if request.user|is_employee and not  perms.ad.change_ad %}
+            {% if request.user|is_employee and not  perms.ad.sort_ad %}
             disabled='disabled'
             {% endif %}>
             调整顺序
@@ -45,10 +55,8 @@
 
 {% block js %}
 {{ block.super }}
-{% import_django_select2_js %}
-<script type="text/javascript" src="{{ STATIC_URL }}js/parsley.min.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}js/i18n/messages.zh_cn.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}js/suning_helper.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}ajax_upload/js/jquery.iframe-transport.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}ajax_upload/js/ajax-upload-widget.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap-datetimepicker.min.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/locales/bootstrap-datetimepicker.zh-CN.js" charset='utf-8'></script>
 <script type="text/javascript">
@@ -59,20 +67,84 @@ $(function() {
 var login_check = suning.decorators.login_check;
 var error_check = suning.decorators.error_check;
 
-/*
 $(function() {
-    var $modal = $("#add-edit-group");
+    var $modal = $("#add-edit-ad");
     var $form = $("form", $modal);
     var form = $form[0];
     var $saveBtn = $(".save", $modal);
     var $cancelBtn = $(".cancel", $modal);
 
-    $("table").on("click", ".edit", function() {
-        var group = $(this.parentNode).data();
-        form.id.value = group.id;
-        form.name.value = group.name;
-        $(form.permissions).val(group.permissions.toString().split(',')).trigger('change');
+    var options = $.extend({}, parsley.bs_options, {
+        excluded: '[type=hidden], #id_cover',
+    });
+
+    var auw = new AjaxUploadWidget($(form.cover), {
+        changeButtonText : "修改图片",
+        removeButtonText : "删除图片",
+        onError: function(data) {
+            toast('error', '图片上传失败，请重试。');
+        }
+    });
+
+    $("#add_ad").click(function() {
+        auw.displaySelection();
         $modal.modal('show');
+    });
+
+    $("table").on("click", ".edit", function() {
+        var ad = $(this.parentNode).data(); form.id.value = ad.id;
+        form.visible.checked = ad.visible
+        form.title.value = ad.title;
+        form.cover.value = ad.cover;
+        form.from_date.value = ad.from_date;
+        form.to_date.value = ad.to_date;
+        form.desc.value = ad.desc;
+        $modal.modal('show');
+        auw.displaySelection();
+    });
+
+    var $from = $("[name=from_date]");
+    var $to = $("[name=to_date]");
+
+    function ensureDate(fromDate) {
+        $from.datetimepicker('setDate', fromDate);
+        var startDate = new Date(fromDate.getTime() + 1000 * 60 * 5);
+        $to.datetimepicker("setStartDate", startDate);
+        if (!$to.val()) {
+            return;
+        }
+
+        var toDate = new Date($to.val());
+        if (toDate.getTime() < startDate.getTime()) {
+            $to.datetimepicker("setDate", startDate);
+        }
+    }
+
+    $from.change(function() {
+        ensureDate(new Date(this.value));
+    });
+
+    $modal.on('shown.bs.modal', function() {
+        $form.parsley(options);
+        var title = form.id.value == "" ? "新增广告" : "编辑广告";
+        $(".modal-title", $modal).html(title);
+
+        if($from.val() != "") {
+            ensureDate(new Date($from.val()));
+        } else {
+            ensureDate(new Date());
+        }
+    });
+
+    $modal.on('hidden.bs.modal', function() {
+        form.id.value = "";
+        form.visible.checked = "";
+        form.title.value = "";
+        form.cover.value = "";
+        form.from_date.value = "";
+        form.to_date.value = "";
+        form.desc.value = "";
+        $form.parsley('destroy');
     });
 
     function loading() {
@@ -85,20 +157,36 @@ $(function() {
         $cancelBtn.button('reset');
     }
 
-    $modal.on('show.bs.modal', function() {
-        $form.parsley(parsley.bs_options);
-    });
-
-    $modal.on('hide.bs.modal', function() {
-        form.id.value = "";
-        form.name.value = "";
-        $(form.permissions).val("").trigger('change');
-        $form.parsley('destroy');
-    });
+    function btn_check(func) {
+        return function(data) {
+            reset();
+            func(data);
+        }
+    }
 
     $saveBtn.click(function() {
         $form.submit();
     });
+
+    function success() {
+        toast('success', !form.id.value ? '新增广告成功' : '广告信息修改成功');
+        suning.reload(2000);
+    }
+
+    function field_check(func) {
+        return function(data) {
+            if (data.ret_code == 0) {
+                func(data);
+                return;
+            }
+
+            if (data.field) {
+                var $group = $("[name=" + data.field +"]", form).parents(".form-group");
+                $group.removeClass("has-success").addClass("has-error");
+                toast('error', data.error);
+            }
+        }
+    }
 
     $form.submit(function(e) {
         e.preventDefault();
@@ -107,16 +195,11 @@ $(function() {
         }
 
         loading(); 
-        Dajaxice.mgr.add_edit_group(function(data) {
-            reset();
-            if(data.ret_code != 0) {
-                toast('error', data.ret_msg);
-                return;
-            }
-
-            toast('success', !form.id.value ? '新增用户组成功' : '用户组信息修改成功');
-            suning.reload(2000);
-        }, {form: $form.serialize(true)}, {
+        Dajaxice.ad.add_edit_ad(
+            btn_check(login_check(field_check(error_check(success)))), { 
+            form: $form.serialize(true),
+            visible: form.visible.checked
+        }, {
             error_callback: function() {
                 reset();
                 toast('error', NETWORK_ERROR_MSG);
@@ -124,14 +207,13 @@ $(function() {
         });
     });
 });
-*/
 
 $(function() {
     var $modal = $("#delete-ad");
     var ad = null;
     $("table").on('click', '.delete', function() {
         ad = $(this.parentNode).data();
-        $('.model-name', $modal).html(ad.name);
+        $('.model-name', $modal).html(ad.title);
         $modal.modal('show');
     });
 
@@ -157,14 +239,14 @@ $(function() {
 
     $saveBtn.click(function() {
         loading();
-        Dajaxice.mgr.delete_ad(
+        Dajaxice.ad.delete_ad(
             login_check(
             error_check(
             btn_check(
             function(data) {
                 toast('success', '删除成功');
                 suning.reload(2000);
-            })))
+            }))
         ), {id: ad.id}, {
             error_callback: function() {
                 reset();

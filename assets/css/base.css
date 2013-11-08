@@ -90,11 +90,15 @@ span.required {
     color: #b20;
 }
 
-th.ops, td.ops {
+th.ops, td.ops, th.ops_3, td.ops_3 {
     width: 135px;
 }
 
-td.ops {
+th.ops_2, td.opts_2 {
+    width: 105px;
+}
+
+td.ops, td.ops_2, td.ops_3 {
     text-align: center;
 }
 
@@ -192,7 +196,6 @@ form.search button[type=submit] {
     right: 0px;
     border: none;
     padding: 5px 9px;
-    background: url(../img/search.png) no-repeat center;
     outline: none;
 }
 

@@ -4,11 +4,17 @@
 
 {% block body %}
 <form role="form" class="form-horizontal">
+    <style type="text/css">
+        #id_from_date, #id_to_date {
+            width: 46%;
+            display: inline;
+        }
+    </style>
     <input type="hidden" name="id">
     <div class="form-group">
         <label class="col-xs-3 control-label">
         </label>
-        <div class="col-xs-5">
+        <div class="col-xs-5 checkbox" style="padding-left: 40px;">
             {{ f.visible }} 
             <label style="font-weight: normal;" for="id_visible">显示</label>
         </div>
@@ -31,18 +37,17 @@
     </div>
     <div class="form-group">
         <label class="col-xs-3 control-label">
-            <span class="required">*</span>{{ f.online_date.label }}
+            <span class="required">*</span>有效时间
         </label>
         <div class="col-xs-8">
-            {{ f.online_date }}
-            <span class="help-block">此项不填写，默认为当前时间</span>
+            {{ f.from_date }} <span style="display: inline-block;width: 5%">到</span> {{ f.to_date }}
         </div>
     </div>
     <div class="form-group">
-        <label class="col-xs-3 control-label">
-            <span class="required">*</span>{{ f.offline_date.label }}
-        </label>
-        <div class="col-xs-8">{{ f.offline_date }}</div>
+        <label class="col-xs-3 control-label">{{ f.desc.label }}</label>
+        <div class="col-xs-8"> 
+            {{ f.desc }}
+        </div>
     </div>
 </form>
 {% endblock %}
