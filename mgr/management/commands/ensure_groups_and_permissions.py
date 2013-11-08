@@ -5,6 +5,7 @@ from django.contrib.auth.models import Group, Permission
 from django.contrib.contenttypes.models import ContentType
 
 from mgr.models import Organization, Staff, get_built_in_group_names
+from ad.models import AD
 
 
 def _ensure_built_in_groups():
@@ -16,12 +17,23 @@ def _ensure_built_in_groups():
 def _ensure_permissions_for_built_in_groups():
     organization_type = ContentType.objects.get_for_model(Organization)
     staff_type = ContentType.objects.get_for_model(Staff)
+    ad_type = ContentType.objects.get_for_model(AD)
+
     group = Group.objects.get(name=u'管理组') 
     group.permissions = [
         Permission.objects.get(content_type=organization_type, codename='add_organization'), 
         Permission.objects.get(content_type=organization_type, codename='change_organization'), 
         Permission.objects.get(content_type=staff_type, codename="add_staff"),
         Permission.objects.get(content_type=staff_type, codename="change_staff"),
+    ]
+    group.save()
+
+    group = Group.objects.get(name=u'广告组')
+    group.permissions = [
+        Permission.objects.get(content_type=ad_type, codename='add_ad'), 
+        Permission.objects.get(content_type=ad_type, codename='change_ad'), 
+        Permission.objects.get(content_type=ad_type, codename="delete_ad"),
+        Permission.objects.get(content_type=ad_type, codename="sort_ad"),
     ]
     group.save()
 

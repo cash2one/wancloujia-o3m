@@ -11,17 +11,27 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
+DATABASE_ENGINE = 'mysql'
+DATABASE_HOST = 'localhost'
+DATABASE_PORT = '3306'
+DATABASE_USER = 'root'
+DATABASE_PASSWORD = 'nameLR9969'
+DATABASE_NAME = 'suning_test'
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'suning_test',                      # Or path to database file if using sqlite3.
+        'NAME': DATABASE_NAME,                      # Or path to database file if using sqlite3.
         # The following settings are not used with sqlite3:
-        'USER': 'root',
-        'PASSWORD': 'nameLR9969',
-        'HOST': '',                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
-        'PORT': '',                      # Set to empty string for default.
+        'USER': DATABASE_USER,
+        'PASSWORD': DATABASE_PASSWORD,
+        'HOST': DATABASE_HOST,                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
+        'PORT': DATABASE_PORT,                      # Set to empty string for default.
     }
 }
+
+SPHINX_API_VERSION = 0x11
+SPHINX_PORT=9312
 
 CACHES = {
     'default': {
@@ -32,7 +42,7 @@ CACHES = {
 
 HAYSTACK_CONNECTIONS = {
     'default': {
-        'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',
+        'ENGINE': 'whoosh_cn_backend.WhooshEngine',
         'PATH': os.path.join(os.path.dirname(__file__), 'whoosh_index')
     }
 }
@@ -75,8 +85,8 @@ USE_TZ = True
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.normpath(__file__)))
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/var/www/example.com/media/"
-#MEDIA_ROOT = '/data/media'
-MEDIA_ROOT = '/home/yangchen/media'
+MEDIA_ROOT = '/data/media'
+#MEDIA_ROOT = '/home/yangchen/media'
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
@@ -150,6 +160,8 @@ MIDDLEWARE_CLASSES = (
 
 ROOT_URLCONF = 'suning.urls'
 
+PAGINATION_PAGE_SIZE = 10
+
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'suning.wsgi.application'
 
@@ -173,18 +185,20 @@ INSTALLED_APPS = (
     # 'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
+    #'haystack',
     'framework',
     'ad',
     'mgr',
     'app',
     'django_tables2',
+    'ajax_upload',
     'django_select2',
 	'dajaxice',
     'dajax',
-    'haystack',
     'django_crontab',
     'parsley',
-    'auth_remember'
+    'auth_remember',
+    #'djangosphinx'
 )
 
 AUTH_REMEMBER_COOKIE_NAME = 'remember_token'

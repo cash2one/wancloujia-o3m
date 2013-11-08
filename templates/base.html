@@ -1,9 +1,14 @@
 {% extends "scaffolding.html" %}
 {% load perm_filters %}
+{% load django_select2_tags %}
+
 {% block css %}
 {{ block.super }}
 <link rel="stylesheet" href="{{ STATIC_URL }}css/base.css" />
+{% import_django_select2_css %}
+<link rel="stylesheet" href="{{ STATIC_URL }}css/select2-adaptation.css" />
 {% endblock %}
+
 {% block content %}
 
 {% block navbar %}
@@ -45,10 +50,12 @@
                 </a>
             </li>
 
-            {% if request.user|is_not_employee %}
-            <li><a href="">
-                <span class="glyphicon glyphicon-facetime-video"></span>&nbsp;&nbsp;广告管理
-            </a></li>
+            {% if request.user|is_not_employee or perms.ad %}
+            <li {% if request.nav.active_tab == "ad" %}class="active"{% endif %}>
+                <a href="/ad/">
+                    <span class="glyphicon glyphicon-facetime-video"></span>&nbsp;&nbsp;广告管理
+                </a>
+            </li>
             {% endif %}
 
             {% if request.user|is_not_employee %}
@@ -117,5 +124,13 @@
 {% block main %}
 {% endblock %}<!-- main end -->
 
+{% endblock %}
+
+{% block js %}
+{{ block.super }}
+{% import_django_select2_js %}
+<script type="text/javascript" src="{{ STATIC_URL }}js/parsley.min.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/i18n/messages.zh_cn.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/suning_helper.js"></script>
 {% endblock %}
 

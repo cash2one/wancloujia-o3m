@@ -1,0 +1,259 @@
+{% extends "base.html" %}
+
+{% load render_table from django_tables2 %}
+{% load perm_filters %}
+
+{% block css %}
+{{ block.super }}
+<link rel="stylesheet" href="{{ STATIC_URL }}ajax_upload/css/ajax-upload-widget.css" />
+<link rel="stylesheet" href="{{ STATIC_URL }}css/bootstrap-datetimepicker.min.css" />
+<link rel="stylesheet" href="{{ STATIC_URL }}css/bootstrap-datetimepicker.bs3-fix.css" />
+<style type="text/css">
+.table.table-bordered>tbody>tr>td {
+    vertical-align: middle;
+}
+td.period {
+    width: 300px;
+}
+td.title, td.visible {
+    width: 100px;
+}
+</style>
+{% endblock %}
+
+{% block main %}
+<div class="main">
+    <div class="toolbar">
+        <a id="add_ad" class="btn btn-primary" href="#add-edit-ad"
+            {% if request.user|is_employee and not perms.ad.add_ad %}
+            disabled='disabled'
+            {% endif %}>
+            新增广告
+        </a>
+        <a data-toggle="modal" class="btn btn-primary" href="#reorder-ad"
+            {% if request.user|is_employee and not  perms.ad.sort_ad %}
+            disabled='disabled'
+            {% endif %}>
+            调整顺序
+        </a>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            广告列表
+            {% include "search_form.html" with query='q' %}
+        </div>
+        <div class="panel-body"> 
+            {% render_table table "table_template.html" %}
+        </div>
+    </div>
+</div>
+
+{% include "ad_modal.html" with modal_id="add-edit-ad" f=form %}
+{% include "delete_modal.html" with modal_id="delete-ad" model_name="广告" %} 
+{% include "reorder_ad_modal.html" with modal_id="reorder-ad" %} 
+{% endblock %}
+
+{% block js %}
+{{ block.super }}
+<script type="text/javascript" src="{{ STATIC_URL }}ajax_upload/js/jquery.iframe-transport.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}ajax_upload/js/ajax-upload-widget.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap-datetimepicker.min.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/locales/bootstrap-datetimepicker.zh-CN.js" charset='utf-8'></script>
+<script type="text/javascript">
+$(function() {
+    $("select").select2();
+});
+
+var login_check = suning.decorators.login_check;
+var error_check = suning.decorators.error_check;
+
+$(function() {
+    var $modal = $("#add-edit-ad");
+    var $form = $("form", $modal);
+    var form = $form[0];
+    var $saveBtn = $(".save", $modal);
+    var $cancelBtn = $(".cancel", $modal);
+
+    var options = $.extend({}, parsley.bs_options, {
+        excluded: '[type=hidden], #id_cover',
+    });
+
+    var auw = new AjaxUploadWidget($(form.cover), {
+        changeButtonText : "修改图片",
+        removeButtonText : "删除图片",
+        onError: function(data) {
+            toast('error', '图片上传失败，请重试。');
+        }
+    });
+
+    $("#add_ad").click(function() {
+        auw.displaySelection();
+        $modal.modal('show');
+    });
+
+    $("table").on("click", ".edit", function() {
+        var ad = $(this.parentNode).data(); form.id.value = ad.id;
+        form.visible.checked = ad.visible
+        form.title.value = ad.title;
+        form.cover.value = ad.cover;
+        form.from_date.value = ad.from_date;
+        form.to_date.value = ad.to_date;
+        form.desc.value = ad.desc;
+        $modal.modal('show');
+        auw.displaySelection();
+    });
+
+    var $from = $("[name=from_date]");
+    var $to = $("[name=to_date]");
+
+    function ensureDate(fromDate) {
+        $from.datetimepicker('setDate', fromDate);
+        var startDate = new Date(fromDate.getTime() + 1000 * 60 * 5);
+        $to.datetimepicker("setStartDate", startDate);
+        if (!$to.val()) {
+            return;
+        }
+
+        var toDate = new Date($to.val());
+        if (toDate.getTime() < startDate.getTime()) {
+            $to.datetimepicker("setDate", startDate);
+        }
+    }
+
+    $from.change(function() {
+        ensureDate(new Date(this.value));
+    });
+
+    $modal.on('shown.bs.modal', function() {
+        $form.parsley(options);
+        var title = form.id.value == "" ? "新增广告" : "编辑广告";
+        $(".modal-title", $modal).html(title);
+
+        if($from.val() != "") {
+            ensureDate(new Date($from.val()));
+        } else {
+            ensureDate(new Date());
+        }
+    });
+
+    $modal.on('hidden.bs.modal', function() {
+        form.id.value = "";
+        form.visible.checked = "";
+        form.title.value = "";
+        form.cover.value = "";
+        form.from_date.value = "";
+        form.to_date.value = "";
+        form.desc.value = "";
+        $form.parsley('destroy');
+    });
+
+    function loading() {
+        $saveBtn.button('loading');
+        $cancelBtn.button('loading');
+    }
+
+    function reset() {
+        $saveBtn.button('reset');
+        $cancelBtn.button('reset');
+    }
+
+    function btn_check(func) {
+        return function(data) {
+            reset();
+            func(data);
+        }
+    }
+
+    $saveBtn.click(function() {
+        $form.submit();
+    });
+
+    function success() {
+        toast('success', !form.id.value ? '新增广告成功' : '广告信息修改成功');
+        suning.reload(2000);
+    }
+
+    function field_check(func) {
+        return function(data) {
+            if (data.ret_code == 0) {
+                func(data);
+                return;
+            }
+
+            if (data.field) {
+                var $group = $("[name=" + data.field +"]", form).parents(".form-group");
+                $group.removeClass("has-success").addClass("has-error");
+                toast('error', data.error);
+            }
+        }
+    }
+
+    $form.submit(function(e) {
+        e.preventDefault();
+        if (!$form.parsley('validate')) {
+            return;
+        }
+
+        loading(); 
+        Dajaxice.ad.add_edit_ad(
+            btn_check(login_check(field_check(error_check(success)))), { 
+            form: $form.serialize(true),
+            visible: form.visible.checked
+        }, {
+            error_callback: function() {
+                reset();
+                toast('error', NETWORK_ERROR_MSG);
+            }
+        });
+    });
+});
+
+$(function() {
+    var $modal = $("#delete-ad");
+    var ad = null;
+    $("table").on('click', '.delete', function() {
+        ad = $(this.parentNode).data();
+        $('.model-name', $modal).html(ad.title);
+        $modal.modal('show');
+    });
+
+    var $saveBtn = $('.save', $modal);
+    var $cancelBtn = $('.cancel', $modal);
+
+    function loading() {
+        $saveBtn.button('loading');
+        $cancelBtn.button('loading');
+    }
+
+    function reset() {
+        $saveBtn.button('reset');
+        $cancelBtn.button('reset');
+    }
+
+    function btn_check(func) {
+        return function(data) {
+            reset();
+            func(data);
+        }
+    }
+
+    $saveBtn.click(function() {
+        loading();
+        Dajaxice.ad.delete_ad(
+            login_check(
+            error_check(
+            btn_check(
+            function(data) {
+                toast('success', '删除成功');
+                suning.reload(2000);
+            }))
+        ), {id: ad.id}, {
+            error_callback: function() {
+                reset();
+                toast('error', NETWORK_ERROR_MSG);
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

@@ -4,17 +4,15 @@ import logging
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.db.models.query import QuerySet
+from django.db.models import Q
 from django.views.decorators.http import require_GET
 from django_tables2.config import RequestConfig
-from haystack.query import SearchQuerySet
 
 from suning import settings
 from mgr.models import cast_staff, Staff, Company, Store
 from mgr.forms import *
 from mgr.tables import *
-from framework.decorators import active_tab
-
-_PAGE_SIZE = 10
+from suning.decorators import active_tab
 
 logger = logging.getLogger(__name__)
 
@@ -79,9 +77,17 @@ def can_delete_store(user):
 def organization(request):
     companyForm = CompanyForm()
     storeForm = StoreForm()
+
     if request.user.is_superuser or request.user.is_staff:
-        companyTable = CompanyTable(Company.objects.all())
         storeTable = StoreTable(Store.objects.all())
+        if request.GET.get("cq") is None:
+            companyTable = CompanyTable(Company.objects.all())
+        else:
+            cq = request.GET.get("cq")
+            logger.debug("search company, query: %s" % cq)
+            results = Company.objects.filter(Q(code=cq) | Q(name__contains=cq))
+            logger.debug("search results(%d items) of company: %s" % (len(results), results))
+            companyTable = CompanyTable(results)
     else:
         user = cast_staff(request.user)
         organization = user.organization.cast()
@@ -114,7 +120,7 @@ def organization(request):
 def group(request):
     groupTable = GroupTable(Group.objects.all().order_by("-pk"))
     groupForm = GroupForm()
-    RequestConfig(request, paginate={"per_page": _PAGE_SIZE}).configure(groupTable)
+    RequestConfig(request, paginate={"per_page": settings.PAGINATION_PAGE_SIZE}).configure(groupTable)
     return render(request, "group.html", {
         'groupTable': groupTable,
         'groupForm': groupForm
@@ -136,7 +142,13 @@ def can_view_staff(user):
 def user(request):
     organizations = Organization.objects.all()
     if request.user.is_superuser:
-        query_set = Staff.objects.exclude(is_superuser=True)
+        if request.GET.get("q", None):
+            #query_set = SearchQuerySet().filter(content=request.GET.get("q")).models(Staff)
+            logger.debug("search results: " + str(query_set))
+            for item in query_set:
+                logger.debug(str(item))
+        else:
+            query_set = Staff.objects.exclude(is_superuser=True)
     elif request.user.is_staff:
         query_set = Employee.objects.all()
     else:
@@ -158,7 +170,7 @@ def user(request):
     employeeForm.fields["organization"].queryset = organizations
     adminForm = AdminForm()
     resetPasswordForm = ResetPasswordForm()
-    RequestConfig(request, paginate={"per_page": _PAGE_SIZE}).configure(table)
+    RequestConfig(request, paginate={"per_page": settings.PAGINATION_PAGE_SIZE}).configure(table) 
     return render(request, "user.html", {
         "table": table,
         "employeeForm": employeeForm,

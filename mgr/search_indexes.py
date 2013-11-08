@@ -1,23 +1,21 @@
+'''
 from haystack import indexes
-from models import Company, Store
+from models import Company, Store, Staff
 
-class CompanyIndex(indexes.SearchIndex, indexes.Indexable):
-    text = indexes.CharField(document=True, model_attr='name')
-    code = indexes.CharField(model_attr='code')
+class CompanyIndex(indexes.ModelSearchIndex, indexes.Indexable):
 
-    def get_model(self):
-        return Company
+    class Meta:
+        model = Company
 
-    def index_queryset(self, using=None):
-        return self.get_model().objects.all()
 
-class StoreIndex(indexes.SearchIndex, indexes.Indexable):
-    text = indexes.CharField(document=True, model_attr='name')
-    code = indexes.CharField(model_attr='code')
+class StoreIndex(indexes.ModelSearchIndex, indexes.Indexable):
 
-    def get_model(self):
-        return Store
+    class Meta:
+        model = Store
 
-    def index_queryset(self, using=None):
-        return self.get_model().objects.all()
 
+class StaffIndex(indexes.ModelSearchIndex, indexes.Indexable):
+
+    class Meta:
+        model = Staff
+'''

@@ -1,0 +1,15 @@
+{% extends "modal.html" %}
+{% block title %}删除{{ model_name }}{% endblock %}
+{% block body %}
+    <p>
+        确认要删除{{ model_name }}&nbsp;&nbsp;
+        <strong class='model-name'></strong>
+        &nbsp;&nbsp;吗？
+    </p>
+{% endblock %}
+{% block foot %}
+    <button type="button" class="btn btn-danger save" data-loading-text='删除...'>删除</button>
+    <button type="button" class="btn btn-default cancel" 
+            data-loading-text='取消' data-dismiss="modal">取消</button>
+{% endblock %}
+

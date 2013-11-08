@@ -90,11 +90,15 @@ span.required {
     color: #b20;
 }
 
-th.ops, td.ops {
+th.ops, td.ops, th.ops_3, td.ops_3 {
     width: 135px;
 }
 
-td.ops {
+th.ops_2, td.opts_2 {
+    width: 105px;
+}
+
+td.ops, td.ops_2, td.ops_3 {
     text-align: center;
 }
 
@@ -157,11 +161,6 @@ td.ops {
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
 }
 
-.modal-body {
-    max-height: 400px;
-    overflow: auto;
-}
-
 ul.pagination {
     margin: 0px;
 }
@@ -197,10 +196,11 @@ form.search button[type=submit] {
     right: 0px;
     border: none;
     padding: 5px 9px;
-    background: url(../img/search.png) no-repeat center;
     outline: none;
 }
 
 form.search button[type=submit] {
     color: #444;
 }
+
+
