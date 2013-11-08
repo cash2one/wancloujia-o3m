@@ -13,7 +13,7 @@ class AD(models.Model):
     to_date = models.DateTimeField(verbose_name=u'下线时间')
     visible = models.BooleanField(verbose_name=u'广告状态')
     approved = models.BooleanField(verbose_name=u'审核状态')
-    position = models.IntegerField()
+    #position = models.IntegerField()
 
     def __unicode__(self):
         return self.title

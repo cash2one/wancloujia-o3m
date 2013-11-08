@@ -14,6 +14,7 @@ class ADForm(forms.ModelForm):
 
     class Meta:
         model = AD
+        #excludes = ('title','position')
         excludes = ('title',)
         widgets = {
             'to_date': forms.TextInput(attrs={

@@ -31,7 +31,8 @@ def ad(request):
         query = request.GET.get("q")
         query_set = AD.objects.filter(Q(title__contains=query) | Q(desc__contains=query))
     else:
-        query_set = AD.objects.all().order_by("position")
+        #query_set = AD.objects.all().order_by("position")
+        query_set = AD.objects.all()
     table = ADTable(query_set)
     RequestConfig(request, paginate={"per_page": 5}).configure(table)
     return render(request, "ad.html", {
