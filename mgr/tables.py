@@ -18,7 +18,7 @@ class StaffTable(tables.Table):
         if not hasattr(staff, "organization"):
             return u'—'
 
-        return staff.organization.name
+        return staff.organization.cast().name
 
     def render_groups(self, record):
         if record.is_superuser or record.is_staff:

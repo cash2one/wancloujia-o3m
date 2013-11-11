@@ -29,7 +29,7 @@
     <div class="panel panel-default">
         <div class="panel-heading">
             用户列表
-            {% include "search_form.html" with query='q' %}
+            {% include "search_form.html" with query=query %}
         </div>
         <div class="panel-body">
             {% render_table table "table_template.html" %}
@@ -155,6 +155,8 @@ $(function() {
 
     $modal.on('hide.bs.modal', function() {
         $form.parsley('destroy');
+        form.password.value = "";
+        form.confirm.value = "";
     });
 
     $("table").on('click', '.pwd', function() {

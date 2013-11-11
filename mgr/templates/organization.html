@@ -29,7 +29,7 @@
         <div class="panel-heading">
             公司列表
             {% if user|is_not_employee %}
-            {% include "search_form.html" with query='cq' %}
+            {% include "search_form.html" with query_name='cq' query=cq %}
             {% endif %}
         </div>
         <div class="panel-body"> 
@@ -40,7 +40,9 @@
     <div class="panel panel-default">
         <div class="panel-heading">
             门店列表
-            {# {% include "search_form.html" with query='sq' %} #}
+            {% if request.user|is_not_employee or not request.user|in_store %}
+            {% include "search_form.html" with query_name='sq' query=sq %}
+            {% endif %}
         </div>
         <div class="panel-body">
             {% render_table storeTable "table_template.html"%}
