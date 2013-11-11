@@ -42,7 +42,6 @@ def cast_staff(user):
 
 
 class Organization(models.Model):
-    name = models.CharField(verbose_name=u'名称', max_length=200)
     real_type = models.ForeignKey(ContentType, editable=False)
 
     def save(self, *args, **kwargs):
@@ -62,8 +61,7 @@ class Organization(models.Model):
 
 class Company(Organization):
     code = models.CharField(verbose_name=u'编码', max_length=20, unique=True)
-
-    #search = SphinxSearch()
+    name = models.CharField(verbose_name=u'名称', max_length=200, unique=True)
 
     class Meta:
         verbose_name = '公司'
@@ -72,8 +70,7 @@ class Company(Organization):
 class Store(Organization):
     company = models.ForeignKey(Company, verbose_name=u'公司')
     code = models.CharField(verbose_name=u'编码', max_length=20, unique=True)
-
-    #search = SphinxSearch()
+    name = models.CharField(verbose_name=u'名称', max_length=200, unique=True)
 
     class Meta:
         verbose_name = '门店'
@@ -81,9 +78,7 @@ class Store(Organization):
 
 class Employee(Staff):
     organization = models.ForeignKey(Organization, verbose_name=u'所属机构')
-    #contact person type?
     contact_person = models.CharField(verbose_name=u'联系人', max_length=20)
-    #contact person phone number type?
     contact_phone = models.CharField(verbose_name=u'联系电话', max_length=20)
 
     def __unicode__(self):
