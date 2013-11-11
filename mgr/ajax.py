@@ -147,18 +147,23 @@ def add_edit_company(request, form):
         logger.warn(f.errors)
         return _invalid_data_json
 
-    company = f.save(commit=False)
-    #fixme 想法让CompanyForm与add_edit_company解耦，取消下面的赋值
-    company.code = f.cleaned_data["code"]
     if form["id"] == '':
+        company = Company(code = f.cleaned_data["code"], name= f.cleaned_data["name"])
         if Company.objects.filter(code=company.code).exists():
             return simplejson.dumps({'ret_code': 1000, 'field': 'code', 'error': u'公司编码重复'})
+        if Company.objects.filter(name=company.name).exists():
+            return simplejson.dumps({'ret_code': 1000, 'field': 'name', 'error': u'公司名已存在'})
         company.save()
         return _ok_json
     else:
         id = form["id"]
+        company = Company.objects.get(pk=id)
+        company.code = code
+        company.name = name
         if Company.objects.exclude(pk=id).filter(code=company.code).exists():
             return simplejson.dumps({'ret_code': 1000, 'field': 'code', 'error': u'公司编码重复'})
+        if Company.objects.exclude(pk=id).filter(name=company.name).exists():
+            return simplejson.dumps({'ret_code': 1000, 'field': 'name', 'error': u'公司名已存在'})
         company.pk = id
         company.save()
         return _ok_json
@@ -176,18 +181,24 @@ def add_edit_store(request, form):
 
     store = f.save(commit=False)
     store.code = f.cleaned_data["code"]
+    store.name = f.cleaned_data["name"]
     if form["id"] == '':
         if Store.objects.filter(code=store.code).exists():
             return simplejson.dumps({'ret_code': 1000, 'field': 'code', 'error': u'门店编码重复'})
+        if Store.objects.filter(name=store.name).exists():
+            return simplejson.dumps({'ret_code': 1000, 'field': 'name', 'error': u'门店名已存在'})
         store.save()
         return _ok_json
     else:
         id = form["id"]
         if Store.objects.exclude(pk=id).filter(code=store.code).exists():
             return simplejson.dumps({'ret_code': 1000, 'field': 'code', 'error': u'门店编码重复'})
+        if Store.objects.exclude(pk=id).filter(name=store.name).exists():
+            return simplejson.dumps({'ret_code': 1000, 'field': 'name', 'error': u'门店名已存在'})
         store.pk = id 
         store.save()
         return _ok_json
+
 
 @dajaxice_register(method='POST')
 @check_login
