@@ -2,6 +2,15 @@
 {% load qs_tags %}
 {% load perm_filters %}
 
+{% block css %}
+{{ block.super }}
+<style type="text/css">
+.prop {
+    width: 200px;
+}
+</style>
+{% endblock %}
+
 {% block main %}
 <div class="main">
     <div class="panel panel-default">
@@ -52,7 +61,7 @@
                         <td class="prop">所属用户组</td>
                         <td>{% qs_attr account.groups.all "name" ", " %}</td>
                     </tr>
-                    <tr><td class="prop">所属机构</td><td>{{ account.organization.name }}</td></tr>
+                    <tr><td class="prop">所属机构</td><td>{{ account.organization }}</td></tr>
                     <tr>
                         <td class="prop">已授权权限列表</td>
                         <td>{{ request.user|get_permissions }}</td>

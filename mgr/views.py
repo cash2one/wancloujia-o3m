@@ -159,7 +159,9 @@ def user(request):
 
     query = request.GET.get("q", None)
     if query:
-        query_set = query_set.filter(Q(username__contains(query)) | Q(email__contains(query)))
+        query_set = query_set.filter(Q(username__contains=query) | 
+                                     Q(email__contains=query) | 
+                                     Q(realname__contains=query))
 
     logger.debug(organizations)
     table = StaffTable(query_set)

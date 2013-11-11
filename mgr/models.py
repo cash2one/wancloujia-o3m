@@ -56,7 +56,7 @@ class Organization(models.Model):
         return ContentType.objects.get_for_model(type(self))
 
     def __unicode__(self):
-        return self.name
+        return self.cast().name
 
 
 class Company(Organization):
