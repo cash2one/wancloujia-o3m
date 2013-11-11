@@ -88,7 +88,7 @@ def add_edit_admin(request, form):
     admin = f.save(commit=False)
     if form["id"] == '':
         if User.objects.filter(username=admin.username).exists():
-            return simplejson.dumps({'ret_code': 1000, 'ret_msg': u'用户名重名'})
+            return simplejson.dumps({'ret_code': 1000, 'field': 'username', 'error': u'用户名重名'})
         password = str(random.randrange(100000, 999999))
         admin.set_password(password)
         admin.save()
@@ -97,7 +97,7 @@ def add_edit_admin(request, form):
     else:
         id = form["id"]
         if User.objects.exclude(pk=id).filter(username=admin.username).exists():
-            return simplejson.dumps({'ret_code': 1000, 'ret_msg': u'用户名重名'})
+            return simplejson.dumps({'ret_code': 1000, 'field': 'username', 'error': u'用户名重名'})
         admin.pk = id 
         #fixme
         admin.password = Administrator.objects.get(pk=id).password
@@ -118,7 +118,7 @@ def add_edit_employee(request, form):
     employee = f.save(commit=False)
     if form["id"] == '':
         if User.objects.filter(username=employee.username).exists():
-            return simplejson.dumps({'ret_code': 1000, 'ret_msg': u'用户名重名'})
+            return simplejson.dumps({'ret_code': 1000, 'field': 'username', 'error': u'工号重复'})
         password = str(random.randrange(100000, 999999))
         employee.set_password(password)
         employee.save()
@@ -128,7 +128,7 @@ def add_edit_employee(request, form):
     else:
         id = form["id"]
         if User.objects.exclude(pk=id).filter(username=employee.username).exists():
-            return simplejson.dumps({'ret_code': 1000, 'ret_msg': u'用户名重名'})
+            return simplejson.dumps({'ret_code': 1000, 'field': 'username', 'error': u'工号重复'})
         employee.pk = id
         #fixme
         employee.password = Employee.objects.get(pk=id).password
@@ -152,13 +152,13 @@ def add_edit_company(request, form):
     company.code = f.cleaned_data["code"]
     if form["id"] == '':
         if Company.objects.filter(code=company.code).exists():
-            return simplejson.dumps({'ret_code': 1000, 'ret_msg': u'公司编码重复'})
+            return simplejson.dumps({'ret_code': 1000, 'field': 'code', 'error': u'公司编码重复'})
         company.save()
         return _ok_json
     else:
         id = form["id"]
         if Company.objects.exclude(pk=id).filter(code=company.code).exists():
-            return simplejson.dumps({'ret_code': 1000, 'ret_msg': u'公司编码重复'})
+            return simplejson.dumps({'ret_code': 1000, 'field': 'code', 'error': u'公司编码重复'})
         company.pk = id
         company.save()
         return _ok_json
@@ -178,13 +178,13 @@ def add_edit_store(request, form):
     store.code = f.cleaned_data["code"]
     if form["id"] == '':
         if Store.objects.filter(code=store.code).exists():
-            return simplejson.dumps({'ret_code': 1000, 'ret_msg': u'门店编码重复'})
+            return simplejson.dumps({'ret_code': 1000, 'field': 'code', 'error': u'门店编码重复'})
         store.save()
         return _ok_json
     else:
         id = form["id"]
         if Store.objects.exclude(pk=id).filter(code=store.code).exists():
-            return simplejson.dumps({'ret_code': 1000, 'ret_msg': u'门店编码重复'})
+            return simplejson.dumps({'ret_code': 1000, 'field': 'code', 'error': u'门店编码重复'})
         store.pk = id 
         store.save()
         return _ok_json
@@ -217,17 +217,16 @@ def add_edit_group(request, form):
     group.name = f.cleaned_data["name"]
     if form["id"] == '':
         if Group.objects.filter(name=group.name).exists():
-            logger.debug("name: " + group.name)
-            logger.debug("exists? " + str(Group.objects.filter(name=group.name).exists()))
-            logger.debug("groups: "  + ", ".join([g.name for g in Group.objects.filter(name=group.name)]))
-            return simplejson.dumps({'ret_code': 1000, 'ret_msg': u'用户组名已存在'})
+            logger.debug("group name exists, name: " + group.name)
+            return simplejson.dumps({'ret_code': 1000, 'field': 'name', 'error': u'用户组名已存在'})
         group.save()    
         f.save_m2m()
         return _ok_json
     else:
         id = form["id"]
         if Group.objects.exclude(pk=id).filter(name=group.name).exists():
-            return simplejson.dumps({'ret_code': 1000, 'ret_msg': u'用户组名已存在'})
+            logger.debug("group name exists, name: " + group.name)
+            return simplejson.dumps({'ret_code': 1000, 'field': 'name', 'error': u'用户组名已存在'})
         group.pk = id;
         group.save()
         f.save_m2m()

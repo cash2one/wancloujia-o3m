@@ -6,7 +6,7 @@ DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
-    ('yangchen', 'yangchen@jiaoyin.cm'),
+    ('yangchen', 'yuhan534@126.com'),
 )
 
 MANAGERS = ADMINS
@@ -30,20 +30,10 @@ DATABASES = {
     }
 }
 
-SPHINX_API_VERSION = 0x11
-SPHINX_PORT=9312
-
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
         'LOCATION': '127.0.0.1:11211',
-    }
-}
-
-HAYSTACK_CONNECTIONS = {
-    'default': {
-        'ENGINE': 'whoosh_cn_backend.WhooshEngine',
-        'PATH': os.path.join(os.path.dirname(__file__), 'whoosh_index')
     }
 }
 
@@ -186,6 +176,7 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
     #'haystack',
+    #'djangosphinx'
     'framework',
     'ad',
     'mgr',
@@ -198,7 +189,6 @@ INSTALLED_APPS = (
     'django_crontab',
     'parsley',
     'auth_remember',
-    #'djangosphinx'
 )
 
 AUTH_REMEMBER_COOKIE_NAME = 'remember_token'

@@ -60,6 +60,9 @@ var parsley_options = $.extend({}, parsley.bs_options, {
     }
 });
 
+var error_check = suning.decorators.error_check;
+var login_check = suning.decorators.login_check;
+
 $(function() {
     var $modal = $("#delete-user");
     var $saveBtn = $(".save", $modal);
@@ -176,21 +179,30 @@ $(function() {
         $cancelBtn.button('reset');
     }
 
+    function btn_check(func) {
+        return function(data) {
+            reset();
+            func(data);
+        }
+    }
+
     $form.submit(function(e) {
         e.preventDefault();
         if (!$form.parsley('validate')) {
             return;
         }
+
         loading();
-        Dajaxice.mgr.reset_password(function(data) {
-            reset();
-            if(data.ret_code != 0) {
-                toast('error', data.ret_msg);
-            } else {
+        Dajaxice.mgr.reset_password(btn_check
+            (login_check
+            (error_check
+            (function(data) {
                 toast('success', '修改密码成功');
+                $modal.modal('hide');
                 suning.reload(2000);
-            }
-        }, {form: $form.serialize(true)}, {
+        }))), {
+            form: $form.serialize(true)
+        }, {
             error_callback: function() {
                 reset();
                 toast('error', NETWORK_ERROR_MSG);
@@ -210,9 +222,9 @@ $(function() {
     var $saveBtn = $(".save", $modal);
     var $cancelBtn = $(".cancel", $modal);
 
-    
     $modal.on('show.bs.modal', function() {
         $form.parsley(parsley_options);
+        $(".modal-name", $modal).html(form.id.value == "" ? "新增管理员" : "编辑管理员信息");
     });
 
     $modal.on('hide.bs.modal', function() {
@@ -239,6 +251,27 @@ $(function() {
         $cancelBtn.button('reset');
     }
 
+    function btn_check(func) {
+        return function(data) {
+            reset();
+            func(data);
+        }
+    }
+
+    function field_check(func) {
+        return function(data) {
+            if(data.ret_code != 0 && data.field) {
+                $("[name=" + data.field + "]", $form).parents(".form-group")
+                                                     .addClass("has-error")
+                                                     .removeClass("has-success");
+                toast('error', data.error);
+                return;
+            }
+
+            func(data);
+        }
+    }
+
     $form.submit(function(e) {
         e.preventDefault();
         if(!$form.parsley('validate')) {
@@ -247,18 +280,17 @@ $(function() {
         
         var func = Dajaxice.mgr.add_edit_admin;
         loading();
-        func(function(data) {
-            reset();
-            if(data.ret_code != 0) {
-                toast('error', data.ret_msg);
-                return;
-            }
-
-            toast('success', form.id.value == "" ? '新增管理员成功' : '管理员信息修改成功');
-            setTimeout(function() {
-                window.location.reload();
-            }, 2000);
-        }, { form: $form.serialize(true) }, {
+        func(btn_check
+            (login_check
+            (field_check
+            (error_check
+            (function(data) {
+                toast('success', form.id.value == "" ?  '新增管理员成功' : '管理员信息修改成功');
+                $modal.modal('hide');
+                suning.reload(2000);
+        })))), { 
+            form: $form.serialize(true) 
+        }, {
             error_callback: function() {
                 reset();
                 toast('error', NETWORK_ERROR_MSG);
@@ -276,6 +308,7 @@ $(function() {
 
     $modal.on('show.bs.modal', function() {
         $form.parsley(parsley_options);
+        $(".modal-title", $modal).html(form.id.value == "" ? "新增普通用户" : "编辑普通用户");
     });
 
     $modal.on('hide.bs.modal', function() {
@@ -305,6 +338,27 @@ $(function() {
         $cancelBtn.button('reset');
     }
 
+    function btn_check(func) {
+        return function(data) {
+            reset();
+            func(data);
+        }
+    }
+
+    function field_check(func) {
+        return function(data) {
+            if(data.ret_code != 0 && data.field) {
+                $("[name=" + data.field + "]", $form).parents(".form-group")
+                                                    .addClass("has-error")
+                                                    .removeClass("has-success");
+                toast('error', data.error);
+                return;
+            }
+
+            func(data);
+        }
+    }
+
     $form.submit(function(e) {
         e.preventDefault();
         if(!$form.parsley('validate')) {
@@ -313,20 +367,21 @@ $(function() {
         
         var func = Dajaxice.mgr.add_edit_employee
         loading();
-        func(function(data) {
-            reset();
-            if(data.ret_code != 0) {
-                toast('error', data.ret_msg);
-                return;
-            }
-
-            toast('success', form.id.value == '' ? '添加用户成功' : '修改用户信息成功');
+        func(btn_check
+            (login_check
+            (field_check
+            (error_check
+            (function(data) {
+            var msg = form.id.value == '' ? '添加用户成功' : '修改用户信息成功';
+            toast('success', msg);
+            $modal.modal('hide');
             suning.reload(2000);
-        }, { form: $form.serialize(true) }, {
-            error_callback: function() {
-                reset();
+        })))), { 
+            form: $form.serialize(true) 
+        }, {
+            error_callback: btn_check(function() {
                 toast('error', NETWORK_ERROR_MSG);
-            }
+            })
         });
     });
 });

@@ -114,14 +114,25 @@ $(function() {
             return;
         }
 
-        var toDate = new Date($to.val());
+        var toDate = parseDate($to.val());
         if (toDate.getTime() < startDate.getTime()) {
             $to.datetimepicker("setDate", startDate);
         }
     }
 
+    function parseDate(value) {
+        var regex = /(\d{4})-(\d\d)-(\d\d) (\d\d):(\d\d)/;
+        var result = value.match(regex);
+        var year = parseInt(result[1], 10);
+        var month = parseInt(result[2], 10);
+        var date = parseInt(result[3], 10);
+        var hours = parseInt(result[4], 10);
+        var minutes = parseInt(result[5], 10);
+        return new Date(year, month-1, date, hours, minutes);
+    }
+
     $from.change(function() {
-        ensureDate(new Date(this.value));
+        ensureDate(parseDate(this.value));
     });
 
     $modal.on('shown.bs.modal', function() {
@@ -130,7 +141,7 @@ $(function() {
         $(".modal-title", $modal).html(title);
 
         if($from.val() != "") {
-            ensureDate(new Date($from.val()));
+            ensureDate(parseDate($from.val()));
         } else {
             ensureDate(new Date());
         }
@@ -168,11 +179,6 @@ $(function() {
         $form.submit();
     });
 
-    function success() {
-        toast('success', !form.id.value ? '新增广告成功' : '广告信息修改成功');
-        suning.reload(2000);
-    }
-
     function field_check(func) {
         return function(data) {
             if (data.ret_code == 0) {
@@ -195,8 +201,16 @@ $(function() {
         }
 
         loading(); 
-        Dajaxice.ad.add_edit_ad(
-            btn_check(login_check(field_check(error_check(success)))), { 
+        Dajaxice.ad.add_edit_ad(btn_check
+            (login_check
+            (field_check
+            (error_check
+            (function(data) {
+                var msg = !form.id.value ? '新增广告成功' : '广告信息修改成功';
+                toast('success', msg);
+                $modal.modal('hide');
+                suning.reload(2000);
+        })))), { 
             form: $form.serialize(true),
             visible: form.visible.checked
         }, {
@@ -245,6 +259,7 @@ $(function() {
             btn_check(
             function(data) {
                 toast('success', '删除成功');
+                $modal.modal('hide');
                 suning.reload(2000);
             }))
         ), {id: ad.id}, {
