@@ -46,7 +46,7 @@ var suning = {
 
         error_check: function(func) {
             return function(data) {
-                if (data.ret_code && data.ret_code == RET_OK) {
+                if (data.ret_code == RET_OK) {
                     func(data);
                     return;
                 }

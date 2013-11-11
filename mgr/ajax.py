@@ -217,17 +217,16 @@ def add_edit_group(request, form):
     group.name = f.cleaned_data["name"]
     if form["id"] == '':
         if Group.objects.filter(name=group.name).exists():
-            logger.debug("name: " + group.name)
-            logger.debug("exists? " + str(Group.objects.filter(name=group.name).exists()))
-            logger.debug("groups: "  + ", ".join([g.name for g in Group.objects.filter(name=group.name)]))
-            return simplejson.dumps({'ret_code': 1000, 'ret_msg': u'用户组名已存在'})
+            logger.debug("group name exists, name: " + group.name)
+            return simplejson.dumps({'ret_code': 1000, 'field': 'name', 'error': u'用户组名已存在'})
         group.save()    
         f.save_m2m()
         return _ok_json
     else:
         id = form["id"]
         if Group.objects.exclude(pk=id).filter(name=group.name).exists():
-            return simplejson.dumps({'ret_code': 1000, 'ret_msg': u'用户组名已存在'})
+            logger.debug("group name exists, name: " + group.name)
+            return simplejson.dumps({'ret_code': 1000, 'field': 'name', 'error': u'用户组名已存在'})
         group.pk = id;
         group.save()
         f.save_m2m()

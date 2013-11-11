@@ -179,21 +179,29 @@ $(function() {
         $cancelBtn.button('reset');
     }
 
+    function btn_check(func) {
+        return function(data) {
+            reset();
+            func(data);
+        }
+    }
+
     $form.submit(function(e) {
         e.preventDefault();
         if (!$form.parsley('validate')) {
             return;
         }
+
         loading();
-        Dajaxice.mgr.reset_password(function(data) {
-            reset();
-            if(data.ret_code != 0) {
-                toast('error', data.ret_msg);
-            } else {
+        Dajaxice.mgr.reset_password(btn_check
+            (login_check
+            (error_check
+            (function(data) {
                 toast('success', '修改密码成功');
                 suning.reload(2000);
-            }
-        }, {form: $form.serialize(true)}, {
+        }))), {
+            form: $form.serialize(true)
+        }, {
             error_callback: function() {
                 reset();
                 toast('error', NETWORK_ERROR_MSG);

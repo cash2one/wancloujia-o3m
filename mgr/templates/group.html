@@ -41,6 +41,10 @@ $(function() {
     $("select").select2();
 });
 
+
+var error_check = suning.decorators.error_check;
+var login_check = suning.decorators.login_check;
+
 $(function() {
     var $modal = $("#add-edit-group");
     var $form = $("form", $modal);
@@ -68,6 +72,8 @@ $(function() {
 
     $modal.on('show.bs.modal', function() {
         $form.parsley(parsley.bs_options);
+        var title = form.id.value == "" ? "新增用户组" : "编辑用户组";
+        $(".modal-title", $modal).html(title);
     });
 
     $modal.on('hide.bs.modal', function() {
@@ -81,6 +87,27 @@ $(function() {
         $form.submit();
     });
 
+    function btn_check(func) {
+        return function(data) {
+            reset();
+            func(data);
+        }
+    }
+
+    function group_name_check(func) {
+        return function(data) {
+            if(data.ret_code != '0' && data.field) {
+                $("[name=" + data.field + "]").parents(".form-group")
+                                                .addClass("has-error")
+                                                .removeClass("has-success")
+                toast('error', data.error);
+                return;
+            }
+
+            func(data);
+        }
+    }
+
     $form.submit(function(e) {
         e.preventDefault();
         if (!$form.parsley('validate')) {
@@ -88,16 +115,18 @@ $(function() {
         }
 
         loading(); 
-        Dajaxice.mgr.add_edit_group(function(data) {
-            reset();
-            if(data.ret_code != 0) {
-                toast('error', data.ret_msg);
-                return;
-            }
-
-            toast('success', !form.id.value ? '新增用户组成功' : '用户组信息修改成功');
-            suning.reload(2000);
-        }, {form: $form.serialize(true)}, {
+        Dajaxice.mgr.add_edit_group(btn_check
+            (login_check
+            (group_name_check
+            (error_check
+            (function(data) {
+                var msg = form.id.value == "" ?  '新增用户组成功' : '用户组信息修改成功'
+                toast('success', msg);
+                $modal.modal("hide");
+                suning.reload(2000);
+        })))), {
+            form: $form.serialize(true)
+        }, {
             error_callback: function() {
                 reset();
                 toast('error', NETWORK_ERROR_MSG);
@@ -128,17 +157,25 @@ $(function() {
         $cancelBtn.button('reset');
     }
 
+    function btn_check(func) {
+        return function(data) {
+            reset();
+            func(data);
+        }
+    }
+
     $saveBtn.click(function() {
         loading();
-        Dajaxice.mgr.delete_group(function(data) {
-            reset();
-            if (data.ret_code != 0) {
-                toast('error', data.ret_msg);
-                return;
-            }
-            toast('success', '删除成功');
-            suning.reload(2000);
-        }, {id: group.id}, {
+        Dajaxice.mgr.delete_group(btn_check
+            (login_check
+            (error_check
+            (function(data) {
+                $modal.modal('hide');
+                toast('success', '删除成功');
+                suning.reload(2000);
+        }))), {
+            id: group.id
+        }, {
             error_callback: function() {
                 reset();
                 toast('error', NETWORK_ERROR_MSG);
