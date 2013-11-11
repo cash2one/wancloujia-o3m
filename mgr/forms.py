@@ -85,20 +85,19 @@ class AdminForm(forms.ModelForm):
 
 
 @parsleyfy
-class CompanyForm(forms.ModelForm):
+class CompanyForm(forms.Form):
     code = forms.CharField(label=u'编码', max_length=20)
+    name = forms.CharField(label=u'名称', max_length=20)
     
-    class Meta:
-        model = Company
-        fields = ('name',)
 
 @parsleyfy
 class StoreForm(forms.ModelForm):
     code = forms.CharField(label=u'编码', max_length=20)
+    name = forms.CharField(label=u'名称', max_length=20)
     
     class Meta:
         model = Store
-        fields = ('company', 'name')
+        fields = ('company',)
 
 
 @parsleyfy

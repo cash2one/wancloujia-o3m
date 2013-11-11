@@ -31,6 +31,30 @@ var suning = {
             window.location.reload();
         }, delay);
     },
+
+    toastNetworkError: function() {
+        toast('error', NETWORK_ERROR_MSG);
+    },
+
+    // TODO 在bs-modal之上扩展，而不使用以下的helper function
+    modal: {
+        setTitle: function($modal, title) {
+            $(".modal-title", $modal).html(title);
+        },
+
+        lock: function($modal) {
+            $(".modal-footer .btn").button('loading');
+        },
+
+        unlock: function($modal) {
+            $(".modal-footer .btn").button('reset');
+        },
+
+        highlightError: function(form, field) {
+            var group = $("[name=" + field + "]", form).parents(".form-group");
+            group.addClass("has-error").removeClass("has-success");
+        }
+    },
     
     decorators: {
         login_check: function(func) {
