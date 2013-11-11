@@ -79,15 +79,8 @@ def organization(request):
     storeForm = StoreForm()
 
     if request.user.is_superuser or request.user.is_staff:
-        storeTable = StoreTable(Store.objects.all())
-        if request.GET.get("cq") is None:
-            companyTable = CompanyTable(Company.objects.all())
-        else:
-            cq = request.GET.get("cq")
-            logger.debug("search company, query: %s" % cq)
-            results = Company.objects.filter(Q(code=cq) | Q(name__contains=cq))
-            logger.debug("search results(%d items) of company: %s" % (len(results), results))
-            companyTable = CompanyTable(results)
+        store_query_set = Store.objects.all()
+        company_query_set = Company.objects.all()
     else:
         user = cast_staff(request.user)
         organization = user.organization.cast()
@@ -95,17 +88,31 @@ def organization(request):
             store = organization
             company = store.company
             #TODO 直接构造QuerySet
-            companyTable = CompanyTable(Company.objects.filter(pk=company.pk))
-            storeTable = StoreTable(Store.objects.filter(pk=store.pk))
+            store_query_set = Store.objects.filter(pk=store.pk)
+            company_query_set = Company.objects.filter(pk=company.pk)
         else:
-            company = organization.cast()
+            company = organization
             #TODO 直接构造QuerySet
-            companyTable = CompanyTable(Company.objects.filter(pk=company.pk))
-            storeTable = StoreTable(Store.objects.filter(company=company))
+            company_query_set = Company.objects.filter(pk=company.pk)
+            store_query_set = Store.objects.filter(company=company)
+
+
+    cq = request.GET.get("cq", None)
+    if cq:
+        company_query_set = company_query_set.filter(Q(code=cq) | Q(name__contains=cq))
+
+    sq = request.GET.get("sq", None)
+    if sq:
+        store_query_set = store_query_set.filter(Q(code=sq) | Q(name__contains=sq))
+
+    storeTable = StoreTable(store_query_set)
+    companyTable = CompanyTable(company_query_set)
 
     RequestConfig(request, paginate={"per_page": 5}).configure(companyTable)
     RequestConfig(request, paginate={"per_page": 5}).configure(storeTable)
     return render(request, "organization.html", {
+        "cq": cq,
+        "sq": sq,
         "companyForm": companyForm,
         "companyTable": companyTable,
         "storeForm": storeForm,

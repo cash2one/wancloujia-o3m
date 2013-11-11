@@ -179,6 +179,7 @@ form.search input[type=text] {
     border: 1px solid #DDD;
     font-size: 14px;
     line-height: 20px;
+    background: #fdfdfd;
     padding: 5px 12px;
     display: block;
     padding-right: 40px;
@@ -187,6 +188,7 @@ form.search input[type=text] {
 
 form.search input[type=text]:focus {
     border: 1px solid #66AFE9;
+    background: #fff;
     outline: none;
 }
 
