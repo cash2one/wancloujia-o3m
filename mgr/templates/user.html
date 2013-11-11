@@ -155,6 +155,8 @@ $(function() {
 
     $modal.on('hide.bs.modal', function() {
         $form.parsley('destroy');
+        form.password.value = "";
+        form.confirm.value = "";
     });
 
     $("table").on('click', '.pwd', function() {
