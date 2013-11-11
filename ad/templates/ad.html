@@ -18,6 +18,10 @@ td.period {
 td.title, td.visible {
     width: 100px;
 }
+
+td.cover {
+    width: 110px;
+}
 </style>
 {% endblock %}
 
@@ -40,7 +44,7 @@ td.title, td.visible {
     <div class="panel panel-default">
         <div class="panel-heading">
             广告列表
-            {% include "search_form.html" with query='q' %}
+            {% include "search_form.html" with query=query %}
         </div>
         <div class="panel-body"> 
             {% render_table table "table_template.html" %}

@@ -27,15 +27,14 @@ def can_view_ad(user):
 @user_passes_test(can_view_ad, login_url=settings.PERMISSION_DENIED_URL)
 @active_tab("ad")
 def ad(request):
-    if request.GET.get("q"):
-        query = request.GET.get("q")
-        query_set = AD.objects.filter(Q(title__contains=query) | Q(desc__contains=query))
-    else:
-        #query_set = AD.objects.all().order_by("position")
-        query_set = AD.objects.all()
+    query_set = AD.objects.all()
+    query = request.GET.get("q", None)
+    if query:
+        query_set = query_set.filter(Q(title__contains=query) | Q(desc__contains=query))
     table = ADTable(query_set)
     RequestConfig(request, paginate={"per_page": 5}).configure(table)
     return render(request, "ad.html", {
+        "query": query,
         "table": table,
         'form': ADForm()
     });
