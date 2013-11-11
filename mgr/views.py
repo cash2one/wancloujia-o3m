@@ -125,10 +125,16 @@ def organization(request):
 @user_passes_test(lambda u: u.is_staff or u.is_superuser, login_url=settings.PERMISSION_DENIED_URL)
 @active_tab("system", "group")
 def group(request):
-    groupTable = GroupTable(Group.objects.all().order_by("-pk"))
+    query_set = Group.objects.all().order_by("-pk")
+    query = request.GET.get("q", None)
+    if query:
+        query_set = query_set.filter(Q(name__contains=query))
+
+    groupTable = GroupTable(query_set)
     groupForm = GroupForm()
     RequestConfig(request, paginate={"per_page": settings.PAGINATION_PAGE_SIZE}).configure(groupTable)
     return render(request, "group.html", {
+        'query': query,
         'groupTable': groupTable,
         'groupForm': groupForm
     }); 

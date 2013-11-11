@@ -22,7 +22,7 @@
     <div class="panel panel-default">
         <div class="panel-heading">
             用户组列表
-            {# {% include "search_form.html" with query='q' %} #}
+            {% include "search_form.html" with query=query %} 
         </div>
         <div class="panel-body"> 
             {% render_table groupTable "table_template.html" %}
