@@ -140,17 +140,10 @@ def can_view_staff(user):
 @user_passes_test(can_view_staff, login_url=settings.PERMISSION_DENIED_URL)
 @active_tab("system", "user")
 def user(request):
-    organizations = Organization.objects.all()
-    if request.user.is_superuser:
-        if request.GET.get("q", None):
-            #query_set = SearchQuerySet().filter(content=request.GET.get("q")).models(Staff)
-            logger.debug("search results: " + str(query_set))
-            for item in query_set:
-                logger.debug(str(item))
-        else:
-            query_set = Staff.objects.exclude(is_superuser=True)
-    elif request.user.is_staff:
-        query_set = Employee.objects.all()
+
+    if request.user.is_superuser or request.user.is_staff:
+        organizations = Organization.objects.all()
+        query_set = Staff.objects.exclude(is_superuser=True)
     else:
         user = cast_staff(request.user)
         if user.in_store():
@@ -164,6 +157,10 @@ def user(request):
             organizations = Organization.objects.filter(pk__in=organization_pks)
             query_set = Employee.objects.filter(organization__pk__in=organization_pks)
 
+    query = request.GET.get("q", None)
+    if query:
+        query_set = query_set.filter(Q(username__contains(query)) | Q(email__contains(query)))
+
     logger.debug(organizations)
     table = StaffTable(query_set)
     employeeForm = EmployeeForm()
@@ -173,6 +170,7 @@ def user(request):
     RequestConfig(request, paginate={"per_page": settings.PAGINATION_PAGE_SIZE}).configure(table) 
     return render(request, "user.html", {
         "table": table,
+        "query": query,
         "employeeForm": employeeForm,
         "adminForm": adminForm,
         "resetPasswordForm": resetPasswordForm
