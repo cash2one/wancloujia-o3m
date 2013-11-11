@@ -88,7 +88,7 @@ def add_edit_admin(request, form):
     admin = f.save(commit=False)
     if form["id"] == '':
         if User.objects.filter(username=admin.username).exists():
-            return simplejson.dumps({'ret_code': 1000, 'ret_msg': u'用户名重名'})
+            return simplejson.dumps({'ret_code': 1000, 'field': 'username', 'error': u'用户名重名'})
         password = str(random.randrange(100000, 999999))
         admin.set_password(password)
         admin.save()
@@ -97,7 +97,7 @@ def add_edit_admin(request, form):
     else:
         id = form["id"]
         if User.objects.exclude(pk=id).filter(username=admin.username).exists():
-            return simplejson.dumps({'ret_code': 1000, 'ret_msg': u'用户名重名'})
+            return simplejson.dumps({'ret_code': 1000, 'field': 'username', 'error': u'用户名重名'})
         admin.pk = id 
         #fixme
         admin.password = Administrator.objects.get(pk=id).password
@@ -118,7 +118,7 @@ def add_edit_employee(request, form):
     employee = f.save(commit=False)
     if form["id"] == '':
         if User.objects.filter(username=employee.username).exists():
-            return simplejson.dumps({'ret_code': 1000, 'ret_msg': u'用户名重名'})
+            return simplejson.dumps({'ret_code': 1000, 'field': 'username', 'error': u'工号重复'})
         password = str(random.randrange(100000, 999999))
         employee.set_password(password)
         employee.save()
@@ -128,7 +128,7 @@ def add_edit_employee(request, form):
     else:
         id = form["id"]
         if User.objects.exclude(pk=id).filter(username=employee.username).exists():
-            return simplejson.dumps({'ret_code': 1000, 'ret_msg': u'用户名重名'})
+            return simplejson.dumps({'ret_code': 1000, 'field': 'username', 'error': u'工号重复'})
         employee.pk = id
         #fixme
         employee.password = Employee.objects.get(pk=id).password
