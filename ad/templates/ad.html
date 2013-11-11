@@ -168,11 +168,6 @@ $(function() {
         $form.submit();
     });
 
-    function success() {
-        toast('success', !form.id.value ? '新增广告成功' : '广告信息修改成功');
-        suning.reload(2000);
-    }
-
     function field_check(func) {
         return function(data) {
             if (data.ret_code == 0) {
@@ -195,8 +190,16 @@ $(function() {
         }
 
         loading(); 
-        Dajaxice.ad.add_edit_ad(
-            btn_check(login_check(field_check(error_check(success)))), { 
+        Dajaxice.ad.add_edit_ad(btn_check
+            (login_check
+            (field_check
+            (error_check
+            (function(data) {
+                var msg = !form.id.value ? '新增广告成功' : '广告信息修改成功';
+                toast('success', msg);
+                $modal.modal('hide');
+                suning.reload(2000);
+        })))), { 
             form: $form.serialize(true),
             visible: form.visible.checked
         }, {
@@ -245,6 +248,7 @@ $(function() {
             btn_check(
             function(data) {
                 toast('success', '删除成功');
+                $modal.modal('hide');
                 suning.reload(2000);
             }))
         ), {id: ad.id}, {

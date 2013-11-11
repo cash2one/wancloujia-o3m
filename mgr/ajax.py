@@ -152,13 +152,13 @@ def add_edit_company(request, form):
     company.code = f.cleaned_data["code"]
     if form["id"] == '':
         if Company.objects.filter(code=company.code).exists():
-            return simplejson.dumps({'ret_code': 1000, 'ret_msg': u'公司编码重复'})
+            return simplejson.dumps({'ret_code': 1000, 'field': 'code', 'error': u'公司编码重复'})
         company.save()
         return _ok_json
     else:
         id = form["id"]
         if Company.objects.exclude(pk=id).filter(code=company.code).exists():
-            return simplejson.dumps({'ret_code': 1000, 'ret_msg': u'公司编码重复'})
+            return simplejson.dumps({'ret_code': 1000, 'field': 'code', 'error': u'公司编码重复'})
         company.pk = id
         company.save()
         return _ok_json
@@ -178,13 +178,13 @@ def add_edit_store(request, form):
     store.code = f.cleaned_data["code"]
     if form["id"] == '':
         if Store.objects.filter(code=store.code).exists():
-            return simplejson.dumps({'ret_code': 1000, 'ret_msg': u'门店编码重复'})
+            return simplejson.dumps({'ret_code': 1000, 'field': 'code', 'error': u'门店编码重复'})
         store.save()
         return _ok_json
     else:
         id = form["id"]
         if Store.objects.exclude(pk=id).filter(code=store.code).exists():
-            return simplejson.dumps({'ret_code': 1000, 'ret_msg': u'门店编码重复'})
+            return simplejson.dumps({'ret_code': 1000, 'field': 'code', 'error': u'门店编码重复'})
         store.pk = id 
         store.save()
         return _ok_json

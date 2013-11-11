@@ -60,6 +60,9 @@ $(function() {
     $("select").select2();
 });
 
+var error_check = suning.decorators.error_check;
+var login_check = suning.decorators.login_check;
+
 $(function() {
     var $modal = $("#add-edit-company");
     var $form = $("form", $modal);
@@ -85,8 +88,17 @@ $(function() {
         $cancelBtn.button('reset');
     }
 
+    function btn_check(func) {
+        return function(data) {
+            reset();
+            func(data);
+        }
+    }
+
     $modal.on('show.bs.modal', function() {
         $form.parsley(parsley.bs_options);
+        var title = form.id.value == "" ? '添加公司' : '编辑公司';
+        $(".modal-title", $modal).html(title);
     });
 
     $modal.on('hide.bs.modal', function() {
@@ -96,27 +108,41 @@ $(function() {
         $form.parsley('destroy');
     });
 
+    function field_check(func) {
+        return function(data) {
+            if(data.ret_code != 0 && data.field) {
+                $("[name=" + data.field+ "]", form).parents(".form-group")
+                                                    .addClass("has-error")
+                                                    .removeClass("has-success");
+                toast('error', data.error);
+                return;
+            }
+
+            func(data);
+        }
+    }
+
     $saveBtn.click(function() {
         $form.submit();
     });
 
     $form.submit(function(e) {
         e.preventDefault();
-        if (!$form.parsley('validate')) {
-            return;
-        }
+        if (!$form.parsley('validate')) return;
 
         loading(); 
-        Dajaxice.mgr.add_edit_company(function(data) {
-            reset();
-            if(data.ret_code != 0) {
-                toast('error', data.ret_msg);
-                return;
-            }
-
-            toast('success', !form.id.value ? '新增公司成功' : '公司信息修改成功');
-            suning.reload(2000);
-        }, {form: $form.serialize(true)}, {
+        Dajaxice.mgr.add_edit_company(btn_check
+            (login_check
+            (field_check
+            (error_check
+            (function(data) {
+                var msg = !form.id.value ? '新增公司成功' : '公司信息修改成功';
+                toast('success', msg);
+                $modal.modal('hide');
+                suning.reload(2000);
+        })))), {
+            form: $form.serialize(true)
+        }, {
             error_callback: function() {
                 reset();
                 toast('error', NETWORK_ERROR_MSG);
@@ -153,6 +179,8 @@ $(function() {
 
     $modal.on('show.bs.modal', function() {
         $form.parsley(parsley.bs_options);
+        var title = form.id.value == "" ? '添加门店' : '编辑门店';
+        $(".modal-title", $modal).html(title);
     });
 
     $modal.on('hide.bs.modal', function() {
@@ -167,23 +195,44 @@ $(function() {
         $form.submit();
     });
 
-    $form.submit(function(e) {
-        e.preventDefault();
-        if (!$form.parsley('validate')) {
-            return;
-        }
-
-        loading(); 
-        Dajaxice.mgr.add_edit_store(function(data) {
+    function btn_check(func) {
+        return function(data) {
             reset();
-            if(data.ret_code != 0) {
-                toast('error', data.ret_msg);
+            func(data);
+        }
+    }
+
+    function field_check(func) {
+        return function(data) {
+            if(data.ret_code != 0 && data.field) {
+                $("[name=" + data.field+ "]", form).parents(".form-group")
+                                                    .addClass("has-error")
+                                                    .removeClass("has-success");
+                toast('error', data.error);
                 return;
             }
 
-            toast('success', !form.id.value ? '新增门店成功' : '门店信息修改成功');
-            suning.reload(2000);
-        }, {form: $form.serialize(true)}, {
+            func(data);
+        }
+    }
+
+    $form.submit(function(e) {
+        e.preventDefault();
+        if (!$form.parsley('validate')) return;
+
+        loading(); 
+        Dajaxice.mgr.add_edit_store(btn_check
+            (login_check
+            (field_check
+            (error_check
+            (function(data) {
+                var msg = !form.id.value ? '新增门店成功' : '门店信息修改成功';
+                toast('success', msg);
+                suning.reload(2000);
+                $modal.modal('hide');
+        })))), {
+            form: $form.serialize(true)
+        }, {
             error_callback: function() {
                 reset();
                 toast('error', NETWORK_ERROR_MSG);
@@ -214,17 +263,23 @@ $(function() {
         $cancelBtn.button('reset');
     }
 
+    function btn_check(func){
+        return function(data) {
+            reset();
+            func(data);
+        }
+    }
+
     $saveBtn.click(function() {
         loading();
-        Dajaxice.mgr.delete_organization(function(data) {
-            reset();
-            if (data.ret_code != 0) {
-                toast('error', data.ret_msg);
-                return;
-            }
-            toast('success', '删除成功');
-            suning.reload(2000);
-        }, {id: organization.id}, {
+        Dajaxice.mgr.delete_organization(btn_check
+            (login_check
+            (error_check
+            (function(data) {
+                toast('success', '删除成功');
+                $modal.modal('hide');
+                suning.reload(2000);
+        }))), {id: organization.id}, {
             error_callback: function() {
                 reset();
                 toast('error', NETWORK_ERROR_MSG);

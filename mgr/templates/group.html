@@ -96,10 +96,10 @@ $(function() {
 
     function group_name_check(func) {
         return function(data) {
-            if(data.ret_code != '0' && data.field) {
-                $("[name=" + data.field + "]").parents(".form-group")
-                                                .addClass("has-error")
-                                                .removeClass("has-success")
+            if(data.ret_code != 0 && data.field) {
+                $("[name=" + data.field + "]", form).parents(".form-group")
+                                                    .addClass("has-error")
+                                                    .removeClass("has-success")
                 toast('error', data.error);
                 return;
             }
