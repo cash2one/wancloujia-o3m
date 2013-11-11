@@ -198,6 +198,7 @@ $(function() {
             (error_check
             (function(data) {
                 toast('success', '修改密码成功');
+                $modal.modal('hide');
                 suning.reload(2000);
         }))), {
             form: $form.serialize(true)
