@@ -14,6 +14,12 @@ window.parsley = window.parsley || {};
 window.parsley.bs_options = options;
 })(window);
 
+(function(global) {
+var console = global.console || {}
+console.log = console.log || function() {};
+global.console = console;
+})(window);
+
 window.NETWORK_ERROR_MSG = '网路异常，请稍后重试';
 
 (function() {
