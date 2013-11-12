@@ -27,13 +27,16 @@ def can_view_ad(user):
 @user_passes_test(can_view_ad, login_url=settings.PERMISSION_DENIED_URL)
 @active_tab("ad")
 def ad(request):
-    query_set = AD.objects.all()
+    query_set = AD.objects.all().order_by("position")
     query = request.GET.get("q", None)
     if query:
         query_set = query_set.filter(Q(title__contains=query) | Q(desc__contains=query))
     table = ADTable(query_set)
     RequestConfig(request, paginate={"per_page": 5}).configure(table)
+    visible_ads = AD.objects.filter(visible=True).order_by("position")
+    ad_list = [{"id": ad.pk, "title": ad.title} for ad in visible_ads]
     return render(request, "ad.html", {
+        "ad_list": ad_list,
         "query": query,
         "table": table,
         'form': ADForm()
