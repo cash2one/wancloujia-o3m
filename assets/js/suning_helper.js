@@ -14,6 +14,12 @@ window.parsley = window.parsley || {};
 window.parsley.bs_options = options;
 })(window);
 
+(function(global) {
+var console = global.console || {}
+console.log = console.log || function() {};
+global.console = console;
+})(window);
+
 window.NETWORK_ERROR_MSG = '网路异常，请稍后重试';
 
 (function() {
@@ -59,17 +65,19 @@ var suning = {
     decorators: {
         login_check: function(func) {
             return function(data) {
-               if(data.ret_code == RET_NOT_LOGIN) {
-                   toast('error', '会话可能已过期，请重新登录');
-                   return;
-               }
+                console.log(data);
+                if(data.ret_code == RET_NOT_LOGIN) {
+                    toast('error', '会话可能已过期，请重新登录');
+                    return;
+                }
 
-               func(data);
+                func(data);
             }
         },
 
         error_check: function(func) {
             return function(data) {
+                console.log("error", data)
                 if (data.ret_code == RET_OK) {
                     func(data);
                     return;

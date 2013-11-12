@@ -3,6 +3,15 @@
 {% block title %}调整顺序{% endblock %}
 
 {% block body %}
+<table class="table table-bordered">
+    <tbody>
+    {% for ad in ad_list %}
+    <tr class="ad" data-id="{{ ad.id }}"><td>{{ ad.title }}</td></tr>
+    {% empty %}
+    <tr><td>暂无广告</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
 {% endblock %}
 
 {% block foot %}

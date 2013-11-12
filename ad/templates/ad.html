@@ -22,6 +22,14 @@ td.title, td.visible {
 td.cover {
     width: 110px;
 }
+
+tr.drag {
+    background-color: #f1f1f1;
+}
+
+#reorder-ad .ad:hover {
+    cursor: move;
+}
 </style>
 {% endblock %}
 
@@ -61,15 +69,51 @@ td.cover {
 {{ block.super }}
 <script type="text/javascript" src="{{ STATIC_URL }}ajax_upload/js/jquery.iframe-transport.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}ajax_upload/js/ajax-upload-widget.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.tablednd.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap-datetimepicker.min.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/locales/bootstrap-datetimepicker.zh-CN.js" charset='utf-8'></script>
 <script type="text/javascript">
 $(function() {
     $("select").select2();
+    $("#reorder-ad table").tableDnD({
+        onDragClass: "drag"
+    });
 });
 
 var login_check = suning.decorators.login_check;
 var error_check = suning.decorators.error_check;
+
+$(function() {
+    var $modal = $("#reorder-ad");
+    var $saveBtn = $modal.find(".save");
+
+    function lock_check(func) {
+        return function(data) {
+            suning.modal.unlock($modal);
+            func(data);
+        }
+    }
+
+    $saveBtn.click(function() {
+        var pks = [];
+        $modal.find(".ad").each(function() {
+            var id = $(this).data("id")
+            if (id) pks.push(id); 
+        });
+        if(pks.length == 0)  return;
+
+        suning.modal.lock($modal);
+        Dajaxice.ad.sort_ad(lock_check(login_check(error_check(function(data) {
+            toast('success', '操做成功！');
+            $modal.modal('hide');
+            suning.reload(2000);
+        }))), {
+            pks: pks.join(",")
+        }, {
+            error_callback: lock_check(suning.toastNetworkError)
+        });
+    });
+});
 
 $(function() {
     var $modal = $("#add-edit-ad");
@@ -96,13 +140,15 @@ $(function() {
     });
 
     $("table").on("click", ".edit", function() {
-        var ad = $(this.parentNode).data(); form.id.value = ad.id;
+        var ad = $(this.parentNode).data(); 
+        form.id.value = ad.id;
         form.visible.checked = ad.visible
         form.title.value = ad.title;
         form.cover.value = ad.cover;
         form.from_date.value = ad.from_date;
         form.to_date.value = ad.to_date;
         form.desc.value = ad.desc;
+        form.position.value = ad.position;
         $modal.modal('show');
         auw.displaySelection();
     });
@@ -153,12 +199,13 @@ $(function() {
 
     $modal.on('hidden.bs.modal', function() {
         form.id.value = "";
-        form.visible.checked = "";
+        form.visible.checked = false;
         form.title.value = "";
         form.cover.value = "";
         form.from_date.value = "";
         form.to_date.value = "";
         form.desc.value = "";
+        form.position.value = 0;
         $form.parsley('destroy');
     });
 
@@ -185,16 +232,13 @@ $(function() {
 
     function field_check(func) {
         return function(data) {
-            if (data.ret_code == 0) {
-                func(data);
+            if (data.ret_code != 0 && data.field) {
+                suning.modal.highlightError(form, data.field);
+                toast('error', data.error);
                 return;
             }
 
-            if (data.field) {
-                var $group = $("[name=" + data.field +"]", form).parents(".form-group");
-                $group.removeClass("has-success").addClass("has-error");
-                toast('error', data.error);
-            }
+            func(data);
         }
     }
 

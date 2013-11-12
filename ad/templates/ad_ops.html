@@ -4,8 +4,15 @@
 <div class="btn-group btn-group-sm" 
     data-id="{{ record.id }}"
     data-title="{{ record.title }}"
+    data-position="{{ record.position }}"
     data-cover="{{ MEDIA_URL }}{{ record.cover }}"
-    data-visible="{{ record.visible }}"
+
+    {% if record.visible %}
+    data-visible="true"
+    {% else %}
+    data-visible="false"
+    {% endif %}
+
     data-from_date="{{ record.from_date|date:'Y-m-d H:i' }}"
     data-to_date="{{ record.to_date|date:'Y-m-d H:i' }}"
     data-desc="{{ record.desc }}"

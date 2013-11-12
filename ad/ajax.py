@@ -5,8 +5,8 @@ from django.utils import simplejson
 from django.contrib.auth.models import User
 from dajaxice.decorators import dajaxice_register
 
+from ad import models
 from forms import *
-from models import *
 from suning.decorators import *
 
 logger = logging.getLogger(__name__)
@@ -19,7 +19,7 @@ _ok_json = simplejson.dumps({'ret_code': 0})
 @dajaxice_register(method='POST')
 @check_login
 def delete_ad(request, id):
-    AD.objects.get(pk=id).delete()
+    models.delete_ad(id)
     return _ok_json
 
 
@@ -36,14 +36,22 @@ def add_edit_ad(request, form, visible):
     ad = f.save(commit=False)
     ad.visible = visible
     if form["id"] == "":
-        if AD.objects.filter(title=ad.title).exists():
+        if models.AD.objects.filter(title=ad.title).exists():
             return simplejson.dumps({'ret_code': 1000, 'field': 'title', 'error': u'广告标题已存在'})
-        ad.save()
+        models.add_ad(ad)
         return _ok_json
     else:
         ad.pk = form["id"]
-        if AD.objects.exclude(pk=ad.pk).filter(title=ad.title).exists():
+        if models.AD.objects.exclude(pk=ad.pk).filter(title=ad.title).exists():
             return simplejson.dumps({'ret_code': 1000, 'field': 'title', 'error': u'广告标题已存在'})
-        ad.save()
+        models.edit_ad(ad)
         return _ok_json
+
+
+@dajaxice_register(method='POST')
+@check_login
+def sort_ad(request, pks):
+    ad_pks = [int(pk) for pk in pks.split(",")]
+    models.sort_ad(ad_pks)
+    return _ok_json
 
