@@ -7,6 +7,34 @@
 {% block css %}
 {{ block.super }}
 <link rel="stylesheet" href="{{ STATIC_URL }}css/jquery.fileupload.css" />
+<style type="text/css">
+
+.uploadify {
+    float: left;
+    position: absolute;
+}
+
+.uploadify-button {
+    text-align: center;
+    background: #5CB85C;
+    color: #FFF;
+    cursor: pointer;
+    border-radius: 4px;
+    border: 1px solid #4CAE4C;
+}
+
+.uploadify-button:hover {
+    background-color: #47A447;
+    border-color: #398439;
+}
+.uploadify-queue {
+    display: none;
+}
+
+#cancel-upload {
+    float: left;
+}
+</style>
 {% endblock %}
 
 {% block main %}
@@ -39,6 +67,7 @@
 <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.ui.widget.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.iframe-transport.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.fileupload.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.uploadify.js"></script>
 <script type="text/javascript">
 $(function() {
     $("select").select2();
@@ -63,64 +92,117 @@ $(function() {
     function lock_check(func) {
         return function() {
             suning.modal.unlock($modal);
-            func.call(window, arguments);
+            func && func.apply(window, arguments);
         }
     }
 
     var $upload = $("#fileupload");
-    var $tip = $upload.find(".tip");
+    var $cancelBtn = $("#cancel-upload");
+    var $tip = $uploadForm.find(".tip");
+
 
     function enable_upload(func) {
         return function() {
-            func();
+            $("#fileupload").uploadify('disable', false);
+            func && func.apply(window, arguments);
         }
     }
 
     function disable_upload(func) {
         return function() {
-            func();
+            $("#fileupload").uploadify('disable', true);
+            func && func.apply(window, arguments);
+        }
+    }
+
+    function show_cancel_btn(func) {
+        return function() {
+            $("#fileupload").css("top", '10000px');
+            $cancelBtn.show();
+            func && func.apply(window, arguments);
+        }
+    }
+
+    function show_upload_btn(func) {
+        return function() {
+            $cancelBtn.hide();
+            $("#fileupload").css("top", '0px');
+            func && func.apply(window, arguments);
         }
     }
 
     function onStart() {
         suning.modal.lock($modal);
-        $tip.find(".progress").html(0);
-        $tip.fadeOut();
+        $tip.html("");
+        $tip.show();
     }
 
     function onProgress(progress) {
-        $tip.find(".progress").html(progress);
+        $tip.html('已上传' + progress + '%，请稍候...');
+        if (progress == 100) {
+            $tip.html('正在解析应用信息...');
+        }
     }
 
     function clearTip() {
-        $tip.fadeIn(function() {
-            $tip.find(".progress").html(0);
-        });
+        $tip.hide().html("");
     }
 
     function onDone(e, data) {
         clearTip();
-        console.log(e, data);
     }
 
-    function onFailed() {
+    function onFailed(file, errorCode, errorMsg, errorString) {
+        console.log(file, errorCode, errorMsg, errorString);
         clearTip();
+
+        if(errorString == "Cancelled") return;
         toast('error', '应用上传失败');
     }
 
-    $upload.fileupload({
-        url: 'upload',
-        autoUpload: true,
-        formData: function() {
-            var form = $uploadForm[0];
-            return [{name: 'csrfmiddlewaretoken', value: form.csrfmiddlewaretoken.value}]
+    $cancelBtn.click(function(e) {
+        e.preventDefault();
+        $("#fileupload").uploadify('cancel');
+    });
+
+    $upload.uploadify({
+        swf: '{{ STATIC_URL }}uploadify.swf',
+        uploader: 'upload',
+        buttonText: "<span class='glyphicon glyphicon-upload'></span>&nbsp;选择文件",
+        fileObjName: 'file',
+        fileTypeExts: "*.apk",
+        width: 100,
+        height: 34,
+        multi: false,
+        formData: {
+            csrfmiddlewaretoken: $uploadForm[0].csrfmiddlewaretoken.value
         },
-        submit: disable_upload(onStart),
-        faield: enable_upload(lock_check(onFailed)),
-        done: enable_upload(lock_check(onDone)),
-        progress: function(e, data) {
-            onProgress(parseInt(data.loaded / data.total * 100, 10));
-        }
+        onDisable: function() {
+            $("#fileupload-button").css("opacity", 0.6);
+        },
+        onEnable: function() {
+            $("#fileupload-button").css("opacity", 1);
+        },
+        onSelectError: function() {
+            toast('error', '文件出错，可能是文件类型不符合要求');
+        },
+        onCancel: enable_upload
+                    (show_upload_btn
+                    (lock_check())),
+        onUploadStart: disable_upload
+                        (show_cancel_btn
+                        (onStart)),
+        onUploadProgress: function(file, upload, total) {
+            onProgress(parseInt(upload / total * 100, 10));
+        },
+        onUploadError: enable_upload
+                        (show_upload_btn
+                        (lock_check
+                        (onFailed))),
+        onUploadSuccess: enable_upload
+                            (show_upload_btn
+                            (lock_check
+                            (onDone)))
     });
 
     $("table").on("click", ".edit", function() {
@@ -181,8 +263,8 @@ $(function() {
         }))));
         var onError = lock_check(suning.toastNetworkError);
 
-        $suning.modal.lock($modal);
-        Dajaxice.mgr.add_edit_app(success, { 
+        suning.modal.lock($modal);
+        Dajaxice.mgr.add_edit_app(onSuccess, { 
             form: $form.serialize(true) 
         }, { 
             error_callback: onError 
