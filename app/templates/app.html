@@ -1,0 +1,229 @@
+{% extends "base.html" %}
+
+{% load render_table from django_tables2 %}
+{% load django_select2_tags %}
+{% load perm_filters %}
+
+{% block css %}
+{{ block.super }}
+<link rel="stylesheet" href="{{ STATIC_URL }}css/jquery.fileupload.css" />
+{% endblock %}
+
+{% block main %}
+<div class="main">
+    <div class="toolbar">
+        <a data-toggle="modal" class="btn btn-primary" href="#add-edit-app"
+            {% if request.user|is_employee and not perms.app %}
+            disabled='disabled'
+            {% endif %}>
+            新增应用
+        </a>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            应用列表
+            {% include "search_form.html" with query=query %} 
+        </div>
+        <div class="panel-body"> 
+            {% render_table table "table_template.html" %}
+        </div>
+    </div>
+</div>
+
+{% include "app_modal.html" with modal_id="add-edit-app" f=appForm %}
+{% include "delete_group_modal.html" with modal_id="delete-group" %} 
+{% endblock %}
+
+{% block js %}
+{{ block.super }}
+<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.ui.widget.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.iframe-transport.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.fileupload.js"></script>
+<script type="text/javascript">
+$(function() {
+    $("select").select2();
+});
+
+var error_check = suning.decorators.error_check;
+var login_check = suning.decorators.login_check;
+
+$(function() {
+    var ADD_APP_MODE = "add";
+    var EDIT_APP_MODE = "edit";
+    var ADD_APP_TITLE = "新增应用";
+    var EDIT_APP_TITLE = "编辑应用";
+    var mode = null; 
+
+    var $modal = $("#add-edit-app");
+    var $uploadForm = $("#upload-apk");
+    var $form = $("#app-form", $modal);
+    var form = $form[0];
+    var $saveBtn = $(".save", $modal);
+
+    function lock_check(func) {
+        return function() {
+            suning.modal.unlock($modal);
+            func.call(window, arguments);
+        }
+    }
+
+    var $upload = $("#fileupload");
+    var $tip = $upload.find(".tip");
+
+    function enable_upload(func) {
+        return function() {
+            func();
+        }
+    }
+
+    function disable_upload(func) {
+        return function() {
+            func();
+        }
+    }
+
+    function onStart() {
+        suning.modal.lock($modal);
+        $tip.find(".progress").html(0);
+        $tip.fadeOut();
+    }
+
+    function onProgress(progress) {
+        $tip.find(".progress").html(progress);
+    }
+
+    function clearTip() {
+        $tip.fadeIn(function() {
+            $tip.find(".progress").html(0);
+        });
+    }
+
+    function onDone(e, data) {
+        clearTip();
+        console.log(e, data);
+    }
+
+    function onFailed() {
+        clearTip();
+        toast('error', '应用上传失败');
+    }
+
+    $upload.fileupload({
+        url: 'upload',
+        autoUpload: true,
+        formData: function() {
+            var form = $uploadForm[0];
+            return [{name: 'csrfmiddlewaretoken', value: form.csrfmiddlewaretoken.value}]
+        },
+        submit: disable_upload(onStart),
+        faield: enable_upload(lock_check(onFailed)),
+        done: enable_upload(lock_check(onDone)),
+        progress: function(e, data) {
+            onProgress(parseInt(data.loaded / data.total * 100, 10));
+        }
+    });
+
+    $("table").on("click", ".edit", function() {
+        var app = $(this.parentNode).data();
+        /*
+        form.id.value = group.id;
+        form.name.value = group.name;
+        $(form.permissions).val(group.permissions.toString().split(',')).trigger('change');
+        */
+        $modal.modal('show');
+    });
+
+
+    $modal.on('show.bs.modal', function() {
+        $form.parsley(parsley.bs_options);
+        mode = form.id.value == "" ? ADD_APP_MODE : EDIT_APP_MODE;
+        var title = mode == ADD_APP_MODE ? ADD_APP_TITLE : EDIT_APP_TITLE;
+        suning.modal.setTitle($modal, title);
+    });
+
+    $modal.on('hide.bs.modal', function() {
+        /*
+        form.id.value = "";
+        form.name.value = "";
+        $(form.permissions).val("").trigger('change');
+        */
+        $form.parsley('destroy');
+    });
+
+    $saveBtn.click(function() {
+        $form.submit();
+    });
+
+    
+
+    function field_check(func) {
+        return function(data) {
+            if(data.ret_code != 0 && data.field) {
+                suning.highlightError(form, data.field);
+                toast('error', data.error);
+                return;
+            }
+
+            func(data);
+        }
+    }
+
+    $form.submit(function(e) {
+        e.preventDefault();
+        if (!$form.parsley('validate')) return;
+        
+
+        var onSuccess = lock_check(login_check(field_check(error_check(function(data) {
+            var msg = form.id.value == "" ?  '新增应用成功' : '应用信息修改成功'
+            toast('success', msg);
+            $modal.modal("hide");
+            suning.reload(2000);
+        }))));
+        var onError = lock_check(suning.toastNetworkError);
+
+        $suning.modal.lock($modal);
+        Dajaxice.mgr.add_edit_app(success, { 
+            form: $form.serialize(true) 
+        }, { 
+            error_callback: onError 
+        });
+    });
+});
+
+$(function() {
+    var app = null;
+    var $modal = $("#delete-app");
+    var $saveBtn = $(".save", $modal);
+
+    $("table").on('click', '.delete', function() {
+        app = $(this.parentNode).data();
+        $('.model-name', $modal).html(app.name);
+        $modal.modal('show');
+    });
+
+    function lock_check(func) {
+        return function(data) {
+            suning.modal.unlock($modal);
+            func(data);
+        }
+    }
+
+    $saveBtn.click(function() {
+        suning.modal.lock($modal);
+        Dajaxice.mgr.delete_group(lock_check
+            (login_check
+            (error_check
+            (function(data) {
+                $modal.modal('hide');
+                toast('success', '删除成功');
+                suning.reload(2000);
+        }))), {
+            id: app.id
+        }, {
+            error_callback: lock_check(suning.toastNetworkError)
+        });
+    });
+});
+</script>
+{% endblock %}
+

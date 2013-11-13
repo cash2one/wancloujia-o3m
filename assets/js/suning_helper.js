@@ -12,6 +12,16 @@ var options = {
 
 window.parsley = window.parsley || {};
 window.parsley.bs_options = options;
+window.parsley.highlightError = function(form, field) {
+    var group = $("[name=" + field + "]", form).parents(".form-group");
+    group.addClass("has-error").removeClass("has-success");
+};
+
+window.parsley.clearHighlight = function(form) {
+    $(".has-error, .has-success", form).removeClass("has-success")
+                                       .removeClass("has-error");
+};
+
 })(window);
 
 (function(global) {
@@ -57,8 +67,11 @@ var suning = {
         },
 
         highlightError: function(form, field) {
-            var group = $("[name=" + field + "]", form).parents(".form-group");
-            group.addClass("has-error").removeClass("has-success");
+            parsley.highlightError(form, field);
+        },
+
+        clearHightLight: function(form) {
+            parsley.clearHighlight(form);
         }
     },
     

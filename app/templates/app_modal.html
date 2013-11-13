@@ -1,0 +1,27 @@
+{% extends "modal.html" %}
+
+{% block title %}新增应用{% endblock %}
+
+{% block body %}
+<form role="form" id="upload-apk" class="form-horizontal">
+    {% csrf_token %}
+    <div class="form-group">
+        <label class="col-lg-3 control-label">
+            <span class="required">*</span>上传APK文件
+        </label>
+        <div class="col-lg-9">
+            <span class="btn btn-success fileinput-button">
+                <i class="glyphicon glyphicon-upload"></i>
+                <span>选择文件</span>
+                                <input id="fileupload" type="file" name="file">
+            </span>
+            <span class="tip hide">
+                已上传<span class="progress"></span>%，请稍后
+            </span>
+        </div>
+    </div>
+</form>
+<form role="form" id="app-form" class="form-horizontal">
+    <input type="hidden" name="id">
+</form>
+{% endblock %}
