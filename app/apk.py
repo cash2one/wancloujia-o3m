@@ -163,7 +163,7 @@ def apiLevelToAndroidVersion(version):
     return VERSIONS[version-1] if version <= len(VERSIONS) else None
 
 def inspect(path):
-    pipe = Popen(["bin/aapt", "dump", "badging", path], stdout=PIPE)
+    pipe = Popen(["aapt", "dump", "badging", path], stdout=PIPE)
     out, err = pipe.communicate()
     if pipe.returncode != 0:
         raise InspectFailedException(err)
