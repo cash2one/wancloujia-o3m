@@ -6,7 +6,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_GET, require_POST
-from decorators import active_tab
+from suning.decorators import active_tab
 
 logger = logging.getLogger(__name__)
 
