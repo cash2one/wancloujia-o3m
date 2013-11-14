@@ -17,6 +17,7 @@ from app.models import App, UploadApk
 from app.forms import AppForm
 from app.tables import AppTable
 from suning.decorators import active_tab
+import apk
 
 
 logger = logging.getLogger(__name__)
@@ -61,5 +62,17 @@ def upload(request):
         return HttpResponseBadRequest(simplejson.dumps({'errors': form.errors}))
 
     uploaded_file = form.save()
-    return HttpResponse(simplejson.dumps({'path': uploaded_file.file.url}))
+    apk_info = apk.inspect(uploaded_file.file.path)
+    icon_path = ""
+    def copy_icon(name, f):
+        pass
+    apk.read_icon(uploaded_file.file.path, copy_icon)
+    return HttpResponse(simplejson.dumps({
+        'apk_id': uploaded_file.pk,
+        'name': apk_info.getAppName(),
+        'packageName': apk_info.getPackageName(),
+        'version': apk_info.versionName,
+        'size': apk_info.packageSize,
+        'icon': icon_path
+    }))
 
