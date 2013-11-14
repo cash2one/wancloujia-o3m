@@ -1,0 +1,8 @@
+django_select2
+django-tables2
+django-dajaxice
+django-parsley
+django-crontab
+django-auth-remember
+python-memcached
+pil
