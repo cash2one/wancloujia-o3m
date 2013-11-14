@@ -6,7 +6,7 @@ from subprocess import Popen, PIPE
 _version_pattern = re.compile("(name|versionCode|versionName)='(.+?)'")
 _sdk_version_pattern = re.compile("sdkVersion:'(\d+)'")
 _target_sdk_version_pattern = re.compile("targetSdkVersion:'(\d+)'")
-_application_info_pattern = re.compile("(name|icon)='(.+?)'")
+_application_info_pattern = re.compile("(label|icon)='(.+?)'")
 _application_label_pattern = re.compile("application-label:'(.+)'")
 _application_icon_pattern = re.compile("application-icon-\d+?:'(.+?drowable-((l|m|tv|h|x|xx)dpi).+?)'")
 
@@ -89,7 +89,7 @@ def _parseAppInfo(apk_info, text):
     for match in matches:
         key = match[0]
         value = match[1]
-        if key == 'name':
+        if key == 'label':
             apk_info.appName = value
         if key == 'icon':
             apk_info.icon = value
@@ -163,7 +163,7 @@ def apiLevelToAndroidVersion(version):
     return VERSIONS[version-1] if version <= len(VERSIONS) else None
 
 def inspect(path):
-    pipe = Popen(["aapt", "dump", "badging", path], stdout=PIPE)
+    pipe = Popen(["android/aapt", "dump", "badging", path], stdout=PIPE)
     out, err = pipe.communicate()
     if pipe.returncode != 0:
         raise InspectFailedException(err)
