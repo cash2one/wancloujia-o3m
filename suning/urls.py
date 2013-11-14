@@ -15,7 +15,7 @@ urlpatterns = patterns('',
     url(r'^ajax-upload/', include('ajax_upload.urls')),
     url(r'^select2/', include('django_select2.urls')),
     url(r'', include('framework.urls')),
-    #url(r'^app/', include('app.urls')),
+    url(r'^app/', include('app.urls')),
     url(r'^mgr/', include('mgr.urls')),
     url(r'ad/', include('ad.urls')),
 ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

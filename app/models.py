@@ -1,15 +1,34 @@
 # coding: utf-8
 from django.db import models
 
-# Create your models here.
+
+class UploadApk(models.Model):
+    file = models.FileField(upload_to='apks/%Y/%m/%d')
+
+
+class Category(models.Model):
+    parent = models.ForeignKey("self", verbose_name=u'所属类型', null=True)
+    name = models.CharField(verbose_name=u'名称', unique=True, max_length=20)
+
+    def __unicode__(self):
+        return self.name
+
+
 class App(models.Model):
-    #serial-number ?
-    #version ?
-    #category ?
-    name = models.CharField(verbose_name=u'名称', max_length=20)
-    promotion = models.BooleanField(verbose_name=u'是否推广')
+    category = models.ForeignKey(Category, verbose_name=u'应用类型')
+    apk = models.ForeignKey(UploadApk)
+    name = models.CharField(verbose_name=u'应用名称', max_length=20, unique=True)
+    icon = models.CharField(verbose_name=u'应用图标', max_length=100)
+    package = models.CharField(max_length=100, unique=True)
+    version = models.CharField(verbose_name=u'版本号', max_length=20)
+    popularize = models.BooleanField(verbose_name=u'是否推广')
     create_date = models.DateField(verbose_name=u'创建时间')
-    status = models.BooleanField(verbose_name=u'是否上线')
+    online = models.BooleanField(verbose_name=u'是否上线')
+    desc = models.CharField(verbose_name=u'应用描述', max_length=400)
+
+    def size(self): 
+        return 0
+
 
 class Subject(models.Model):
     #position ?
@@ -19,9 +38,14 @@ class Subject(models.Model):
     upload_date = models.DateField(verbose_name=u'上传时间')
     desc = models.CharField(verbose_name=u'描述', max_length=200)
 
+    def __unicode__(self):
+        return self.name
+
+
 class AppGroup(models.Model):
     app = models.ForeignKey(App, verbose_name=u'应用')
     subject = models.ForeignKey(Subject, verbose_name=u'专题')
+
 
 '''
 class Feedback(models.Model):
@@ -30,4 +54,5 @@ class Feedback(models.Model):
     #model_number?
     model_number = models.CharField(verbose_name='产品型号')
 '''
+
 
