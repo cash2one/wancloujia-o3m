@@ -12,6 +12,7 @@ data_backup.json
 
 suning/whoosh_index/*
 static/*
+logs/*
 nohup.out
 
 # C extensions
@@ -31,7 +32,6 @@ develop-eggs
 .installed.cfg
 lib
 lib64
-logs
 
 # Installer logs
 pip-log.txt
