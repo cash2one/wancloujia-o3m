@@ -46,7 +46,6 @@ def _ensure_permissions_for_built_in_groups():
         Permission.objects.get(content_type=app_type, codename="delete_app"),
         Permission.objects.get(content_type=app_type, codename="publish_app"),
         Permission.objects.get(content_type=app_type, codename="drop_app"),
-        Permission.objects.get(content_type=app_type, codename="audit_app")
     ]
     group.save()
 
