@@ -38,10 +38,12 @@ def can_view_app(user):
 def app(request):
     published_apps = App.objects.filter(online=True).order_by("-create_date")
     droped_apps = App.objects.filter(online=False).order_by("-create_date")
-    query_set = list(chain(published_apps, droped_apps))
     query = request.GET.get("q", None)
     if query:
-        query_set = query_set.filter(Q(name__contains=query) | Q(desc__contains=query))
+        published_apps = published_apps.filter(Q(name__contains=query) | Q(desc__contains=query))
+        droped_apps = droped_apps.filter(Q(name__contains=query) | Q(desc__contains=query))
+
+    query_set = list(chain(published_apps, droped_apps))
     table = AppTable(query_set)
     RequestConfig(request, paginate={"per_page": settings.PAGINATION_PAGE_SIZE}).configure(table)
     return render(request, "app.html", {
