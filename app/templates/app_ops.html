@@ -35,14 +35,20 @@
     </button>
 
     {% if not record.online %}
-        {% if request.user|is_not_employee or perms.app.online_app %}
-        <button type="button" class="btn btn-default publish" title="上线">
+        <button type="button" 
+            {% if request.user|is_not_employee or perms.app.publish_app %}
+            disabled="disabled" 
+            {% endif %}
+            class="btn btn-default publish" title="上线">
             <span class="glyphicon glyphicon-arrow-up"></span>
         </button>
         {% endif %}
     {% else %}
-        {% if request.user|is_not_employee or perms.app.offline_app %}
-        <button type="button" class="btn btn-default drop" title="下线">
+        <button type="button" 
+            {% if request.user|is_not_employee or perms.app.drop_app %}
+            disabled="disabled"
+            {% endif %}
+            class="btn btn-default drop" title="下线">
             <span class="glyphicon glyphicon-arrow-down"></span>
         </button>
         {% endif %}
