@@ -263,9 +263,7 @@ $(function() {
     function field_check(func) {
         return function(data) {
             if(data.ret_code != 0 && data.field) {
-                $("[name=" + data.field + "]", $form).parents(".form-group")
-                                                     .addClass("has-error")
-                                                     .removeClass("has-success");
+                parsley.highlightError(form, data.field);
                 toast('error', data.error);
                 return;
             }
@@ -350,9 +348,7 @@ $(function() {
     function field_check(func) {
         return function(data) {
             if(data.ret_code != 0 && data.field) {
-                $("[name=" + data.field + "]", $form).parents(".form-group")
-                                                    .addClass("has-error")
-                                                    .removeClass("has-success");
+                parsley.highlightError(form, data.field);
                 toast('error', data.error);
                 return;
             }

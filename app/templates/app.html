@@ -185,7 +185,6 @@ $(function() {
     }
 
     function onDone(file, data) {
-
         uploading = false;
         clearTip();
         var data = $.parseJSON(data);
@@ -272,13 +271,14 @@ $(function() {
     });
 
     $("table").on("click", ".edit", function() {
-        var app = $(this.parentNode).data();
+        app = $(this.parentNode).data();
         form.id.value = app.id;
         form.name.value = app.name;
         form.version.value = app.version;
         form.size.value = app.size;
         form.package.value = app.package;
         form.apk.value = app.apk;
+        form.online.value = app.online;
         $(form.app_icon).val(app.icon).trigger('change');
         var parent = app.category < 12 ? 1 : 2;
         $parent.val(parent).trigger('change');
@@ -343,9 +343,10 @@ $(function() {
     $modal.on('hide.bs.modal', function() {
         form.id.value = "";
         form.apk.value = "";
-        form.package.value = "";
+        form.package.value = "true";
         form.name.value = "";
         form.version.value = "";
+        form.online.value = "";
         form.size.value = "";
         $(form.app_icon).val("").change();
         $parent.val("1").trigger('change');
@@ -376,13 +377,13 @@ $(function() {
 
     $form.submit(function(e) {
         e.preventDefault();
+
         if(mode == ADD_APP_MODE && !app) {
             toast('error', '请先上传应用文件');
             console.log('no apk provided');
             return;    
         }
 
-        console.log('validate');
         if (!$form.parsley('validate')) return;
 
         var onSuccess = lock_check(login_check(field_check(error_check(function(data) {

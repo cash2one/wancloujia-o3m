@@ -16,8 +16,9 @@ class AppForm(forms.ModelForm):
 
     class Meta:
         model = App
-        fields = ('version', 'name', 'apk', 'category', 'popularize', 'desc')
+        fields = ('version', 'name', 'apk', 'category', 'online', 'popularize', 'desc')
         widgets = {
+            'online': forms.HiddenInput,
             'version': forms.TextInput(attrs={
                 'readonly': 'readonly', 
                 'class': 'form-control'

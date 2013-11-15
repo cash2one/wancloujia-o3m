@@ -19,6 +19,7 @@
 <form role="form" id="app-form" class="form-horizontal">
     <input type="hidden" name="id">
     {{ f.apk }}
+    {{ f.online }}
     {{ f.package}}
     <div class="form-group">
         <label class="col-xs-3 control-label">
@@ -49,7 +50,10 @@
         <label class="col-xs-3 control-label">
             <span class="required">*</span>{{ f.app_icon.label }}
         </label>
-        <div class="col-xs-8"> {{ f.app_icon }} </div>
+        <div class="col-xs-8">
+             <input class="ajax-upload" data-filename=""data-required="True" 
+                data-upload-url="/ajax-upload/" id="id_app_icon" name="app_icon" type="file" />
+        </div>
     </div>
     <div class="form-group">
         <label class="col-xs-3 control-label">

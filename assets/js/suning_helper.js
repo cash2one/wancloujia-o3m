@@ -39,14 +39,12 @@ window.parsley = window.parsley || {};
 window.parsley.bs_options = options;
 window.parsley.highlightError = function(form, field) {
     var group = $("[name=" + field + "]", form).parents(".form-group");
-    group.addClass("has-error").removeClass("has-success");
+    group.addClass("has-error");
 };
 
 window.parsley.clearHighlight = function(form) {
-    $(".has-error, .has-success", form).removeClass("has-success")
-                                       .removeClass("has-error");
+    $(".has-error", form).removeClass("has-error");
 };
-
 })(window);
 
 (function(global) {

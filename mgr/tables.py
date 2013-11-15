@@ -32,7 +32,7 @@ class StaffTable(tables.Table):
 
     class Meta:
         model = Staff
-        sortable = False
+        orderable = False
         attrs = {'class': 'table table-hover table-bordered'}
         fields = ('username', 'realname')
         empty_text = '当前没有用户信息'
@@ -45,7 +45,7 @@ class StoreTable(tables.Table):
         model = Store
         attrs = {'class': 'table table-hover table-bordered stores'}
         fields = ('code', 'name', 'company')
-        sortable = False
+        orderable = False
         page_field = 'sp'
         empty_text = u'暂无门店'
 
@@ -56,7 +56,7 @@ class CompanyTable(tables.Table):
 
     class Meta:
         model = Company
-        sortable = False
+        orderable = False
         attrs = {'class': 'table table-hover table-bordered companies'}
         fields = ('code', 'name')
         page_field = 'cp'
