@@ -42,7 +42,6 @@
             class="btn btn-default publish" title="上线">
             <span class="glyphicon glyphicon-arrow-up"></span>
         </button>
-        {% endif %}
     {% else %}
         <button type="button" 
             {% if request.user|is_not_employee or perms.app.drop_app %}
@@ -51,7 +50,6 @@
             class="btn btn-default drop" title="下线">
             <span class="glyphicon glyphicon-arrow-down"></span>
         </button>
-        {% endif %}
     {% endif %}
 
     <button type="button"  
