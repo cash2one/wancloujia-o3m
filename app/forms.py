@@ -1,5 +1,6 @@
-# encoding: utf-8
+# coding: utf-8
 import re
+import logging
 
 from django import forms
 from parsley.decorators import parsleyfy
@@ -7,18 +8,28 @@ from ajax_upload.widgets import AjaxClearableFileInput
 
 from models import *
 
+
 @parsleyfy
 class AppForm(forms.ModelForm):
+    package = forms.CharField(widget=forms.HiddenInput)
+    app_icon = forms.CharField(label=u'应用图标', widget=AjaxClearableFileInput, required=False)
 
     class Meta:
         model = App
-        fields = ('name', 'version', 'package', 'apk', 'icon', 'category', 'popularize', 'desc')
+        fields = ('version', 'name', 'apk', 'category', 'popularize', 'desc')
         widgets = {
-            'name': forms.TextInput(attrs={'readonly': 'readonly', 'class': 'form-control'}),
-            'version': forms.TextInput(attrs={'readonly': 'readonly', 'class': 'form-control'}),
-            'icon': AjaxClearableFileInput,
-            'package': forms.HiddenInput,
-            'desc': forms.Textarea(attrs={'rows': 4, 'class': 'form-control'}),
+            'version': forms.TextInput(attrs={
+                'readonly': 'readonly', 
+                'class': 'form-control'
+            }),
+            'desc': forms.Textarea(attrs={
+                'rows': 4, 
+                'class': 'form-control'
+            }),
+            'name': forms.TextInput(attrs={
+                'readonly': 'readonly', 
+                'class': 'form-control'
+            }),
             'apk': forms.HiddenInput
         }
 

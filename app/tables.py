@@ -8,15 +8,17 @@ from models import *
 class AppTable(tables.Table): 
     size = tables.Column(verbose_name=u'应用大小')
     subjects = tables.Column(verbose_name=u'所属应用专题')
-    ops_2 = tables.TemplateColumn(verbose_name=u'操作', template_name="app_ops.html")
+    create_date = tables.TemplateColumn(verbose_name=u'创建时间', 
+                                        template_code='{{ record.create_date|date:"Y-m-d H:i"}}')
+    ops_3 = tables.TemplateColumn(verbose_name=u'操作', template_name="app_ops.html")
 
     def render_size(self, record):
         if record.size() == 0:
             return u'－'
-        elif record.size() < 1000 * 1000:
-            return ('%.2fKB' % record.size() / 1000.0)
+        elif record.size() < 1024 * 1024:
+            return ('%.2f KB' % (record.size() / 1024.0))
         else:
-            return ('%.2fMB' % record.size() / 1000.0 / 1000.0)
+            return ('%.2f MB' % (record.size() / 1024.0 / 1024.0))
 
     def render_category(self, record):
         categories = []
@@ -25,7 +27,7 @@ class AppTable(tables.Table):
             categories.append(category)
             category = category.parent
         categories.reverse()
-        return "-".join(categories)
+        return "-".join([str(c) for c in categories])
 
     def render_subjects(self, record):
         return ", ".join([item.subject for item in AppGroup.objects.filter(app=record)])

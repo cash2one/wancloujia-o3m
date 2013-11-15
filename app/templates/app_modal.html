@@ -47,15 +47,22 @@
     </div>
     <div class="form-group">
         <label class="col-xs-3 control-label">
-            <span class="required">*</span>{{ f.icon.label }}
+            <span class="required">*</span>{{ f.app_icon.label }}
         </label>
-        <div class="col-xs-8"> {{ f.icon }} </div>
+        <div class="col-xs-8"> {{ f.app_icon }} </div>
     </div>
     <div class="form-group">
         <label class="col-xs-3 control-label">
             <span class="required">*</span>{{ f.category.label }}
         </label>
-        <div class="col-xs-8"> {{ f.category }} </div>
+        <div class="col-xs-8" style="padding-top: 7px;">
+            <select name="parent">
+                <option value="1">游戏</option>
+                <option value="2">软件</option>
+            </select>
+            <select name="category" disabled='disabled' data-required="true">
+            </select>
+        </div>
     </div>
     <div class="form-group">
         <label class="col-xs-3 control-label">

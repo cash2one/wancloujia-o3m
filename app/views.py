@@ -2,6 +2,8 @@
 import logging
 
 from django.shortcuts import render, redirect
+from django.core.files.images import ImageFile
+from django.core.files.storage import default_storage        
 from django.utils import simplejson
 from django.http import HttpResponseBadRequest, HttpResponse
 from django.contrib.auth.decorators import login_required, user_passes_test
@@ -63,16 +65,19 @@ def upload(request):
 
     uploaded_file = form.save()
     apk_info = apk.inspect(uploaded_file.file.path)
-    icon_path = ""
+
+    holder = {'icon_url': None}
     def copy_icon(name, f):
-        pass
+        path = "apk_icons/" + apk_info.getPackageName() + "/" + name
+        holder['icon_url'] = settings.MEDIA_URL + default_storage.save(path, ImageFile(f))
     apk.read_icon(uploaded_file.file.path, copy_icon)
+
     return HttpResponse(simplejson.dumps({
         'apk_id': uploaded_file.pk,
         'name': apk_info.getAppName(),
         'packageName': apk_info.getPackageName(),
         'version': apk_info.versionName,
         'size': apk_info.packageSize,
-        'icon': icon_path
+        'icon': holder['icon_url']
     }))
 
