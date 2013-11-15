@@ -104,6 +104,9 @@ STATICFILES_DIRS = (
 LOGIN_URL = '/welcome'
 PERMISSION_DENIED_URL = '/permission_denied'
 
+LOGIN_JSON_URL = "/welcome_json"
+PERMISSION_DENIED_JSON_URL = "/permission_denied_json"
+
 # List of finder classes that know how to find static files in
 # various locations.
 STATICFILES_FINDERS = (

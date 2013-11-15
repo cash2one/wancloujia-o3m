@@ -39,3 +39,10 @@ def logout(request):
 def permission_denied(request):
     return render(request, "permission_denied.html")
 
+
+def welcome_json(request):
+    return HttpResponse(simplejson.dumps({'ret_code': 1000, 'ret_msg': 'not_login_error'}), mimetype='application/json')
+
+
+def permission_denied_json(request):
+    return HttpResponse(simplejson.dumps({'ret_code': 1000, 'ret_msg': 'permission_denied'}), mimetype='application/json')

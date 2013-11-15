@@ -25,7 +25,7 @@ var toast = function(type, text, callback) {
 
 (function(window) {
 var options = {
-    successClass: 'has-success',
+    successClass: '', // nothing
     errorClass: 'has-error',
     validateIfUnchanged: true,
     errors: {

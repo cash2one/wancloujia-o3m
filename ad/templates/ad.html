@@ -130,12 +130,19 @@ $(function() {
         changeButtonText : "修改图片",
         removeButtonText : "删除图片",
         onError: function(data) {
+            suning.modal.unlock($modal);
             toast('error', '图片上传失败，请重试。');
+        },
+        onUpload: function() {
+            suning.modal.lock($modal);
+        },
+        onComplete: function() {
+            suning.modal.unlock($modal);
         }
     });
 
     $("#add_ad").click(function() {
-        auw.displaySelection();
+        //auw.displaySelection();
         $modal.modal('show');
     });
 
@@ -144,13 +151,13 @@ $(function() {
         form.id.value = ad.id;
         form.visible.checked = ad.visible
         form.title.value = ad.title;
-        form.cover.value = ad.cover;
+        $(form.cover).val(ad.cover).trigger('change');
         form.from_date.value = ad.from_date;
         form.to_date.value = ad.to_date;
         form.desc.value = ad.desc;
         form.position.value = ad.position;
         $modal.modal('show');
-        auw.displaySelection();
+        //auw.displaySelection();
     });
 
     var $from = $("[name=from_date]");
@@ -201,6 +208,7 @@ $(function() {
         form.id.value = "";
         form.visible.checked = false;
         form.title.value = "";
+        $(form.cover).val("").trigger('change');
         form.cover.value = "";
         form.from_date.value = "";
         form.to_date.value = "";

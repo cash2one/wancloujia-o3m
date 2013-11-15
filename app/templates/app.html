@@ -105,7 +105,14 @@ $(function() {
         changeButtonText : "修改图片",
         removeButtonText : "删除图片",
         onError: function(data) {
+            suning.modal.unlock($modal);
             toast('error', '图片上传失败，请重试。');
+        },
+        onUpload: function() {
+            suning.modal.lock($modal);
+        },
+        onComplete: function() {
+            suning.modal.unlock($modal);
         }
     });
 
@@ -178,9 +185,16 @@ $(function() {
     }
 
     function onDone(file, data) {
+
         uploading = false;
         clearTip();
         var data = $.parseJSON(data);
+        if (data.ret_code && data.ret_code != 0) {
+            var msg = data.ret_msg == "not_login_error" ? "会话可能已经过期，请重新登录" :
+                                                            "权限不足";
+            toast('error', msg);
+        }
+
         if (mode == ADD_APP_MODE) {
             app = {
                 apk: data.apk_id,
@@ -454,8 +468,8 @@ $(function() {
         var action = mode == PUBLISH_APP ? "上线应用" : "下线应用";
         $modal.find(".modal-title").html(action);
         if(mode == PUBLISH_APP) {
-            var template = _.template("确定要<%= action %>&nbsp;<strong><%= name %></strong>&nbsp;吗?");
-            $modal.find(".modal-body").html(template({action: action, name: app.name}));
+            var template = _.template("确定要上线应用&nbsp;<strong><%= name %></strong>&nbsp;吗?");
+            $modal.find(".modal-body").html(template({name: app.name}));
         } else {
             $modal.find(".modal-body").html("如果应用下线了，将不能被手机助手用户看到，并且会排在应用列表的后面。确认继续吗？");
         }

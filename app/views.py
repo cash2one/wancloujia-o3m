@@ -57,8 +57,7 @@ class UploadForm(forms.ModelForm):
 
 
 @require_POST
-@login_required
-@user_passes_test(can_view_app, login_url=settings.PERMISSION_DENIED_URL)
+@login_required(login_url=settings.LOGIN_JSON_URL)
 def upload(request):
     form = UploadForm(data=request.POST, files=request.FILES)
     if not form.is_valid():
