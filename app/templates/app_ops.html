@@ -36,7 +36,7 @@
 
     {% if not record.online %}
         <button type="button" 
-            {% if request.user|is_not_employee or perms.app.publish_app %}
+            {% if request.user|is_employee and not perms.app.publish_app %}
             disabled="disabled" 
             {% endif %}
             class="btn btn-default publish" title="上线">
@@ -44,7 +44,7 @@
         </button>
     {% else %}
         <button type="button" 
-            {% if request.user|is_not_employee or perms.app.drop_app %}
+            {% if request.user|is_employee and not perms.app.drop_app %}
             disabled="disabled"
             {% endif %}
             class="btn btn-default drop" title="下线">
