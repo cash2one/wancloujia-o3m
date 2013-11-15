@@ -5,10 +5,19 @@
     data-id="{{ record.id }}"
     data-name="{{ record.name }}"
     data-icon="{{ record.app_icon }}"
-    data-category="{{ record.category }}"
-    data-desc="{{ record.desc }}"
+    data-version="{{ record.version }}"
+    data-size="{{ record.size }}"
     data-package="{{ record.package }}"
+    data-apk="{{ record.apk.id }}"
+    data-category="{{ record.category.pk }}"
+    data-desc="{{ record.desc }}"
     data-popularize="{{ record.popularize }}"
+
+    {% if record.popularize %}
+    data-popularize="true"
+    {% else %}
+    data-popularize="false"
+    {% endif %}
 
     {% if record.online %}
     data-online="true"

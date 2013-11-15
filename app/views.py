@@ -1,5 +1,6 @@
 #coding: utf-8
 import logging
+from itertools import chain
 
 from django.shortcuts import render, redirect
 from django.core.files.images import ImageFile
@@ -35,7 +36,9 @@ def can_view_app(user):
 @user_passes_test(can_view_app, login_url=settings.PERMISSION_DENIED_URL)
 @active_tab("app")
 def app(request):
-    query_set = App.objects.all().order_by("online", "create_date")
+    published_apps = App.objects.filter(online=True).order_by("-create_date")
+    droped_apps = App.objects.filter(online=False).order_by("-create_date")
+    query_set = list(chain(published_apps, droped_apps))
     query = request.GET.get("q", None)
     if query:
         query_set = query_set.filter(Q(name__contains=query) | Q(desc__contains=query))

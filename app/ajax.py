@@ -21,7 +21,6 @@ _ok_json = simplejson.dumps({'ret_code': 0})
 @preprocess_form
 def add_edit_app(request, form):
     f = AppForm(form)
-    logger.debug(f)
     if not f.is_valid():
         logger.warn("%s: form is invalid" % __name__)
         logger.warn(f.errors)
@@ -37,12 +36,12 @@ def add_edit_app(request, form):
     if form["id"] == "":
         if App.objects.filter(package=app.package).exists():
             return simplejson.dumps({'ret_code': 1000, 'ret_msg': u'应用已存在'})
-        app.create_date = datetime.now()
         app.save()
     else:
         app.pk = form["id"]
-        if App.objects.exclude(pk=app.pk).filter(package==app.package).exists():
-            return simplejson.dumps({'ret_code': 1000, 'ret_msg': u'应用已存在'})
+        if App.objects.get(pk=app.pk).package != app.package:
+            return simplejson.dumps({'ret_code': 1000, 'ret_msg': u'应用包名不相同'})
+        app.create_date = App.objects.get(pk=app.pk).create_date
         app.save()
 
     return _ok_json
