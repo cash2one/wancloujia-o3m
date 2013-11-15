@@ -58,10 +58,12 @@
             </li>
             {% endif %}
 
-            {% if request.user|is_not_employee %}
-            <li><a href="">
-                <span class="glyphicon glyphicon-circle-arrow-down"></span>&nbsp;&nbsp;应用管理
-            </a></li>
+            {% if request.user|is_not_employee or perms.app %}
+            <li {% if request.nav.active_tab == "app" %}class="active"{% endif %}>
+                <a href="/app/">
+                    <span class="glyphicon glyphicon-circle-arrow-down"></span>&nbsp;&nbsp;应用管理
+                </a>
+            </li>
             {% endif %}
 
             {% if request.user|is_not_employee %}

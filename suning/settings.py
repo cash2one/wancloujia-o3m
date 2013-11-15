@@ -15,8 +15,8 @@ DATABASE_ENGINE = 'mysql'
 DATABASE_HOST = 'localhost'
 DATABASE_PORT = '3306'
 DATABASE_USER = 'root'
-DATABASE_PASSWORD = 'nameLR9969'
-DATABASE_NAME = 'suning_test'
+DATABASE_PASSWORD = 'root'
+DATABASE_NAME = 'suning_app_list'
 
 DATABASES = {
     'default': {
@@ -104,6 +104,9 @@ STATICFILES_DIRS = (
 LOGIN_URL = '/welcome'
 PERMISSION_DENIED_URL = '/permission_denied'
 
+LOGIN_JSON_URL = "/welcome_json"
+PERMISSION_DENIED_JSON_URL = "/permission_denied_json"
+
 # List of finder classes that know how to find static files in
 # various locations.
 STATICFILES_FINDERS = (
@@ -185,7 +188,6 @@ INSTALLED_APPS = (
     'ajax_upload',
     'django_select2',
 	'dajaxice',
-    'dajax',
     'django_crontab',
     'parsley',
     'auth_remember',

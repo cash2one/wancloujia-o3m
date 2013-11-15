@@ -12,10 +12,13 @@
     {% endblock %}
 </head>
 <body>
-<p>
-    您的<a href="{{ link }}">苏宁豌豆荚手机后台</a>账号
-    &nbsp;<strong>{{ username }}</strong>&nbsp;已经开通，
-    初始密码为{{ password }}，请尽快<a href="{{ link }}">登录</a>更改密码。
-</p>
+<pre>
+欢迎您使用苏宁豌豆荚手机助手管理后台！
+您可以使用以下信息直接登录网站：
+用户名：{{ username }}
+初始密码：{{ password }}
+您也可以登录<a href="{{ link }}">{{ link }}</a>更改密码。
+本邮件包含登录信息，请勿转发他人。
+</pre>
 </body>
 </html>

@@ -1,0 +1,58 @@
+{% load organization_filters %}
+{% load perm_filters %}
+
+<div class="btn-group btn-group-sm" 
+    data-id="{{ record.id }}"
+    data-name="{{ record.name }}"
+    data-icon="{{ record.app_icon }}"
+    data-version="{{ record.version }}"
+    data-size="{{ record.size }}"
+    data-package="{{ record.package }}"
+    data-apk="{{ record.apk.id }}"
+    data-category="{{ record.category.pk }}"
+    data-desc="{{ record.desc }}"
+    data-popularize="{{ record.popularize }}"
+
+    {% if record.popularize %}
+    data-popularize="true"
+    {% else %}
+    data-popularize="false"
+    {% endif %}
+
+    {% if record.online %}
+    data-online="true"
+    {% else %}
+    data-online="false"
+    {% endif %}
+    >
+
+    <button type="button"  
+            {% if request.user|is_employee and not perms.app.change_app %}
+            disabled='disabled'
+            {% endif %}
+            class="btn btn-default edit" title="编辑">
+        <span class="glyphicon glyphicon-edit"></span>
+    </button>
+
+    {% if not record.online %}
+        {% if request.user|is_not_employee or perms.app.online_app %}
+        <button type="button" class="btn btn-default publish" title="上线">
+            <span class="glyphicon glyphicon-arrow-up"></span>
+        </button>
+        {% endif %}
+    {% else %}
+        {% if request.user|is_not_employee or perms.app.offline_app %}
+        <button type="button" class="btn btn-default drop" title="下线">
+            <span class="glyphicon glyphicon-arrow-down"></span>
+        </button>
+        {% endif %}
+    {% endif %}
+
+    <button type="button"  
+            {% if request.user|is_employee and not perms.app.delete_app %}
+            disabled='disabled'
+            {% endif %}
+            class="btn btn-danger delete" title="删除">
+        <span class="glyphicon glyphicon-trash"></span>
+    </button>
+</div>

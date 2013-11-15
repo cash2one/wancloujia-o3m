@@ -1,0 +1,90 @@
+{% extends "modal.html" %}
+
+{% block title %}新增应用{% endblock %}
+
+{% block body %}
+<form role="form" id="upload-apk" class="form-horizontal">
+    {% csrf_token %}
+    <div class="form-group">
+        <label class="col-lg-3 control-label">
+            <span class="required">*</span>上传APK文件
+        </label>
+        <div class="col-lg-9" style="height: 34px; overflow: hidden">
+            <input id="fileupload" type="file" name="file">
+            <button class="btn btn-danger" style="display: none" id="cancel-upload">取消上传</button>
+            <div class="tip" style="display: none; padding: 6px 12px; margin-left: 80px;"></div>
+        </div>
+    </div>
+</form>
+<form role="form" id="app-form" class="form-horizontal">
+    <input type="hidden" name="id">
+    {{ f.apk }}
+    {{ f.online }}
+    {{ f.package}}
+    <div class="form-group">
+        <label class="col-xs-3 control-label">
+            {{ f.name.label }}
+        </label>
+        <div class="col-xs-8">
+            <input type="text" class="form-control" readonly="readonly" 
+                    data-maxlength="20" maxlength ="20" name="name"/>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-xs-3 control-label">
+            {{ f.version.label }}
+        </label>
+        <div class="col-xs-8">
+            <input type="text" class="form-control" readonly="readonly" 
+                    data-maxlength="20" maxlength ="20" name="version"/>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-xs-3 control-label">应用大小</label>
+        <div class="col-xs-8">
+            <input type="text" class="form-control" maxlength="20" 
+                    data-maxlength="20" readonly="readonly" name="size"/>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-xs-3 control-label">
+            <span class="required">*</span>{{ f.app_icon.label }}
+        </label>
+        <div class="col-xs-8">
+             <input class="ajax-upload" data-filename=""data-required="True" 
+                data-upload-url="/ajax-upload/" id="id_app_icon" name="app_icon" type="file" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-xs-3 control-label">
+            <span class="required">*</span>{{ f.category.label }}
+        </label>
+        <div class="col-xs-8" style="padding-top: 7px;">
+            <select name="parent">
+                <option value="1">游戏</option>
+                <option value="2">软件</option>
+            </select>
+            <select name="category" disabled='disabled' data-required="true">
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-xs-3 control-label">
+            <span class="required">*</span>{{ f.popularize.label }}
+        </label>
+        <div class="col-xs-8" style="padding-top: 7px;">
+            <input id="popularized" data-required="true" type="radio" name="popularize" checked value="True">
+            <label for="popularized">是</label>
+            &nbsp;
+            <input id="unpopularized" data-required="true" type="radio" name="popularize" value="False">
+            <label for="unpopularized">否</label>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-xs-3 control-label">
+            <span class="required">*</span>{{ f.desc.label }}
+        </label>
+        <div class="col-xs-8"> {{ f.desc }} </div>
+    </div>
+</form>
+{% endblock %}

@@ -17,7 +17,9 @@ def preprocess_form(func):
         f = kwargs["form"]
         form = deserialize_form(f)
         dict = map(lambda k: (k, form[k]), form)
-        logger.debug("form: " + str(dict))
+        logger.debug("form:")
+        for k, v in dict:
+            logger.debug("%s: %s %s", k, v, type(v))
 
         return func(request, form=form)
     return wrap

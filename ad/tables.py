@@ -20,7 +20,7 @@ class ADTable(tables.Table):
 
     class Meta:
         model = AD
-        sortable = False
+        orderable = False
         attrs = {'class': 'table table-hover table-bordered'}
         fields = ('title', 'cover', 'desc', 'visible')
         empty_text = '暂无广告'

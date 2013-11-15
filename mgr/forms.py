@@ -4,7 +4,6 @@ import re
 from django import forms
 from django.contrib.auth.models import Group, Permission
 from django.contrib.contenttypes.models import ContentType
-from django.core.validators import RegexValidator
 from parsley.decorators import parsleyfy
 
 from models import *

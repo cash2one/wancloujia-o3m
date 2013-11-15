@@ -28,6 +28,7 @@ def delete_ad(request, id):
 def add_edit_ad(request, form, visible):
     form = deserialize_form(form)
     f = ADForm(form)
+    logger.debug(f)
     if not f.is_valid():
         logger.warn("%s: form is invalid" % __name__)
         logger.warn(f.errors)
