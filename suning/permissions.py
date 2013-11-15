@@ -36,8 +36,8 @@ def get_available_permissions():
         (Permission.objects.get(content_type=app_type, codename="change_app").pk, u'编辑应用'),
         (Permission.objects.get(content_type=app_type, codename="delete_app").pk, u'删除应用'),
         (Permission.objects.get(content_type=app_type, codename="publish_app").pk, u'上线应用'),
-        (Permission.objects.get(content_type=app_type, codename="drop_app").pk, u'下线应用'),
-        (Permission.objects.get(content_type=app_type, codename="audit_app").pk, u'审核应用')
+        (Permission.objects.get(content_type=app_type, codename="drop_app").pk, u'下线应用')
+        #(Permission.objects.get(content_type=app_type, codename="audit_app").pk, u'审核应用')
     )
     return _available_permissions
 
