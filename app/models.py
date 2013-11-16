@@ -40,12 +40,16 @@ class App(models.Model):
 
 
 class Subject(models.Model):
-    #position ?
-    #creator ?
     name = models.CharField(verbose_name=u'名称', max_length=20)
-    cover = models.ImageField(verbose_name=u'图片', upload_to='ad/%Y/%m/%d', max_length=50)
-    upload_date = models.DateField(verbose_name=u'上传时间')
+    cover = models.CharField(verbose_name=u'图片', max_length=100)
     desc = models.CharField(verbose_name=u'描述', max_length=200)
+
+    creator = models.ForeignKey(User, verbose_name=u'创建者', editable=False)
+    create_date = models.DateTimeField(verbose_name=u'创建时间', auto_now_add=True)
+    updater = models.ForeignKey(User, verbose_name=u'上次修改者', editable=False)
+    update_date = models.DateTimeField(verbose_name=u'上次修改时间', auto_now=True)
+
+    position = models.IntegerField(editable=False, default=0)
 
     def __unicode__(self):
         return self.name
@@ -54,6 +58,7 @@ class Subject(models.Model):
 class AppGroup(models.Model):
     app = models.ForeignKey(App, verbose_name=u'应用')
     subject = models.ForeignKey(Subject, verbose_name=u'专题')
+    position = models.IntegerField(editalbe=False)
 
 
 '''
