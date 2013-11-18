@@ -67,9 +67,11 @@
             {% endif %}
 
             {% if request.user|is_not_employee %}
-            <li><a href="">
-                <span class="glyphicon glyphicon-tags"></span>&nbsp;&nbsp;应用专题管理
-            </a></li>
+            <li {% if request.nav.active_tab == "subject" %}class="active"{% endif %}>
+                <a href="/app/subject/">
+                    <span class="glyphicon glyphicon-tags"></span>&nbsp;&nbsp;应用专题管理
+                </a>
+            </li>
             {% endif %}
 
             {% if request.user|is_not_employee %}

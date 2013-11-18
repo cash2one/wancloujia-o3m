@@ -34,3 +34,18 @@ class AppForm(forms.ModelForm):
             'apk': forms.HiddenInput
         }
 
+
+@parsleyfy
+class SubjectForm(forms.ModelForm):
+
+    class Meta:
+        model = Subject
+        fields = ('name', 'cover', 'desc')
+        widgets = {
+            'cover': AjaxClearableFileInput,
+            'desc': forms.Textarea(attrs={
+                'rows': 4, 
+                'class': 'form-control'
+            })
+        }
+

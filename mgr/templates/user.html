@@ -10,7 +10,9 @@
                 {% if request.user|is_employee and not perms.mgr.add_staff %} 
                 disabled='disabled' 
                 {% endif %}>
-                新增用户<span class="caret"></span>
+                <span class="glyphicon glyphicon-plus"></span>
+                新增用户
+                <span class="caret"></span>
             </a>
             <ul class="dropdown-menu" role="menu">
 

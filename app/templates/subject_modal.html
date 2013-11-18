@@ -1,0 +1,35 @@
+{% extends "modal.html" %}
+
+{% block title %}新增应用专题{% endblock %}
+
+{% block body %}
+<form role="form" id="app-form" class="form-horizontal">
+    <input type="hidden" name="id">
+    <div class="form-group">
+        <label class="col-xs-3 control-label"> 
+            <span class="required">*</span>{{ f.name.label }} 
+        </label>
+        <div class="col-xs-8"> {{ f.name }} </div>
+    </div>
+    <div class="form-group">
+        <label class="col-xs-3 control-label">
+            <span class="required">*</span>{{ f.cover.label }}
+        </label>
+        <div class="col-xs-8">
+            {{ f.cover }}
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-xs-3 control-label">{{ f.desc.label }}</label>
+        <div class="col-xs-8"> {{ f.desc }} </div>
+    </div>
+    <div class="form-group">
+        <label class="col-xs-3 control-label">
+            <span class="required">*</span>应用列表
+        </label>
+        <div class="col-xs-8">
+            <input type="text" name="apps">
+        </div>
+    </div>
+</form>
+{% endblock %}
