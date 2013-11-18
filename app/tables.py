@@ -43,4 +43,5 @@ class AppTable(tables.Table):
         fields = ('name', 'version', 'category', 'popularize', 'online', 'create_date')
         orderable = False
         attrs = {'class': 'table table-hover table-bordered'}
+        empty_text = u'暂无应用'
 

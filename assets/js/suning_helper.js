@@ -25,6 +25,7 @@
 (function(global) {
     var console = global.console || {}
     console.log = console.log || function() {};
+    console.error = console.error || function() {};
     global.console = console;
 })(window);
 
