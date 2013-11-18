@@ -1,4 +1,5 @@
 #coding: utf-8
+import math
 import logging
 from itertools import chain
 
@@ -50,7 +51,7 @@ def app(request):
     query_set = list(chain(published_apps, droped_apps))
     table = AppTable(query_set)
     if query:
-        table.empty_text = u'无搜索结果'
+        table.empty_text = settings.NO_SEARCH_RESULTS
     RequestConfig(request, paginate={"per_page": settings.PAGINATION_PAGE_SIZE}).configure(table)
     return render(request, "app.html", {
         "query": query,
@@ -92,7 +93,6 @@ def upload(request):
     }))
 
 
-
 def can_view_subject(user):
     return user.is_superuser or \
             user.is_staff or \
@@ -118,9 +118,31 @@ def subject(request):
 
     query_set = list(chain(published_subjects, droped_subjects))
     table = SubjectTable(query_set)
+    if query:
+        table.empty_text = settings.NO_SEARCH_RESULTS
     RequestConfig(request, paginate={"per_page": settings.PAGINATION_PAGE_SIZE}).configure(table)
     return render(request, "subject.html", {
         "query": query,
         "table": table,
         'form': SubjectForm()
     });
+
+
+@require_GET
+@login_required(login_url=settings.LOGIN_JSON_URL)
+def search_apps(request):
+    query = request.GET.get("q", "")
+    page = int(request.GET.get("p"))
+    page_limit = int(request.GET.get("page_limit"))
+
+    apps = App.objects.filter(online=True).filter(name__contains=query)
+    total = apps.count()
+    apps = apps[(page-1)*page_limit:page*page_limit]
+    results = [{'id': app.pk, 'text': app.name} for app in apps]
+
+    json = simplejson.dumps({
+        'ret_code': 0, 
+        'results': results, 
+        'total': total
+    })
+    return HttpResponse(json, mimetype='application/json')

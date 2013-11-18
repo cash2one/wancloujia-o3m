@@ -1,3 +1,4 @@
+#coding: utf-8
 # Django settings for suning project.
 import os
 
@@ -154,6 +155,7 @@ MIDDLEWARE_CLASSES = (
 ROOT_URLCONF = 'suning.urls'
 
 PAGINATION_PAGE_SIZE = 10
+NO_SEARCH_RESULTS = u'无搜索结果'
 
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'suning.wsgi.application'

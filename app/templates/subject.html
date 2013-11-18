@@ -51,23 +51,64 @@
 var error_check = suning.decorators.error_check;
 var login_check = suning.decorators.login_check;
 
-/*
 $(function() {
-    var ADD_APP_MODE = "add";
-    var EDIT_APP_MODE = "edit";
-    var ADD_APP_TITLE = "新增应用";
-    var EDIT_APP_TITLE = "编辑应用";
-    var mode = null; 
-    var uploading = false;
-
-    var $modal = $("#add-edit-app");
-    var $uploadForm = $("#upload-apk");
-    var $form = $("#app-form", $modal);
+    var $modal = $("#add-edit-subject");
+    var $form = $("form", $modal);
     var form = $form[0];
     var $saveBtn = $(".save", $modal);
-    var app = null;
+    var $apps = $(form.apps);
+    var query_id = 0;
 
-    var auw = new AjaxUploadWidget($(form.app_icon), {
+    $apps.select2({
+        tags: [],
+        ajax: {
+            url: '/app/search_apps/',
+            dataType: 'json',
+            data: function(term, page) {
+                return {
+                    q: term,
+                    page_limit: 10,
+                    p: page
+                }
+            },
+            results: function(data, page) {
+                if(data.ret_code != 0) return {results: [], more: false};
+                var more = (page * 10) < data.total;
+                return {results: data.results, more: more};
+            }
+        },
+        initSelection : function (element, callback) {
+            var value = $(element).val();
+            if(value == '') {
+                callback([]);
+                return;
+            }
+
+            var current = query_id;
+            function query_check(func) {
+                return function(data) {
+                    if(current != query_id) {
+                        console.log('query_id not equals, drop it');
+                        return;
+                    }
+                    func(data)
+                }
+            }
+
+            $apps.select2('readonly', true);
+            Dajaxice.app.get_apps(query_check(function(data) {
+                $apps.select2('readonly', false);
+                callback(data.results);
+            }), {pks: value}, {
+                error_callback: function() {
+                    console.error('failed to query apps, network error');
+                    return;
+                }
+            })
+        }
+    });
+
+    var auw = new AjaxUploadWidget($(form.cover), {
         changeButtonText : "修改图片",
         removeButtonText : "删除图片",
         onError: function(data) {
@@ -88,241 +129,33 @@ $(function() {
             func && func.apply(window, arguments);
         }
     }
-
-    var $upload = $("#fileupload");
-    var $cancelBtn = $("#cancel-upload");
-    var $tip = $uploadForm.find(".tip");
-
-    function enable_upload(func) {
-        return function() {
-            $("#fileupload").uploadify('disable', false);
-            func && func.apply(window, arguments);
-        }
-    }
-
-    function disable_upload(func) {
-        return function() {
-            $("#fileupload").uploadify('disable', true);
-            func && func.apply(window, arguments);
-        }
-    }
-
-    function show_cancel_btn(func) {
-        return function() {
-            $("#fileupload").css("top", '10000px');
-            $cancelBtn.show();
-            func && func.apply(window, arguments);
-        }
-    }
-
-    function show_upload_btn(func) {
-        return function() {
-            $cancelBtn.hide();
-            $("#fileupload").css("top", '0px');
-            func && func.apply(window, arguments);
-        }
-    }
-
-    function onStart() {
-        uploading = true;
-        $tip.html("");
-        $tip.show();
-    }
-
-    function onProgress(progress) {
-        $tip.html('已上传' + progress + '%，请稍候...');
-        if (progress == 100) {
-            $tip.html('正在解析应用信息...');
-        }
-    }
-
-    function clearTip() {
-        $tip.hide().html("");
-    }
-
-    function str_size(size) {
-        var result = "";
-        if (size < 1024 * 1024) {
-            result = (size / 1024).toFixed(2) + " KB";
-        } else {
-            result = (size / 1024 / 1024).toFixed(2) + " MB";
-        }
-        return result;
-    }
-
-    function onDone(file, data) {
-        uploading = false;
-        clearTip();
-        var data = $.parseJSON(data);
-        if (data.ret_code && data.ret_code != 0) {
-            var msg = data.ret_msg == "not_login_error" ? "会话可能已经过期，请重新登录" :
-                                                            "权限不足";
-            toast('error', msg);
-        }
-
-        if (mode == ADD_APP_MODE) {
-            app = {
-                apk: data.apk_id,
-                name: data.name,
-                version: data.version,
-                size: data.size,
-                package: data.packageName,
-                icon: data.icon
-            };
-
-            form.apk.value = app.apk;
-            form.name.value = app.name;
-            form.version.value = app.version;
-            form.size.value = str_size(app.size);
-            $(form.app_icon).val(app.icon).trigger('change');
-            form.package.value = app.package;
-        } else {
-            if(data.packageName != app.package) {
-                toast('error', '应用包名不匹配，请确认上传的是否为同一个应用');
-                return;
-            } 
-
-            form.apk.value = data.apk_id;
-            form.name.value = data.name;
-            form.version.value = data.version;
-            form.size.value = str_size(data.size);
-            $(form.app_icon).val(data.icon).trigger('change');
-        }
-    }
-
-    function onFailed(file, errorCode, errorMsg, errorString) {
-        uploading = false;
-        console.log(file, errorCode, errorMsg, errorString);
-        clearTip();
-
-        if(errorString == "Cancelled") return;
-        toast('error', '应用上传失败');
-    }
-
-    $cancelBtn.click(function(e) {
-        e.preventDefault();
-        $("#fileupload").uploadify('cancel');
-    });
-
-    $upload.uploadify({
-        swf: '{{ STATIC_URL }}uploadify.swf',
-        uploader: 'upload',
-        buttonText: "<span class='glyphicon glyphicon-upload'></span>&nbsp;选择文件",
-        fileObjName: 'file',
-        fileTypeExts: "*.apk",
-        width: 100,
-        height: 34,
-        multi: false,
-        formData: {
-            csrfmiddlewaretoken: $uploadForm[0].csrfmiddlewaretoken.value
-        },
-        onDisable: function() {
-            $("#fileupload-button").css("opacity", 0.6);
-        },
-        onEnable: function() {
-            $("#fileupload-button").css("opacity", 1);
-        },
-        onSelectError: function() {
-            toast('error', '文件出错，可能是文件类型不符合要求');
-        },
-        onCancel: enable_upload(show_upload_btn(lock_check(function() {
-                                    uploading = false;
-                                }))),
-        onUploadStart: disable_upload(show_cancel_btn(onStart)),
-        onUploadProgress: function(file, upload, total) {
-            onProgress(parseInt(upload / total * 100, 10));
-        },
-        onUploadError: enable_upload(show_upload_btn(onFailed)),
-        onUploadSuccess: enable_upload(show_upload_btn(onDone))
-    });
-
+    
     $("table").on("click", ".edit", function() {
-        app = $(this.parentNode).data();
-        form.id.value = app.id;
-        form.name.value = app.name;
-        form.version.value = app.version;
-        form.size.value = app.size;
-        form.package.value = app.package;
-        form.apk.value = app.apk;
-        form.online.value = app.online;
-        $(form.app_icon).val(app.icon).trigger('change');
-        var parent = app.category < 12 ? 1 : 2;
-        $parent.val(parent).trigger('change');
-        $category.val(app.category).trigger('change');
-        form.popularize.value = app.popularize;
-        form.desc.value = app.desc;
+        var subject = $(this.parentNode).data();
+        form.id.value = subject.id;
+        form.name.value = subject.name;
+        form.desc.value = subject.desc;
+        $(form.cover).val(subject.cover).trigger('change');
+        $apps.val(subject.apps).trigger('change');
         $modal.modal('show');
-    });
-
-    var $category = $(form.category);
-    var $parent = $(form.parent).change(function() {
-        var game_options = [{pk: 3, name: '休闲益智'},
-                            {pk: 4, name: '角色冒险'},
-                            {pk: 5, name: '动作格斗'},
-                            {pk: 6, name: '策略游戏'},
-                            {pk: 7, name: '体育竞技'},
-                            {pk: 8, name: '飞行射击'},
-                            {pk: 9, name: '卡片棋牌'},
-                            {pk: 10, name: '经营养成'},
-                            {pk: 11, name: '其他游戏'}];
-        var soft_options = [{pk: 12, name: '系统安全'},
-                            {pk: 13, name: '壁纸美化'},
-                            {pk: 14, name: '聊天通讯'},
-                            {pk: 15, name: '生活实用'},
-                            {pk: 16, name: '书籍阅读'},
-                            {pk: 17, name: '影音图像'},
-                            {pk: 18, name: '学习办公'},
-                            {pk: 19, name: '网络社区'},
-                            {pk: 20, name: '地图导购'},
-                            {pk: 21, name: '理财购物'},
-                            {pk: 22, name: '其他软件'}];
-
-        $category.select2('destroy');
-        $category.html("");
-        if (this.value) {
-            $category.removeAttr("disabled");
-            var options = this.value == 1 ? game_options : soft_options;
-            var template = _.template("<option value='<%= pk %>'><%= name %></option>");
-            $(template({pk: "", name: "-----"})).appendTo($category);
-            _.each(options, function(option) {
-                $(template(option)).appendTo($category);
-            });
-            $category.val('').trigger('change');
-            $category.select2();
-        } else {
-            $category.attr("disabled", 'disabled');
-            $category.select2();
-        }
-    });
-    $category.select2();
-    $parent.select2();
-    $parent.val('1').trigger('change');
-
-
-    $modal.on('show.bs.modal', function() {
-        $form.parsley(parsley.bs_options);
-        mode = form.id.value == "" ? ADD_APP_MODE : EDIT_APP_MODE;
-        var title = mode == ADD_APP_MODE ? ADD_APP_TITLE : EDIT_APP_TITLE;
-        suning.modal.setTitle($modal, title);
     });
 
     $modal.on('hide.bs.modal', function() {
         form.id.value = "";
-        form.apk.value = "";
-        form.package.value = "true";
         form.name.value = "";
-        form.version.value = "";
-        form.online.value = "";
-        form.size.value = "";
-        $(form.app_icon).val("").change();
-        $parent.val("1").trigger('change');
-        $category.val("").trigger('change');
-        form.popularize.value = "True";
         form.desc.value = "";
-        if (uploading) {
-            $("#fileupload").uploadify('cancel');
-        }
+        $(form.cover).val("").trigger('change');
+
+        $apps.val("").trigger('change');
+        $apps.select2('readonly', false);
+        query_id++;
         $form.parsley('destroy');
+    });
+
+    $modal.on('show.bs.modal', function() {
+        $form.parsley(parsley.bs_options);
+        var title = form.id.value ? '新增应用专题' : '修改应用专题';
+        suning.modal.setTitle($modal, title);
     });
 
     $saveBtn.click(function() {
@@ -343,17 +176,10 @@ $(function() {
 
     $form.submit(function(e) {
         e.preventDefault();
-
-        if(mode == ADD_APP_MODE && !app) {
-            toast('error', '请先上传应用文件');
-            console.log('no apk provided');
-            return;    
-        }
-
         if (!$form.parsley('validate')) return;
 
         var onSuccess = lock_check(login_check(field_check(error_check(function(data) {
-            var msg = mode == ADD_APP_MODE ?  '新增应用成功' : '应用信息修改成功';
+            var msg = form.id.value ?  '新增应用专题成功' : '应用专题修改成功';
             toast('success', msg);
             $modal.modal("hide");
             suning.reload(2000);
@@ -361,7 +187,7 @@ $(function() {
         var onError = lock_check(suning.toastNetworkError);
 
         suning.modal.lock($modal);
-        Dajaxice.app.add_edit_app(onSuccess, { 
+        Dajaxice.app.add_edit_subject(onSuccess, { 
             form: $form.serialize(true) 
         }, { 
             error_callback: onError 
@@ -369,6 +195,7 @@ $(function() {
     });
 });
 
+/*
 $(function() {
     var app = null;
     var $modal = $("#delete-app");

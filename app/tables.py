@@ -3,6 +3,7 @@ import logging
 
 import django_tables2 as tables
 from models import App, Subject
+from mgr.models import cast_staff
 
 
 class AppTable(tables.Table): 
@@ -57,10 +58,12 @@ class SubjectTable(tables.Table):
         return u"已上线" if record.online else u"已下线"
 
     def render_creator(self, record):
-        return record.creator.real_name
+        creator = cast_staff(record.creator)
+        return creator.realname if creator.realname else u'—'
 
     def render_updator(self, record):
-        return record.updator.real_name
+        user = cast_staff(record.updator if record.updator else record.creator)
+        return user.realname if user.realname else u'—'
 
     class Meta:
         model = Subject

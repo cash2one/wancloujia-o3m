@@ -3,7 +3,7 @@
 {% block title %}新增应用专题{% endblock %}
 
 {% block body %}
-<form role="form" id="app-form" class="form-horizontal">
+<form role="form" class="form-horizontal">
     <input type="hidden" name="id">
     <div class="form-group">
         <label class="col-xs-3 control-label"> 
@@ -28,7 +28,7 @@
             <span class="required">*</span>应用列表
         </label>
         <div class="col-xs-8">
-            <input type="text" name="apps">
+            <input type="text" data-required='true' name="apps">
         </div>
     </div>
 </form>

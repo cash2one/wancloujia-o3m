@@ -97,6 +97,15 @@ window.NETWORK_ERROR_MSG = '网路异常，请稍后重试';
 
                     toast('error', data.ret_msg || '服务器端发生异常');
                 }
+            },
+
+            delay: function(func, millies) {
+                return function() {
+                    var args = arguments;
+                    setTimeout(function() {
+                        func.apply(window, args);
+                    }, millies);
+                }
             }
         }
     };
