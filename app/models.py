@@ -26,9 +26,9 @@ class App(models.Model):
     popularize = models.BooleanField(verbose_name=u'是否推广')
     create_date = models.DateTimeField(verbose_name=u'创建时间', auto_now_add=True)
     online = models.BooleanField(verbose_name=u'是否上线')
-    desc = models.CharField(verbose_name=u'应用描述', max_length=400)
+    desc = models.CharField(verbose_name=u'应用描述', max_length=50)
 
-    def size(self): 
+    def size(self):
         return os.path.getsize(self.apk.file.path)
 
     class Meta:

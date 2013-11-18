@@ -35,19 +35,9 @@
     float: left;
 }
 
-.radio-select {
-    padding-left: 0px;
-    list-style: none;
-}
-
-.radio-select li {
-    float: left;
-}
-
 .droped {
     color: #999;
 }
-
 </style>
 {% endblock %}
 
@@ -74,7 +64,7 @@
 
 {% include "app_modal.html" with modal_id="add-edit-app" f=form %}
 {% include "delete_modal.html" with modal_id="delete-app" model_name="应用" %} 
-{% include "modal.html" with modal_id="prompt" %} 
+{% include "prompt.html" with modal_id="prompt" %} 
 {% endblock %}
 
 {% block js %}

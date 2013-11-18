@@ -24,7 +24,9 @@ class AppForm(forms.ModelForm):
                 'class': 'form-control'
             }),
             'desc': forms.Textarea(attrs={
-                'rows': 4, 
+                'rows': 3, 
+                'placeholder': u'最多可以输入50个字',
+                'maxlength': 50,
                 'class': 'form-control'
             }),
             'name': forms.TextInput(attrs={
