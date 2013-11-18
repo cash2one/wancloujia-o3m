@@ -49,6 +49,8 @@ def app(request):
 
     query_set = list(chain(published_apps, droped_apps))
     table = AppTable(query_set)
+    if query:
+        table.empty_text = u'无搜索结果'
     RequestConfig(request, paginate={"per_page": settings.PAGINATION_PAGE_SIZE}).configure(table)
     return render(request, "app.html", {
         "query": query,

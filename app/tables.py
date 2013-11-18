@@ -43,7 +43,7 @@ class AppTable(tables.Table):
         fields = ('name', 'version', 'category', 'popularize', 'online', 'create_date')
         orderable = False
         attrs = {'class': 'table table-hover table-bordered'}
-        empty_text = '暂无应用'
+        empty_text = u'暂无应用'
 
 
 class SubjectTable(tables.Table):
@@ -67,4 +67,4 @@ class SubjectTable(tables.Table):
         fields = ('name', 'online', 'creator', 'create_date', 'updator', 'update_date')
         orderable = False
         attrs = {'class': 'table table-hover table-bordered'}
-        empty_text = '暂无应用专题'
+        empty_text = u'暂无应用专题'

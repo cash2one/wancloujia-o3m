@@ -36,6 +36,7 @@ def add_edit_app(request, form):
     if form["id"] == "":
         if App.objects.filter(package=app.package).exists():
             return simplejson.dumps({'ret_code': 1000, 'ret_msg': u'应用已存在'})
+        app.online = True
         app.save()
     else:
         app.pk = form["id"]

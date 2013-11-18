@@ -2,152 +2,152 @@
     "model": "app.Category",
     "pk": 1,
     "fields": {
-        "name": "游戏"
+        "name": "软件"
     }
 }, {
     "model": "app.Category",
     "pk": 2,
     "fields": {
-        "name": "软件"
+        "name": "游戏"
     }
 }, {
     "model": "app.Category",
     "pk": 3,
     "fields": {
-        "parent": 1,
+        "parent": 2,
         "name": "休闲益智"
     }
 }, {
     "model": "app.Category",
     "pk": 4,
     "fields": {
-        "parent": 1,
+        "parent": 2,
         "name": "角色冒险"
     }
 }, {
     "model": "app.Category",
     "pk": 5,
     "fields": {
-        "parent": 1,
+        "parent": 2,
         "name": "动作格斗"
     }
 }, {
     "model": "app.Category",
     "pk": 6,
     "fields": {
-        "parent": 1,
+        "parent": 2,
         "name": "策略游戏"
     }
 }, {
     "model": "app.Category",
     "pk": 7,
     "fields": {
-        "parent": 1,
+        "parent": 2,
         "name": "体育竞技"
     }
 }, {
     "model": "app.Category",
     "pk": 8,
     "fields": {
-        "parent": 1,
+        "parent": 2,
         "name": "飞行射击"
     }
 }, {
     "model": "app.Category",
     "pk": 9,
     "fields": {
-        "parent": 1,
+        "parent": 2,
         "name": "卡片棋牌"
     }
 }, {
     "model": "app.Category",
     "pk": 10,
     "fields": {
-        "parent": 1,
+        "parent": 2,
         "name": "经营养成"
     }
 }, {
     "model": "app.Category",
     "pk": 11,
     "fields": {
-        "parent": 1,
+        "parent": 2,
         "name": "其他游戏"
     }
 }, {
     "model": "app.Category",
     "pk": 12,
     "fields": {
-        "parent": 2,
+        "parent": 1,
         "name": "系统安全"
     }
 }, {
     "model": "app.Category",
     "pk": 13,
     "fields": {
-        "parent": 2,
+        "parent": 1,
         "name": "壁纸美化"
     }
 }, {
     "model": "app.Category",
     "pk": 14,
     "fields": {
-        "parent": 2,
+        "parent": 1,
         "name": "聊天通讯"
     }
 }, {
     "model": "app.Category",
     "pk": 15,
     "fields": {
-        "parent": 2,
+        "parent": 1,
         "name": "生活实用"
     }
 }, {
     "model": "app.Category",
     "pk": 16,
     "fields": {
-        "parent": 2,
+        "parent": 1,
         "name": "书籍阅读"
     }
 }, {
     "model": "app.Category",
     "pk": 17,
     "fields": {
-        "parent": 2,
+        "parent": 1,
         "name": "影音图像"
     }
 }, {
     "model": "app.Category",
     "pk": 18,
     "fields": {
-        "parent": 2,
+        "parent": 1,
         "name": "学习办公"
     }
 }, {
     "model": "app.Category",
     "pk": 19,
     "fields": {
-        "parent": 2,
+        "parent": 1,
         "name": "网络社区"
     }
 }, {
     "model": "app.Category",
     "pk": 20,
     "fields": {
-        "parent": 2,
+        "parent": 1,
         "name": "地图导航"
     }
 }, {
     "model": "app.Category",
     "pk": 21,
     "fields": {
-        "parent": 2,
+        "parent": 1,
         "name": "理财购物"
     }
 }, {
     "model": "app.Category",
     "pk": 22,
     "fields": {
-        "parent": 2,
+        "parent": 1,
         "name": "其他软件"
     }
 }]

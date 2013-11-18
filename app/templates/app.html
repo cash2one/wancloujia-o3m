@@ -35,19 +35,9 @@
     float: left;
 }
 
-.radio-select {
-    padding-left: 0px;
-    list-style: none;
-}
-
-.radio-select li {
-    float: left;
-}
-
 .droped {
     color: #999;
 }
-
 </style>
 {% endblock %}
 
@@ -74,7 +64,7 @@
 
 {% include "app_modal.html" with modal_id="add-edit-app" f=form %}
 {% include "delete_modal.html" with modal_id="delete-app" model_name="应用" %} 
-{% include "modal.html" with modal_id="prompt" %} 
+{% include "prompt.html" with modal_id="prompt" %} 
 {% endblock %}
 
 {% block js %}
@@ -83,6 +73,40 @@
 <script type="text/javascript" src="{{ STATIC_URL }}ajax_upload/js/ajax-upload-widget.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.uploadify.js"></script>
 <script type="text/javascript">
+(function(global) {
+var game_options = [{pk: 3, name: '休闲益智'},
+                    {pk: 4, name: '角色冒险'},
+                    {pk: 5, name: '动作格斗'},
+                    {pk: 6, name: '策略游戏'},
+                    {pk: 7, name: '体育竞技'},
+                    {pk: 8, name: '飞行射击'},
+                    {pk: 9, name: '卡片棋牌'},
+                    {pk: 10, name: '经营养成'},
+                    {pk: 11, name: '其他游戏'}];
+var soft_options = [{pk: 12, name: '系统安全'},
+                    {pk: 13, name: '壁纸美化'},
+                    {pk: 14, name: '聊天通讯'},
+                    {pk: 15, name: '生活实用'},
+                    {pk: 16, name: '书籍阅读'},
+                    {pk: 17, name: '影音图像'},
+                    {pk: 18, name: '学习办公'},
+                    {pk: 19, name: '网络社区'},
+                    {pk: 20, name: '地图导购'},
+                    {pk: 21, name: '理财购物'},
+                    {pk: 22, name: '其他软件'}];
+
+global.categories = {
+    game_options: game_options,
+    soft_options: soft_options,
+    getParentPk: function(pk) {
+        return pk < 12 ? 2 : 1;
+    },
+    getOptionsByParentPk: function(parentPk) {
+        return parentPk == 1 ? soft_options : game_options;
+    }
+};
+})(window);
+
 var error_check = suning.decorators.error_check;
 var login_check = suning.decorators.login_check;
 
@@ -210,7 +234,7 @@ $(function() {
             form.size.value = str_size(app.size);
             $(form.app_icon).val(app.icon).trigger('change');
             form.package.value = app.package;
-        } else {
+        } else if(mode == EDIT_APP_MODE) {
             if(data.packageName != app.package) {
                 toast('error', '应用包名不匹配，请确认上传的是否为同一个应用');
                 return;
@@ -221,6 +245,8 @@ $(function() {
             form.version.value = data.version;
             form.size.value = str_size(data.size);
             $(form.app_icon).val(data.icon).trigger('change');
+        } else {
+            console.error("mode not set!");
         }
     }
 
@@ -275,12 +301,12 @@ $(function() {
         form.id.value = app.id;
         form.name.value = app.name;
         form.version.value = app.version;
-        form.size.value = app.size;
+        form.size.value = str_size(parseInt(app.size, 10));
         form.package.value = app.package;
         form.apk.value = app.apk;
         form.online.value = app.online;
         $(form.app_icon).val(app.icon).trigger('change');
-        var parent = app.category < 12 ? 1 : 2;
+        var parent = categories.getParentPk(parseInt(app.category, 10));
         $parent.val(parent).trigger('change');
         $category.val(app.category).trigger('change');
         form.popularize.value = app.popularize;
@@ -290,32 +316,11 @@ $(function() {
 
     var $category = $(form.category);
     var $parent = $(form.parent).change(function() {
-        var game_options = [{pk: 3, name: '休闲益智'},
-                            {pk: 4, name: '角色冒险'},
-                            {pk: 5, name: '动作格斗'},
-                            {pk: 6, name: '策略游戏'},
-                            {pk: 7, name: '体育竞技'},
-                            {pk: 8, name: '飞行射击'},
-                            {pk: 9, name: '卡片棋牌'},
-                            {pk: 10, name: '经营养成'},
-                            {pk: 11, name: '其他游戏'}];
-        var soft_options = [{pk: 12, name: '系统安全'},
-                            {pk: 13, name: '壁纸美化'},
-                            {pk: 14, name: '聊天通讯'},
-                            {pk: 15, name: '生活实用'},
-                            {pk: 16, name: '书籍阅读'},
-                            {pk: 17, name: '影音图像'},
-                            {pk: 18, name: '学习办公'},
-                            {pk: 19, name: '网络社区'},
-                            {pk: 20, name: '地图导购'},
-                            {pk: 21, name: '理财购物'},
-                            {pk: 22, name: '其他软件'}];
-
         $category.select2('destroy');
         $category.html("");
         if (this.value) {
             $category.removeAttr("disabled");
-            var options = this.value == 1 ? game_options : soft_options;
+            var options = categories.getOptionsByParentPk(this.value);
             var template = _.template("<option value='<%= pk %>'><%= name %></option>");
             $(template({pk: "", name: "-----"})).appendTo($category);
             _.each(options, function(option) {
