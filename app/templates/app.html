@@ -210,7 +210,7 @@ $(function() {
             form.size.value = str_size(app.size);
             $(form.app_icon).val(app.icon).trigger('change');
             form.package.value = app.package;
-        } else {
+        } else if(mode == EDIT_APP_MODE) {
             if(data.packageName != app.package) {
                 toast('error', '应用包名不匹配，请确认上传的是否为同一个应用');
                 return;
@@ -221,6 +221,8 @@ $(function() {
             form.version.value = data.version;
             form.size.value = str_size(data.size);
             $(form.app_icon).val(data.icon).trigger('change');
+        } else {
+            console.error("mode not set!");
         }
     }
 
@@ -275,7 +277,7 @@ $(function() {
         form.id.value = app.id;
         form.name.value = app.name;
         form.version.value = app.version;
-        form.size.value = app.size;
+        form.size.value = str_size(parseInt(app.size, 10));
         form.package.value = app.package;
         form.apk.value = app.apk;
         form.online.value = app.online;
