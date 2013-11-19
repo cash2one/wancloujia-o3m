@@ -29,7 +29,11 @@
 
     {% for p in table|get_pages %}
     <li {% if p == table.page.number %}class='active'{% endif %}>
-        <a href="{% querystring table.prefixed_page_field=p %}">{{ p }}</a>
+        <a {% if table.page.number != p %}
+            href="{% querystring table.prefixed_page_field=p %}"
+           {% endif %} >
+            {{ p }}
+        </a>
     </li>
     {% endfor %}
 
