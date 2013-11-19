@@ -15,8 +15,8 @@ DATABASE_ENGINE = 'mysql'
 DATABASE_HOST = 'localhost'
 DATABASE_PORT = '3306'
 DATABASE_USER = 'root'
-DATABASE_PASSWORD = 'root'
-DATABASE_NAME = 'suning_app_list'
+DATABASE_PASSWORD = 'nameLR9969'
+DATABASE_NAME = 'suning_sw'
 
 DATABASES = {
     'default': {
@@ -184,6 +184,8 @@ INSTALLED_APPS = (
     'ad',
     'mgr',
     'app',
+    'rest_framework',
+    'interface',
     'django_tables2',
     'ajax_upload',
     'django_select2',
