@@ -6,7 +6,7 @@ from django.shortcuts import render, redirect
 from django.core.files.images import ImageFile
 from django.core.files.storage import default_storage        
 from django.utils import simplejson
-from django.http import HttpResponseBadRequest, HttpResponse
+from django.http import HttpResponseBadRequest, HttpResponse, Http404
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.db.models.query import QuerySet
 from django.db.models import Q
@@ -63,12 +63,12 @@ class UploadForm(forms.ModelForm):
 @require_POST
 @login_required(login_url=settings.LOGIN_JSON_URL)
 def upload(request):
-    #return HttpResponseBadRequest(simplejson.dumps({'errors': "test"}))
+    #raise Http404;
     form = UploadForm(data=request.POST, files=request.FILES)
     if not form.is_valid():
         logger.warn("%s: form is invalid" % __name__)
         logger.warn(form.errors)
-        return HttpResponseBadRequest(simplejson.dumps({'errors': form.errors}))
+        return Http404
 
     uploaded_file = form.save()
 
