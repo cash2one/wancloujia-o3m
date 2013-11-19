@@ -3,6 +3,7 @@ import logging
 import time
 from datetime import datetime
 
+from django.db import transaction, connection
 from django.utils import simplejson
 from django.contrib.auth.models import User
 from dajaxice.decorators import dajaxice_register
@@ -60,6 +61,19 @@ def delete_app(request, id):
     return _ok_json
 
 
+@transaction.commit_manually
+def _drop_app(id):
+    try:
+        models.App.objects.filter(pk=id).update(online=False)
+        models.AppGroup.objects.filter(app__pk=id).delete()
+    except Exception as e:
+        transaction.rollback()
+        logger.exception(e)
+        raise e
+    else:
+        transaction.commit()
+
+
 @dajaxice_register(method='POST')
 @check_login
 def publish_app(request, id):
@@ -70,7 +84,7 @@ def publish_app(request, id):
 @dajaxice_register(method='POST')
 @check_login
 def drop_app(request, id):
-    models.App.objects.filter(pk=id).update(online=False)
+    _drop_app(id)
     return _ok_json
 
 
@@ -78,8 +92,8 @@ def drop_app(request, id):
 @check_login
 @preprocess_form
 def add_edit_subject(request, form):
-    name = form["name"]
     pk = form["id"]
+    name = form["name"]
     cover = form["cover"]
     desc = form["desc"] 
     apps = form["apps"]
@@ -117,7 +131,7 @@ def add_edit_subject(request, form):
 @dajaxice_register(method='POST')
 @check_login
 def delete_subject(request, id):
-    models.Subject.objects.get(pk=id).delete(pk=id)
+    models.delete_subject(id)
     return _ok_json
 
 
@@ -137,8 +151,9 @@ def sort_subjects(request, subjects):
 
 
 @dajaxice_register(method='POST')
+#@request_delay(3)
 def get_apps(request, pks):
     pks = [int(pk) for pk in pks.split(",")]
-    apps = models.App.objects.filter(pk__in=pks)
-    results = [{'id': app.pk, 'text': app.name} for app in apps]
+    groups = models.AppGroup.objects.filter(app__pk__in=pks).filter(app__online=True).order_by("position")
+    results = [{'id': g.app.pk, 'text': g.app.name} for g in groups]
     return simplejson.dumps({'results': results})

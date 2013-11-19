@@ -126,12 +126,12 @@ def edit_subject(subject, apps, user):
         transaction.commit()
 
 
-def _drop_subject(id, user):
+def _drop_subject(id):
     subject = Subject.objects.get(pk=id)
     c = connection.cursor()
     try:
         sql= '''update app_subject set position = position - 1
-                 where position > %d and visible = 1 ''' % subject.position
+                 where position > %d and online = 1 ''' % subject.position
         c.execute(sql)
     finally:
         c.close()
@@ -178,6 +178,19 @@ def sort_subjects(pks):
             subject = Subject.get(pk=pks[i])
             subject.position = i + 1
             subject.save()
+    except Exception as e:
+        logger.exception(e)
+        transaction.rollback()
+        raise e
+    else:
+        transaction.commit()
+
+
+@transaction.commit_manually
+def delete_subject(pk):
+    try: 
+        _drop_subject(pk)
+        Subject.objects.get(pk=pk).delete()
     except Exception as e:
         logger.exception(e)
         transaction.rollback()
