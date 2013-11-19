@@ -20,7 +20,7 @@
 
         function cancel_check(func) {
             return function(file, errorCode, errorMsg, errorString) {
-                if (errorString == 'Cancel') return;
+                if (errorString == 'Cancelled') return;
 
                 func(file, errorCode, errorMsg, errorString);
             }
@@ -30,7 +30,7 @@
             return function() {
                 $("#fileupload").uploadify('disable', true);
                 $cancelBtn.show();
-                $tip.empty().show();
+                $tip.empty();
                 func && func.apply(global, arguments);
             }
         }
@@ -39,8 +39,37 @@
             return function() {
                 $("#fileupload").uploadify('disable', false);
                 $cancelBtn.hide();
-                $tip.empty().hide();
+                $tip.empty();
                 func && func.apply(global, arguments);
+            }
+        }
+
+        function setButtonText(text) {
+            var html = "<span class='glyphicon glyphicon-upload'></span>&nbsp;" + text;
+            $("#fileupload .uploadify-button-text").html(html);
+
+        }
+
+        function upload_error_check(func) {
+            return function(file, result) {
+                var data = $.parseJSON(result);
+                if (data.ret_code && data.ret_code != 0) {
+                    var msg = "";
+                    if (data.ret_msg == "not_login_error") {
+                        msg = "会话可能已经过期，请重新登录";
+                    } else if (data.ret_msg == "inspect_apk_failed") {
+                        msg = "应用文件解析失败，文件可能已经损坏";
+                    } else {
+                        msg = "权限不足";
+                    }
+                    $tip.html(msg);
+                    setButtonText("重新上传");
+                    return;
+                }
+
+                setButtonText("选择文件");
+                $tip.html('上传成功');
+                func && func.apply(global, [data]);
             }
         }
 
@@ -70,9 +99,24 @@
             },
             onUploadStart: show_uploading_ui(options.onStart),
             onCancel: hide_uploading_ui(options.onCancel),
-            onUploadError: cancel_check(hide_uploading_ui(options.onFailed)),
-            onUploadSuccess: hide_uploading_ui(options.onDone)
+            onUploadError: cancel_check(hide_uploading_ui(function() {
+                setButtonText("重新上传");
+                $tip.html("上传失败");
+                options.onFailed();
+            })),
+            onUploadSuccess: hide_uploading_ui(upload_error_check(options.onDone))
         });
+
+        return {
+            reset: function() {
+                setButtonText("选择文件");
+                $tip.empty();
+            },
+
+            cancel: function() {
+                $("#fileupload").uploadify('cancel');
+            }
+        };
     }
 
     global.apk_upload = apk_upload;

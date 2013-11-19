@@ -130,31 +130,15 @@ $(function() {
         bindForm();
     }
 
-    apk_upload($("#upload-apk"), {
+    var apk_uploader = apk_upload($("#upload-apk"), {
         onCancel: function() {
             uploading = false;
         },
-        onFailed: function(file, errorCode, errorMsg, errorString) {
-            console.log(file, errorCode, errorMsg, errorString);
+        onFailed: function() {
             uploading = false;
-            toast('error', '应用上传失败');
         },
-        onDone: function(file, data) {
+        onDone: function(data) {
             uploading = false;
-            var data = $.parseJSON(data);
-            if (data.ret_code && data.ret_code != 0) {
-                var msg = "";
-                if (data.ret_msg == "not_login_error") {
-                    msg = "会话可能已经过期，请重新登录";
-                } else if (data.ret_msg == "inspect_apk_failed") {
-                    msg = "应用文件解析失败，文件可能已经损坏";
-                } else {
-                    msg = "权限不足";
-                }
-                toast('error', msg);
-                return;
-            }
-
             if (mode == ADD_APP_MODE && data.id) {
                 mode = EDIT_APP_MODE;
             } else if (mode == EDIT_APP_MODE && !data.id) {
@@ -203,7 +187,9 @@ $(function() {
 
     $modal.on('hide.bs.modal', function() {
         clearForm();
-        if (uploading) $("#fileupload").uploadify('cancel');
+        console.log('cancel & reset apk_uploader');
+        if (uploading) apk_uploader.cancel();
+        apk_uploader.reset();
         $form.parsley('destroy');
     });
 

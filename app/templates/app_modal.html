@@ -6,13 +6,16 @@
 <form role="form" id="upload-apk" class="form-horizontal">
     {% csrf_token %}
     <div class="form-group">
-        <label class="col-lg-3 control-label">
+        <label class="col-xs-3 control-label">
             <span class="required">*</span>上传APK文件
         </label>
-        <div class="col-lg-9" style="height: 34px; overflow: hidden">
-            <input id="fileupload" type="file" name="file">
-            <button class="btn btn-danger cancel" style="display: none">取消上传</button>
-            <span class="tip" style="display: none; padding: 6px 12px;"></span>
+        <div class="col-xs-9" style="height: 34px;">
+            <div style="float: left; width: 100px; height: 34px">
+                <input id="fileupload" type="file" name="file">
+                <button class="btn btn-danger cancel" style="display: none; width: 100px;">取消上传</button>
+            </div>
+            <div class="tip" style="float: left; padding: 6px 12px;">
+            </div>
         </div>
     </div>
 </form>

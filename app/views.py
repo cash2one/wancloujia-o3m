@@ -63,6 +63,7 @@ class UploadForm(forms.ModelForm):
 @require_POST
 @login_required(login_url=settings.LOGIN_JSON_URL)
 def upload(request):
+    #return HttpResponseBadRequest(simplejson.dumps({'errors': "test"}))
     form = UploadForm(data=request.POST, files=request.FILES)
     if not form.is_valid():
         logger.warn("%s: form is invalid" % __name__)
@@ -86,6 +87,7 @@ def upload(request):
         holder['icon_url'] = settings.MEDIA_URL + default_storage.save(path, ImageFile(f))
     apk.read_icon(uploaded_file.file.path, copy_icon)
     app_dict = {
+        'ret_code': 0,
         'apk_id': uploaded_file.pk,
         'name': apk_info.getAppName(),
         'packageName': apk_info.getPackageName(),
