@@ -15,8 +15,8 @@ DATABASE_ENGINE = 'mysql'
 DATABASE_HOST = 'localhost'
 DATABASE_PORT = '3306'
 DATABASE_USER = 'root'
-DATABASE_PASSWORD = 'nameLR9969'
-DATABASE_NAME = 'suning_sw'
+DATABASE_PASSWORD = 'root'
+DATABASE_NAME = 'suning_app_list'
 
 DATABASES = {
     'default': {
