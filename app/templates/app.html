@@ -305,12 +305,15 @@ $(function() {
         form.package.value = app.package;
         form.apk.value = app.apk;
         form.online.value = app.online;
+        form.desc.value = app.desc;
+
         $(form.app_icon).val(app.icon).trigger('change');
         var parent = categories.getParentPk(parseInt(app.category, 10));
         $parent.val(parent).trigger('change');
         $category.val(app.category).trigger('change');
-        form.popularize.value = app.popularize;
-        form.desc.value = app.desc;
+        for(var i = 0; i < form.popularize.length; i++) {
+            form.popularize[i].checked = form.popularize[i].value == app.popularize;
+        }
         $modal.modal('show');
     });
 
@@ -353,11 +356,15 @@ $(function() {
         form.version.value = "";
         form.online.value = "";
         form.size.value = "";
+        form.desc.value = "";
+
         $(form.app_icon).val("").change();
         $parent.val("1").trigger('change');
         $category.val("").trigger('change');
-        form.popularize.value = "True";
-        form.desc.value = "";
+        for(var i = 0; i < form.popularize.length; i++) {
+            form.popularize[i].checked = form.popularize[i].value == "False";
+        }
+
         if (uploading) {
             $("#fileupload").uploadify('cancel');
         }
