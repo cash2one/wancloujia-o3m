@@ -79,7 +79,6 @@
             buttonText: "<span class='glyphicon glyphicon-upload'></span>&nbsp;选择文件",
             fileObjName: 'file',
             fileTypeExts: "*.apk",
-            successTimeout: 60 * 24,
             width: 100,
             height: 34,
             multi: false,
