@@ -70,20 +70,37 @@ def upload(request):
         return HttpResponseBadRequest(simplejson.dumps({'errors': form.errors}))
 
     uploaded_file = form.save()
-    apk_info = apk.inspect(uploaded_file.file.path)
+
+    try:
+        apk_info = apk.inspect(uploaded_file.file.path)
+    except Exception as e:
+        logger.exception(e)
+        return HttpResponse(simplejson.dumps({
+            'ret_code': 1000,
+            'ret_msg': 'inspect_apk_failed'
+        }), mimetype='application/json')
 
     holder = {'icon_url': None}
     def copy_icon(name, f):
         path = "apk_icons/" + apk_info.getPackageName() + "/" + name
         holder['icon_url'] = settings.MEDIA_URL + default_storage.save(path, ImageFile(f))
     apk.read_icon(uploaded_file.file.path, copy_icon)
-
-    return HttpResponse(simplejson.dumps({
+    app_dict = {
         'apk_id': uploaded_file.pk,
         'name': apk_info.getAppName(),
         'packageName': apk_info.getPackageName(),
         'version': apk_info.versionName,
         'size': apk_info.packageSize,
         'icon': holder['icon_url']
-    }))
+    }
 
+    apps = App.objects.filter(package=apk_info.getPackageName())
+    if len(apps) > 0:
+        app = apps[0]
+        app_dict["id"] = app.pk
+        app_dict["category"] = app.category.pk
+        app_dict["desc"] = app.desc
+        app_dict["popularize"] = "True" if app.popularize else "False"
+
+    return HttpResponse(simplejson.dumps(app_dict), 
+                        mimetype='application/json')

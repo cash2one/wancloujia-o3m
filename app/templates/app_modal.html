@@ -11,8 +11,8 @@
         </label>
         <div class="col-lg-9" style="height: 34px; overflow: hidden">
             <input id="fileupload" type="file" name="file">
-            <button class="btn btn-danger" style="display: none" id="cancel-upload">取消上传</button>
-            <div class="tip" style="display: none; padding: 6px 12px; margin-left: 80px;"></div>
+            <button class="btn btn-danger cancel" style="display: none">取消上传</button>
+            <span class="tip" style="display: none; padding: 6px 12px;"></span>
         </div>
     </div>
 </form>
@@ -64,7 +64,7 @@
                 <option value="1">软件</option>
                 <option value="2">游戏</option>
             </select>
-            <select name="category" disabled='disabled' data-required="true">
+            <select name="category" data-required="true">
             </select>
         </div>
     </div>
