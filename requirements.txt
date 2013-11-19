@@ -6,3 +6,4 @@ django-crontab
 django-auth-remember
 python-memcached
 pil
+djangorestframework

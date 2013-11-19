@@ -14,17 +14,9 @@ logger = logging.getLogger(__name__)
 @require_GET
 def welcome(request):
     if request.user.is_authenticated():
-        return redirect("/dashboard")
+        return redirect("/mgr/account/")
     else:
         return render(request, "login.html") 
-
-
-@require_GET
-@login_required
-@active_tab("dashboard")
-def dashboard(request):
-    logger.debug('dashboard')
-    return render(request, "dashboard.html")
 
 
 @require_GET

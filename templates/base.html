@@ -44,9 +44,9 @@
 <div id="sidebar" class="sidebar affix">
     <div class="bs-sidebar hidden-print" role="complementary">
         <ul class="nav bs-sidenav">
-            <li {% if request.nav.active_tab == "dashboard" %}class="active"{% endif %}>
-                <a href="/dashboard">
-                    <span class="glyphicon glyphicon-dashboard"></span>&nbsp;&nbsp;控制面板
+            <li {% if request.nav.active_tab == 'account' %}class="active"{% endif %}>
+                <a href="/mgr/account">
+                    <span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;个人中心
                 </a>
             </li>
 
@@ -111,13 +111,9 @@
             </li>
             {% endif %}
 
-            <li><a href="">
-                <span class="glyphicon glyphicon-th"></span>&nbsp;&nbsp;数据统计
-            </a></li>
-
-            <li {% if request.nav.active_tab == 'account' %}class="active"{% endif %}>
-                <a href="/mgr/account">
-                    <span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;账号管理
+            <li>
+                <a href="">
+                    <span class="glyphicon glyphicon-th"></span>&nbsp;&nbsp;数据统计
                 </a>
             </li>
         </ul>

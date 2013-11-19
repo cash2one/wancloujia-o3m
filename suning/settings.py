@@ -186,6 +186,8 @@ INSTALLED_APPS = (
     'ad',
     'mgr',
     'app',
+    'rest_framework',
+    'interface',
     'django_tables2',
     'ajax_upload',
     'django_select2',

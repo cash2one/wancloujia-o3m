@@ -1,7 +1,10 @@
+import logging
 import re
 import zipfile
 import os.path
 from subprocess import Popen, PIPE
+
+logger = logging.getLogger(__name__)
 
 _version_pattern = re.compile("(name|versionCode|versionName)='(.+?)'")
 _sdk_version_pattern = re.compile("sdkVersion:'(\d+)'")
@@ -163,7 +166,7 @@ def apiLevelToAndroidVersion(version):
     return VERSIONS[version-1] if version <= len(VERSIONS) else None
 
 def inspect(path):
-    pipe = Popen(["android/aapt", "dump", "badging", path], stdout=PIPE)
+    pipe = Popen(["android/aapt", "dump", "badging", path], stdout=PIPE, stderr=PIPE)
     out, err = pipe.communicate()
     if pipe.returncode != 0:
         raise InspectFailedException(err)

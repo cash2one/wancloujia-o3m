@@ -135,7 +135,7 @@
             }
             this.$element.hide();
         } else {
-            this.$previewArea.slideUp();
+            this.$previewArea.hide();
             this.$changeButton.hide();
             this.$removeButton.hide();
             this.$element.show();
