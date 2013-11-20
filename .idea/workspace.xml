@@ -37,7 +37,7 @@
           <file leaf-file-name="urls.py" pinned="false" current="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/interface/urls.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state line="9" column="27" selection-start="357" selection-end="357" vertical-scroll-proportion="-5.4" vertical-offset="0" max-vertical-offset="270">
+                <state line="9" column="27" selection-start="357" selection-end="357" vertical-scroll-proportion="0.0" vertical-offset="135" max-vertical-offset="270">
                   <folding />
                 </state>
               </provider>
@@ -46,7 +46,7 @@
           <file leaf-file-name="views.py" pinned="false" current="true" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/interface/views.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state line="101" column="18" selection-start="3238" selection-end="3238" vertical-scroll-proportion="0.71005154" vertical-offset="964" max-vertical-offset="1755">
+                <state line="98" column="25" selection-start="3159" selection-end="3159" vertical-scroll-proportion="0.632732" vertical-offset="979" max-vertical-offset="1755">
                   <folding>
                     <element signature="e#26#62#0" expanded="true" />
                   </folding>
@@ -57,10 +57,8 @@
           <file leaf-file-name="serializers.py" pinned="false" current="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/interface/serializers.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state line="25" column="17" selection-start="1156" selection-end="1156" vertical-scroll-proportion="-15.0" vertical-offset="0" max-vertical-offset="660">
-                  <folding>
-                    <element signature="e#0#38#0" expanded="true" />
-                  </folding>
+                <state line="25" column="17" selection-start="1156" selection-end="1156" vertical-scroll-proportion="0.0" vertical-offset="375" max-vertical-offset="660">
+                  <folding />
                 </state>
               </provider>
             </entry>
@@ -81,7 +79,7 @@
           <file leaf-file-name="models.py" pinned="false" current="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/app/models.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state line="46" column="27" selection-start="1482" selection-end="1482" vertical-scroll-proportion="0.13530928" vertical-offset="510" max-vertical-offset="2895">
+                <state line="46" column="27" selection-start="1482" selection-end="1482" vertical-scroll-proportion="-0.09664948" vertical-offset="690" max-vertical-offset="2895">
                   <folding />
                 </state>
               </provider>
@@ -274,8 +272,8 @@
     <property name="options.lastSelected" value="project.propVCSSupport.Mappings" />
     <property name="last_opened_file_path" value="$USER_HOME$/PycharmProjects/myapi" />
     <property name="FullScreen" value="true" />
-    <property name="options.splitter.details.proportions" value="0.2" />
     <property name="options.searchVisible" value="true" />
+    <property name="options.splitter.details.proportions" value="0.2" />
   </component>
   <component name="PyConsoleOptionsProvider">
     <option name="myPythonConsoleState">
@@ -469,9 +467,7 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/suning/settings.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="18" column="21" selection-start="326" selection-end="326" vertical-scroll-proportion="0.0" vertical-offset="270" max-vertical-offset="3945">
-          <folding />
-        </state>
+        <state line="18" column="21" selection-start="326" selection-end="326" vertical-scroll-proportion="0.0" vertical-offset="270" max-vertical-offset="3945" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/rebuild_db.sh">
@@ -503,9 +499,7 @@
     </entry>
     <entry file="file:///Library/Python/2.7/site-packages/django/contrib/auth/models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="204" column="14" selection-start="7241" selection-end="7241" vertical-scroll-proportion="0.0" vertical-offset="2606" max-vertical-offset="7905">
-          <folding />
-        </state>
+        <state line="204" column="14" selection-start="7241" selection-end="7241" vertical-scroll-proportion="0.0" vertical-offset="2606" max-vertical-offset="7905" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/interface/serializer.py">
@@ -524,51 +518,43 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/suning/settings.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="17" column="22" selection-start="286" selection-end="286" vertical-scroll-proportion="0.3342071" vertical-offset="0" max-vertical-offset="4005">
-          <folding />
-        </state>
+        <state line="17" column="22" selection-start="286" selection-end="286" vertical-scroll-proportion="0.3342071" vertical-offset="0" max-vertical-offset="4005" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/mgr/models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="19" column="24" selection-start="645" selection-end="645" vertical-scroll-proportion="1.2" vertical-offset="285" max-vertical-offset="1695">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="46" column="27" selection-start="1482" selection-end="1482" vertical-scroll-proportion="0.13530928" vertical-offset="510" max-vertical-offset="2895">
-          <folding />
-        </state>
+        <state line="19" column="24" selection-start="645" selection-end="645" vertical-scroll-proportion="1.2" vertical-offset="285" max-vertical-offset="1695" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/suning/urls.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="21" column="29" selection-start="805" selection-end="805" vertical-scroll-proportion="0.28994846" vertical-offset="0" max-vertical-offset="776">
-          <folding />
-        </state>
+        <state line="21" column="29" selection-start="805" selection-end="805" vertical-scroll-proportion="0.28994846" vertical-offset="0" max-vertical-offset="776" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/interface/urls.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="27" selection-start="357" selection-end="357" vertical-scroll-proportion="-5.4" vertical-offset="0" max-vertical-offset="270">
+        <state line="9" column="27" selection-start="357" selection-end="357" vertical-scroll-proportion="0.0" vertical-offset="135" max-vertical-offset="270">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/interface/serializers.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="25" column="17" selection-start="1156" selection-end="1156" vertical-scroll-proportion="-15.0" vertical-offset="0" max-vertical-offset="660">
-          <folding>
-            <element signature="e#0#38#0" expanded="true" />
-          </folding>
+        <state line="25" column="17" selection-start="1156" selection-end="1156" vertical-scroll-proportion="0.0" vertical-offset="375" max-vertical-offset="660">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="46" column="27" selection-start="1482" selection-end="1482" vertical-scroll-proportion="-0.09664948" vertical-offset="690" max-vertical-offset="2895">
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/interface/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="101" column="18" selection-start="3238" selection-end="3238" vertical-scroll-proportion="0.71005154" vertical-offset="964" max-vertical-offset="1755">
+        <state line="98" column="25" selection-start="3159" selection-end="3159" vertical-scroll-proportion="0.632732" vertical-offset="979" max-vertical-offset="1755">
           <folding>
             <element signature="e#26#62#0" expanded="true" />
           </folding>
