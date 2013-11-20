@@ -12,7 +12,9 @@
                 disabled='disabled'
                 {% endif %}
                 class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                新增组织<span class="caret"></span>
+                <span class="glyphicon glyphicon-plus"></span>
+                新增组织
+                <span class="caret"></span>
             </a>
             <ul class="dropdown-menu" role="menu">
                 {% if request.user.is_superuser or request.user.is_staff %}

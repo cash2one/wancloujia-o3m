@@ -67,7 +67,7 @@ class GroupTable(tables.Table):
     members = tables.Column(verbose_name=u'成员数量', empty_values=())
     built_in = tables.Column(verbose_name=u'是否内置', empty_values=())
     permissions = tables.Column(verbose_name=u'已授权权限', empty_values=())
-    ops = tables.TemplateColumn(verbose_name=u'操作', template_name='group_ops.html')
+    ops_2 = tables.TemplateColumn(verbose_name=u'操作', template_name='group_ops.html')
 
     def render_members(self, record):
         return len(User.objects.filter(groups=record))
