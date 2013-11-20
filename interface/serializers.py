@@ -30,10 +30,16 @@ class AppSerializer(serializers.ModelSerializer):
             return instance
         return App(**attrs)
     """
+    def __init__(self, *args, **kwargs):
+        # Instantiate the superclass normally
+        super(AppSerializer, self).__init__(*args, **kwargs)
+
     class Meta:
         model = App
+        fields = ('id', 'apk', 'name', 'app_icon', 'desc', 'version',)
 
 
 class SubjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = Subject
+        fields = ('id','name','cover','desc',)
