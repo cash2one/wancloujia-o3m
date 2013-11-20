@@ -1,6 +1,7 @@
 # Create your views here.
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
+from rest_framework import status
 from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
 from rest_framework.response import Response
@@ -11,7 +12,7 @@ from django.contrib import auth
 from mgr.models import Staff
 from app.models import Subject
 from app.models import App
-from serializers import AppSerializer
+from serializers import AppSerializer, SubjectSerializer
 
 class JSONResponse(HttpResponse):
     """
@@ -79,7 +80,9 @@ def user_logout(request):
 @api_view(['GET'])
 @parser_classes((JSONParser,))
 def all_subjects(request):
-    Subject.objects.all()
+    subjects = Subject.objects.all()
+    serializer = SubjectSerializer(subjects)
+    return Response(serializer.data)
     pass
 
 @api_view(['GET', 'POST'])
@@ -93,7 +96,15 @@ def subject_apps(request):
     serializer = AppSerializer(apps)
     return Response(serializer.data)
 
-
+@api_view(['GET','POST'])
+@parser_classes((JSONParser,))
+def create_subject(request):
+    if request.method == "POST":
+        serializer = SubjectSerializer(data = request.DATA)
+        #if serializer.is_valid():
+        serializer.save_object()
+        return Response(status=status.HTTP_201_CREATED)
+    return Response(status=status.HTTP_200_OK)
 
 @api_view(['GET','POST'])
 @parser_classes((JSONParser,))

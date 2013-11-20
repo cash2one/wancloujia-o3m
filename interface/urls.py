@@ -6,5 +6,7 @@ urlpatterns = patterns('interface.views',
     url('^logout$', 'user_logout'),
     url('^upload$', 'upload'),
     url('^subject_apps$', 'subject_apps'),
-    url(r'^echo$','echo'),
+    url('^subjects', 'all_subjects'),
+    url('^create_subject', 'create_subject'),
+    url(r'^echo$', 'echo'),
 )

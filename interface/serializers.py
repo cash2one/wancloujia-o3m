@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from app.models import App, UploadApk, Category
+from app.models import App, UploadApk, Category, Subject
 
 
 class AppSerializer(serializers.ModelSerializer):
@@ -32,3 +32,8 @@ class AppSerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = App
+
+
+class SubjectSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Subject
