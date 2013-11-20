@@ -7,6 +7,11 @@
 {% block css %}
 {{ block.super }}
 <link rel="stylesheet" href="{{ STATIC_URL }}ajax_upload/css/ajax-upload-widget.css" />
+<style type="text/css">
+.droped {
+    color: #999;
+}
+</style>
 {% endblock %}
 
 {% block main %}
@@ -234,19 +239,19 @@ $(function() {
     var mode = null;
     var PUBLISH_SUBJECT = "publish_subject";
     var DROP_SUBJECT = "drop_subject";
-    var app = null;
+    var subject = null;
     var $modal = $("#prompt");
     var $saveBtn = $modal.find(".save");
 
     $("table").on("click", ".publish", function() {
         mode = PUBLISH_SUBJECT;
-        app = $(this.parentNode).data();
+        subject = $(this.parentNode).data();
         $modal.modal('show');
     });
 
     $("table").on("click", ".drop", function() {
         mode = DROP_SUBJECT;
-        app = $(this.parentNode).data();
+        subject = $(this.parentNode).data();
         $modal.modal('show');
     });
 
@@ -262,9 +267,9 @@ $(function() {
         $modal.find(".modal-title").html(action);
         if(mode == PUBLISH_SUBJECT) {
             var template = _.template("确定要上线应用专题&nbsp;<strong><%= name %></strong>&nbsp;吗?");
-            $modal.find(".modal-body").html(template({name: app.name}));
+            $modal.find(".modal-body").html(template({name: subject.name}));
         } else {
-            $modal.find(".modal-body").html("如果应用下线了，将不能被手机助手用户看到，并且会排在应用列表的后面。确认继续吗？");
+            $modal.find(".modal-body").html("如果应用专题下线了，将不能被手机助手用户看到，并且会排在应用专题列表的后面。确认继续吗？");
         }
     });
 
@@ -272,10 +277,14 @@ $(function() {
         var func = Dajaxice.app[mode];
         suning.modal.lock($modal);
         func(lock_check(login_check(error_check(function(data) {
-            toast('success', mode == PUBLISH_APP ? '应用专题已上线' : '应用专题已下线');
+            toast('success', mode == PUBLISH_SUBJECT ? '应用专题已上线' : '应用专题已下线');
             $modal.modal('hide');
             suning.reload(2000);
-        }))), {id: app.id}, {error_callback: lock_check(suning.toastNetworkError)});
+        }))), {
+            id: subject.id
+        }, {
+            error_callback: lock_check(suning.toastNetworkError)
+        });
     });
 });
 </script>

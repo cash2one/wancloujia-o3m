@@ -138,7 +138,14 @@ def delete_subject(request, id):
 @dajaxice_register(method='POST')
 @check_login
 def drop_subject(request, id):
-    models.drop_subject(id, request.user)
+    models.drop_subject(id)
+    return _ok_json
+
+
+@dajaxice_register(method='POST')
+@check_login
+def publish_subject(request, id):
+    models.publish_subject(id)
     return _ok_json
 
 

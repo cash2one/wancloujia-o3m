@@ -101,8 +101,8 @@ def add_subject(subject, apps, user):
         subject.updator = user
         subject.update_date = datetime.now()
         subject.save()
-        _publish_subject(subject.pk)
         _set_included_apps(subject, apps) 
+        _publish_subject(subject.pk)
     except Exception as e:
         transaction.rollback()
         logger.exception(e)
@@ -143,9 +143,6 @@ def _drop_subject(id):
 def drop_subject(id):
     try:
         _drop_subject(id)    
-        subject = Subject.objects.get(pk=id)
-        subject.updator = user
-        subject.update_date = datetime.now()
     except Exception as e:
         transaction.rollback()
         logger.exception(e)
@@ -158,9 +155,6 @@ def drop_subject(id):
 def publish_subject(id):
     try: 
         _publish_subject(id)
-        subject = Subject.objects.get(pk=id)
-        subject.updator = user
-        subject.update_date = datetime.now()
     except Exception as e:
         logger.exception(e)
         transaction.rollback()
