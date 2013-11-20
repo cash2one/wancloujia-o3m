@@ -9,6 +9,20 @@ $(function() {
     var $apps = $(form.apps);
     var query_id = 0;
 
+    var apps_cache = [];
+    function parse_apps_cache(value) {
+        var arr = value.split(",");
+        var results = [];
+        for(var i = 0; i < arr.length; i+=2) {
+            results.push(arr[i]);
+            apps_cache.push({
+                id: arr[i],
+                text: arr[i+1]
+            });
+        }
+        return results;
+    } 
+
     $apps.select2({
         tags: [],
         ajax: {
@@ -35,35 +49,22 @@ $(function() {
         },
         initSelection: function(element, callback) {
             var value = $(element).val();
-            if (value == '') {
+            if (form.id.value == "" || value == '') {
                 callback([]);
                 return;
             }
 
-            var current = query_id;
+            callback(apps_cache);
+        }
+    });
 
-            function query_check(func) {
-                return function(data) {
-                    if (current != query_id) {
-                        console.log('query_id not equals, drop it');
-                        return;
-                    }
-                    func(data)
-                }
-            }
-
-            $apps.select2('readonly', true);
-            Dajaxice.app.get_apps(query_check(function(data) {
-                $apps.select2('readonly', false);
-                callback(data.results);
-            }), {
-                pks: value
-            }, {
-                error_callback: function() {
-                    console.error('failed to query apps, network error');
-                    return;
-                }
-            })
+    $apps.select2("container").find("ul.select2-choices").sortable({
+        containment: 'parent',
+        start: function() {
+            $apps.select2("onSortStart");
+        },
+        update: function() {
+            $apps.select2("onSortEnd");
         }
     });
 
@@ -95,7 +96,9 @@ $(function() {
         form.name.value = subject.name;
         form.desc.value = subject.desc;
         $(form.cover).val(subject.cover).trigger('change');
-        $apps.val(subject.apps).trigger('change');
+        var apps = parse_apps_cache(subject.apps);
+        console.log("set apps: ", apps.join(","));
+        $apps.val(apps.join(",")).trigger('change');
         $modal.modal('show');
     });
 
@@ -107,6 +110,7 @@ $(function() {
 
         $apps.val("").trigger('change');
         $apps.select2('readonly', false);
+        apps_cache = [];
         query_id++;
         $form.parsley('destroy');
     });
@@ -146,6 +150,7 @@ $(function() {
         var onError = lock_check(suning.toastNetworkError);
 
         suning.modal.lock($modal);
+        console.log("apps: ", form.apps.value);
         Dajaxice.app.add_edit_subject(onSuccess, {
             form: $form.serialize(true)
         }, {

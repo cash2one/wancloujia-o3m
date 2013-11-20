@@ -159,8 +159,9 @@ def sort_subjects(request, pks):
 
 @dajaxice_register(method='POST')
 #@request_delay(3)
-def get_apps(request, pks):
+def get_apps(request, subject, pks):
     pks = [int(pk) for pk in pks.split(",")]
-    groups = models.AppGroup.objects.filter(app__pk__in=pks).filter(app__online=True).order_by("position")
+    groups = models.AppGroup.objects.filter(subject__pk=subject).filter(app__pk__in=pks).filter(app__online=True).order_by("position")
     results = [{'id': g.app.pk, 'text': g.app.name} for g in groups]
+    logger.debug(results)
     return simplejson.dumps({'results': results})
