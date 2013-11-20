@@ -145,7 +145,7 @@ def subject(request):
         "query": query,
         "table": table,
         'form': SubjectForm()
-    });
+    })
 
 
 @require_GET
