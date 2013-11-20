@@ -17,7 +17,7 @@ DATABASE_HOST = 'localhost'
 DATABASE_PORT = '3306'
 DATABASE_USER = 'root'
 DATABASE_PASSWORD = 'root'
-DATABASE_NAME = 'suning_app_list'
+DATABASE_NAME = 'suning'
 
 DATABASES = {
     'default': {

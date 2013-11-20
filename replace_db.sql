@@ -1,2 +1,2 @@
-drop database suning_app_list;
-create database suning_app_list;
+drop database suning;
+create database suning;

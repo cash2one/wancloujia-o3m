@@ -29,11 +29,11 @@ logger = logging.getLogger(__name__)
 def can_view_app(user):
     return user.is_superuser or \
             user.is_staff or \
-            user.has_module_perms('app.add_app') or \
-            user.has_module_perms('app.change_app') or \
-            user.has_module_perms('app.delete_app') or \
-            user.has_module_perms('app.publish_app') or \
-            user.has_module_perms('app.drop_app')
+            user.has_perm('app.add_app') or \
+            user.has_perm('app.change_app') or \
+            user.has_perm('app.delete_app') or \
+            user.has_perm('app.publish_app') or \
+            user.has_perm('app.drop_app')
 
 
 @require_GET

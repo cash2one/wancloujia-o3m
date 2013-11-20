@@ -74,10 +74,10 @@ def get_permissions(user):
 
 @register.filter
 def can_view_app(user):
-    return suning.views.can_view_app(user)
+    return app.views.can_view_app(user)
 
 
 @register.filter
 def can_view_subject(user):    
-    return suning.views.can_view_subject(user)
+    return app.views.can_view_subject(user)
     
