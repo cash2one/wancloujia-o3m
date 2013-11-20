@@ -59,11 +59,11 @@ class SubjectTable(tables.Table):
 
     def render_creator(self, record):
         creator = cast_staff(record.creator)
-        return creator.realname if creator.realname else u'—'
+        return creator.realname if creator.realname else creator.username
 
     def render_updator(self, record):
         user = cast_staff(record.updator if record.updator else record.creator)
-        return user.realname if user.realname else u'—'
+        return user.realname if user.realname else user.username 
 
     class Meta:
         model = Subject
