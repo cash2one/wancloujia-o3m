@@ -11,7 +11,7 @@ from interface.serializer import LogSerializer
 from django.contrib import auth
 from mgr.models import Staff
 from app.models import Subject
-from app.models import App
+from app.models import App, AppGroup
 from serializers import AppSerializer, SubjectSerializer
 
 class JSONResponse(HttpResponse):
@@ -80,31 +80,44 @@ def user_logout(request):
 @api_view(['GET'])
 @parser_classes((JSONParser,))
 def all_subjects(request):
-    subjects = Subject.objects.all()
-    serializer = SubjectSerializer(subjects)
-    return Response(serializer.data)
-    pass
+    subjects = Subject.objects.filter(online=True).order_by('-position')
+    result = [
+        {
+            "id": item.id,
+            "name": item.name,
+            "cover": item.cover,
+            "desc": item.desc,
+            "size": get_subject_total_size(item),
+        } for item in subjects]
+    return Response(result)
+
+
+def get_subject_total_size(subject):
+    apps = get_apps_by_subject_id(subject.id)
+    size = reduce(lambda acc, i: acc + i.size(), apps, 0)
+    return size
+
+
+def get_apps_by_subject_id(subject_id):
+    subject = Subject.objects.get(id=subject_id)
+    apps_in_subject = AppGroup.objects.filter(subject=subject)
+    apps = filter(lambda i: i.online, [item.app for item in apps_in_subject])
+    return apps
 
 @api_view(['GET', 'POST'])
 @parser_classes((JSONParser,))
 #@renderer_classes((JSONRenderer,))
 def subject_apps(request):
     if request.DATA and 'id' in request.DATA:
-        return Response({'status': 'with id ' + str(request.DATA['id']) } )
-    #return Response({'status': 'no id'})
+        apps = get_apps_by_subject_id(request.DATA['id'])
+        serializer = AppSerializer(apps)
+        return Response(serializer.data)
     apps = App.objects.all()
     serializer = AppSerializer(apps)
+    for idx, item in enumerate(serializer.data):
+        item['size'] = apps[idx].size()
     return Response(serializer.data)
 
-@api_view(['GET','POST'])
-@parser_classes((JSONParser,))
-def create_subject(request):
-    if request.method == "POST":
-        serializer = SubjectSerializer(data = request.DATA)
-        #if serializer.is_valid():
-        serializer.save_object()
-        return Response(status=status.HTTP_201_CREATED)
-    return Response(status=status.HTTP_200_OK)
 
 @api_view(['GET','POST'])
 @parser_classes((JSONParser,))

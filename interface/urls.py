@@ -7,6 +7,5 @@ urlpatterns = patterns('interface.views',
     url('^upload$', 'upload'),
     url('^subject_apps$', 'subject_apps'),
     url('^subjects', 'all_subjects'),
-    url('^create_subject', 'create_subject'),
     url(r'^echo$', 'echo'),
 )
