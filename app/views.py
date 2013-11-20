@@ -141,7 +141,12 @@ def subject(request):
     if query:
         table.empty_text = settings.NO_SEARCH_RESULTS
     RequestConfig(request, paginate={"per_page": settings.PAGINATION_PAGE_SIZE}).configure(table)
+
+    subjects = Subject.objects.filter(online=True).order_by("position")
+    subject_list = [{"id": subject.pk, "name": subject.name} for subject in subjects]
+    
     return render(request, "subject.html", {
+        "subject_list": subject_list,
         "query": query,
         "table": table,
         'form': SubjectForm()

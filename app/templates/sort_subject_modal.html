@@ -1,0 +1,21 @@
+{% extends "modal.html" %}
+
+{% block title %}调整顺序{% endblock %}
+
+{% block body %}
+<table class="table table-bordered">
+    <tbody>
+    {% for subject in subject_list %}
+    <tr class="subject" data-id="{{ subject.id }}"><td>{{ subject.name }}</td></tr>
+    {% empty %}
+    <tr><td>暂无应用专题</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
+
+{% block foot %}
+    <button type="button" class="btn btn-primary save" data-loading-text='保存...'>保存</button>
+    <button type="button" class="btn btn-default cancel" 
+            data-loading-text='取消' data-dismiss="modal">取消</button>
+{% endblock %}
