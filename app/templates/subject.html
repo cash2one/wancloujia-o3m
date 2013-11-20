@@ -23,7 +23,7 @@
             {% endif %}>
             <span class="glyphicon glyphicon-plus"></span> 新增应用专题
         </a>
-        <a data-toggle="modal" class="btn btn-primary" href="#sort_subjects"
+        <a data-toggle="modal" class="btn btn-primary" href="#sort-subjects"
             {% if request.user|is_employee and not perms.app.sort_subject %}
             disabled='disabled'
             {% endif %}>
@@ -42,12 +42,14 @@
 </div>
 
 {% include "subject_modal.html" with modal_id="add-edit-subject" f=form %}
+{% include "sort_subject_modal.html" with modal_id="sort-subjects" subjects=subjects %}
 {% include "delete_modal.html" with modal_id="delete-subject" model_name="应用专题" %}
 {% include "modal.html" with modal_id="prompt" %} 
 {% endblock %}
 
 {% block js %}
 {{ block.super }}
+<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.tablednd.js"></script>
 <script type="text/javascript" 
         src="{{ STATIC_URL }}ajax_upload/js/jquery.iframe-transport.js"></script>
 <script type="text/javascript" 

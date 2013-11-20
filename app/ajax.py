@@ -151,8 +151,8 @@ def publish_subject(request, id):
 
 @dajaxice_register(method='POST')
 @check_login
-def sort_subjects(request, subjects):
-    pks = [int(s.pk) for s in subjects.split(",")]
+def sort_subjects(request, pks):
+    pks = [int(pk) for pk in pks.split(",")]
     models.sort_subjects(pks)
     return _ok_json
 

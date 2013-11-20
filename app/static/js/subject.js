@@ -240,3 +240,38 @@ $(function() {
         });
     });
 });
+
+$(function() {
+    var $modal = $("#sort-subjects");
+    $modal.find("table").tableDnD({
+        onDragClass: "drag"
+    })
+    var $saveBtn = $modal.find(".save");
+
+    function lock_check(func) {
+        return function(data) {
+            suning.modal.unlock($modal);
+            func(data);
+        }
+    }
+
+    $saveBtn.click(function() {
+        var pks = [];
+        $modal.find(".subject").each(function() {
+            var id = $(this).data("id")
+            if (id) pks.push(id);
+        });
+        if (pks.length == 0) return;
+
+        suning.modal.lock($modal);
+        Dajaxice.app.sort_subjects(lock_check(login_check(error_check(function(data) {
+            toast('success', '操做成功！');
+            $modal.modal('hide');
+            suning.reload(2000);
+        }))), {
+            pks: pks.join(",")
+        }, {
+            error_callback: lock_check(suning.toastNetworkError)
+        });
+    });
+});

@@ -167,9 +167,9 @@ def publish_subject(id):
 def sort_subjects(pks):
     try: 
         Subject.objects.exclude(pk__in=pks).update(position=_MAX_SUBJECTS, online=False)
-        Subject.objects.filter(pk__in=pks).update(visible=True)
+        Subject.objects.filter(pk__in=pks).update(online=True)
         for i in range(0, len(pks)):
-            subject = Subject.get(pk=pks[i])
+            subject = Subject.objects.get(pk=pks[i])
             subject.position = i + 1
             subject.save()
     except Exception as e:
