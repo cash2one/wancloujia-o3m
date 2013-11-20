@@ -1,0 +1,45 @@
+{% load organization_filters %}
+{% load perm_filters %}
+{% load app_filters %}
+
+<div class="btn-group btn-group-sm" 
+    data-id="{{ record.id }}"
+    data-name="{{ record.name }}"
+    data-cover="{{ record.cover }}"
+    data-apps="{{ record|get_apps }}"
+    data-desc="{{ record.desc }}">
+
+    <button type="button"  
+            {% if request.user|is_employee and not perms.app.change_subject %}
+            disabled='disabled'
+            {% endif %}
+            class="btn btn-default edit" title="编辑">
+        <span class="glyphicon glyphicon-edit"></span>
+    </button>
+
+    {% if not record.online %}
+        <button type="button" 
+            {% if request.user|is_employee and not perms.app.publish_subject %}
+            disabled="disabled" 
+            {% endif %}
+            class="btn btn-default publish" title="上线">
+            <span class="glyphicon glyphicon-export"></span>
+        </button>
+    {% else %}
+        <button type="button" 
+            {% if request.user|is_employee and not perms.app.drop_subject %}
+            disabled="disabled"
+            {% endif %}
+            class="btn btn-default drop" title="下线">
+            <span class="glyphicon glyphicon-import"></span>
+        </button>
+    {% endif %}
+
+    <button type="button"  
+            {% if request.user|is_employee and not perms.app.delete_subject %}
+            disabled='disabled'
+            {% endif %}
+            class="btn btn-danger delete" title="删除">
+        <span class="glyphicon glyphicon-trash"></span>
+    </button>
+</div>

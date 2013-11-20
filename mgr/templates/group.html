@@ -11,13 +11,19 @@
     max-height: none;
     overflow: hidden;
 }
+
+.name, .members, .built_in {
+    width: 90px;
+}
 </style>
 {% endblock %}
 
 {% block main %}
 <div class="main">
     <div class="toolbar">
-        <a data-toggle="modal" class="btn btn-primary" href="#add-edit-group">新增用户组</a>
+        <a data-toggle="modal" class="btn btn-primary" href="#add-edit-group">
+            <span class="glyphicon glyphicon-plus"></span> 新增用户组
+        </a>
     </div>
     <div class="panel panel-default">
         <div class="panel-heading">

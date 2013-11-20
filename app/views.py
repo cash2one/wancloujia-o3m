@@ -1,4 +1,5 @@
 #coding: utf-8
+import math
 import logging
 from itertools import chain
 
@@ -16,9 +17,9 @@ from django import forms
 from django_tables2.config import RequestConfig
 
 from suning import settings
-from app.models import App, UploadApk
-from app.forms import AppForm
-from app.tables import AppTable
+from app.models import App, UploadApk, Subject
+from app.forms import AppForm, SubjectForm
+from app.tables import AppTable, SubjectTable
 from suning.decorators import active_tab
 import apk
 
@@ -28,7 +29,11 @@ logger = logging.getLogger(__name__)
 def can_view_app(user):
     return user.is_superuser or \
             user.is_staff or \
-            user.has_module_perms('app')
+            user.has_perm('app.add_app') or \
+            user.has_perm('app.change_app') or \
+            user.has_perm('app.delete_app') or \
+            user.has_perm('app.publish_app') or \
+            user.has_perm('app.drop_app')
 
 
 @require_GET
@@ -46,7 +51,7 @@ def app(request):
     query_set = list(chain(published_apps, droped_apps))
     table = AppTable(query_set)
     if query:
-        table.empty_text = u'无搜索结果'
+        table.empty_text = settings.NO_SEARCH_RESULTS
     RequestConfig(request, paginate={"per_page": settings.PAGINATION_PAGE_SIZE}).configure(table)
     return render(request, "app.html", {
         "query": query,
@@ -106,3 +111,58 @@ def upload(request):
 
     return HttpResponse(simplejson.dumps(app_dict), 
                         mimetype='application/json')
+
+
+def can_view_subject(user):
+    return user.is_superuser or \
+            user.is_staff or \
+            user.has_perm('app.add_subject') or \
+            user.has_perm('app.change_subject') or \
+            user.has_perm('app.delete_subject') or \
+            user.has_perm('app.publish_subject') or \
+            user.has_perm('app.drop_subject') or \
+            user.has_perm('app.sort_subject') 
+
+
+@require_GET
+@login_required
+@user_passes_test(can_view_subject, login_url=settings.PERMISSION_DENIED_URL)
+@active_tab("subject")
+def subject(request):
+    published_subjects = Subject.objects.filter(online=True).order_by("-create_date")
+    droped_subjects = Subject.objects.filter(online=False).order_by("-create_date")
+    query = request.GET.get("q", None)
+    if query:
+        published_subjects = published_subjects.filter(Q(name__contains=query) | Q(desc__contains=query))
+        droped_subjects = droped_subjects.filter(Q(name__contains=query) | Q(desc__contains=query))
+
+    query_set = list(chain(published_subjects, droped_subjects))
+    table = SubjectTable(query_set)
+    if query:
+        table.empty_text = settings.NO_SEARCH_RESULTS
+    RequestConfig(request, paginate={"per_page": settings.PAGINATION_PAGE_SIZE}).configure(table)
+    return render(request, "subject.html", {
+        "query": query,
+        "table": table,
+        'form': SubjectForm()
+    })
+
+
+@require_GET
+@login_required(login_url=settings.LOGIN_JSON_URL)
+def search_apps(request):
+    query = request.GET.get("q", "")
+    page = int(request.GET.get("p"))
+    page_limit = int(request.GET.get("page_limit"))
+
+    apps = App.objects.filter(online=True).filter(name__contains=query)
+    total = apps.count()
+    apps = apps[(page-1)*page_limit:page*page_limit]
+    results = [{'id': app.pk, 'text': app.name} for app in apps]
+
+    json = simplejson.dumps({
+        'ret_code': 0, 
+        'results': results, 
+        'total': total
+    })
+    return HttpResponse(json, mimetype='application/json')

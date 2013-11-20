@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% load render_table from django_tables2 %}
+{% load django_select2_tags %}
+{% load perm_filters %}
+
+{% block css %}
+{{ block.super }}
+<link rel="stylesheet" href="{{ STATIC_URL }}ajax_upload/css/ajax-upload-widget.css" />
+<style type="text/css">
+.droped {
+    color: #999;
+}
+</style>
+{% endblock %}
+
+{% block main %}
+<div class="main">
+    <div class="toolbar">
+        <a data-toggle="modal" class="btn btn-primary" href="#add-edit-subject"
+            {% if request.user|is_employee and not perms.app.add_subject %}
+            disabled='disabled'
+            {% endif %}>
+            <span class="glyphicon glyphicon-plus"></span> 新增应用专题
+        </a>
+        <a data-toggle="modal" class="btn btn-primary" href="#sort_subjects"
+            {% if request.user|is_employee and not perms.app.sort_subject %}
+            disabled='disabled'
+            {% endif %}>
+            <span class="glyphicon glyphicon-sort"></span> 调整顺序
+        </a>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            应用专题列表
+            {% include "search_form.html" with query=query %} 
+        </div>
+        <div class="panel-body"> 
+            {% render_table table "app_table.html" %}
+        </div>
+    </div>
+</div>
+
+{% include "subject_modal.html" with modal_id="add-edit-subject" f=form %}
+{% include "delete_modal.html" with modal_id="delete-subject" model_name="应用专题" %}
+{% include "modal.html" with modal_id="prompt" %} 
+{% endblock %}
+
+{% block js %}
+{{ block.super }}
+<script type="text/javascript" 
+        src="{{ STATIC_URL }}ajax_upload/js/jquery.iframe-transport.js"></script>
+<script type="text/javascript" 
+        src="{{ STATIC_URL }}ajax_upload/js/ajax-upload-widget.js"></script>
+<script type="text/javascript" 
+        src="{{ STATIC_URL }}js/subject.js"></script>
+{% endblock %}

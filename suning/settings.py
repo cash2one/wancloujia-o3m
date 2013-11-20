@@ -1,3 +1,4 @@
+#coding: utf-8
 # Django settings for suning project.
 import os
 
@@ -16,7 +17,7 @@ DATABASE_HOST = 'localhost'
 DATABASE_PORT = '3306'
 DATABASE_USER = 'root'
 DATABASE_PASSWORD = 'root'
-DATABASE_NAME = 'suning_app_list'
+DATABASE_NAME = 'suning'
 
 DATABASES = {
     'default': {
@@ -154,6 +155,7 @@ MIDDLEWARE_CLASSES = (
 ROOT_URLCONF = 'suning.urls'
 
 PAGINATION_PAGE_SIZE = 10
+NO_SEARCH_RESULTS = u'无搜索结果'
 
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'suning.wsgi.application'

@@ -40,13 +40,13 @@ tr.drag {
             {% if request.user|is_employee and not perms.ad.add_ad %}
             disabled='disabled'
             {% endif %}>
-            新增广告
+            <span class="glyphicon glyphicon-plus"></span> 新增广告
         </a>
         <a data-toggle="modal" class="btn btn-primary" href="#reorder-ad"
             {% if request.user|is_employee and not  perms.ad.sort_ad %}
             disabled='disabled'
             {% endif %}>
-            调整顺序
+            <span class="glyphicon glyphicon-sort"></span> 调整顺序
         </a>
     </div>
     <div class="panel panel-default">
