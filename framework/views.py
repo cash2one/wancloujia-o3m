@@ -40,3 +40,5 @@ def welcome_json(request):
 def permission_denied_json(request):
     return HttpResponse(simplejson.dumps({'ret_code': 1000, 'ret_msg': 'permission_denied'}), 
                         mimetype='application/json')
+
+

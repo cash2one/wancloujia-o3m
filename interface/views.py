@@ -1,6 +1,7 @@
 # Create your views here.
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.shortcuts import render, redirect
 from rest_framework import status
 from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
@@ -123,3 +124,11 @@ def subject_apps(request):
 @parser_classes((JSONParser,))
 def echo(request):
     return Response(request.DATA)
+
+
+def wandoujia_subjects(request):
+    return render(request, "wandoujia/subjects.html")
+
+
+def wandoujia_apps(request, id):
+    return render(request, "wandoujia/apps.html")
