@@ -1,0 +1,2 @@
+window.onXXX = function(data) {
+}

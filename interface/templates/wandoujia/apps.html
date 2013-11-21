@@ -3,41 +3,123 @@
 <html>
 <head>
     <meta charset="utf-8">
-        <title>安卓HD平板应用专区专题 - 豌豆荚</title>
-    <meta name="kewords" content="安卓软件,安卓游戏,安卓软件下载,安卓游戏下载" >
-    <meta name="description" content="编辑精选安卓HD平板应用专区专题，好玩的安卓软件和游戏尽在豌豆荚。" >
-    <link rel="stylesheet" type="text/css" href="http://s.wdjimg.com/style/css/biz/www/apps/special.css?v=201311201701" />
+    <title>{{ subject.name }}</title>
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}wandoujia/css/apps.css" />
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}wandoujia/css/apps_fix.css" />
 </head>
 <body>        
-    <div class="container clearfix">
-        <div class="banner-wrap">
-            <h2>HD平板应用专区</h2>
+        <div class="banner-wrap container">
+            {{ subject.name }}
         </div>
-        <div class="container-inner">
-            <div class="app-block with-comments">
-                <ul class="app-list clearfix" >
-                    <li class="app " data-pn="com.uc.browser" style="margin-left:0;">
-                        <a class="icon-area" data-pn="com.uc.browser" href="http://www.wandoujia.com/apps/com.uc.browser" >
-                            <img src="http://img.wdjimg.com/mms/icon/v1/6/14/7bf85b1d99f955f41730cff2b9b59146_68_68.png" alt="UC浏览器-小体积版" class="icon" width="68"/>
+        <div class="toolsbar container">
+            <button class="btn" id="select-all">全选</button>
+            <button class="btn btn-primary" id="install">安装已选应用</button>
+            <span id="tip"></span>
+            <a id="cancel" class="btn btn-link">取消选择</a>
+        </div>
+        <div class="app-block with-comments container">
+            <ul class="app-list clearfix">
+            {% for app in apps %}
+            <li class="app selected" data-size="{{ app.bits }}" data-pn="com.uc.browser">
+                <div class="app-inner">
+                    <div class="info">
+                        <a class="icon-area" data-pn="com.uc.browser" href="{{ MEDIA_URL }}{{ app.apk }}" >
+                            <img src="{{ app.icon }} " alt="{{ app.name }}" class="icon" />
                         </a>
                         <div class="operate">
-                            <a href="http://www.wandoujia.com/apps/com.uc.browser" class="name">
-                                <span class="txt">UC浏览器-小体积版</span>
+                            <a href="{{ MEDIA_URL }}{{ app.apk }}" class="name">
+                                <span class="txt">{{ app.name }}</span>
                             </a>
                             <span class="meta">
-                                <span>783人喜欢</span>
-                                <span class="downloads"> 1046万人下载 </span>
+                                <span>{{ app.version }}&nbsp;&nbsp;{{ app.size }}</span>
+                                <a href="{{ MEDIA_URL }}{{ app.apk }}#name={{ app.name }}&icon={{ app.icon }}&content-type=application" class="btn install-link">安装</a>
                             </span>    
                         </div>
-                        <div class="pos-comment">
-                            <div class="cmt-split"><i></i></div>
-                            <div class="cmt-content">人气超高的国产浏览器，流畅度经过优化，专为平板适配。</div>
-                        </div>
-                    </li>
-                </ul>
-            </div>
+                    </div>
+                    <div class="pos-comment">
+                        <div class="cmt-split"><i></i></div>
+                        <div class="cmt-content">{{ app.desc }}</div>
+                    </div>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
         </div>
-    </div>
-    <!--<script src="http://s.wdjimg.com/style/js/lib/require.js" type="text/javascript"></script>-->
-    <!--<script src="http://s.wdjimg.com/style/b/js/run/www/special.js?v=201311201701"></script>-->
+
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
+    <script type="text/javascript"> 
+
+    function bitsize(size) {
+        var result = "";
+        if (size < 1024 * 1024) {
+            result = (size / 1024).toFixed(2) + " KB";
+        } else {
+            result = (size / 1024 / 1024).toFixed(2) + " MB";
+        }
+        return result;
+    }
+
+    $(function() {
+        var $appList = $(".app-list");
+        var $tip = $("#tip");
+        var $cancel = $("#cancel");
+        var $install = $("#install");
+        var $select_all = $("#select-all");
+
+        function count_selected_apps() {
+            return $appList.find(".app.selected").length;
+        }
+
+        function show_tip() {
+            var count = count_selected_apps();
+            var bits = 0;
+            $appList.find(".app.selected").each(function() {
+                var $this = $(this);
+                bits += parseInt($this.data("size"), 10);
+            });
+            $tip.html("已经" + count + "选择款应用，共" + bitsize(bits));
+        }
+
+        on_selection_changed();
+
+        $appList.on("click", ".app", function(e) {
+            var $this = $(this);
+            if(e.target == $this.find(".install-link")[0]) {
+                return;
+            }
+
+            $this.toggleClass("selected");
+            on_selection_changed();
+        });
+
+        $select_all.click(function() {
+            $appList.find(".app").addClass("selected");
+            on_selection_changed();
+        });
+
+        $cancel.click(function() {
+            $appList.find(".app").removeClass("selected");
+            on_selection_changed();
+        });
+
+        function on_selection_changed() {
+            if(count_selected_apps() == 0) {
+                $install.attr("disabled", "disabled");
+            } else {
+                $install.removeAttr("disabled");
+            }
+
+            show_tip();
+        }
+
+        $install.click(function() {
+            $appList.find(".app a.install-link").each(function(index) {
+                console.log(index, $(this).attr("href"));
+                this.click();
+            });
+        });
+    });
+    </script>
+    <script type="text/javascript" src="{{ STATIC_URL }}wandoujia/js/log.js"></script>
 </body>
