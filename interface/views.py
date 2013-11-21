@@ -13,6 +13,8 @@ from mgr.models import Staff
 from app.models import Subject
 from app.models import App, AppGroup
 from serializers import AppSerializer, SubjectSerializer
+import logging
+
 
 class JSONResponse(HttpResponse):
     """
@@ -51,10 +53,12 @@ def snippet_detail(request, pk):
         return HttpResponse(status=204)
 
 @csrf_exempt
+@api_view(['GET', 'POST'])
 def upload(request):
     if request.method == "POST":
-        return HttpResponse(status=400)
-    return HttpResponse(status=202)
+        logger.info(request.raw_post_data)
+        return HttpResponse(request.raw_post_data)
+    return HttpResponse(request.DATA)
 
 
 @api_view(['GET'])
@@ -111,6 +115,8 @@ def subject_apps(request):
     if request.DATA and 'id' in request.DATA:
         apps = get_apps_by_subject_id(request.DATA['id'])
         serializer = AppSerializer(apps)
+        for idx, item in enumerate(serializer.data):
+            item['size'] = apps[idx].size()
         return Response(serializer.data)
     apps = App.objects.all()
     serializer = AppSerializer(apps)
@@ -119,7 +125,14 @@ def subject_apps(request):
     return Response(serializer.data)
 
 
-@api_view(['GET','POST'])
+@api_view(['GET', 'POST'])
 @parser_classes((JSONParser,))
 def echo(request):
     return Response(request.DATA)
+
+logger = logging.getLogger('post_logger')
+logger.setLevel(logging.INFO)
+filename = 'logs/post'
+hdlr = logging.handlers.TimedRotatingFileHandler(filename, 'M', 1, 7)
+hdlr.suffix = '%Y%m%d.log'
+logger.addHandler(hdlr)
