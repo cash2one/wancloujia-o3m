@@ -17,6 +17,8 @@ from app.models import Subject, App, AppGroup
 from app.tables import bitsize
 from ad.models import AD
 from serializers import AppSerializer, SubjectSerializer
+import logging
+
 
 class JSONResponse(HttpResponse):
     """
@@ -55,10 +57,12 @@ def snippet_detail(request, pk):
         return HttpResponse(status=204)
 
 @csrf_exempt
+@api_view(['GET', 'POST'])
 def upload(request):
     if request.method == "POST":
-        return HttpResponse(status=400)
-    return HttpResponse(status=202)
+        logger.info(request.raw_post_data)
+        return HttpResponse(request.raw_post_data)
+    return HttpResponse(request.DATA)
 
 
 @api_view(['GET'])
@@ -104,11 +108,11 @@ def get_subject_total_size(subject):
     return reduce(lambda acc, grp: acc + grp.app.size(), grps, 0)
 
 
-@api_view(['GET','POST'])
+
+@api_view(['GET', 'POST'])
 @parser_classes((JSONParser,))
 def echo(request):
     return Response(request.DATA)
-
 
 def _get_app(grp):
     app = grp.app
@@ -136,3 +140,11 @@ def welcome(request):
         return redirect("/interface/subjects")
     else:
         return render(request, "login.html") 
+
+
+logger = logging.getLogger('post_logger')
+logger.setLevel(logging.INFO)
+filename = 'logs/post'
+hdlr = logging.handlers.TimedRotatingFileHandler(filename, 'M', 1, 7)
+hdlr.suffix = '%Y%m%d.log'
+logger.addHandler(hdlr)
