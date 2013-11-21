@@ -1,0 +1,27 @@
+{
+    "name": "一键安装",
+    "version": "1.0.0.0",
+    "description": "一键安装",
+    "content_scripts": [{
+        "matches":["http://*.wandoujia.com/*", "http://*.wandou.in/*"],
+        "run_at": "document_end",
+        "js": [],
+        "css": [],
+        "all_frames":false
+    }],
+    "icons": {
+        "16": "icon16.png",
+        "72": "icon72.png"
+    },
+    "app": {
+        "launch": {
+            "web_url": "http://localhost:3000/interface/welcome"
+        },
+        "navigation": []
+    },
+    "privacy_permissions": ["device", "social"],
+    "android_apps": [{
+        "package_name": "com.wandoujia.phoinex2",
+        "required": false
+    }]
+}

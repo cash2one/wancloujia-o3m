@@ -1,6 +1,9 @@
 # Create your views here.
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.shortcuts import render, redirect
+from django.views.decorators.http import require_GET, require_POST
+from django.contrib.auth.decorators import login_required
 from rest_framework import status
 from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
@@ -10,8 +13,9 @@ from interface.models import LogEntity
 from interface.serializer import LogSerializer
 from django.contrib import auth
 from mgr.models import Staff
-from app.models import Subject
-from app.models import App, AppGroup
+from app.models import Subject, App, AppGroup
+from app.tables import bitsize
+from ad.models import AD
 from serializers import AppSerializer, SubjectSerializer
 import logging
 
@@ -81,54 +85,62 @@ def user_login(request, username, password):
 def user_logout(request):
     return Response({"status":"ok"})
 
-@api_view(['GET'])
-@parser_classes((JSONParser,))
-def all_subjects(request):
-    subjects = Subject.objects.filter(online=True).order_by('-position')
-    result = [
-        {
-            "id": item.id,
-            "name": item.name,
-            "cover": item.cover,
-            "desc": item.desc,
-            "size": get_subject_total_size(item),
-        } for item in subjects]
-    return Response(result)
+
+@require_GET
+@login_required(login_url="/interface/welcome")
+def subjects(request):
+    subjects = Subject.objects.filter(online=True).order_by('position')
+    ads = AD.objects.filter(visible=True).order_by('position')
+    results = [{
+        "id": item.pk,
+        "name": item.name,
+        "cover": item.cover,
+        "desc": item.desc,
+        "count": AppGroup.objects.filter(subject__pk=item.pk).filter(app__online=True).count(),
+        "size": bitsize(get_subject_total_size(item)),
+    } for item in subjects]
+    return render(request, "wandoujia/subjects.html", {"subjects": results, "ads": ads})
+    #return render(request, "wandoujia/subjects.html", {"subjects": [], "ads": []})
 
 
 def get_subject_total_size(subject):
-    apps = get_apps_by_subject_id(subject.id)
-    size = reduce(lambda acc, i: acc + i.size(), apps, 0)
-    return size
+    grps = AppGroup.objects.filter(subject__pk=subject.pk).filter(app__online=True)
+    return reduce(lambda acc, grp: acc + grp.app.size(), grps, 0)
 
-
-def get_apps_by_subject_id(subject_id):
-    subject = Subject.objects.get(id=subject_id)
-    apps_in_subject = AppGroup.objects.filter(subject=subject)
-    apps = filter(lambda i: i.online, [item.app for item in apps_in_subject])
-    return apps
-
-@api_view(['GET', 'POST'])
-@parser_classes((JSONParser,))
-#@renderer_classes((JSONRenderer,))
-def subject_apps(request):
-    if request.DATA and 'id' in request.DATA:
-        apps = get_apps_by_subject_id(request.DATA['id'])
-        serializer = AppSerializer(apps)
-        for idx, item in enumerate(serializer.data):
-            item['size'] = apps[idx].size()
-        return Response(serializer.data)
-    apps = App.objects.all()
-    serializer = AppSerializer(apps)
-    for idx, item in enumerate(serializer.data):
-        item['size'] = apps[idx].size()
-    return Response(serializer.data)
 
 
 @api_view(['GET', 'POST'])
 @parser_classes((JSONParser,))
 def echo(request):
     return Response(request.DATA)
+
+def _get_app(grp):
+    app = grp.app
+    return {
+        "name":  app.name,
+        "icon": app.app_icon,
+        "desc": app.desc,
+        "version": app.version,
+        "size": bitsize(app.size()),
+        "bits": app.size(),
+        "apk": app.apk.file
+    }
+
+@require_GET
+@login_required(login_url="/interface/welcome")
+def apps(request, id):
+    subject = Subject.objects.get(pk=id)
+    appgrps = AppGroup.objects.filter(subject=subject).order_by("position")
+    apps = map(_get_app, appgrps)
+    return render(request, "wandoujia/apps.html", {"subject": subject, "apps": apps})
+
+@require_GET
+def welcome(request):
+    if request.user.is_authenticated():
+        return redirect("/interface/subjects")
+    else:
+        return render(request, "login.html") 
+
 
 logger = logging.getLogger('post_logger')
 logger.setLevel(logging.INFO)

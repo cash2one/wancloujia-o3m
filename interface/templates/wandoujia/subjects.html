@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>专题列表</title>
+    <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}wandoujia/css/subjects.css"/>
+    <link rel="stylesheet" href="{{ STATIC_URL }}wandoujia/css/subjects_fix.css"/>
+</head>
+<body data-page="special-list" class="special-list">
+        {% if ads|length != 0 %}
+        <div class="special-block clearfix ad-banner">
+            <div id="carousel-example-generic" class="carousel slide">
+                <div class="carousel-inner">
+                    {% for ad in ads %}
+                    <div data-desc="{{ ad.desc }}"
+                        {% if forloop.counter0 == 0 %}
+                            class="item active" 
+                         {% else %}
+                            class="item"
+                         {% endif %}>
+                        <img src="{{ MEDIA_URL }}{{ ad.cover }}">
+                        <div class="carousel-caption"> </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="control-bar">
+                    <div class="desc"></div>
+                    <div class="slide-btns">
+                        <a href="#carousel-example-generic" class="prev" data-slide="prev"> 
+                        </a>
+                        <a href="#carousel-example-generic" class="next" data-slide="next"> 
+                        </a>
+                    </div>
+                    <div class="progress"></div>
+                </div>
+            </div> 
+        </div>
+        {% endif %}
+
+        <div class="special-block clearfix">
+            <h2 class="special-title">应用专题</h2>
+            <div class="special-content clearfix">
+                {% for subject in subjects %}
+                <div class="special-item">
+                    <div class="special-wrap">
+                            <a href="/interface/subjects/{{ subject.id }}" title="{{ subject.name }}">
+                               <img width="205" height="80" src="{{ subject.cover }}" alt="{{ subject.name }}"/>
+                            </a>
+                    </div>
+                    <div class="name">
+                        <a href="/interface/subjects/{{ subject.id }}">{{ subject.name }}</a>
+                    </div>
+                    <div class="meta">
+                        <span class="first">{{ subject.count }}款应用</span>
+                        <span>共{{ subject.size }}</span>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="special-item empty">暂无应用专题</div>
+                {% endfor %}
+            </div>
+        </div>    
+
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
+    <script>
+    $(function() {
+        var $carousel = $(".carousel").carousel();
+        var $progress =$carousel.find(".progress");
+        var $desc = $carousel.find(".desc");
+        var length = $carousel.find(".item").length;
+        if(length == 0) {
+            return;
+        }
+
+        var ad = $carousel.find(".item:eq(0)").data();
+        $progress.html("1/" + length);
+        $desc.html(ad.desc);
+        $carousel.on("slid.bs.carousel", function() {
+            var $item = $carousel.find(".item.active");
+            ad = $item.data();
+            var item = $item[0];
+            var index = 0;
+            $item.parent().children().each(function(i) {
+                if(item == this) {
+                    index = i;
+                }
+            });
+            $progress.html((index + 1) + "/" + length);
+            $desc.html(ad.desc);
+        });
+    });
+    </script>
+    <script type="text/javascript" src="{{ STATIC_URL }}wandoujia/js/log.js"></script>
+</body>
+</html>

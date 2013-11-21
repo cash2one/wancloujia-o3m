@@ -6,6 +6,13 @@ from models import App, Subject
 from mgr.models import cast_staff
 
 
+def bitsize(bits):
+    if bits < 1024 * 1024:
+        return ('%.2f KB' % (bits / 1024.0))
+    else:
+        return ('%.2f MB' % (bits / 1024.0 / 1024.0))
+
+
 class AppTable(tables.Table): 
     size = tables.Column(verbose_name=u'应用大小')
     subjects = tables.Column(verbose_name=u'所属应用专题')
@@ -14,13 +21,8 @@ class AppTable(tables.Table):
     ops_3 = tables.TemplateColumn(verbose_name=u'操作', template_name="app_ops.html")
 
     def render_size(self, record):
-        if record.size() == 0:
-            return u'－'
-        elif record.size() < 1024 * 1024:
-            return ('%.2f KB' % (record.size() / 1024.0))
-        else:
-            return ('%.2f MB' % (record.size() / 1024.0 / 1024.0))
-
+        return u'－' if record.size() == 0 else bitsize(record.size())
+        
     def render_category(self, record):
         categories = []
         category = record.category
@@ -59,11 +61,11 @@ class SubjectTable(tables.Table):
 
     def render_creator(self, record):
         creator = cast_staff(record.creator)
-        return creator.realname if creator.realname else u'—'
+        return creator.realname if creator.realname else creator.username
 
     def render_updator(self, record):
         user = cast_staff(record.updator if record.updator else record.creator)
-        return user.realname if user.realname else u'—'
+        return user.realname if user.realname else user.username 
 
     class Meta:
         model = Subject

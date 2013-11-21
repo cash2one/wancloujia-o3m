@@ -1,0 +1,125 @@
+
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>{{ subject.name }}</title>
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}wandoujia/css/apps.css" />
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}wandoujia/css/apps_fix.css" />
+</head>
+<body>        
+        <div class="banner-wrap container">
+            {{ subject.name }}
+        </div>
+        <div class="toolsbar container">
+            <button class="btn" id="select-all">全选</button>
+            <button class="btn btn-primary" id="install">安装已选应用</button>
+            <span id="tip"></span>
+            <a id="cancel" class="btn btn-link">取消选择</a>
+        </div>
+        <div class="app-block with-comments container">
+            <ul class="app-list clearfix">
+            {% for app in apps %}
+            <li class="app selected" data-size="{{ app.bits }}" data-pn="com.uc.browser">
+                <div class="app-inner">
+                    <div class="info">
+                        <a class="icon-area" data-pn="com.uc.browser" href="{{ MEDIA_URL }}{{ app.apk }}" >
+                            <img src="{{ app.icon }} " alt="{{ app.name }}" class="icon" />
+                        </a>
+                        <div class="operate">
+                            <a href="{{ MEDIA_URL }}{{ app.apk }}" class="name">
+                                <span class="txt">{{ app.name }}</span>
+                            </a>
+                            <span class="meta">
+                                <span>{{ app.version }}&nbsp;&nbsp;{{ app.size }}</span>
+                                <a href="{{ MEDIA_URL }}{{ app.apk }}#name={{ app.name }}&icon={{ app.icon }}&content-type=application" class="btn install-link">安装</a>
+                            </span>    
+                        </div>
+                    </div>
+                    <div class="pos-comment">
+                        <div class="cmt-split"><i></i></div>
+                        <div class="cmt-content">{{ app.desc }}</div>
+                    </div>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
+    <script type="text/javascript"> 
+
+    function bitsize(size) {
+        var result = "";
+        if (size < 1024 * 1024) {
+            result = (size / 1024).toFixed(2) + " KB";
+        } else {
+            result = (size / 1024 / 1024).toFixed(2) + " MB";
+        }
+        return result;
+    }
+
+    $(function() {
+        var $appList = $(".app-list");
+        var $tip = $("#tip");
+        var $cancel = $("#cancel");
+        var $install = $("#install");
+        var $select_all = $("#select-all");
+
+        function count_selected_apps() {
+            return $appList.find(".app.selected").length;
+        }
+
+        function show_tip() {
+            var count = count_selected_apps();
+            var bits = 0;
+            $appList.find(".app.selected").each(function() {
+                var $this = $(this);
+                bits += parseInt($this.data("size"), 10);
+            });
+            $tip.html("已经" + count + "选择款应用，共" + bitsize(bits));
+        }
+
+        on_selection_changed();
+
+        $appList.on("click", ".app", function(e) {
+            var $this = $(this);
+            if(e.target == $this.find(".install-link")[0]) {
+                return;
+            }
+
+            $this.toggleClass("selected");
+            on_selection_changed();
+        });
+
+        $select_all.click(function() {
+            $appList.find(".app").addClass("selected");
+            on_selection_changed();
+        });
+
+        $cancel.click(function() {
+            $appList.find(".app").removeClass("selected");
+            on_selection_changed();
+        });
+
+        function on_selection_changed() {
+            if(count_selected_apps() == 0) {
+                $install.attr("disabled", "disabled");
+            } else {
+                $install.removeAttr("disabled");
+            }
+
+            show_tip();
+        }
+
+        $install.click(function() {
+            $appList.find(".app a.install-link").each(function(index) {
+                console.log(index, $(this).attr("href"));
+                this.click();
+            });
+        });
+    });
+    </script>
+    <script type="text/javascript" src="{{ STATIC_URL }}wandoujia/js/log.js"></script>
+</body>
