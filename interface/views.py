@@ -129,7 +129,11 @@ def _get_app(grp):
 @require_GET
 @login_required(login_url="/interface/welcome")
 def apps(request, id):
-    subject = Subject.objects.get(pk=id)
+    subjects = Subject.objects.filter(pk=id)
+    if len(subjects) == 0:
+        return redirect("/interface/subjects")
+
+    subject = subjects[0]    
     appgrps = AppGroup.objects.filter(subject=subject).order_by("position")
     apps = map(_get_app, appgrps)
     return render(request, "wandoujia/apps.html", {"subject": subject, "apps": apps})

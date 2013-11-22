@@ -11,7 +11,7 @@ _sdk_version_pattern = re.compile("sdkVersion:'(\d+)'")
 _target_sdk_version_pattern = re.compile("targetSdkVersion:'(\d+)'")
 _application_info_pattern = re.compile("(label|icon)='(.+?)'")
 _application_label_pattern = re.compile("application-label:'(.+)'")
-_application_icon_pattern = re.compile("application-icon-\d+?:'(.+?drowable-((l|m|tv|h|x|xx)dpi).+?)'")
+_application_icon_pattern = re.compile("application-icon-\d+?:'(res/drawable-((l|m|tv|h|xh|xx)dpi)/icon.png)'")
 
 def _first(*args):
     for arg in args:
@@ -35,7 +35,7 @@ class ApkInfo():
         self.mdpiIcon = None
         self.tvdpiIcon = None
         self.hdpiIcon = None
-        self.xdpiIcon = None
+        self.xhdpiIcon = None
         self.xxdpiIcon = None
 
     def getAppName(self):
@@ -43,7 +43,7 @@ class ApkInfo():
 
     def getIcon(self):
         return _first(self.hdpiIcon, self.icon, self.mdpiIcon, self.tvdpiIcon, 
-                        self.xdpiIcon, self.xxdpiIcon)
+                        self.xhdpiIcon, self.xxdpiIcon)
 
     def getPackageName(self):
         return self.packageName
@@ -117,8 +117,8 @@ def _parseApplicationIcons(apk_info, text):
         apk_info.tvdpiIcon = result.group(1)
     if level == 'hdpi':
         apk_info.hdpiIcon = result.group(1)
-    if level == 'xdpi': 
-        apk_info.xdpiIcon = result.group(1)
+    if level == 'xhdpi': 
+        apk_info.xhdpiIcon = result.group(1)
     if level == 'xxdpi': 
         apk_info.xxdpiIcon = result.group(1)
 
