@@ -320,6 +320,7 @@ body {
   margin-right: auto;
   margin-top: 30px;
   text-align: center;
+  line-height: 20px;
   color: #777;
   font-size: 14px;
   font-family: "微软雅黑";
@@ -328,6 +329,7 @@ body {
 #empty.abs {
   position: absolute;
   margin-left: -50px;
+  margin-top: -60px;
   left: 50%;
   top: 40%;
 }
