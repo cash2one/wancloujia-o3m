@@ -11,7 +11,6 @@ $(function() {
     var form = $form[0];
     var $saveBtn = $(".save", $modal);
     var app = null;
-    console.log("initialize mode");
     var mode = null;
 
     $("a[href=#add-edit-app]").click(function() {
@@ -71,7 +70,6 @@ $(function() {
         $(form.app_icon).val(value || "").trigger('change');
     }
 
-
     function clearForm() {
         form.id.value = "";
         form.package.value = "";
@@ -87,7 +85,6 @@ $(function() {
         set_popularize("False");
     }
 
-
     function bindForm() {
         form.id.value = app.id;
         form.package.value = app.package;
@@ -101,6 +98,15 @@ $(function() {
         set_app_icon(app.icon)
         if (app.popularize) set_popularize(app.popularize);
         if (app.category) set_category(app.category);
+    }
+
+    function loadApkInfo() {
+        form.package.value = app.package;
+        form.apk.value = app.apk;
+        form.name.value = app.name;
+        form.version.value = app.version;
+        form.size.value = str_size(app.size);
+        set_app_icon(app.icon);
     }
 
     function create_app(data) {
@@ -122,12 +128,32 @@ $(function() {
     }
 
     function reload_apk_info(data) {
-        if (mode == EDIT_APP_MODE && app && data.packageName != app.package) {
-            clearForm();
+        if (mode == ADD_APP_MODE) {
+            if (data.id) {
+                mode = EDIT_APP_MODE;
+                app = create_app(data);
+                bindForm();
+            } else {
+                mode = ADD_APP_MODE;
+                app = create_app(data);
+                loadApkInfo();
+            }
+        } else {
+            if (data.id && app.package == data.packageName) {
+                mode = EDIT_APP_MODE;
+                app = create_app(data);
+                loadApkInfo();
+            } else if (data.id && app.package != data.packageName) {
+                mode = EDIT_APP_MODE;
+                app = create_app(data);
+                bindForm();
+            } else {
+                mode = ADD_APP_MODE;
+                app = create_app(data);
+                clearForm();
+                loadApkInfo();
+            }
         }
-
-        app = create_app(data);
-        bindForm();
     }
 
     var apk_uploader = apk_upload($("#upload-apk"), {
@@ -139,11 +165,6 @@ $(function() {
         },
         onDone: function(data) {
             uploading = false;
-            if (mode == ADD_APP_MODE && data.id) {
-                mode = EDIT_APP_MODE;
-            } else if (mode == EDIT_APP_MODE && !data.id) {
-                mode = ADD_APP_MODE;
-            }
             reload_apk_info(data);
         },
         onStart: function() {
@@ -180,14 +201,12 @@ $(function() {
     $modal.on('show.bs.modal', function() {
         $form.parsley(parsley.bs_options);
         mode = form.id.value == "" ? ADD_APP_MODE : EDIT_APP_MODE;
-        console.log("set mode: ", mode);
         var title = mode == ADD_APP_MODE ? "新增应用" : "编辑应用";
         suning.modal.setTitle($modal, title);
     });
 
     $modal.on('hide.bs.modal', function() {
         clearForm();
-        console.log('cancel & reset apk_uploader');
         if (uploading) apk_uploader.cancel();
         apk_uploader.reset();
         $form.parsley('destroy');
@@ -213,8 +232,7 @@ $(function() {
         e.preventDefault();
 
         if (mode == ADD_APP_MODE && !app) {
-            toast('error', '请先上传应用文件');
-            console.log('no apk provided');
+            toast('error', uploading ? '正在上传应用，请稍等' : '请先上传应用文件');
             return;
         }
 

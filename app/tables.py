@@ -2,7 +2,7 @@
 import logging
 
 import django_tables2 as tables
-from models import App, Subject
+from models import App, Subject, AppGroup
 from mgr.models import cast_staff
 
 
@@ -15,7 +15,7 @@ def bitsize(bits):
 
 class AppTable(tables.Table): 
     size = tables.Column(verbose_name=u'应用大小')
-    subjects = tables.Column(verbose_name=u'所属应用专题')
+    subjects = tables.Column(verbose_name=u'所属应用专题', empty_values=())
     create_date = tables.TemplateColumn(verbose_name=u'创建时间', 
                                         template_code='{{ record.create_date|date:"Y-m-d H:i"}}')
     ops_3 = tables.TemplateColumn(verbose_name=u'操作', template_name="app_ops.html")
@@ -33,7 +33,8 @@ class AppTable(tables.Table):
         return "-".join([str(c) for c in categories])
 
     def render_subjects(self, record):
-        return ", ".join([item.subject for item in AppGroup.objects.filter(app=record)])
+        grps = AppGroup.objects.filter(app=record)
+        return ", ".join([item.subject.name for item in grps]) if len(grps) > 0 else u'—'
 
     def render_popularize(self, record):
         return u'推广' if record.popularize else u'不推广'

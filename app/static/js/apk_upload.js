@@ -64,6 +64,7 @@
                     }
                     $tip.html(msg);
                     setButtonText("重新上传");
+                    options.onFailed();
                     return;
                 }
 
@@ -101,7 +102,7 @@
             onCancel: hide_uploading_ui(options.onCancel),
             onUploadError: cancel_check(hide_uploading_ui(function() {
                 setButtonText("重新上传");
-                $tip.html("上传失败");
+                $tip.html("上传失败，可能是网络发生异常");
                 options.onFailed();
             })),
             onUploadSuccess: hide_uploading_ui(upload_error_check(options.onDone))
