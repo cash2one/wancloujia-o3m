@@ -42,8 +42,8 @@ class ApkInfo():
         return _first(self.appName, self.applicationLabel)
 
     def getIcon(self):
-        return _first(self.icon, self.mdpiIcon, self.tvdpiIcon, self.hdpiIcon, 
-                        self.hdpiIcon, self.xdpiIcon, self.xxdpiIcon)
+        return _first(self.hdpiIcon, self.icon, self.mdpiIcon, self.tvdpiIcon, 
+                        self.xdpiIcon, self.xxdpiIcon)
 
     def getPackageName(self):
         return self.packageName

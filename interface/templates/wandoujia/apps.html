@@ -47,6 +47,7 @@
         </div>
 
     <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/async.min.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
     <script type="text/javascript"> 
 
@@ -69,6 +70,10 @@
 
         function count_selected_apps() {
             return $appList.find(".app.selected").length;
+        }
+
+        function count_total_apps() {
+            return $appList.find(".app").length;
         }
 
         function show_tip() {
@@ -110,13 +115,24 @@
                 $install.removeAttr("disabled");
             }
 
+            if(count_selected_apps() == count_total_apps()) {
+                $select_all.attr("disabled", "disabled");
+            } else {
+                $select_all.removeAttr("disabled");
+            }
+
+
             show_tip();
         }
 
         $install.click(function() {
-            $appList.find(".app a.install-link").each(function(index) {
-                console.log(index, $(this).attr("href"));
-                this.click();
+            var linkEls = $appList.find(".app.selected a.install-link").toArray();
+            async.eachSeries(linkEls, function(item, callback) {
+                setTimeout(function() {
+                    item.click();
+                    console.log(item);
+                    callback(null);
+                }, 500);
             });
         });
     });
