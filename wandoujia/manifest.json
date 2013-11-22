@@ -15,13 +15,9 @@
     },
     "app": {
         "launch": {
-            "web_url": "http://localhost:3000/interface/welcome"
+            "web_url": "http://suning.wandoujia.com/interface/welcome"
         },
         "navigation": []
     },
-    "privacy_permissions": ["device", "social"],
-    "android_apps": [{
-        "package_name": "com.wandoujia.phoinex2",
-        "required": false
-    }]
+    "privacy_permissions": ["device", "social"]
 }
