@@ -31,7 +31,7 @@
                             </a>
                             <span class="meta">
                                 <span>{{ app.version }}&nbsp;&nbsp;{{ app.size }}</span>
-                                <a href="{{ MEDIA_URL }}{{ app.apk }}#name={{ app.name }}&icon={{ app.icon }}&content-type=application" class="btn install-link">安装</a>
+                                <a href="{{ MEDIA_URL }}{{ app.apk }}#name={{ app.name }}&icon=http://{{ request.META.HTTP_HOST }}{{ app.icon }}&content-type=application" class="btn install-link">安装</a>
                             </span>    
                         </div>
                     </div>
