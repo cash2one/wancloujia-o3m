@@ -9,6 +9,9 @@
 </head>
 <body data-page="special-list" class="special-list">
         <div class="special-block clearfix nav">
+            {% if ads|length == 0 and subjects|length != 0%}
+            <span style="font-size: 16px">应用专题</span>
+            {% endif %}
             {% include "wandoujia/user_area.html" %}
         </div>
 
@@ -42,8 +45,17 @@
         </div>
         {% endif %}
 
+        {% if ads|length == 0 and subjects|length == 0 %}
+        <div id="empty" class="abs">
+            暂无应用专题
+        </div>
+        
+        {% else %}
         <div class="special-block clearfix">
+            {% if ads|length != 0 %}
             <h2 class="special-title">应用专题</h2>
+            {% endif %}
+            {% if subjects|length != 0 %}
             <div class="special-content clearfix">
                 {% for subject in subjects %}
                 <div class="special-item">
@@ -60,11 +72,16 @@
                         <span>共{{ subject.size }}</span>
                     </div>
                 </div>
-                {% empty %}
-                <div class="special-item empty">暂无应用专题</div>
                 {% endfor %}
             </div>
+            {% endif %}
         </div>    
+        {% if subjects|length == 0 %}
+        <div id="empty">
+            暂无应用专题
+        </div>
+        {% endif %}
+        {% endif %}
 
     <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.9.1.min.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
