@@ -1,23 +1,26 @@
-# Create your views here.
+# coding: utf-8
+import logging
+from datetime import datetime
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render, redirect
 from django.views.decorators.http import require_GET, require_POST
 from django.contrib.auth.decorators import login_required
+from django.contrib import auth
+
 from rest_framework import status
 from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, parser_classes, renderer_classes
+
+from serializers import AppSerializer, SubjectSerializer
 from interface.models import LogEntity
 from interface.serializer import LogSerializer
-from django.contrib import auth
 from mgr.models import Staff
 from app.models import Subject, App, AppGroup
 from app.tables import bitsize
 from ad.models import AD
-from serializers import AppSerializer, SubjectSerializer
-import logging
 
 
 class JSONResponse(HttpResponse):
@@ -80,17 +83,20 @@ def user_login(request, username, password):
     else:
         return Response({"status": "wrong method"})
 
-@api_view(['GET'])
-@parser_classes((JSONParser,))
-def user_logout(request):
-    return Response({"status":"ok"})
+
+@require_GET
+@login_required
+def logout(request):
+    auth.logout(request)
+    return redirect("/interface/welcome")
 
 
 @require_GET
 @login_required(login_url="/interface/welcome")
 def subjects(request):
     subjects = Subject.objects.filter(online=True).order_by('position')
-    ads = AD.objects.filter(visible=True).order_by('position')
+    now = datetime.now()
+    ads = AD.objects.filter(visible=True).filter(from_date__lt=now).filter(to_date__gt=now).order_by('position')
     results = [{
         "id": item.pk,
         "name": item.name,
