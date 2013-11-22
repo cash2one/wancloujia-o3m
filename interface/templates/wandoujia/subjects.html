@@ -4,9 +4,14 @@
     <meta charset="utf-8" />
     <title>专题列表</title>
     <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}wandoujia/css/subjects.css"/>
+    <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}wandoujia/css/style.css"/>
     <link rel="stylesheet" href="{{ STATIC_URL }}wandoujia/css/subjects_fix.css"/>
 </head>
 <body data-page="special-list" class="special-list">
+        <div class="special-block clearfix nav">
+            {% include "wandoujia/user_area.html" %}
+        </div>
+
         {% if ads|length != 0 %}
         <div class="special-block clearfix ad-banner">
             <div id="carousel-example-generic" class="carousel slide">

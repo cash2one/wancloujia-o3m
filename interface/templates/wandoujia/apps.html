@@ -4,16 +4,18 @@
     <meta charset="utf-8">
     <title>{{ subject.name }}</title>
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}wandoujia/css/apps.css" />
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}wandoujia/css/style.css" />
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}wandoujia/css/apps_fix.css" />
 </head>
 <body>        
-        <div class="banner-wrap container">
-            {{ subject.name }}
+        <div class="banner-wrap container nav">
+            <div style="float: left">{{ subject.name }}</div>
+            {% include "wandoujia/user_area.html" %}
         </div>
         <div class="toolsbar container">
             <button class="btn" id="select-all">全选</button>
             <button class="btn btn-primary" id="install">安装已选应用</button>
-            <span id="tip"></span>
+            <span id="tip" style="line-height: 20px;display: inline-block;vertical-align: middle"></span>
             <a id="cancel" class="btn btn-link">取消选择</a>
         </div>
         <div class="app-block with-comments container">
