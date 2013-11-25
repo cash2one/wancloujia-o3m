@@ -33,6 +33,9 @@ class App(models.Model):
     online = models.BooleanField(verbose_name=u'是否上线')
     desc = models.CharField(verbose_name=u'应用描述', max_length=50, null=True)
 
+    def available(self):
+        return self.online
+
     def size(self):
         return os.path.getsize(self.apk.file.path)
 
@@ -62,6 +65,9 @@ class Subject(models.Model):
 
     def __unicode__(self):
         return self.name
+
+    def available(self):
+        return self.online
 
     class Meta:
         permissions = (

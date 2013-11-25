@@ -7,11 +7,6 @@
 {% block css %}
 {{ block.super }}
 <link rel="stylesheet" href="{{ STATIC_URL }}ajax_upload/css/ajax-upload-widget.css" />
-<style type="text/css">
-.droped {
-    color: #999;
-}
-</style>
 {% endblock %}
 
 {% block main %}
@@ -36,7 +31,7 @@
             {% include "search_form.html" with query=query %} 
         </div>
         <div class="panel-body"> 
-            {% render_table table "app_table.html" %}
+            {% render_table table "multiple_table_template.html" %}
         </div>
     </div>
 </div>

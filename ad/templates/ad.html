@@ -23,12 +23,14 @@ td.cover {
     width: 110px;
 }
 
-tr.drag {
-    background-color: #f1f1f1;
-}
 
 #reorder-ad .ad:hover {
     cursor: move;
+}
+
+.form-horizontal .form-group>div>input[type=text][readonly] {
+    cursor: auto;
+    background-color: #EEE;
 }
 </style>
 {% endblock %}
@@ -55,7 +57,7 @@ tr.drag {
             {% include "search_form.html" with query=query %}
         </div>
         <div class="panel-body"> 
-            {% render_table table "table_template.html" %}
+            {% render_table table "multiple_table_template.html" %}
         </div>
     </div>
 </div>

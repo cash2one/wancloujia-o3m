@@ -223,4 +223,10 @@ form.search button[type=submit] {
     color: #444;
 }
 
+tr.droped {
+    color: #999;
+}
 
+tr.drag {
+    background-color: #f1f1f1;
+}

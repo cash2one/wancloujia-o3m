@@ -34,7 +34,7 @@ def get_available_permissions():
 
         (Permission.objects.get(content_type=ad_type, codename="add_ad").pk, u'添加广告'),
         (Permission.objects.get(content_type=ad_type, codename="change_ad").pk, u'编辑广告'),
-        (Permission.objects.get(content_type=ad_type, codename="sort_ad").pk, u'排序广告'),
+        (Permission.objects.get(content_type=ad_type, codename="sort_ad").pk, u'调整广告顺序'),
         (Permission.objects.get(content_type=ad_type, codename="delete_ad").pk, u'删除广告'),
 
         (Permission.objects.get(content_type=app_type, codename="add_app").pk, u'添加应用'),

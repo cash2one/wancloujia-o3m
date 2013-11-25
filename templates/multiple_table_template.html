@@ -4,7 +4,7 @@
 
 {% block table.tbody.row %}
 <tr 
-    {% if row.record.online %}
+    {% if row.record.available %}
     class="{{ forloop.counter|divisibleby:2|yesno:"even,odd" }}"
     {% else %}
     class="{{ forloop.counter|divisibleby:2|yesno:"even,odd" }} droped"

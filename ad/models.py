@@ -18,6 +18,9 @@ class AD(models.Model):
     def __unicode__(self):
         return self.title
 
+    def available(self):
+        return self.visible
+
     class Meta:
         permissions = (
             ('sort_ad', 'Can sort the advertisements'),
