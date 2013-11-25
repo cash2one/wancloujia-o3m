@@ -77,9 +77,7 @@ td.cover {
 <script type="text/javascript">
 $(function() {
     $("select").select2();
-    $("#reorder-ad table").tableDnD({
-        onDragClass: "drag"
-    });
+    
 });
 
 var login_check = suning.decorators.login_check;
@@ -87,8 +85,14 @@ var error_check = suning.decorators.error_check;
 
 $(function() {
     var $modal = $("#reorder-ad");
+    if($modal.find(".ad").length == 0) return;
+
     var $saveBtn = $modal.find(".save");
 
+    $("#reorder-ad table").tableDnD({
+        onDragClass: "drag"
+    });
+    
     function lock_check(func) {
         return function(data) {
             suning.modal.unlock($modal);
