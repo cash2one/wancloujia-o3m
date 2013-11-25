@@ -9,9 +9,6 @@
 </head>
 <body data-page="special-list" class="special-list">
         <div class="special-block clearfix nav">
-            {% if ads|length == 0 and subjects|length != 0%}
-            <span style="font-size: 16px">应用专题</span>
-            {% endif %}
             {% include "wandoujia/user_area.html" %}
         </div>
 
@@ -58,14 +55,12 @@
             {% if subjects|length != 0 %}
             <div class="special-content clearfix">
                 {% for subject in subjects %}
-                <div class="special-item">
-                    <div class="special-wrap">
-                            <a href="/interface/subjects/{{ subject.id }}" title="{{ subject.name }}">
-                               <img width="205" height="80" src="{{ subject.cover }}" alt="{{ subject.name }}"/>
-                            </a>
+                <div class="special-item" data-id="{{ subject.id }}">
+                    <div class="special-wrap" title="{{ subject.name }}">
+                        <img width="205" height="80" src="{{ subject.cover }}" alt="{{ subject.name }}"/>
                     </div>
-                    <div class="name">
-                        <a href="/interface/subjects/{{ subject.id }}">{{ subject.name }}</a>
+                    <div class="name" title="{{ subject.name }}">
+                        {{ subject.name }}
                     </div>
                     <div class="meta">
                         <span class="first">{{ subject.count }}款应用</span>
@@ -86,6 +81,15 @@
     <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.9.1.min.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
     <script>
+    $(function() {
+
+        $(".special-item").click(function() {
+            var subject_id = $(this).data("id");
+            if(!subject_id) return;
+
+            window.location = "/interface/subjects/" + subject_id;
+        });
+    });
     $(function() {
         var $carousel = $(".carousel").carousel();
         var $progress =$carousel.find(".progress");

@@ -7,6 +7,11 @@
 {% block css %}
 {{ block.super }}
 <link rel="stylesheet" href="{{ STATIC_URL }}ajax_upload/css/ajax-upload-widget.css" />
+<style>
+td.name {
+    width: 200px;
+}
+</style>
 {% endblock %}
 
 {% block main %}
@@ -39,7 +44,7 @@
 {% include "subject_modal.html" with modal_id="add-edit-subject" f=form %}
 {% include "sort_subject_modal.html" with modal_id="sort-subjects" subjects=subjects %}
 {% include "delete_modal.html" with modal_id="delete-subject" model_name="应用专题" %}
-{% include "modal.html" with modal_id="prompt" %} 
+{% include "prompt.html" with modal_id="prompt" %} 
 {% endblock %}
 
 {% block js %}

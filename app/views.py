@@ -129,14 +129,16 @@ def can_view_subject(user):
 @user_passes_test(can_view_subject, login_url=settings.PERMISSION_DENIED_URL)
 @active_tab("subject")
 def subject(request):
-    published_subjects = Subject.objects.filter(online=True).order_by("-create_date")
-    droped_subjects = Subject.objects.filter(online=False).order_by("-create_date")
+    query_set = Subject.objects.order_by("position", "-create_date")
+    #published_subjects = Subject.objects.filter(online=True).order_by("-create_date")
+    #droped_subjects = Subject.objects.filter(online=False).order_by("-create_date")
     query = request.GET.get("q", None)
     if query:
-        published_subjects = published_subjects.filter(Q(name__contains=query) | Q(desc__contains=query))
-        droped_subjects = droped_subjects.filter(Q(name__contains=query) | Q(desc__contains=query))
+        #published_subjects = published_subjects.filter(Q(name__contains=query) | Q(desc__contains=query))
+        #droped_subjects = droped_subjects.filter(Q(name__contains=query) | Q(desc__contains=query))
+        query_set = query_set.filter(Q(name__contains=query) | Q(desc__contains=query))
 
-    query_set = list(chain(published_subjects, droped_subjects))
+    #query_set = list(chain(published_subjects, droped_subjects))
     table = SubjectTable(query_set)
     if query:
         table.empty_text = settings.NO_SEARCH_RESULTS

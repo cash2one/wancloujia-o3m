@@ -15,7 +15,7 @@
         <div class="toolsbar container">
             <button class="btn" id="select-all">全选</button>
             <button class="btn btn-primary" id="install">安装已选应用</button>
-            <span id="tip" style="line-height: 20px;display: inline-block;vertical-align: middle"></span>
+            <span id="tip"></span>
             <a id="cancel" class="btn btn-link">取消选择</a>
         </div>
         <div class="app-block with-comments container">
@@ -24,13 +24,13 @@
             <li class="app selected" data-size="{{ app.bits }}" data-pn="com.uc.browser">
                 <div class="app-inner">
                     <div class="info">
-                        <a class="icon-area" data-pn="com.uc.browser" href="{{ MEDIA_URL }}{{ app.apk }}" >
+                        <div class="icon-area">
                             <img src="{{ app.icon }} " alt="{{ app.name }}" class="icon" />
-                        </a>
+                        </div>
                         <div class="operate">
-                            <a href="{{ MEDIA_URL }}{{ app.apk }}" class="name">
+                            <span class="name">
                                 <span class="txt">{{ app.name }}</span>
-                            </a>
+                            </span>
                             <span class="meta">
                                 <span>{{ app.version }}&nbsp;&nbsp;{{ app.size }}</span>
                                 <a href="{{ MEDIA_URL }}{{ app.apk }}#name={{ app.name }}&icon=http://{{ request.META.HTTP_HOST }}{{ app.icon }}&content-type=application" class="btn install-link">安装</a>

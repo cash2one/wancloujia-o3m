@@ -15,21 +15,25 @@ body {
 
 @media screen and (max-width: 960px) {
   body .special-block {
-    width: 768px;
+    width: 715px;
     margin: 0 auto;
   }
 
-  .special-content {
-    margin-left: -45px;
-  }
-  .special-item {
-    margin-left: 45px;
-  }
-
   .ad-banner>.carousel>.carousel-inner>.item>img {
-    width: 758px;
-    height: 190px;
+    width: 715px;
+    height: 180px;
   }
+}
+
+.special-item {
+  cursor: pointer;
+}
+
+.special-item .name {
+  height: 20px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .special-item.empty {

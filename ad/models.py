@@ -1,7 +1,9 @@
 # coding: utf-8
+from datetime import datetime
 import logging
 
 from django.db import models, connection, transaction
+from django.utils import timezone
 
 logger = logging.getLogger(__name__)
 
@@ -20,6 +22,9 @@ class AD(models.Model):
 
     def available(self):
         return self.visible
+
+    def in_period(self):
+        return self.from_date <= timezone.now() <= self.to_date
 
     class Meta:
         permissions = (

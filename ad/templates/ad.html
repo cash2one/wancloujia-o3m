@@ -15,7 +15,7 @@
 td.period {
     width: 300px;
 }
-td.title, td.visible {
+td.title {
     width: 100px;
 }
 
@@ -23,6 +23,9 @@ td.cover {
     width: 110px;
 }
 
+td.visible {
+    width: 120px;
+}
 
 #reorder-ad .ad:hover {
     cursor: move;
@@ -92,7 +95,7 @@ $(function() {
     $("#reorder-ad table").tableDnD({
         onDragClass: "drag"
     });
-    
+
     function lock_check(func) {
         return function(data) {
             suning.modal.unlock($modal);

@@ -230,3 +230,8 @@ tr.droped {
 tr.drag {
     background-color: #f1f1f1;
 }
+
+td>p.warn {
+    color: #B20;
+    font-size: 12px;
+}
