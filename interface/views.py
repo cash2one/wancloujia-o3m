@@ -97,16 +97,21 @@ def subjects(request):
     subjects = Subject.objects.filter(online=True).order_by('position')
     now = datetime.now()
     ads = AD.objects.filter(visible=True).filter(from_date__lt=now).filter(to_date__gt=now).order_by('position')
-    results = [{
-        "id": item.pk,
-        "name": item.name,
-        "cover": item.cover,
-        "desc": item.desc,
-        "count": AppGroup.objects.filter(subject__pk=item.pk).filter(app__online=True).count(),
-        "size": bitsize(get_subject_total_size(item)),
-    } for item in subjects]
-    return render(request, "wandoujia/subjects.html", {"subjects": results, "ads": ads})
+    results = []
+    for item in subjects:
+        grps = AppGroup.objects.filter(subject=item).filter(app__online=True)
+        if  grps.count() != 0:
+            results.append({
+                "id": item.pk,
+                "name": item.name,
+                "cover": item.cover,
+                "desc": item.desc,
+                "count": grps.count(),
+                "size": bitsize(get_subject_total_size(item)),       
+            })        
+    
     #return render(request, "wandoujia/subjects.html", {"subjects": [], "ads": []})
+    return render(request, "wandoujia/subjects.html", {"subjects": results, "ads": ads})
 
 
 def get_subject_total_size(subject):
@@ -141,6 +146,9 @@ def apps(request, id):
 
     subject = subjects[0]    
     appgrps = AppGroup.objects.filter(subject=subject).order_by("position")
+    if appgrps.count() == 0:
+        return redirect("/interface/subjects")
+
     apps = map(_get_app, appgrps)
     return render(request, "wandoujia/apps.html", {"subject": subject, "apps": apps})
 

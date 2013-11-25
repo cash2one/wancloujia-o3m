@@ -1,5 +1,6 @@
 *.py[cod]
 data_backup.json
+wandoujia.zip
 
 # wandoujia extension
 *.wdx

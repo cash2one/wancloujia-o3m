@@ -2,6 +2,7 @@
 import logging
 
 import django_tables2 as tables
+
 from models import App, Subject, AppGroup
 from mgr.models import cast_staff
 

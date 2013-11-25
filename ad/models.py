@@ -1,14 +1,16 @@
 # coding: utf-8
+from datetime import datetime
 import logging
 
 from django.db import models, connection, transaction
+from django.utils import timezone
 
 logger = logging.getLogger(__name__)
 
 class AD(models.Model):
     title = models.CharField(verbose_name=u'广告标题', max_length=50)
     cover = models.CharField(verbose_name=u'广告图片', max_length=100)
-    desc = models.CharField(verbose_name=u'广告介绍', max_length=400, blank=True)
+    desc = models.CharField(verbose_name=u'广告介绍', max_length=50, blank=True)
     from_date = models.DateTimeField(verbose_name=u'上线时间')
     to_date = models.DateTimeField(verbose_name=u'下线时间')
     visible = models.BooleanField(verbose_name=u'广告状态')
@@ -17,6 +19,12 @@ class AD(models.Model):
 
     def __unicode__(self):
         return self.title
+
+    def available(self):
+        return self.visible
+
+    def in_period(self):
+        return self.from_date <= timezone.now() <= self.to_date
 
     class Meta:
         permissions = (

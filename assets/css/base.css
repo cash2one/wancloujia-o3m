@@ -223,4 +223,25 @@ form.search button[type=submit] {
     color: #444;
 }
 
+tr.droped {
+    color: #999;
+}
 
+tr.drag {
+    background-color: #f1f1f1;
+}
+
+td>p.warn {
+    color: #B20;
+    font-size: 12px;
+}
+
+.form-horizontal .form-group.has-error>div .select2-choices {
+    border-color: #B94A48;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+}
+
+.form-horizontal .form-group.has-error>div .select2-dropdown-open .select2-choices {
+    border-color: #5897fb;
+}

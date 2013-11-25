@@ -15,21 +15,26 @@ body {
 
 @media screen and (max-width: 960px) {
   body .special-block {
-    width: 768px;
+    width: 715px;
     margin: 0 auto;
   }
 
-  .special-content {
-    margin-left: -45px;
-  }
-  .special-item {
-    margin-left: 45px;
-  }
-
   .ad-banner>.carousel>.carousel-inner>.item>img {
-    width: 758px;
-    height: 190px;
+    width: 715px;
+    height: 180px;
   }
+}
+
+.special-item {
+  cursor: pointer;
+  -webkit-user-select: none;
+}
+
+.special-item .name {
+  height: 20px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .special-item.empty {
@@ -320,6 +325,7 @@ body {
   margin-right: auto;
   margin-top: 30px;
   text-align: center;
+  line-height: 20px;
   color: #777;
   font-size: 14px;
   font-family: "微软雅黑";
@@ -328,6 +334,7 @@ body {
 #empty.abs {
   position: absolute;
   margin-left: -50px;
+  margin-top: -60px;
   left: 50%;
   top: 40%;
 }

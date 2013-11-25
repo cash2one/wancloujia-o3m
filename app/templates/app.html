@@ -35,9 +35,14 @@
     float: left;
 }
 
-.droped {
-    color: #999;
+td.name {
+    width: 120px;
 }
+
+td.subjects {
+    width: 300px;
+}
+
 </style>
 {% endblock %}
 
@@ -57,7 +62,7 @@
             {% include "search_form.html" with query=query %} 
         </div>
         <div class="panel-body"> 
-            {% render_table table "app_table.html" %}
+            {% render_table table "multiple_table_template.html" %}
         </div>
     </div>
 </div>

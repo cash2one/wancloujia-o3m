@@ -30,7 +30,8 @@ class ADForm(forms.ModelForm):
                 'data-provide': 'datetimepicker'
             }), 
             'desc': forms.Textarea(attrs={
-                'rows': 4,
+                'rows': 2,
+                'maxlength': 50,
                 'class': 'form-control'
             }),
             'cover': AjaxClearableFileInput

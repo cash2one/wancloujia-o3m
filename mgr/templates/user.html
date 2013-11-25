@@ -2,6 +2,21 @@
 {% load perm_filters %}
 {% load render_table from django_tables2 %}
 
+{% block css %}
+{{ block.super }}
+<style type="text/css">
+.modal-body {
+    max-height: none;
+    overflow: hidden;
+}
+
+td.username, td.realname {
+    width: 110px;
+}
+</style>
+
+{% endblock %}
+
 {% block main %}
 <div class="main">
     <div class="toolbar">

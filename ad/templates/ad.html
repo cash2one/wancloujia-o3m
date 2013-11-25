@@ -15,7 +15,7 @@
 td.period {
     width: 300px;
 }
-td.title, td.visible {
+td.title {
     width: 100px;
 }
 
@@ -23,12 +23,17 @@ td.cover {
     width: 110px;
 }
 
-tr.drag {
-    background-color: #f1f1f1;
+td.visible {
+    width: 120px;
 }
 
 #reorder-ad .ad:hover {
     cursor: move;
+}
+
+.form-horizontal .form-group>div>input[type=text][readonly] {
+    cursor: auto;
+    background-color: #EEE;
 }
 </style>
 {% endblock %}
@@ -55,7 +60,7 @@ tr.drag {
             {% include "search_form.html" with query=query %}
         </div>
         <div class="panel-body"> 
-            {% render_table table "table_template.html" %}
+            {% render_table table "multiple_table_template.html" %}
         </div>
     </div>
 </div>
@@ -75,9 +80,7 @@ tr.drag {
 <script type="text/javascript">
 $(function() {
     $("select").select2();
-    $("#reorder-ad table").tableDnD({
-        onDragClass: "drag"
-    });
+    
 });
 
 var login_check = suning.decorators.login_check;
@@ -85,7 +88,13 @@ var error_check = suning.decorators.error_check;
 
 $(function() {
     var $modal = $("#reorder-ad");
+    if($modal.find(".ad").length == 0) return;
+
     var $saveBtn = $modal.find(".save");
+
+    $("#reorder-ad table").tableDnD({
+        onDragClass: "drag"
+    });
 
     function lock_check(func) {
         return function(data) {

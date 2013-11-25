@@ -10,18 +10,19 @@ $(function() {
     var query_id = 0;
 
     var apps_cache = [];
+
     function parse_apps_cache(value) {
         var arr = value.split(",");
         var results = [];
-        for(var i = 0; i < arr.length; i+=2) {
+        for (var i = 0; i < arr.length; i += 2) {
             results.push(arr[i]);
             apps_cache.push({
                 id: arr[i],
-                text: arr[i+1]
+                text: arr[i + 1]
             });
         }
         return results;
-    } 
+    }
 
     $apps.select2({
         tags: [],
@@ -248,9 +249,11 @@ $(function() {
 
 $(function() {
     var $modal = $("#sort-subjects");
+    if ($modal.find(".subject").length == 0) return;
+
     $modal.find("table").tableDnD({
         onDragClass: "drag"
-    })
+    });
     var $saveBtn = $modal.find(".save");
 
     function lock_check(func) {

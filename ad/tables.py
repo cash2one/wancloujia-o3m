@@ -1,12 +1,18 @@
 # coding: utf-8
 import logging
+
+from django.utils.safestring import mark_safe
 import django_tables2 as tables
 
+from suning.utils import AvailableColumn
 from models import AD
+
+logger = logging.getLogger(__name__)
+
 
 class ADTable(tables.Table):
     cover = tables.TemplateColumn(verbose_name=u'广告图片', template_name="ad_cover.html")
-    visible = tables.Column(verbose_name=u'广告状态', empty_values=())
+    visible = AvailableColumn(verbose_name=u'广告状态', empty_values=())
     desc = tables.TemplateColumn(verbose_name=u'广告介绍', template_name="ad_desc.html")
     period = tables.TemplateColumn(verbose_name=u'有效时间段', 
                                    template_code='''
@@ -14,9 +20,6 @@ class ADTable(tables.Table):
                                         - {{ record.to_date|date:"Y-m-d H:i"}}
                                    ''')
     ops_2 = tables.TemplateColumn(verbose_name=u"操作", template_name="ad_ops.html")
-
-    def render_visible(self, record):
-        return u'显示' if record.visible else u'隐藏'
 
     class Meta:
         model = AD
