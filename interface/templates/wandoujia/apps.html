@@ -129,11 +129,12 @@
         $install.click(function() {
             var linkEls = $appList.find(".app.selected a.install-link").toArray();
             async.eachSeries(linkEls, function(item, callback) {
+                var time = linkEls.indexOf(item) == 0 ? 4 : 500;
                 setTimeout(function() {
                     item.click();
                     console.log(item);
                     callback(null);
-                }, 1000);
+                }, time);
             });
         });
     });
