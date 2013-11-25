@@ -42,6 +42,7 @@ body .banner-wrap {
 }
 
 .app-block .app {
+    -webkit-user-select: none;
     padding: 0px;
     height: 163px;
     width: 225px;

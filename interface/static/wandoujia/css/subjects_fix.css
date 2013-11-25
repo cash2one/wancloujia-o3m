@@ -27,6 +27,7 @@ body {
 
 .special-item {
   cursor: pointer;
+  -webkit-user-select: none;
 }
 
 .special-item .name {

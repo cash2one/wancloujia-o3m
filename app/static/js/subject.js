@@ -250,7 +250,7 @@ $(function() {
 $(function() {
     var $modal = $("#sort-subjects");
     if ($modal.find(".subject").length == 0) return;
-   
+
     $modal.find("table").tableDnD({
         onDragClass: "drag"
     });
