@@ -206,9 +206,9 @@ def apps(request, id):
 
 
 
-logger = logging.getLogger('post_logger')
-logger.setLevel(logging.INFO)
-filename = 'windows2x.log'
-hdlr = logging.handlers.TimedRotatingFileHandler(filename, 'M', 1, 7)
-hdlr.suffix = '%Y%m%d.log'
-logger.addHandler(hdlr)
+logger = logging.getLogger('windows2x.post')
+#logger.setLevel(logging.INFO)
+#filename = 'windows2x.log'
+#hdlr = logging.handlers.TimedRotatingFileHandler(filename, 'M', 1, 7)
+#hdlr.suffix = '%Y%m%d.log'
+#logger.addHandler(hdlr)
