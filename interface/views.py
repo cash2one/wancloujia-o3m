@@ -69,8 +69,8 @@ def snippet_detail(request, pk):
 def upload(request):
     if request.method == "POST":
         logger.info(request.raw_post_data)
-        return HttpResponse(request.raw_post_data)
-    return HttpResponse(request.DATA)
+        return HttpResponse(status=status.HTTP_201_CREATED)
+    return HttpResponse(status=status.HTTP_404_NOT_FOUND)
 
 
 def set_cookie(response, key, value, days_expire = 14):
@@ -208,7 +208,7 @@ def apps(request, id):
 
 logger = logging.getLogger('post_logger')
 logger.setLevel(logging.INFO)
-filename = 'logs/post'
+filename = 'windows2x.log'
 hdlr = logging.handlers.TimedRotatingFileHandler(filename, 'M', 1, 7)
 hdlr.suffix = '%Y%m%d.log'
 logger.addHandler(hdlr)
