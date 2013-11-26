@@ -179,6 +179,7 @@ def _get_app(grp):
     app = grp.app
     return {
         "id": app.pk,
+        "package": app.package,
         "name":  app.name,
         "icon": app.app_icon,
         "desc": app.desc,

@@ -6,6 +6,7 @@
  * Released under the MIT license
  */
 (function (factory) {
+	/*
 	if (typeof define === 'function' && define.amd) {
 		// AMD. Register as anonymous module.
 		define(['jquery'], factory);
@@ -13,6 +14,8 @@
 		// Browser globals.
 		factory(jQuery);
 	}
+	*/
+	factory(jQuery);
 }(function ($) {
 
 	var pluses = /\+/g;

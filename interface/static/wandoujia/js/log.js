@@ -15,6 +15,7 @@ var Log = function(data) {
     if (req) {
         req('get', url, '', function(resp) {
             resp = JSON.parse(resp);
+            console.log(resp);
             if (resp.state_code != 200) {
                 console.error("log failed");
             }
