@@ -245,3 +245,7 @@ td>p.warn {
 .form-horizontal .form-group.has-error>div .select2-dropdown-open .select2-choices {
     border-color: #5897fb;
 }
+
+td {
+    word-break:break-all;
+}

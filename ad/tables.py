@@ -27,8 +27,8 @@ class AvailableColumn(tables.Column):
 
 class ADTable(tables.Table):
     cover = tables.TemplateColumn(verbose_name=u'广告图片', template_name="ad_cover.html")
-    visible = AvailableColumn(verbose_name=u'广告状态', empty_values=())
     desc = tables.TemplateColumn(verbose_name=u'广告介绍', template_name="ad_desc.html")
+    visible = AvailableColumn(verbose_name=u'广告状态', empty_values=())
     period = tables.TemplateColumn(verbose_name=u'有效时间段', 
                                    template_code='''
                                         {{ record.from_date|date:"Y-m-d H:i"}} 

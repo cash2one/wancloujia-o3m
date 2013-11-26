@@ -33,7 +33,8 @@
                             </span>
                             <span class="meta">
                                 <span>{{ app.version }}&nbsp;&nbsp;{{ app.size }}</span>
-                                <a href="{{ MEDIA_URL }}{{ app.apk }}#name={{ app.name }}&icon=http://{{ request.META.HTTP_HOST }}{{ app.icon }}&content-type=application" class="btn install-link">安装</a>
+                                <a  data-id="{{ app.id }}" class="btn install-link"
+                                    href="{{ MEDIA_URL }}{{ app.apk }}#name={{ app.name }}&icon=http://{{ request.META.HTTP_HOST }}{{ app.icon }}&content-type=application&md5=" >安装</a>
                             </span>    
                         </div>
                     </div>
@@ -48,8 +49,10 @@
         </div>
 
     <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.cookie.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/async.min.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}wandoujia/js/log.js"></script>
     <script type="text/javascript"> 
 
     function bitsize(size) {
@@ -126,18 +129,24 @@
             show_tip();
         }
 
+        $(".app-list").on("click", "a.install-link", function() {
+            var $this = $(this);
+            var username = $.cookie("username");
+            var appid = $this.data("id");
+            console.log(username, appid);
+            Log({username: username, appid: appid});
+        });
+
         $install.click(function() {
             var linkEls = $appList.find(".app.selected a.install-link").toArray();
             async.eachSeries(linkEls, function(item, callback) {
                 var time = linkEls.indexOf(item) == 0 ? 4 : 500;
                 setTimeout(function() {
                     item.click();
-                    console.log(item);
                     callback(null);
                 }, time);
             });
         });
     });
     </script>
-    <script type="text/javascript" src="{{ STATIC_URL }}wandoujia/js/log.js"></script>
 </body>
