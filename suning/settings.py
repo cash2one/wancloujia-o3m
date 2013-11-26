@@ -232,6 +232,14 @@ LOGGING = {
             'backupCount': 5,
             'formatter':'standard',
         },
+        'windows2x': {
+            'level':'INFO',
+            'class':'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(PROJECT_ROOT + '/logs/','windows2x.log'),
+            'maxBytes': 1024*1024*5,
+            'backupCount': 5,
+            'formatter':'standard',
+        },
         'default': {
             'level':'DEBUG',
             'class':'logging.handlers.RotatingFileHandler',
@@ -246,6 +254,11 @@ LOGGING = {
             'handlers': ['mail_admins'],
             'level': 'ERROR',
             'propagate': True,
+        },
+        'windows2x.post': {
+            'handlers': ['windows2x'],
+            'level': 'INFO',
+            'propagate': False,
         },
         'django': {
             'handlers': ['django'],
