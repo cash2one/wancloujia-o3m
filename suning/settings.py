@@ -212,6 +212,9 @@ LOGGING = {
         'standard': {
             'format': '%(asctime)s [%(name)s:%(lineno)d] [%(levelname)s]- %(message)s'
         },
+        'windows2x': {
+            'format': '[windows2x]%(message)s'
+        },
     },
     'filters': {
         'require_debug_false': {
@@ -238,7 +241,7 @@ LOGGING = {
             'filename': os.path.join(PROJECT_ROOT + '/logs/','windows2x.log'),
             'maxBytes': 1024*1024*5,
             'backupCount': 5,
-            'formatter':'standard',
+            'formatter':'windows2x',
         },
         'default': {
             'level':'DEBUG',
