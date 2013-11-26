@@ -21,7 +21,7 @@
         <div class="app-block with-comments container">
             <ul class="app-list clearfix">
             {% for app in apps %}
-            <li class="app selected" data-size="{{ app.bits }}" data-pn="com.uc.browser">
+            <li class="app selected" data-size="{{ app.bits }}"data-pn="com.uc.browser">
                 <div class="app-inner">
                     <div class="info">
                         <div class="icon-area">
@@ -34,6 +34,7 @@
                             <span class="meta">
                                 <span>{{ app.version }}&nbsp;&nbsp;{{ app.size }}</span>
                                 <a  data-id="{{ app.id }}" class="btn install-link"
+                                    data-package="{{ app.package }}" 
                                     href="{{ MEDIA_URL }}{{ app.apk }}#name={{ app.name }}&icon=http://{{ request.META.HTTP_HOST }}{{ app.icon }}&content-type=application&md5=" >安装</a>
                             </span>    
                         </div>
@@ -49,6 +50,8 @@
         </div>
 
     <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}Narya/libs/require-2.1.9.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}Narya/Narya.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.cookie.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/async.min.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
@@ -125,7 +128,6 @@
                 $select_all.removeAttr("disabled");
             }
 
-
             show_tip();
         }
 
@@ -133,8 +135,9 @@
             var $this = $(this);
             var username = $.cookie("username");
             var appid = $this.data("id");
-            console.log(username, appid);
-            Log({username: username, appid: appid});
+            var package = $this.data("package");
+            console.log(username, appid, package);
+            Log({event: "install", user: username, app: appid, package: package});
         });
 
         $install.click(function() {
