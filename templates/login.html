@@ -13,6 +13,8 @@
     </div>
     <form class='form' role='form' method='POST'>
         <input type="hidden" name='next' value="{{ request.GET.next }}"/>
+        <input type="hidden" name="wandoujia" value="{{ wandoujia }}" />
+        {% csrf_token %}
         <div class="form-group">
             <label class="sr-only" for="username">用户名</label>
             <input type="text" class="form-control" id="username" name="username" placeholder="用户名">

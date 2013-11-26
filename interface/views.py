@@ -1,11 +1,14 @@
 # coding: utf-8
 import logging
-from datetime import datetime
+import datetime
+from functools import wraps
+
 from django.http import HttpResponse
+from django.utils import simplejson
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render, redirect
 from django.views.decorators.http import require_GET, require_POST
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import auth
 
 from rest_framework import status
@@ -15,8 +18,10 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view, parser_classes, renderer_classes
 
 from serializers import AppSerializer, SubjectSerializer
+from suning import settings
 from interface.models import LogEntity
 from interface.serializer import LogSerializer
+from framework.forms import LoginForm
 from mgr.models import Staff
 from app.models import Subject, App, AppGroup
 from app.tables import bitsize
@@ -68,34 +73,78 @@ def upload(request):
     return HttpResponse(request.DATA)
 
 
-@api_view(['GET'])
-@parser_classes((JSONParser,))
-def user_login(request, username, password):
-    if request.method == "GET":
-        user = Staff.objects.filter(username=username)
-        if user and auth.authenticate(username=username,password=password):
-            #auth.login(request,user)
-            return Response({"status": "ok"})
-        elif len(user) == 0:
-            return Response({"status": "user not exist"})
-        else:
-            return Response({"status": "wrong password"})
+def set_cookie(response, key, value, days_expire = 14):
+    max_age = days_expire * 24 * 60 * 60 
+    expires = datetime.datetime.strftime(datetime.datetime.utcnow() + datetime.timedelta(seconds=max_age), "%a, %d-%b-%Y %H:%M:%S GMT")
+    response.set_cookie(key, value, max_age=max_age, expires=expires)
+
+
+def login_test(func):
+    @wraps(func)
+    def wrap(request, *args, **kwargs):
+        value = request.COOKIES.get("username")
+        if not value:
+            return redirect("/interface/welcome")
+
+        return func(request, *args, **kwargs)
+    return wrap
+
+
+@require_GET
+def welcome(request):
+    if request.COOKIES.get("username"):
+        return redirect("/interface/subjects")
     else:
-        return Response({"status": "wrong method"})
+        return render(request, "login.html", {"wandoujia": "true"}) 
+
+@require_POST
+def login(request):
+    username = request.POST["username"]
+    password = request.POST["password"]
+    form = LoginForm({'username': username, 'password': password})
+    if not form.is_valid():
+        logger.debug("form is invalid")    
+        return HttpResponse(simplejson.dumps({
+            'ret_code': 1000, 
+            'ret_msg': u'用户名或密码不正确！'
+        }), mimetype='application/json')
+
+    data = form.cleaned_data
+    logger.debug("username: %s; password: %s" % (data['username'], data['password']))
+    user = auth.authenticate(username=data['username'], password=data['password'])
+    if user is None:
+        logger.debug("user is not authenticated")
+        return HttpResponse(simplejson.dumps({
+            'ret_code': 1000, 
+            'ret_msg': u'用户名或密码不正确！'
+        }), mimetype='application/json')
+
+    if not user.is_active:
+        logger.debug("user is not active")
+        return HttpResponse(simplejson.dumps({
+            'ret_code': 1000, 
+            'ret_msg': u'账号被锁定，登录失败！'
+        }), mimetype='application/json')
+    logger.debug("user is authenticated")
+
+    response = HttpResponse(simplejson.dumps({'ret_code': 0}), mimetype='application/json')
+    set_cookie(response, "username", username)
+    return response
 
 
 @require_GET
-@login_required
+@login_test
 def logout(request):
-    auth.logout(request)
-    return redirect("/interface/welcome")
+    response = redirect("/interface/welcome")
+    response.delete_cookie("username")
+    return response
 
 
 @require_GET
-@login_required(login_url="/interface/welcome")
+@login_test
 def subjects(request):
     subjects = Subject.objects.filter(online=True).order_by('position')
-    now = datetime.now()
+    now = datetime.datetime.now()
     ads = AD.objects.filter(visible=True).filter(from_date__lt=now).filter(to_date__gt=now).order_by('position')
     results = []
     for item in subjects:
@@ -125,9 +174,11 @@ def get_subject_total_size(subject):
 def echo(request):
     return Response(request.DATA)
 
+
 def _get_app(grp):
     app = grp.app
     return {
+        "id": app.pk,
         "name":  app.name,
         "icon": app.app_icon,
         "desc": app.desc,
@@ -137,8 +188,9 @@ def _get_app(grp):
         "apk": app.apk.file
     }
 
+
 @require_GET
-@login_required(login_url="/interface/welcome")
+@login_test
 def apps(request, id):
     subjects = Subject.objects.filter(pk=id)
     if len(subjects) == 0:
@@ -152,12 +204,6 @@ def apps(request, id):
     apps = map(_get_app, appgrps)
     return render(request, "wandoujia/apps.html", {"subject": subject, "apps": apps})
 
-@require_GET
-def welcome(request):
-    if request.user.is_authenticated():
-        return redirect("/interface/subjects")
-    else:
-        return render(request, "login.html") 
 
 
 logger = logging.getLogger('post_logger')
