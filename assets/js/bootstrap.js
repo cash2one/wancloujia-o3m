@@ -857,6 +857,7 @@ if (typeof jQuery === "undefined") { throw new Error("Bootstrap requires jQuery"
     this.$element  = $(element)
     this.$backdrop =
     this.isShown   = null
+    this.locked = false
 
     if (this.options.remote) this.$element.load(this.options.remote)
   }
@@ -916,18 +917,18 @@ if (typeof jQuery === "undefined") { throw new Error("Bootstrap requires jQuery"
     })
   }
 
-  Modal.prototype.lock = function() {
-	  this.lock = true
+  Modal.prototype.lock = function () {
+    this.locked = true
   }
 
-  Modal.prototype.unlock = function() {
-	  this.lock = false
+  Modal.prototype.unlock = function () {
+    this.locked = false
   }
 
   Modal.prototype.hide = function (e) {
     if (e) e.preventDefault()
 
-	if(this.lock) return
+	if(this.locked) return
 
     e = $.Event('hide.bs.modal')
 
