@@ -21,14 +21,7 @@ $(function() {
         changeButtonText: "修改图片",
         removeButtonText: "删除图片",
         onError: function(data) {
-            suning.modal.unlock($modal);
             toast('error', '图片上传失败，请重试。');
-        },
-        onUpload: function() {
-            suning.modal.lock($modal);
-        },
-        onComplete: function() {
-            suning.modal.unlock($modal);
         }
     });
 
@@ -206,6 +199,7 @@ $(function() {
     });
 
     $modal.on('hide.bs.modal', function() {
+        auw.abort();
         clearForm();
         if (uploading) apk_uploader.cancel();
         apk_uploader.reset();
