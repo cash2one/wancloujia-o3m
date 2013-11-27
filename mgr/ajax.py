@@ -143,7 +143,7 @@ def add_edit_employee(request, form):
 
 
 @dajaxice_register(method='POST')
-@request_delay(3)
+#@request_delay(3)
 @check_login
 @preprocess_form
 def add_edit_company(request, form):
