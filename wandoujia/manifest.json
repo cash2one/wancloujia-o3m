@@ -15,7 +15,7 @@
     },
     "app": {
         "launch": {
-            "web_url": "http://suning.wandoujia.com/interface/welcome"
+            "web_url": "http://localhost:3000/interface/welcome"
         },
         "navigation": []
     },

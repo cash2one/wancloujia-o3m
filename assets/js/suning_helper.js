@@ -58,10 +58,12 @@ window.NETWORK_ERROR_MSG = '网路异常，请稍后重试';
             },
 
             lock: function($modal) {
+                $modal.modal('lock');
                 $(".modal-footer .btn").button('loading');
             },
 
             unlock: function($modal) {
+                $modal.modal('unlock');
                 $(".modal-footer .btn").button('reset');
             },
 
