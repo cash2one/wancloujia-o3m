@@ -237,11 +237,12 @@ LOGGING = {
         },
         'windows2x': {
             'level':'INFO',
-            'class':'logging.handlers.RotatingFileHandler',
+            'class':'logging.handlers.TimedRotatingFileHandler',
             'filename': os.path.join(PROJECT_ROOT + '/logs/','windows2x.log'),
-            'maxBytes': 1024*1024*5,
-            'backupCount': 5,
+            #'maxBytes': 1024*1024*5,
+            'backupCount': 7,
             'formatter':'windows2x',
+            'when':'midnight',
         },
         'default': {
             'level':'DEBUG',
