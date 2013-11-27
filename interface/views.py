@@ -27,6 +27,8 @@ from app.models import Subject, App, AppGroup
 from app.tables import bitsize
 from ad.models import AD
 
+import zlib
+
 
 class JSONResponse(HttpResponse):
     """
@@ -68,7 +70,9 @@ def snippet_detail(request, pk):
 @api_view(['GET', 'POST'])
 def upload(request):
     if request.method == "POST":
-        logger.info(request.raw_post_data)
+        #log = request.raw_post_data
+        log = zlib.decompress(str(request.raw_post_data), 16+zlib.MAX_WBITS, 16384)
+        logger.info(log)
         return HttpResponse(status=status.HTTP_201_CREATED)
     return HttpResponse(status=status.HTTP_404_NOT_FOUND)
 
@@ -208,8 +212,10 @@ def apps(request, id):
 
 
 logger = logging.getLogger('windows2x.post')
-#logger.setLevel(logging.INFO)
-#filename = 'windows2x.log'
-#hdlr = logging.handlers.TimedRotatingFileHandler(filename, 'M', 1, 7)
-#hdlr.suffix = '%Y%m%d.log'
-#logger.addHandler(hdlr)
+logger.setLevel(logging.INFO)
+filename = 'logs/windows2x'
+hdlr = logging.handlers.TimedRotatingFileHandler(filename, 'M', 1, 7)
+hdlr.suffix = '%Y-%m-%d.log'
+formatter = logging.Formatter('[windows2x]%(message)s')
+hdlr.setFormatter(formatter)
+logger.addHandler(hdlr)
