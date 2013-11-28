@@ -95,7 +95,7 @@ def organization(request):
             #TODO 直接构造QuerySet
             company_query_set = Company.objects.filter(pk=company.pk)
             store_query_set = Store.objects.filter(company=company)
-
+            storeForm.fields["company"].queryset = company_query_set
 
     cq = request.GET.get("cq", None)
     if cq:
