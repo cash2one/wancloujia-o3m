@@ -210,7 +210,7 @@ form.search input[type=text]:focus {
     outline: none;
 }
 
-form.search button[type=submit] {
+form.search button {
     position: absolute;
     top: 0px;
     right: 0px;
@@ -219,7 +219,7 @@ form.search button[type=submit] {
     outline: none;
 }
 
-form.search button[type=submit] {
+form.search button {
     color: #444;
 }
 
