@@ -200,7 +200,7 @@ $(function() {
         e.preventDefault();
         if (!$form.parsley('validate')) return;
 
-        suning.modal.unlock($modal);
+        suning.modal.lock($modal);
         Dajaxice.mgr.add_edit_store(btn_check
             (login_check
             (field_check

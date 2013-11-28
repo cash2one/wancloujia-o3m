@@ -1,6 +1,7 @@
 *.py[cod]
 data_backup.json
 wandoujia.zip
+suning.zip
 
 # wandoujia extension
 *.wdx

@@ -95,15 +95,15 @@ def organization(request):
             #TODO 直接构造QuerySet
             company_query_set = Company.objects.filter(pk=company.pk)
             store_query_set = Store.objects.filter(company=company)
-
+            storeForm.fields["company"].queryset = company_query_set
 
     cq = request.GET.get("cq", None)
     if cq:
-        company_query_set = company_query_set.filter(Q(code=cq) | Q(name__contains=cq))
+        company_query_set = company_query_set.filter(Q(code__contains=cq) | Q(name__contains=cq))
 
     sq = request.GET.get("sq", None)
     if sq:
-        store_query_set = store_query_set.filter(Q(code=sq) | Q(name__contains=sq))
+        store_query_set = store_query_set.filter(Q(code__contains=sq) | Q(name__contains=sq))
 
     storeTable = StoreTable(store_query_set)
     companyTable = CompanyTable(company_query_set)

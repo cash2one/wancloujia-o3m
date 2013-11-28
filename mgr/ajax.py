@@ -143,6 +143,7 @@ def add_edit_employee(request, form):
 
 
 @dajaxice_register(method='POST')
+#@request_delay(3)
 @check_login
 @preprocess_form
 def add_edit_company(request, form):
@@ -163,8 +164,8 @@ def add_edit_company(request, form):
     else:
         id = form["id"]
         company = Company.objects.get(pk=id)
-        company.code = code
-        company.name = name
+        company.code = f.cleaned_data["code"]
+        company.name = f.cleaned_data["name"]
         if Company.objects.exclude(pk=id).filter(code=company.code).exists():
             return simplejson.dumps({'ret_code': 1000, 'field': 'code', 'error': u'公司编码重复'})
         if Company.objects.exclude(pk=id).filter(name=company.name).exists():
