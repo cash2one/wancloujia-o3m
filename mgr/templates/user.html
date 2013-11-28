@@ -103,19 +103,20 @@ $(function() {
     }
 
     $saveBtn.click(function() {
-        loading();
+        suning.modal.lock($modal);
         Dajaxice.mgr.delete_user(function(data) {
-            reset();
+            suning.modal.unlock($modal);
             if(data.ret_code != 0) {
                 toast('error', data.ret_msg);
                 return;
             }
 
             toast('success', '删除成功');
+            $modal.modal('hide');
             suning.reload(2000);
         }, {id: user.id}, {
             error_callback: function() {
-                reset();
+                suning.modal.unlock($modal);
                 toast('error', NETWORK_ERROR_MSG);
             }
         });
