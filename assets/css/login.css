@@ -43,11 +43,11 @@ img {
 }
 
 input#username {
-    background: url(../img/user.png) no-repeat 94% center;
+    background: url(../img/user.png) no-repeat 95% center;
 }
 
 input#password {
-    background: url(../img/password.png) no-repeat 94% center;
+    background: url(../img/password.png) no-repeat 95% center;
 }
 
 .container > .form > .form-group {
@@ -56,18 +56,18 @@ input#password {
 
 .container > .form .form-group input {
     box-shadow: none;
+    border: 1px solid #d8d8d8;
     color: #464646;
+    background-color: #fff;
     font-size: 18px;
     border-radius: 0px;
-    border: 1px solid #d8d8d8;
     line-height: 30px;
     height: 60px;
-    padding: 16px 20px;
+    padding: 16px 60px 16px 20px;
 }
 
 .container > .form input:focus {
     box-shadow: none;
-    border: 1px solid #d8d8d8;
 }
 
 #submit {
@@ -110,3 +110,4 @@ input#password {
 :-ms-input-placeholder { /* Internet Explorer 10+ */
     color: #a7a7a7;
 }
+
