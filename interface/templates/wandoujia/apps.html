@@ -162,7 +162,7 @@
         $install.click(function() {
             var linkEls = $appList.find(".app.selected a.install-link").toArray();
             _.each(linkEls, function(el) {
-                $(el).click();
+                el.click();
             });
             /*
             async.eachSeries(linkEls, function(item, callback) {
