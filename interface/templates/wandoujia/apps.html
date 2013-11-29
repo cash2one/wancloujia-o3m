@@ -51,10 +51,8 @@
         </div>
 
     <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.9.1.min.js"></script>
-    <!--
     <script type="text/javascript" src="{{ STATIC_URL }}js/require.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}wandoujia/js/Narya.js"></script>
-    -->
     <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.cookie.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/async.min.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
@@ -134,13 +132,31 @@
             show_tip();
         }
 
+        function get_brand() {
+            var build = Narya.Device.get("build");
+            return build ? (build.get("brand") || "") : "";
+        }
+
+        function get_model() {
+            var build = Narya.Device.get("build");
+            return build ? (build.get("model") || "") : "";
+        }
+
         $(".app-list").on("click", "a.install-link", function() {
             var $this = $(this);
             var username = $.cookie("username");
             var appid = $this.data("id");
             var package = $this.data("package");
-            console.log(username, appid, package);
-            Log({event: "install", user: username, app: appid, package: package});
+            var log = {
+                event: "install", 
+                user: username, 
+                app: appid, 
+                package: package, 
+                brand: get_brand(), 
+                model: get_model()
+            };
+            console.log(log);
+            Log(log);
         });
 
         $install.click(function() {
