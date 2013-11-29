@@ -156,7 +156,10 @@ def user(request):
 
     if request.user.is_superuser or request.user.is_staff:
         organizations = Organization.objects.all()
-        query_set = Staff.objects.exclude(is_superuser=True)
+        if request.user.is_superuser:
+            query_set = Staff.objects.exclude(is_superuser=True)
+        else:
+            query_set = Employee.objects.all()
     else:
         user = cast_staff(request.user)
         if user.in_store():
