@@ -26,6 +26,8 @@ $(function() {
 
     $apps.select2({
         tags: [],
+        formatSearching: function() { return "搜索中..."; },
+        formatNoMatches: function() { return "没有搜索结果"; },
         ajax: {
             url: '/app/search_apps/',
             dataType: 'json',

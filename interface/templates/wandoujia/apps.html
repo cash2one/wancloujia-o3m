@@ -33,7 +33,8 @@
                             </span>
                             <span class="meta">
                                 <span>{{ app.version }}&nbsp;&nbsp;{{ app.size }}</span>
-                                <a  data-id="{{ app.id }}" class="btn install-link"
+                                <a  data-id="{{ app.id }}" download="{{ app.name }}.apk" 
+                                    class="btn install-link"
                                     data-package="{{ app.package }}" 
                                     href="{{ MEDIA_URL }}{{ app.apk }}#name={{ app.name }}&icon=http://{{ request.META.HTTP_HOST }}{{ app.icon }}&content-type=application&md5=" >安装</a>
                             </span>    
@@ -50,10 +51,8 @@
         </div>
 
     <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.9.1.min.js"></script>
-    <!--
     <script type="text/javascript" src="{{ STATIC_URL }}js/require.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}wandoujia/js/Narya.js"></script>
-    -->
     <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.cookie.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/async.min.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
@@ -133,24 +132,47 @@
             show_tip();
         }
 
+        function get_brand() {
+            var build = Narya.Device.get("build");
+            return build ? (build.get("brand") || "") : "";
+        }
+
+        function get_model() {
+            var build = Narya.Device.get("build");
+            return build ? (build.get("model") || "") : "";
+        }
+
         $(".app-list").on("click", "a.install-link", function() {
             var $this = $(this);
             var username = $.cookie("username");
             var appid = $this.data("id");
             var package = $this.data("package");
-            console.log(username, appid, package);
-            Log({event: "install", user: username, app: appid, package: package});
+            var log = {
+                event: "install", 
+                user: username, 
+                app: appid, 
+                package: package, 
+                brand: get_brand(), 
+                model: get_model()
+            };
+            console.log(log);
+            Log(log);
         });
 
         $install.click(function() {
             var linkEls = $appList.find(".app.selected a.install-link").toArray();
+            _.each(linkEls, function(el) {
+                $(el).click();
+            });
+            /*
             async.eachSeries(linkEls, function(item, callback) {
-                var time = linkEls.indexOf(item) == 0 ? 4 : 500;
+                var time = linkEls.indexOf(item) == 0 ? 4 : 300;
                 setTimeout(function() {
                     item.click();
                     callback(null);
                 }, time);
             });
+            */
         });
     });
     </script>
