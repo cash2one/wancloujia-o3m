@@ -55,6 +55,7 @@ def reset_password(request, form):
         logger.warn(f.errors)
         return _invalid_data_json
 
+    logger.debug("password: " + f.cleaned_data["password"])
     user = User.objects.get(pk=form["id"])
     user.set_password(f.cleaned_data["password"])
     user.save()
