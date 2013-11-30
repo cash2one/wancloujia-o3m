@@ -26,7 +26,6 @@ def account(request):
     })
 
 
-
 def can_view_organization(user):
     if user.is_superuser or user.is_staff:
         return True

@@ -15,7 +15,8 @@ def login(request, username, password, remember_me):
     form = LoginForm({'username': username, 'password': password})
     if not form.is_valid():
         logger.debug("form is invalid")    
-        return simplejson.dumps({'ret_code': 1000, 'ret_msg': u'用户名或密码不正确！'})
+        logger.warn(form.errors)
+        return simplejson.dumps({'ret_code': 1000, 'ret_msg': u'用户名或密码格式不正确！'})
 
     data = form.cleaned_data
     logger.debug("username: %s; password: %s" % (data['username'], data['password']))

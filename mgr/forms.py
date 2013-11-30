@@ -8,15 +8,16 @@ from parsley.decorators import parsleyfy
 
 from models import *
 from suning.permissions import *
+from suning.user_constraits import PWD_MAX_LEN, PWD_MIN_LEN
 
 @parsleyfy
 class ModifyPasswordForm(forms.Form):
     origin = forms.CharField(label=u'旧密码', max_length=16, min_length=6,
                              widget=forms.PasswordInput())
     password = forms.CharField(label=u'新密码', help_text='6~16个字符，区分大小写', 
-                               max_length=16, min_length = 6, 
+                               max_length=PWD_MAX_LEN, min_length=PWD_MIN_LEN, 
                                widget=forms.PasswordInput())
-    confirm = forms.CharField(label=u'确认密码', max_length=16, min_length=6,
+    confirm = forms.CharField(label=u'确认密码', max_length=PWD_MAX_LEN, min_length=PWD_MIN_LEN,
                               widget=forms.PasswordInput(attrs={'data-equal': 'password'}))
 
     def clean(self):
