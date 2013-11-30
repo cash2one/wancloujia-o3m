@@ -29,6 +29,7 @@ from ad.models import AD
 
 import zlib
 
+logger = logging.getLogger('windows2x.post')
 
 class JSONResponse(HttpResponse):
     """
@@ -209,13 +210,3 @@ def apps(request, id):
     apps = map(_get_app, appgrps)
     return render(request, "wandoujia/apps.html", {"subject": subject, "apps": apps})
 
-
-
-logger = logging.getLogger('windows2x.post')
-logger.setLevel(logging.INFO)
-filename = 'logs/windows2x'
-hdlr = logging.handlers.TimedRotatingFileHandler(filename, 'M', 1, 7)
-hdlr.suffix = '%Y-%m-%d.log'
-formatter = logging.Formatter('[windows2x]%(message)s')
-hdlr.setFormatter(formatter)
-logger.addHandler(hdlr)
