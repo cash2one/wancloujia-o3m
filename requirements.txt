@@ -2,7 +2,7 @@ django==1.5.5
 django_select2
 django-tables2
 django-dajaxice
-django-parsley
+django-parsley==0.1
 django-crontab
 django-auth-remember
 python-memcached
