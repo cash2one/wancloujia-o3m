@@ -164,7 +164,6 @@ def subjects(request):
                 "size": bitsize(get_subject_total_size(item)),       
             })        
     
-    #return render(request, "wandoujia/subjects.html", {"subjects": [], "ads": []})
     return render(request, "wandoujia/subjects.html", {"subjects": results, "ads": ads})
 
 
