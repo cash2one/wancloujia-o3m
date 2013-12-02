@@ -1,5 +1,5 @@
-<form data-provide="search-form" class="search pull-right" 
-		method="GET" action="{{ action|default:"." }}">
+<div class="search pull-right">
+<form data-provide="search-form" method="GET" action="{{ action|default:"." }}">
     <input class="query" type="text" name="{{ query_name|default:"q" }}" 
     		value="{{ query|default:"" }}">
 
@@ -20,4 +20,4 @@
         <span class="glyphicon glyphicon-remove"></span>
     </button>
 </form>
-
+</div>
