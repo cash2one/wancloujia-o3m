@@ -34,7 +34,7 @@ class ResetPasswordForm(forms.Form):
                                max_length=16, min_length = 6, 
                                widget=forms.PasswordInput())
     confirm = forms.CharField(label=u'确认密码', max_length=16, min_length=6,
-                              widget=forms.PasswordInput(attrs={'data-equal': 'password'}))
+                              widget=forms.PasswordInput(attrs={'parsley-equal': 'password'}))
 
 
 class TextInput(forms.TextInput):
