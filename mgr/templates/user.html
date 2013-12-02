@@ -69,8 +69,13 @@ td.username, td.realname {
 <script type="text/javascript">
 var parsley_options = $.extend({}, parsley.bs_options, {
     validators: {
-        phone: function(val) {
-            return /^\d{11}$/.test(val);
+        phone: function() {
+            return {
+                validate: function(val) {
+                    return /^\d{11}$/.test(val);
+                }, 
+                priority: 2
+            };
         }
     }, messages: {
         phone: '请输入正确的手机号码'

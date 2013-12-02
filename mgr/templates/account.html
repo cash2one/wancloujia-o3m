@@ -92,8 +92,13 @@ $(function() {
 
     var options = $.extend({}, parsley.bs_options, {
         validators: {
-            equal: function(val, name) {
-                return form[name].value == val;
+            equal: function() {
+                return {
+                    validate: function(val, name) {
+                        return form[name].value == val;
+                    }, 
+                    priority: 2
+                };
             }
         }, messages: {
             equal: '两次输入的密码不相同'
@@ -125,9 +130,7 @@ $(function() {
     }
     
     $saveBtn.click(function() {
-        if (!$form.parsley('validate')) {
-            return;
-        }
+        if (!$form.parsley('validate')) return;
 
         loading();
         Dajaxice.mgr.modify_password(
