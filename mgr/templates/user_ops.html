@@ -21,8 +21,7 @@
     data-organization="{{ record|get_organization_id }}"
     data-groups='{% qs_attr record.groups.all "pk" %}'
     data-permissions='{% qs_attr record.user_permissions.all "pk" %}'
-    {% endif %}
-    >
+    {% endif %}>
 
     <button type="button"  
             {% if request.user|is_employee and not perms.mgr.change_staff %}

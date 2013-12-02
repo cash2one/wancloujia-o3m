@@ -3,7 +3,7 @@ import logging
 import random
 
 from django.utils import simplejson
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group, Permission
 from django.core.mail import EmailMultiAlternatives
 from django.template import Context, loader
 from dajaxice.decorators import dajaxice_register
@@ -111,10 +111,24 @@ def add_edit_admin(request, form):
         return _ok_json
 
 
+def _modify_groups_and_permissions(id, groups, permissions):
+    employee = Employee.objects.get(pk=id)
+    logger.debug("%s groups: %s" % (__name__, groups))
+    logger.debug("%s permissions: %s" % (__name__, permissions))
+    employee.groups=Group.objects.filter(pk__in=groups)
+    employee.user_permissions=Permission.objects.filter(pk__in=permissions)
+    employee.save()
+    logger.debug("%s employee.permissions: %s" % (__name__, employee.user_permissions.all()))
+    logger.debug("%s employee.groups: %s" % (__name__, employee.groups.all()))
+
+
 @dajaxice_register(method='POST')
 @check_login
-@preprocess_form
-def add_edit_employee(request, form):
+def add_edit_employee(request, form, permissions):
+    form = deserialize_form(form)
+    logger.debug("form: " + str(map(lambda k: (k, form[k]), form)))
+    logger.debug("permissions:" + permissions)
+
     f = EmployeeForm(form)
     if not f.is_valid():
         logger.warn("add_edit_employee: form is invalid")
@@ -128,9 +142,7 @@ def add_edit_employee(request, form):
         password = str(random.randrange(100000, 999999))
         employee.set_password(password)
         employee.save()
-        f.save_m2m()
         _notify(employee, password)
-        return _ok_json
     else:
         id = form["id"]
         if User.objects.exclude(pk=id).filter(username=employee.username).exists():
@@ -139,7 +151,16 @@ def add_edit_employee(request, form):
         #fixme
         employee.password = Employee.objects.get(pk=id).password
         employee.save()
-        f.save_m2m()
+
+    if not request.user.is_staff and not request.user.is_superuser:
+        return _ok_json
+
+    if permissions is not None and form.has_key("groups"):
+        logger.debug("modify employee's groups and permissions")
+        groups = form["groups"]
+        permissions = [int(p) for p in permissions.split(",")] if permissions else []
+        groups = [int(g) for g in groups.split(",")] if groups else []
+        _modify_groups_and_permissions(employee.pk, groups, permissions)
         return _ok_json
 
 

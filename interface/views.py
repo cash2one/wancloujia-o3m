@@ -164,14 +164,12 @@ def subjects(request):
                 "size": bitsize(get_subject_total_size(item)),       
             })        
     
-    #return render(request, "wandoujia/subjects.html", {"subjects": [], "ads": []})
     return render(request, "wandoujia/subjects.html", {"subjects": results, "ads": ads})
 
 
 def get_subject_total_size(subject):
     grps = AppGroup.objects.filter(subject__pk=subject.pk).filter(app__online=True)
     return reduce(lambda acc, grp: acc + grp.app.size(), grps, 0)
-
 
 
 @api_view(['GET', 'POST'])
