@@ -10,6 +10,7 @@ from models import *
 from suning.permissions import *
 from suning.user_constraits import PWD_MAX_LEN, PWD_MIN_LEN
 
+
 @parsleyfy
 class ModifyPasswordForm(forms.Form):
     origin = forms.CharField(label=u'旧密码', max_length=16, min_length=6,
@@ -25,6 +26,7 @@ class ModifyPasswordForm(forms.Form):
         if data["password"] != data["confirm"]:
             raise forms.ValidationError(u"两次输入的密码不相同")
         return data
+
 
 @parsleyfy
 class ResetPasswordForm(forms.Form):
@@ -63,8 +65,9 @@ class EmployeeForm(forms.ModelForm):
         widgets = {
             'introduce': forms.Textarea(attrs={'class': 'form-control', 'rows': 4})
         }
-        fields = ('id', 'username', 'realname', 'organization', 'phone', 'email', 
-                  'tel', 'introduce', 'groups', 'user_permissions')
+        fields = ('id', 'username', 'realname', 'organization', 
+                    'phone', 'email', 'tel', 'introduce')
+
 
 @parsleyfy
 class AdminForm(forms.ModelForm):

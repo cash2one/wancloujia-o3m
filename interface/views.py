@@ -172,7 +172,6 @@ def get_subject_total_size(subject):
     return reduce(lambda acc, grp: acc + grp.app.size(), grps, 0)
 
 
-
 @api_view(['GET', 'POST'])
 @parser_classes((JSONParser,))
 def echo(request):

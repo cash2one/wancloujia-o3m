@@ -1,6 +1,7 @@
 #coding: utf-8
 import logging
 
+from django import forms
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.db.models.query import QuerySet
@@ -9,10 +10,11 @@ from django.views.decorators.http import require_GET
 from django_tables2.config import RequestConfig
 
 from suning import settings
+from suning import permissions
+from suning.decorators import active_tab
 from mgr.models import cast_staff, Staff, Company, Store
 from mgr.forms import *
 from mgr.tables import *
-from suning.decorators import active_tab
 
 logger = logging.getLogger(__name__)
 
@@ -185,11 +187,24 @@ def user(request):
     adminForm = AdminForm()
     resetPasswordForm = ResetPasswordForm()
     RequestConfig(request, paginate={"per_page": settings.PAGINATION_PAGE_SIZE}).configure(table) 
+
+    groupsWidget = None
+    permissionsWidget = None
+    if request.user.is_superuser or request.user.is_staff:
+        groupChoices=[(g.pk, g.name) for g in Group.objects.all()]
+        groupChoices.insert(0, ("", "-------"))
+        groupsWidget = forms.Select(choices=groupChoices)
+        permissionsWidget = forms.SelectMultiple(choices=permissions.get_available_permissions())
+
     return render(request, "user.html", {
         "table": table,
         "query": query,
+
+        "groupsWidget": groupsWidget,
+        "permissionsWidget": permissionsWidget,
         "employeeForm": employeeForm,
+
         "adminForm": adminForm,
-        "resetPasswordForm": resetPasswordForm
+        "resetPasswordForm": resetPasswordForm,
     })
 

@@ -1,5 +1,6 @@
 {% extends "modal.html" %}
 {% load perm_filters %}
+{% load widget_filters %}
 
 {% block title %}新增普通用户{% endblock %}
 
@@ -57,22 +58,21 @@
         <div class="col-lg-8"> {{ f.introduce }} </div>
     </div>
 
-    <div class="form-group"
-        {% if request.user|is_employee %}
-        style="display: none"
-        {% endif %}>
-        <label class="col-lg-3 control-label"> 所属组 </label>
-        <div class="col-lg-8"> {{ f.groups }} </div>
+    {% if groupsWidget %}
+    <div class="form-group">
+        <label class="col-lg-3 control-label">所属组</label>
+        <div class="col-lg-8"> {{ groupsWidget|render:"groups" }} </div>
     </div>
-    <div class="form-group"
-        {% if request.user|is_employee %}
-        style="display: none"
-        {% endif %}>
-        <label class="col-lg-3 control-label"> 授权权限 </label>
+    {% endif %}
+
+    {% if permissionsWidget %}
+    <div class="form-group">
+        <label class="col-lg-3 control-label">授权权限</label>
         <div class="col-lg-8">
-            {{ f.user_permissions }}
+            {{ permissionsWidget|render:"user_permissions" }}
         </div>
     </div>
+    {% endif %}
 </form>
 {% endblock %}
 

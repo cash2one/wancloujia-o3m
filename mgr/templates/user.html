@@ -54,7 +54,7 @@ td.username, td.realname {
     </div>
 </div>
 
-{% include "employee_modal.html" with modal_id="add-edit-employee" f=employeeForm %}
+{% include "employee_modal.html" with modal_id="add-edit-employee" f=employeeForm groupsWidget=groupsWidget permissionsWidget=permissionsWidget %}
 
 {% if request.user.is_superuser %}
 {% include "admin_modal.html" with modal_id="add-edit-admin" f=adminForm %}
@@ -382,6 +382,10 @@ $(function() {
         }
         
         var func = Dajaxice.mgr.add_edit_employee
+        var permissions = "";
+        if(form.user_permissions) {
+            permissions = ($(form.user_permissions).val() || []).join(",");
+        }
         loading();
         func(btn_check
             (login_check
@@ -392,8 +396,9 @@ $(function() {
             toast('success', msg);
             $modal.modal('hide');
             suning.reload(2000);
-        })))), { 
-            form: $form.serialize(true) 
+        })))),  {
+            form: $form.serialize(true),
+            permissions: permissions
         }, {
             error_callback: btn_check(function() {
                 toast('error', NETWORK_ERROR_MSG);
