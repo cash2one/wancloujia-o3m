@@ -89,13 +89,15 @@ class AdminForm(forms.ModelForm):
 
 @parsleyfy
 class CompanyForm(forms.Form):
-    code = forms.CharField(label=u'编码', max_length=20)
+    code = forms.CharField(label=u'编码', max_length=20, 
+                            widget=forms.TextInput(attrs={"parsley-type": "digits"}))
     name = forms.CharField(label=u'名称', max_length=20)
     
 
 @parsleyfy
 class StoreForm(forms.ModelForm):
-    code = forms.CharField(label=u'编码', max_length=20)
+    code = forms.CharField(label=u'编码', max_length=20, 
+                            widget=forms.TextInput(attrs={"parsley-type": "digits"}))
     name = forms.CharField(label=u'名称', max_length=20)
     
     class Meta:
