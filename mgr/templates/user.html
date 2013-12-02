@@ -13,6 +13,10 @@
 td.username, td.realname {
     width: 110px;
 }
+
+.panel-heading {
+    height: 40px;
+}
 </style>
 
 {% endblock %}
@@ -45,7 +49,7 @@ td.username, td.realname {
 
     <div class="panel panel-default">
         <div class="panel-heading">
-            用户列表
+            <div class="pull-left">用户列表</div>
             {% include "search_form.html" with query=query %}
         </div>
         <div class="panel-body">

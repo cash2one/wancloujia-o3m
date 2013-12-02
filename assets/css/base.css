@@ -186,12 +186,16 @@ table.table-bordered>thead>tr>th {
     border-bottom-width: 1px;
 }
 
-form.search {
+.search {
+    zoom: 1;
+}
+
+.search form {
     margin-top: -5px;
     position: relative;
 }
 
-form.search input[type=text] {
+.search input[type=text] {
     height: 30px;
     border: 1px solid #DDD;
     font-size: 14px;
@@ -204,22 +208,19 @@ form.search input[type=text] {
 }
 
 
-form.search input[type=text]:focus {
+.search input[type=text]:focus {
     border: 1px solid #66AFE9;
     background: #fff;
     outline: none;
 }
 
-form.search button {
+.search button {
     position: absolute;
     top: 0px;
     right: 0px;
     border: none;
     padding: 5px 9px;
     outline: none;
-}
-
-form.search button {
     color: #444;
 }
 
