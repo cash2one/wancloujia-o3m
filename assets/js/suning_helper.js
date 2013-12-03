@@ -32,6 +32,19 @@
 window.NETWORK_ERROR_MSG = '网路异常，请稍后重试';
 
 (function() {
+    var select2_tip_options = {
+        formatSearching: function() {
+            return "搜索中...";
+        },
+        formatNoMatches: function() {
+            return "没有搜索结果";
+        },
+    };
+
+    window.select2_tip_options = select2_tip_options;
+})();
+
+(function() {
     var RET_OK = 0;
     var RET_NOT_LOGIN = 1001;
 
