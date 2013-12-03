@@ -43,6 +43,7 @@ def cast_staff(user):
 
 class Organization(models.Model):
     real_type = models.ForeignKey(ContentType, editable=False)
+    parent = mdoels.ForeignKey(Organization)
 
     def save(self, *args, **kwargs):
         if not self.id:
@@ -59,21 +60,26 @@ class Organization(models.Model):
         return self.cast().name
 
 
+class Region(Organization):
+    name = models.CharField(verbose_name=u'名称',max_length=200, unique=True)
+
+    class Meta:
+        verbose_name = u'大区'
+
 class Company(Organization):
     code = models.CharField(verbose_name=u'编码', max_length=20, unique=True)
     name = models.CharField(verbose_name=u'名称', max_length=200, unique=True)
 
     class Meta:
-        verbose_name = '公司'
+        verbose_name = u'公司'
 
 
 class Store(Organization):
-    company = models.ForeignKey(Company, verbose_name=u'公司')
     code = models.CharField(verbose_name=u'编码', max_length=20, unique=True)
     name = models.CharField(verbose_name=u'名称', max_length=200, unique=True)
 
     class Meta:
-        verbose_name = '门店'
+        verbose_name = u'门店'
     
 
 class Employee(Staff):
