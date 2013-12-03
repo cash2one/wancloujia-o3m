@@ -24,14 +24,8 @@ $(function() {
         return results;
     }
 
-    $apps.select2({
+    var select2_options = $.extend({}, select2_tip_options, {
         tags: [],
-        formatSearching: function() {
-            return "搜索中...";
-        },
-        formatNoMatches: function() {
-            return "没有搜索结果";
-        },
         ajax: {
             url: '/app/search_apps/',
             dataType: 'json',
@@ -65,6 +59,7 @@ $(function() {
         }
     });
 
+    $apps.select2(select2_options);
     $apps.select2("container").find("ul.select2-choices").sortable({
         containment: 'parent',
         start: function() {
