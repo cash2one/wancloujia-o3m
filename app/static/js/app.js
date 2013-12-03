@@ -185,10 +185,10 @@ $(function() {
             $(template(option)).appendTo($category);
         });
         $category.val('').trigger('change');
-        $category.select2();
+        $category.select2(select2_tip_options);
     });
-    $category.select2();
-    $parent.select2();
+    $category.select2(select2_tip_options);
+    $parent.select2(select2_tip_options);
     set_category();
 
     $modal.on('show.bs.modal', function() {
