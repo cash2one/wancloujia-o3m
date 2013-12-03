@@ -8,3 +8,5 @@ django-auth-remember
 python-memcached
 pil
 djangorestframework
+redis
+jinja2
