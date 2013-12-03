@@ -275,7 +275,7 @@ LOGGING = {
         }
     },
     'root': {
-        'handlers': ['default', 'console'],
+        'handlers': ['default'],
         'level': 'DEBUG',
         'propagate': False,
     }
