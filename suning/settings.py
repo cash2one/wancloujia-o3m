@@ -38,10 +38,10 @@ CACHES = {
     }
 }
 
-EMAIL_PORT="25"
 EMAIL_HOST="smtp.qq.com"
 EMAIL_HOST_USER="491320274"
 EMAIL_HOST_PASSWORD="bachisback1"
+FROM_EMAIL = "491320274@qq.com"
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
@@ -235,6 +235,10 @@ LOGGING = {
             'backupCount': 5,
             'formatter':'standard',
         },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler'
+        },
         'windows2x': {
             'level':'INFO',
             'class':'logging.handlers.TimedRotatingFileHandler',
@@ -271,7 +275,7 @@ LOGGING = {
         }
     },
     'root': {
-        'handlers': ['default'],
+        'handlers': ['default', 'console'],
         'level': 'DEBUG',
         'propagate': False,
     }

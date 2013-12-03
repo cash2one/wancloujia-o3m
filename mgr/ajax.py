@@ -2,15 +2,15 @@
 import logging
 import random
 
+import redis
 from django.utils import simplejson
 from django.contrib.auth.models import User, Group, Permission
-from django.core.mail import EmailMultiAlternatives
-from django.template import Context, loader
 from dajaxice.decorators import dajaxice_register
 from dajaxice.utils import deserialize_form
 from suning import settings
 
 from suning.decorators import *
+from suning.service import notify
 from forms import *
 from models import *
 
@@ -62,25 +62,6 @@ def reset_password(request, form):
     return _ok_json
 
 
-def _notify(user, password):
-    link = "suning.wandoujia.com"
-    t = loader.get_template("notify.html")
-    content = t.render(Context({
-        'realname': user.realname,
-        'username': user.username, 
-        'password': password, 
-        'link': link
-    }))
-    from_email = "491320274@qq.com"
-    subject = u'苏宁豌豆荚手机助手后台账号已经开通'
-    msg = EmailMultiAlternatives(subject, content, from_email, (user.email,))
-    msg.attach_alternative(content, "text/html")  
-    try:
-        msg.send()
-    except Exception as e:
-        logger.exception(e)
-
-
 @dajaxice_register(method='POST')
 @check_login
 @preprocess_form
@@ -98,7 +79,7 @@ def add_edit_admin(request, form):
         password = str(random.randrange(100000, 999999))
         admin.set_password(password)
         admin.save()
-        _notify(admin, password)
+        notify(admin, password)
         return _ok_json
     else:
         id = form["id"]
@@ -142,7 +123,7 @@ def add_edit_employee(request, form, permissions):
         password = str(random.randrange(100000, 999999))
         employee.set_password(password)
         employee.save()
-        _notify(employee, password)
+        notify(employee, password)
     else:
         id = form["id"]
         if User.objects.exclude(pk=id).filter(username=employee.username).exists():
