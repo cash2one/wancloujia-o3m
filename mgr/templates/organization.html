@@ -18,6 +18,9 @@
             </a>
             <ul class="dropdown-menu" role="menu">
                 {% if request.user.is_superuser or request.user.is_staff %}
+                <li><a data-toggle="modal" href="#add-edit-region">新增大区</a></li>
+                {% endif %}
+                {% if request.user|can_add_company %}
                 <li><a data-toggle="modal" href="#add-edit-company">新增公司</a></li>
                 {% endif %}
                 {% if request.user.is_superuser or request.user.is_staff or perms.mgr.add_organization %}
@@ -29,8 +32,20 @@
 
     <div class="panel panel-default">
         <div class="panel-heading">
-            公司列表
+            大区列表
             {% if user|is_not_employee %}
+            {% include "search_form.html" with query_name='rq' query=rq %}
+            {% endif %}
+        </div>
+        <div class="panel-body"> 
+            {% render_table regionTable "table_template.html" %}
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            公司列表
+            {% if user|is_not_employee or reqest.user|in_region %}
             {% include "search_form.html" with query_name='cq' query=cq %}
             {% endif %}
         </div>
@@ -52,6 +67,7 @@
     </div>
 </div>
 
+{% include "region_modal.html" with modal_id="add-edit-region" f=regionForm %}
 {% include "company_modal.html" with modal_id="add-edit-company" f=companyForm %}
 {% include "store_modal.html" with modal_id="add-edit-store" f=storeForm %} 
 {% include "delete_organization_modal.html" with modal_id="delete-organization"%} 
@@ -59,211 +75,7 @@
 
 {% block js %}
 {{ block.super }}
-<script type="text/javascript">
-$(function() {
-    $("select").select2(select2_tip_options);
-});
-
-var error_check = suning.decorators.error_check;
-var login_check = suning.decorators.login_check;
-var toastNetworkError = suning.toastNetworkError;
-
-$(function() {
-    var $modal = $("#add-edit-company");
-    var $form = $("form", $modal);
-    var form = $form[0];
-    var $saveBtn = $(".save", $modal);
-    var $cancelBtn = $(".cancel", $modal);
-
-    $("table.companies").on("click", ".edit", function() {
-        var company = $(this.parentNode).data();
-        form.id.value = company.id;
-        form.code.value = company.code;
-        form.name.value = company.name;
-        $modal.modal('show');
-    });
-
-    function btn_check(func) {
-        return function(data) {
-            suning.modal.unlock($modal);
-            func(data);
-        }
-    }
-
-    $modal.on('show.bs.modal', function() {
-        $form.parsley(parsley.bs_options);
-        var title = form.id.value == "" ? '添加公司' : '编辑公司';
-        suning.modal.setTitle($modal, title);
-    });
-
-    $modal.on('hide.bs.modal', function() {
-        form.name.value = "";
-        form.code.value = "";
-        form.id.value = "";
-        $form.parsley('destroy');
-    });
-
-    function field_check(func) {
-        return function(data) {
-            if(data.ret_code != 0 && data.field) {
-                suning.modal.highlightError(form, data.field);
-                toast('error', data.error);
-                return;
-            }
-
-            func(data);
-        }
-    }
-
-    $saveBtn.click(function() {
-        $form.submit();
-    });
-
-    $form.submit(function(e) {
-        e.preventDefault();
-        if (!$form.parsley('validate')) return;
-
-        suning.modal.lock($modal);
-        Dajaxice.mgr.add_edit_company(btn_check
-            (login_check
-            (field_check
-            (error_check
-            (function(data) {
-                var msg = !form.id.value ? '新增公司成功' : '公司信息修改成功';
-                toast('success', msg);
-                $modal.modal('hide');
-                suning.reload(2000);
-        })))), {
-            form: $form.serialize(true)
-        }, {
-            error_callback: btn_check(function() {
-                toast('error', NETWORK_ERROR_MSG);
-            })
-        });
-    });
-});
-
-$(function() {
-    var $modal = $("#add-edit-store");
-    var $form = $("form", $modal);
-    var form = $form[0];
-    var $saveBtn = $(".save", $modal);
-    var $cancelBtn = $(".cancel", $modal);
-
-    $("table.stores").on("click", ".edit", function() {
-        var store = $(this.parentNode).data();
-        form.id.value = store.id;
-        $(form.company).val(store.company).trigger('change');
-        form.code.value = store.code;
-        form.name.value = store.name;
-        $modal.modal('show');
-    });
-
-    $modal.on('show.bs.modal', function() {
-        $form.parsley(parsley.bs_options);
-        var title = form.id.value == "" ? '添加门店' : '编辑门店';
-        $(".modal-title", $modal).html(title);
-    });
-
-    $modal.on('hide.bs.modal', function() {
-        form.id.value = "";
-        form.code.value = "";
-        form.name.value = "";
-        $(form.company).val("").trigger('change');
-        $form.parsley('destroy');
-    });
-
-    $saveBtn.click(function() {
-        $form.submit();
-    });
-
-    function btn_check(func) {
-        return function(data) {
-            suning.modal.unlock($modal);
-            func(data);
-        }
-    }
-
-    function field_check(func) {
-        return function(data) {
-            if(data.ret_code != 0 && data.field) {
-                parsley.highlightError(data.field);
-                toast('error', data.error);
-                return;
-            }
-
-            func(data);
-        }
-    }
-
-    $form.submit(function(e) {
-        e.preventDefault();
-        if (!$form.parsley('validate')) return;
-
-        suning.modal.lock($modal);
-        Dajaxice.mgr.add_edit_store(btn_check
-            (login_check
-            (field_check
-            (error_check
-            (function(data) {
-                var msg = !form.id.value ? '新增门店成功' : '门店信息修改成功';
-                toast('success', msg);
-                suning.reload(2000);
-                $modal.modal('hide');
-        })))), {
-            form: $form.serialize(true)
-        }, {
-            error_callback: btn_check(toastNetworkError)
-        });
-    });
-});
-
-$(function() {
-    var organization = null;
-    var $modal = $("#delete-organization");
-    $("table").on('click', '.delete', function() {
-        organization = $(this.parentNode).data();
-        $('.organization-name', $modal).html(organization.name);
-        $modal.modal('show');
-    });
-
-    var $saveBtn = $('.save', $modal);
-    var $cancelBtn = $('.cancel', $modal);
-
-    function loading() {
-        $saveBtn.button('loading');
-        $cancelBtn.button('loading');
-    }
-
-    function reset() {
-        $saveBtn.button('reset');
-        $cancelBtn.button('reset');
-    }
-
-    function btn_check(func){
-        return function(data) {
-            reset();
-            func(data);
-        }
-    }
-
-    $saveBtn.click(function() {
-        loading();
-        Dajaxice.mgr.delete_organization(btn_check
-            (login_check
-            (error_check
-            (function(data) {
-                toast('success', '删除成功');
-                $modal.modal('hide');
-                suning.reload(2000);
-        }))), {id: organization.id}, {
-            error_callback: function() {
-                reset();
-                toast('error', NETWORK_ERROR_MSG);
-            }
-        });
-    });
-});
-</script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/form_modal.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/organization.js"></script>
 {% endblock %}
 

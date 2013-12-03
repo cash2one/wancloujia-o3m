@@ -3,6 +3,7 @@ data_backup.json
 wandoujia.zip
 suning.zip
 *log
+dump.rdb
 
 # wandoujia extension
 *.wdx

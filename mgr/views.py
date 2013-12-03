@@ -12,7 +12,7 @@ from django_tables2.config import RequestConfig
 from suning import settings
 from suning import permissions
 from suning.decorators import active_tab
-from mgr.models import cast_staff, Staff, Company, Store
+from mgr.models import cast_staff, Staff, Company, Store, Region
 from mgr.forms import *
 from mgr.tables import *
 
@@ -78,46 +78,71 @@ def can_delete_store(user):
 def organization(request):
     companyForm = CompanyForm()
     storeForm = StoreForm()
+    regionForm = RegionForm()
 
     if request.user.is_superuser or request.user.is_staff:
         store_query_set = Store.objects.all()
         company_query_set = Company.objects.all()
+        region_query_set = Region.objects.all()
     else:
         user = cast_staff(request.user)
         organization = user.organization.cast()
+        #TODO 直接构造QuerySet
         if organization.real_type == ContentType.objects.get_for_model(Store):
             store = organization
-            company = store.company
-            #TODO 直接构造QuerySet
+            company = store.parent()
+            region = company.parent()
             store_query_set = Store.objects.filter(pk=store.pk)
             company_query_set = Company.objects.filter(pk=company.pk)
-        else:
+            region_query_set = Region.objects.filter(pk=region.pk)
+        elif organization.real_type == ContentType.objects.get_for_model(Company):
             company = organization
-            #TODO 直接构造QuerySet
+            region_query_set = Region.objects.filter(pk=company.parent().pk)
             company_query_set = Company.objects.filter(pk=company.pk)
-            store_query_set = Store.objects.filter(company=company)
+            store_query_set = company.children()
             storeForm.fields["company"].queryset = company_query_set
+        else:
+            region = organization
+            region_query_set = Region.objects.filter(pk=region.pk)
+            company_query_set = region.children()
+            store_query_set = Store.objects.filter(company__in=company_query_set)
+            companyForm.fields["region"].queryset = region_query_set
+            storeForm.fields["region"].queryset = company_query_set
 
+    rq = request.GET.get("rq", None)
+    if rq:
+        region_query_set = region_query_set.filter(name__contains=rq)
     cq = request.GET.get("cq", None)
     if cq:
         company_query_set = company_query_set.filter(Q(code__contains=cq) | Q(name__contains=cq))
-
     sq = request.GET.get("sq", None)
     if sq:
         store_query_set = store_query_set.filter(Q(code__contains=sq) | Q(name__contains=sq))
 
+    regionTable = RegionTable(region_query_set)
     storeTable = StoreTable(store_query_set)
     companyTable = CompanyTable(company_query_set)
 
+    if rq:
+        regionTable.empty_text = settings.NO_SEARCH_RESULTS
+    if cq:
+        companyTable.empty_text = settings.NO_SEARCH_RESULTS
+    if sq:
+        storeTable.empty_text = settings.NO_SEARCH_RESULTS
+
+    RequestConfig(request, paginate={"per_page": 5}).configure(regionTable)
     RequestConfig(request, paginate={"per_page": 5}).configure(companyTable)
     RequestConfig(request, paginate={"per_page": 5}).configure(storeTable)
     return render(request, "organization.html", {
         "cq": cq,
         "sq": sq,
+        "rq": rq,
         "companyForm": companyForm,
         "companyTable": companyTable,
         "storeForm": storeForm,
-        "storeTable": storeTable
+        "storeTable": storeTable,
+        'regionForm': regionForm,
+        'regionTable': regionTable
     });
 
 

@@ -1,2 +1,2 @@
-drop database suning;
-create database suning;
+drop database region;
+create database region;

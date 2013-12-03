@@ -146,6 +146,31 @@ def add_edit_employee(request, form, permissions):
 
 
 @dajaxice_register(method='POST')
+@check_login
+@preprocess_form
+def add_edit_region(request, form):
+    f = RegionForm(form)
+    if not f.is_valid():
+        logger.warn("%s: data is invalid" % __name__)
+        logger.warn(f.errors)
+        return _invalid_data_json
+
+    if form["id"] == '':
+        region = Region(name=f.cleaned_data["name"])
+        if Region.objects.filter(name=region.name).exists():
+            return simplejson.dumps({'ret_code': 1000, 'field': 'name', 'error': u'大区名已存在'})
+        region.save()
+    else:
+        region = Region.objects.get(pk=form["id"])
+        region.name = f.cleaned_data["name"]
+        if Region.objects.exclude(pk=region.pk).filter(name=region.name).exists():
+            return simplejson.dumps({'ret_code': 1000, 'field': 'name', 'error': u'大区名已存在'})
+        region.save()
+
+    return _ok_json
+
+
+@dajaxice_register(method='POST')
 #@request_delay(3)
 @check_login
 @preprocess_form
@@ -156,26 +181,26 @@ def add_edit_company(request, form):
         logger.warn(f.errors)
         return _invalid_data_json
 
+    company = f.save(commit=False)
+    company.code = f.cleaned_data["code"]
+    company.name = f.cleaned_data["name"]
+
     if form["id"] == '':
-        company = Company(code = f.cleaned_data["code"], name= f.cleaned_data["name"])
         if Company.objects.filter(code=company.code).exists():
             return simplejson.dumps({'ret_code': 1000, 'field': 'code', 'error': u'公司编码重复'})
         if Company.objects.filter(name=company.name).exists():
             return simplejson.dumps({'ret_code': 1000, 'field': 'name', 'error': u'公司名已存在'})
         company.save()
-        return _ok_json
     else:
         id = form["id"]
-        company = Company.objects.get(pk=id)
-        company.code = f.cleaned_data["code"]
-        company.name = f.cleaned_data["name"]
         if Company.objects.exclude(pk=id).filter(code=company.code).exists():
             return simplejson.dumps({'ret_code': 1000, 'field': 'code', 'error': u'公司编码重复'})
         if Company.objects.exclude(pk=id).filter(name=company.name).exists():
             return simplejson.dumps({'ret_code': 1000, 'field': 'name', 'error': u'公司名已存在'})
         company.pk = id
         company.save()
-        return _ok_json
+
+    return _ok_json
 
 
 @dajaxice_register(method='POST')
@@ -191,13 +216,13 @@ def add_edit_store(request, form):
     store = f.save(commit=False)
     store.code = f.cleaned_data["code"]
     store.name = f.cleaned_data["name"]
+
     if form["id"] == '':
         if Store.objects.filter(code=store.code).exists():
             return simplejson.dumps({'ret_code': 1000, 'field': 'code', 'error': u'门店编码重复'})
         if Store.objects.filter(name=store.name).exists():
             return simplejson.dumps({'ret_code': 1000, 'field': 'name', 'error': u'门店名已存在'})
         store.save()
-        return _ok_json
     else:
         id = form["id"]
         if Store.objects.exclude(pk=id).filter(code=store.code).exists():
@@ -206,7 +231,8 @@ def add_edit_store(request, form):
             return simplejson.dumps({'ret_code': 1000, 'field': 'name', 'error': u'门店名已存在'})
         store.pk = id 
         store.save()
-        return _ok_json
+        
+    return _ok_json
 
 
 @dajaxice_register(method='POST')
