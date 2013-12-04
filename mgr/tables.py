@@ -39,7 +39,7 @@ class StaffTable(tables.Table):
 
 
 class StoreTable(tables.Table):
-    ops = tables.TemplateColumn(verbose_name=u'操作', template_name='store_ops.html')
+    ops_2 = tables.TemplateColumn(verbose_name=u'操作', template_name='store_ops.html')
 
     class Meta:
         model = Store
@@ -50,15 +50,34 @@ class StoreTable(tables.Table):
         empty_text = u'暂无门店'
 
 
+class ChildrenCountColumn(tables.Column):
+
+    def render(self, record, value):
+        return str(record.children().count())
+
+
+class RegionTable(tables.Table):
+    companies = ChildrenCountColumn(verbose_name=u'公司数量', empty_values=())
+    ops_2 = tables.TemplateColumn(verbose_name=u'操作', template_name='region_ops.html')
+
+    class Meta:
+        model = Region
+        orderable = False
+        attrs = {'class': 'table table-hover table-bordered regions'}
+        fields = ('name',)
+        page_field = 'rp'
+        empty_text = u'暂无大区'
+
+
 class CompanyTable(tables.Table):
-    stores = tables.TemplateColumn(verbose_name=u'门店数量', template_name="store_count.html")
-    ops = tables.TemplateColumn(verbose_name=u'操作', template_name='company_ops.html')
+    stores = ChildrenCountColumn(verbose_name=u'门店数量', empty_values=())
+    ops_2 = tables.TemplateColumn(verbose_name=u'操作', template_name='company_ops.html')
 
     class Meta:
         model = Company
         orderable = False
         attrs = {'class': 'table table-hover table-bordered companies'}
-        fields = ('code', 'name')
+        fields = ('code', 'name', 'region')
         page_field = 'cp'
         empty_text = u'暂无公司'
 
@@ -84,8 +103,7 @@ class GroupTable(tables.Table):
     class Meta:
         model = Group
         orderable = False
-        attrs = {'class': 'table table-hover table-bordered companies'}
+        attrs = {'class': 'table table-hover table-bordered'}
         fields = ('name', 'permissions')
         page_field = 'p'
         empty_text = u'暂无用户组'
-

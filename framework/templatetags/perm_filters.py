@@ -28,8 +28,14 @@ def in_group(user, name):
     groups = Group.objects.filter(name=name)
     return groups[0] in user.groups if len(groups) > 0 else False
 
+
 @register.filter
 def in_store(user):
+    return cast_staff(user).in_store()
+
+
+@register.filter
+def in_region(user):
     return cast_staff(user).in_store()
 
 
@@ -47,6 +53,11 @@ def can_change_company(user):
 
 
 @register.filter
+def can_change_store(user):
+    return is_not_employee(user) or cast_staff(user).has_perm("mgr.change_organization")
+
+
+@register.filter
 def can_view_organization(user):
     return mgr.views.can_view_organization(user)
 
@@ -57,8 +68,36 @@ def can_add_organization(user):
 
 
 @register.filter
+def can_delete_organization(user):
+    return user.is_superuser or user.is_staff
+
+
+@register.filter
+def can_add_region(user):
+    return is_not_employee(user)
+
+
+@register.filter
+def can_change_region(user):
+    if is_not_employee(user):
+        return True
+
+    user = cast_staff(user)
+    return user.in_region() and user.has_perm("mgr.change_organization")
+
+
+@register.filter
 def can_add_store(user):
     return mgr.views.can_add_store(user)
+
+
+@register.filter
+def can_add_company(user):
+    if user.is_superuser or user.is_staff:
+        return True
+
+    user = cast_staff(user)
+    return user.in_region() and user.has_perm("mgr.add_organization")
 
 
 @register.filter

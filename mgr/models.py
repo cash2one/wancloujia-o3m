@@ -33,21 +33,30 @@ class Staff(User):
     def __unicode__(self):
         return self.username
 
-    def in_store(self):
-        raise NotImplementedError()
-
 
 def cast_staff(user):
     return Staff.objects.get(pk=user.id).cast()
 
 
 class Organization(models.Model):
+    CODE_LENGTH_LIMIT = 20
+    NAME_LENGTH_LIMIT = 200
+
     real_type = models.ForeignKey(ContentType, editable=False)
 
     def save(self, *args, **kwargs):
         if not self.id:
             self.real_type = self._get_real_type()
         super(Organization, self).save(*args, **kwargs)
+
+    def children(self):
+        return []
+
+    def descendants_and_self(self):
+        return []
+
+    def parent(self):
+        return None
 
     def cast(self):
         return self.real_type.get_object_for_this_type(pk=self.pk)
@@ -59,21 +68,71 @@ class Organization(models.Model):
         return self.cast().name
 
 
-class Company(Organization):
-    code = models.CharField(verbose_name=u'编码', max_length=20, unique=True)
-    name = models.CharField(verbose_name=u'名称', max_length=200, unique=True)
+class Region(Organization):
+    name = models.CharField(verbose_name=u'名称', unique=True, 
+                            max_length=Organization.NAME_LENGTH_LIMIT)
+
+    def children(self):
+        return Company.objects.filter(region__pk=self.pk) if self.pk else []
+
+    def descendants_and_self(self):
+        if not self.pk:
+            return []
+
+        pks = [self.pk]
+        companies = self.children()
+        for company in companies:
+            pks.append(company.pk)
+        stores = Store.objects.filter(company__in=companies)
+        for store in stores:
+            pks.append(store.pk)
+        return Organization.objects.filter(pk__in=pks)
 
     class Meta:
-        verbose_name = '公司'
+        verbose_name = u'大区'
+
+
+class Company(Organization):
+    code = models.CharField(verbose_name=u'编码', unique=True, 
+                            max_length=Organization.CODE_LENGTH_LIMIT)
+    name = models.CharField(verbose_name=u'名称', unique=True, 
+                            max_length=Organization.NAME_LENGTH_LIMIT)
+    region = models.ForeignKey(Region, verbose_name=u'所属大区')
+
+    def parent(self):
+        return self.region
+
+    def children(self):
+        return Store.objects.filter(company__pk=self.pk) if self.pk else []
+
+    def descendants_and_self(self):
+        if not self.pk:
+            return[]
+
+        pks = [self.pk]
+        for child in self.children():
+            pks.append(child.pk)
+        return Organization.objects.filter(pk__in=pks)
+
+    class Meta:
+        verbose_name = u'公司'
 
 
 class Store(Organization):
-    company = models.ForeignKey(Company, verbose_name=u'公司')
-    code = models.CharField(verbose_name=u'编码', max_length=20, unique=True)
-    name = models.CharField(verbose_name=u'名称', max_length=200, unique=True)
+    code = models.CharField(verbose_name=u'编码', unique=True, 
+                            max_length=Organization.CODE_LENGTH_LIMIT)
+    name = models.CharField(verbose_name=u'名称', unique=True, 
+                            max_length=Organization.NAME_LENGTH_LIMIT)
+    company = models.ForeignKey(Company, verbose_name=u'所属公司')
+
+    def parent(self):
+        return self.company
+
+    def descendants_and_self(self):
+        return Organization.objects.filter(pk=self.pk) if self.pk else []
 
     class Meta:
-        verbose_name = '门店'
+        verbose_name = u'门店'
     
 
 class Employee(Staff):
@@ -86,6 +145,9 @@ class Employee(Staff):
 
     def in_store(self):
         return self.organization.real_type == ContentType.objects.get_for_model(Store)
+
+    def in_region(self):
+        return self.organization.real_type == ContentType.objects.get_for_model(Region)
 
 
 class Administrator(Staff):

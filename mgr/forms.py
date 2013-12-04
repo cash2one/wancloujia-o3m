@@ -88,17 +88,26 @@ class AdminForm(forms.ModelForm):
 
 
 @parsleyfy
-class CompanyForm(forms.Form):
-    code = forms.CharField(label=u'编码', max_length=20, 
+class RegionForm(forms.Form):
+    name = forms.CharField(label=u'名称', max_length=Organization.NAME_LENGTH_LIMIT) 
+
+
+@parsleyfy
+class CompanyForm(forms.ModelForm):
+    code = forms.CharField(label=u'编码', max_length=Organization.CODE_LENGTH_LIMIT, 
                             widget=forms.TextInput(attrs={"parsley-type": "digits"}))
-    name = forms.CharField(label=u'名称', max_length=20)
+    name = forms.CharField(label=u'名称', max_length=Organization.NAME_LENGTH_LIMIT)
+
+    class Meta:
+        model = Company
+        fields = ('region',)
     
 
 @parsleyfy
 class StoreForm(forms.ModelForm):
-    code = forms.CharField(label=u'编码', max_length=20, 
+    code = forms.CharField(label=u'编码', max_length=Organization.CODE_LENGTH_LIMIT, 
                             widget=forms.TextInput(attrs={"parsley-type": "digits"}))
-    name = forms.CharField(label=u'名称', max_length=20)
+    name = forms.CharField(label=u'名称', max_length=Organization.NAME_LENGTH_LIMIT)
     
     class Meta:
         model = Store

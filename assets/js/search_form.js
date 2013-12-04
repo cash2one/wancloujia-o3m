@@ -6,6 +6,7 @@
 		this.$searchBtn = this.$form.find(".search");
 		this.$resetBtn = this.$form.find(".reset");
 		this.$query = this.$form.find(".query");
+		this.$query.removeAttr("readonly");
 
 		if(this.$query.val()) {
 			this.$searchBtn.addClass("hide");
