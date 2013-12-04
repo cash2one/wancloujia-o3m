@@ -119,6 +119,8 @@ def organization(request):
     if sq:
         store_query_set = store_query_set.filter(Q(code__contains=sq) | Q(name__contains=sq))
 
+    region_query_set = region_query_set.order_by("-pk")
+
     regionTable = RegionTable(region_query_set)
     storeTable = StoreTable(store_query_set)
     companyTable = CompanyTable(company_query_set)

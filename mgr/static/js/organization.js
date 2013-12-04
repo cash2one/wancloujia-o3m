@@ -42,7 +42,7 @@ $(function() {
 			form.id.value = store.id;
 			form.code.value = store.code;
 			form.name.value = store.name;
-			$(form.company).val(store.region).trigger('change');
+			$(form.company).val(store.company).trigger('change');
 		},
 		table: '.stores'
 	});

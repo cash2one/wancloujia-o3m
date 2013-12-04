@@ -80,12 +80,14 @@
 	};
 
 	FormModal.prototype.onShow = function() {
-		this.$form.parsley(this.options.parsley || {});
+		var parsley_options = this.options.parsley || {};
+		this.$form.parsley($.extend({}, parsley.bs_options, parsley_options));
 		suning.modal.setTitle(this.$el, this.title());
 	};
 
 	FormModal.prototype.onHide = function() {
 		this.options.clear(this.form);
+		parsley.clearHighlight(this.form);
 		this.$form.parsley('destroy');
 	};
 
@@ -100,7 +102,7 @@
 		if (!el) return;
 
 		var that = this;
-		
+
 		this.el = el;
 		this.$el = $(el);
 		this.options = options;
