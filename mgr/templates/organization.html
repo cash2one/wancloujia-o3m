@@ -17,7 +17,7 @@
                 <span class="caret"></span>
             </a>
             <ul class="dropdown-menu" role="menu">
-                {% if request.user.is_superuser or request.user.is_staff %}
+                {% if request.user|can_add_region %}
                 <li><a data-toggle="modal" href="#add-edit-region">新增大区</a></li>
                 {% endif %}
                 {% if request.user|can_add_company %}
@@ -33,9 +33,7 @@
     <div class="panel panel-default">
         <div class="panel-heading">
             大区列表
-            {% if user|is_not_employee %}
             {% include "search_form.html" with query_name='rq' query=rq %}
-            {% endif %}
         </div>
         <div class="panel-body"> 
             {% render_table regionTable "table_template.html" %}
@@ -45,9 +43,7 @@
     <div class="panel panel-default">
         <div class="panel-heading">
             公司列表
-            {% if user|is_not_employee or reqest.user|in_region %}
             {% include "search_form.html" with query_name='cq' query=cq %}
-            {% endif %}
         </div>
         <div class="panel-body"> 
             {% render_table companyTable "table_template.html" %}
@@ -57,9 +53,7 @@
     <div class="panel panel-default">
         <div class="panel-heading">
             门店列表
-            {% if request.user|is_not_employee or not request.user|in_store %}
             {% include "search_form.html" with query_name='sq' query=sq %}
-            {% endif %}
         </div>
         <div class="panel-body">
             {% render_table storeTable "table_template.html"%}

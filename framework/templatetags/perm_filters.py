@@ -53,6 +53,11 @@ def can_change_company(user):
 
 
 @register.filter
+def can_change_store(user):
+    return is_not_employee(user) or cast_staff(user).has_perm("mgr.change_organization")
+
+
+@register.filter
 def can_view_organization(user):
     return mgr.views.can_view_organization(user)
 
@@ -63,8 +68,18 @@ def can_add_organization(user):
 
 
 @register.filter
+def can_delete_organization(user):
+    return user.is_superuser or user.is_staff
+
+
+@register.filter
+def can_add_region(user):
+    return is_not_employee(user)
+
+
+@register.filter
 def can_change_region(user):
-    if user.is_superuser or user.is_staff:
+    if is_not_employee(user):
         return True
 
     user = cast_staff(user)

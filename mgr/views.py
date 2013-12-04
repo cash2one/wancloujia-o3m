@@ -52,11 +52,8 @@ def can_add_store(user):
     if user.is_superuser or user.is_staff:
         return True
 
-    if not user.has_perm("mgr.add_organization"):
-        return False
-
     user = cast_staff(user)
-    return user.organization.real_type != ContentType.objects.get_for_model(Store)
+    return user_has_perm("mgr.add_organization") and not user.in_store()
 
 
 def can_delete_store(user):
