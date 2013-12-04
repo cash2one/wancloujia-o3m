@@ -30,7 +30,7 @@ $(function() {
 	});
 
 	$('table').on('click', '.delete', function() {
-		modal.show($(this).data());
+		modal.show($(this.parentNode).data());
 	});
 });
 
