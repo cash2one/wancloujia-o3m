@@ -57,62 +57,54 @@
 			that.$form.submit();
 		});
 		this.$form.submit($.proxy(_onSubmit, this));
-
-		$(options.table).on("click", ".edit", function() {
-			options.bind(that.form, $(this.parentNode).data());
-			that.$el.modal('show');
-		});
 	}
 
-	FormModal.prototype.title = function() {
-		var options = this.options;
-		return this.editing() ? options.edit_title : options.add_title;
-	};
+	FormModal.prototype = {
+		constructor: FormModal,
 
-	FormModal.prototype.editing = function() {
-		return this.form.id.value != "";
-	};
+		onShow: function() {
+			var parsley_options = this.options.parsley || {};
+			this.$form.parsley($.extend({}, parsley.bs_options, parsley_options));
+			suning.modal.setTitle(this.$el, this.title());
+		},
 
-	FormModal.prototype.params = function() {
-		return {
-			form: this.$form.serialize(true)
-		};
-	};
+		onHide: function() {
+			this.options.clear(this.form);
+			parsley.clearHighlight(this.form);
+			this.$form.parsley('destroy');
+		},
 
-	FormModal.prototype.onShow = function() {
-		var parsley_options = this.options.parsley || {};
-		this.$form.parsley($.extend({}, parsley.bs_options, parsley_options));
-		suning.modal.setTitle(this.$el, this.title());
-	};
+		show: function(data) {
+			this.options.bind(this.form, data);
+			this.$el.modal('show');
 
-	FormModal.prototype.onHide = function() {
-		this.options.clear(this.form);
-		parsley.clearHighlight(this.form);
-		this.$form.parsley('destroy');
-	};
+		},
 
-	FormModal.prototype.msg = function() {
-		var options = this.options;
-		return this.editing() ? options.edit_success_msg : options.add_success_msg;
-	};
+		params: function() {
+			return {
+				form: this.$form.serialize(true)
+			};
+		},
 
-	window.FormModal = FormModal;
+		msg: function() {
+			var msg = this.options.msg;
+			return typeof msg == 'string' ? msg : msg(this.form);
+		},
+
+		title: function() {
+			var title = this.options.title;
+			return typeof title == 'string' ? title : title(this.form);
+		}
+	};
 
 	function ActionModal(el, options) {
 		if (!el) return;
-
-		var that = this;
 
 		this.el = el;
 		this.$el = $(el);
 		this.options = options;
 		this.$el.on('show.bs.modal', $.proxy(this.onShow, this));
 		this.$el.find(".save").click($.proxy(this.process, this));
-
-		$(options.table).on("click", ".delete", function() {
-			that.data = $(this.parentNode).data();
-			that.$el.modal('show');
-		});
 	}
 
 	ActionModal.prototype = {
@@ -155,8 +147,23 @@
 		msg: function() {
 			var msg = this.options.msg;
 			return typeof msg == "string" ? msg : msg(this.data);
+		},
+
+		show: function(data) {
+			this.data = data;
+			this.$el.modal('show');
 		}
 	};
 
-	window.ActionModal = ActionModal;
+	function text_generator(add_text, edit_text) {
+		return function(form) {
+			return form.id.value ? edit_text : add_text;
+		}
+	}
+
+	window.modals = {
+		FormModal: FormModal,
+		ActionModal: ActionModal,
+		text_generator: text_generator
+	};
 })(window);

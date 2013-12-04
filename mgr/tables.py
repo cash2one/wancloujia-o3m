@@ -39,7 +39,7 @@ class StaffTable(tables.Table):
 
 
 class StoreTable(tables.Table):
-    ops = tables.TemplateColumn(verbose_name=u'操作', template_name='store_ops.html')
+    ops_2 = tables.TemplateColumn(verbose_name=u'操作', template_name='store_ops.html')
 
     class Meta:
         model = Store
@@ -58,7 +58,7 @@ class ChildrenCountColumn(tables.Column):
 
 class RegionTable(tables.Table):
     companies = ChildrenCountColumn(verbose_name=u'公司数量', empty_values=())
-    ops = tables.TemplateColumn(verbose_name=u'操作', template_name='region_ops.html')
+    ops_2 = tables.TemplateColumn(verbose_name=u'操作', template_name='region_ops.html')
 
     class Meta:
         model = Region
@@ -71,7 +71,7 @@ class RegionTable(tables.Table):
 
 class CompanyTable(tables.Table):
     stores = ChildrenCountColumn(verbose_name=u'门店数量', empty_values=())
-    ops = tables.TemplateColumn(verbose_name=u'操作', template_name='company_ops.html')
+    ops_2 = tables.TemplateColumn(verbose_name=u'操作', template_name='company_ops.html')
 
     class Meta:
         model = Company

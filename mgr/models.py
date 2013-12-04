@@ -52,6 +52,9 @@ class Organization(models.Model):
     def children(self):
         return []
 
+    def descendants_and_self(self):
+        return []
+
     def parent(self):
         return None
 
@@ -72,6 +75,19 @@ class Region(Organization):
     def children(self):
         return Company.objects.filter(region__pk=self.pk) if self.pk else []
 
+    def descendants_and_self(self):
+        if not self.pk:
+            return []
+
+        pks = [self.pk]
+        companies = self.children()
+        for company in companies:
+            pks.append(company.pk)
+        stores = Store.objects.filter(company__in=companies)
+        for store in stores:
+            pks.append(store.pk)
+        return Organization.objects.filter(pk__in=pks)
+
     class Meta:
         verbose_name = u'大区'
 
@@ -89,6 +105,15 @@ class Company(Organization):
     def children(self):
         return Store.objects.filter(company__pk=self.pk) if self.pk else []
 
+    def descendants_and_self(self):
+        if not self.pk:
+            return[]
+
+        pks = [self.pk]
+        for child in self.children():
+            pks.append(child.pk)
+        return Organization.objects.filter(pk__in=pks)
+
     class Meta:
         verbose_name = u'公司'
 
@@ -102,6 +127,9 @@ class Store(Organization):
 
     def parent(self):
         return self.company
+
+    def descendants_and_self(self):
+        return Organization.objects.filter(pk=self.pk) if self.pk else []
 
     class Meta:
         verbose_name = u'门店'

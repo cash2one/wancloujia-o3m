@@ -107,7 +107,7 @@ def organization(request):
             company_query_set = region.children()
             store_query_set = Store.objects.filter(company__in=company_query_set)
             companyForm.fields["region"].queryset = region_query_set
-            storeForm.fields["region"].queryset = company_query_set
+            storeForm.fields["company"].queryset = company_query_set
 
     rq = request.GET.get("rq", None)
     if rq:
@@ -190,16 +190,8 @@ def user(request):
             query_set = Employee.objects.all()
     else:
         user = cast_staff(request.user)
-        if user.in_store():
-            query_set = Employee.objects.filter(organization=user.organization)
-            organizations = Organization.objects.filter(pk=user.organization.pk)
-        else:
-            company = user.organization
-            stores = Store.objects.filter(company=company)
-            organization_pks = [store.pk for store in stores]
-            organization_pks.append(company.pk)
-            organizations = Organization.objects.filter(pk__in=organization_pks)
-            query_set = Employee.objects.filter(organization__pk__in=organization_pks)
+        organizations = user.organization.cast().descendants_and_self()
+        query_set = Employee.objects.filter(organization__in=organizations)
 
     query = request.GET.get("q", None)
     if query:
@@ -207,7 +199,6 @@ def user(request):
                                      Q(email__contains=query) | 
                                      Q(realname__contains=query))
 
-    logger.debug(organizations)
     table = StaffTable(query_set)
     employeeForm = EmployeeForm()
     employeeForm.fields["organization"].queryset = organizations
