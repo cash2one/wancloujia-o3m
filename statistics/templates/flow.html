@@ -20,9 +20,9 @@
                 <div class="filters-wrap">
                     <div class="filter-group">
                         <div class="filter">
-                            <label for="region">大区：</label>
-                            <select id="region" name="region"
-                                {% if filters.user.has_perm %}
+                            <label for="filter_region">大区：</label>
+                            <select id="filter_region" name="region"
+                                {% if not filters.user.has_perm %}
                                 readonly='readonly'
                                 {% endif %}>
 
@@ -43,14 +43,14 @@
                             </select>
                         </div>
                         <div class="filter">
-                            <label for="company">公司：</label>
-                            <select id="company" name="company"
-                                {% if fitlers.user.has_perm %}
+                            <label for="filter_company">公司：</label>
+                            <select id="filter_company" name="company"
+                                {% if not fitlers.user.has_perm %}
                                 readonly='readonly'
                                 {% endif %}>
                                 
                                 {% if filters.user.has_perm %}
-                                {% for c in filters.user.company %}
+                                {% for c in filters.user.company.items %}
                                 <option value="{{ c.pk }}"
                                     {% if c.pk == filters.user.company.selected %}
                                     selected='selected'
@@ -66,14 +66,14 @@
                             </select>
                         </div>
                         <div class="filter">
-                            <label for="store">门店：</label>
-                            <select id="store" name="store"
-                                {% if fitlers.user.has_perm %}
+                            <label for="filter_store">门店：</label>
+                            <select id="fitler_store" name="store"
+                                {% if not fitlers.user.has_perm %}
                                 readonly='readonly'
                                 {% endif %}>
                                 
                                 {% if filters.user.has_perm %}
-                                {% for s in filters.user.store %}
+                                {% for s in filters.user.store.items %}
                                 <option value="{{ s.pk }}"
                                     {% if s.pk == filters.user.store.selected %}
                                     selected='selected'
@@ -106,12 +106,13 @@
                         <div class="filter">
                             <label for="brand">品牌：</label>
                             <select id="brand" name="brand">
-                                {% for item in filter.brand.items %}
-                                <option value="{{ item }}"
-                                    {% if item == filters.brand.selected %}
+                                <option value="">--------</option>
+                                {% for item in filters.brand.items %}
+                                <option value="{{ item.brand }}"
+                                    {% if item.brand == filters.brand.selected %}
                                     selected='selected'
                                     {% endif %}>
-                                    {{ item }}
+                                    {{ item.brand }}
                                 </option>
                                 {% endfor %}
                             </select>
@@ -150,6 +151,7 @@
 {% endblock %}
 {% block js %}
 {{ block.super }}
+<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.jcombo.js"></script>
 <script type="text/javascript">
 $(function() {
     $('select').select2(select2_tip_options);
@@ -157,6 +159,13 @@ $(function() {
 </script>
 <script type="text/javascript">
 $(function() {
+    var $filter_region = $("#filter_region").jCombo("regions");
+    var $filter_company = $("#filter_company").jCombo("companies?r=", {
+        parent: $filter_region
+    });
+    $("#filter_store").jCombo("stores?c=", {
+        parent: $filter_company
+    });
 });
 </script>
 {% endblock %}

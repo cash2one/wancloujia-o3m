@@ -6,7 +6,9 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_GET, require_POST
+
 from suning.decorators import active_tab
+from suning.utils import render_json
 
 logger = logging.getLogger(__name__)
 
@@ -33,10 +35,9 @@ def permission_denied(request):
 
 
 def welcome_json(request):
-    return HttpResponse(simplejson.dumps({'ret_code': 1000, 'ret_msg': 'not_login_error'}), 
-                        mimetype='application/json')
+    return render_json({'ret_code': 1000, 'ret_msg': 'not_login_error'})
 
 
 def permission_denied_json(request):
-    return HttpResponse(simplejson.dumps({'ret_code': 1000, 'ret_msg': 'permission_denied'}), 
-                        mimetype='application/json')
+    return render_json({'ret_code': 1000, 'ret_msg': 'permission_denied'})
+

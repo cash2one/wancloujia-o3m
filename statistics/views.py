@@ -13,6 +13,7 @@ from django.http import HttpResponse
 
 from suning import settings
 from suning import permissions
+from suning.utils import render_json
 from suning.decorators import active_tab
 from mgr.models import cast_staff, Region, Company, Store, Organization, Employee
 from interface.models import LogMeta
@@ -55,7 +56,7 @@ def _filter_logs_by_period(logs, from_date, to_date):
 
     return logs
 
-@require_POST
+@require_GET
 def regions(request):
     user = request.user
     if not user.is_authenticated():
@@ -69,24 +70,45 @@ def regions(request):
     results = {}
     for r in regions:
         results[str(r.pk)] = r.name
-    return HttpResponse(simplejson.dumps(results), mimetype='application/json')
+    return render_json(results)
 
-@require_POST
+
+@require_GET
 def companies(request):
     user = request.user
-    rid = request.GET.get('region', None)
+    rid = request.GET.get('r', None)
     if not user.is_authenticated() or not rid:
         companies = []
     elif user.is_superuser or user.is_staff:
         companies = Company.objects.filter(region__pk=rid)
     else:
-        #what?
+        #TODO
         companies = []
 
     results = {}
     for c in companies:
         results[str(c.pk)] = c.name
-    return HttpResponse(simplejson.dumps(results), mimetype='application/json')
+    return render_json(results)
+
+
+@require_GET
+def stores(request):
+    user = request.user
+    cid = request.GET.get('c', None)
+
+    if not user.is_authenticated() or not cid:
+        stores = []
+    elif user.is_superuser or user.is_staff:
+        stores = Store.objects.filter(company__pk=cid)
+    else:
+        #TODO
+        stores = []
+    results = {}
+    for s in stores:
+        results[str(s.pk)] = s.name
+    return render_json(results)
+
+ 
 
 
 def _get_model_by_id(manager, id):
@@ -119,7 +141,9 @@ def _get_app_by_id(id):
 
 def _filter_logs_by_user_info(logs, filters, user, query):
     user = cast_staff(user)
-    if (user.is_superuser and user.is_staff) or \
+    logger.debug("%s: admin? %s" %(__name__, str(user.is_superuser or user.is_staff)))
+
+    if user.is_superuser or user.is_staff or \
         user.has_perm("interface.view_organization_statistics"):
 
         if not user.is_superuser and not user.is_staff:
@@ -165,6 +189,7 @@ def _filter_logs_by_user_info(logs, filters, user, query):
             'store': store_options,
             'username': emp.username if emp else ''
         }
+        logger.debug("%s: %s" %(__name__, filters))
 
         if uid:
             return logs.filter(uid=uid)
@@ -230,7 +255,10 @@ def flow(request):
     total = len(logs)
     logTable = LogTable(logs)
     RequestConfig(request, paginate={"per_page": 50}).configure(logTable) 
+
+    logger.debug("filters: %s" % filters)
     return render(request, "flow.html", {
+        'filters': filters,
         'logTable': logTable,
         'total': total
     })
