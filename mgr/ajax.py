@@ -16,6 +16,7 @@ from models import *
 
 logger = logging.getLogger(__name__)
 
+_DEFAULT_PASSWORD= '123456'
 _invalid_data_msg = u'数据出错，请检查'
 _invalid_data_json = simplejson.dumps({'ret_code': 1000, 'ret_msg': _invalid_data_msg})
 _ok_json = simplejson.dumps({'ret_code': 0})
@@ -76,10 +77,11 @@ def add_edit_admin(request, form):
     if form["id"] == '':
         if User.objects.filter(username=admin.username).exists():
             return simplejson.dumps({'ret_code': 1000, 'field': 'username', 'error': u'用户名重名'})
-        password = str(random.randrange(100000, 999999))
+        #password = str(random.randrange(100000, 999999))
+        password = _DEFAULT_PASSWORD
         admin.set_password(password)
         admin.save()
-        notify(admin, password)
+        #notify(admin, password)
         return _ok_json
     else:
         id = form["id"]
@@ -120,10 +122,11 @@ def add_edit_employee(request, form, permissions):
     if form["id"] == '':
         if User.objects.filter(username=employee.username).exists():
             return simplejson.dumps({'ret_code': 1000, 'field': 'username', 'error': u'工号重复'})
-        password = str(random.randrange(100000, 999999))
+        #password = str(random.randrange(100000, 999999))
+        password = _DEFAULT_PASSWORD
         employee.set_password(password)
         employee.save()
-        notify(employee, password)
+        #notify(employee, password)
     else:
         id = form["id"]
         if User.objects.exclude(pk=id).filter(username=employee.username).exists():
