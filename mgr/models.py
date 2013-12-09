@@ -52,6 +52,9 @@ class Organization(models.Model):
     def children(self):
         return []
 
+    def ancestor(self):
+        return None
+
     def descendants_and_self(self):
         return []
 
@@ -74,6 +77,9 @@ class Region(Organization):
 
     def children(self):
         return Company.objects.filter(region__pk=self.pk) if self.pk else []
+
+    def ancestor(self):
+        return self 
 
     def descendants_and_self(self):
         if not self.pk:
@@ -102,6 +108,9 @@ class Company(Organization):
     def parent(self):
         return self.region
 
+    def ancestor(self):
+        return self.region
+
     def children(self):
         return Store.objects.filter(company__pk=self.pk) if self.pk else []
 
@@ -128,6 +137,9 @@ class Store(Organization):
     def parent(self):
         return self.company
 
+    def ancestor(self):
+        return self.company.region
+
     def descendants_and_self(self):
         return Organization.objects.filter(pk=self.pk) if self.pk else []
 
@@ -148,6 +160,25 @@ class Employee(Staff):
 
     def in_region(self):
         return self.organization.real_type == ContentType.objects.get_for_model(Region)
+
+    def get_region(self):
+        org = self.organization.cast()
+        region_type = ContentType.objects.get_for_model(Region)
+        return org if org.real_type == region_type else org.ancestor()
+
+    def get_company(self):
+        org = self.organization.cast()
+        if org.real_type == ContentType.objects.get_for_model(Region):
+            return None
+        elif org.real_type == ContentType.objects.get_for_model(Company):
+            return org
+        else:
+            return org.company
+    
+    def get_store(self):
+        org = self.organization.cast()
+        store_type = ContentType.objects.get_for_model(Store)
+        return None if org.real_type !=  store_type else org
 
 
 class Administrator(Staff):

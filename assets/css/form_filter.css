@@ -1,0 +1,55 @@
+.submit {
+    width: 80px;
+    height: 40px;
+    top: 50%;
+    right: 0px;
+    margin-top: -25px;
+    position: absolute;
+    text-align: center;
+}
+
+.filters-wrap {
+    background-color: #fff;
+    margin-right: 80px;
+}
+
+.filter-group {
+    border-bottom: 1px solid #EBEBEB;
+    line-height: 30px;
+    padding: 10px;
+    overflow: hidden;
+}
+
+.filter {
+    float: left;
+    width: 235px;
+    margin-right: 10px;
+}
+
+.filter label {
+    width: 75px;
+    text-align: left;
+}
+
+.filter select {
+    width: 150px;
+}
+
+.filter-group.last {
+    border: none;
+}
+
+.form-filter {
+    position: relative;
+    background-color: #EBEBEB;
+}
+
+.form-filter .form-control {
+    width: 150px;
+    display: inline-block;
+}
+
+.form-filter input.date {
+    cursor: auto;
+}
+

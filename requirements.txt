@@ -1,4 +1,4 @@
-django==1.5.5
+Django==1.5.2
 django_select2
 django-tables2
 django-dajaxice
@@ -10,3 +10,4 @@ pil
 djangorestframework
 redis
 jinja2
+django-filter

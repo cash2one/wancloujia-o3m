@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+
+{% load render_table from django_tables2 %}
+{% load django_select2_tags %}
+{% load perm_filters %}
+
+{% block css %}
+{{ block.super }}
+<link rel="stylesheet" href="{{ STATIC_URL }}css/form_filter.css"/>
+{% endblock %}
+
+{% block main %}
+<div class="main">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            筛选条件
+        </div>
+        <div class="panel-body" style="padding: 0px"> 
+            <form class="form-filter">
+                <div class="filters-wrap">
+                    <div class="filter-group">
+                        <div class="filter">
+                            <label for="region">大区：</label>
+                            <select id="region" name="region"
+                                {% if filters.user.has_perm %}
+                                readonly='readonly'
+                                {% endif %}>
+
+                                {% if filters.user.has_perm %}
+                                {% for r in filters.user.region.items %} 
+                                <option value="{{ r.pk }}"
+                                    {% if r.pk == filters.user.region.selected %}
+                                    selected='selected'
+                                    {% endif %}>
+                                    {{ r.name }}
+                                </option>
+                                {% endfor %}
+                                {% else %}
+                                <option selected="selected" value="{{ filters.user.region.pk}}">
+                                    {{ filters.user.region.name}}
+                                </option>
+                                {% endif %}
+                            </select>
+                        </div>
+                        <div class="filter">
+                            <label for="company">公司：</label>
+                            <select id="company" name="company"
+                                {% if fitlers.user.has_perm %}
+                                readonly='readonly'
+                                {% endif %}>
+                                
+                                {% if filters.user.has_perm %}
+                                {% for c in filters.user.company %}
+                                <option value="{{ c.pk }}"
+                                    {% if c.pk == filters.user.company.selected %}
+                                    selected='selected'
+                                    {% endif %}>
+                                    {{ c.name }}
+                                </option>
+                                {% endfor %}
+                                {% else %}
+                                <option value="{{ fitlers.user.company.pk }}">
+                                    {{ filters.user.company.name }}
+                                </option>
+                                {% endif %}
+                            </select>
+                        </div>
+                        <div class="filter">
+                            <label for="store">门店：</label>
+                            <select id="store" name="store"
+                                {% if fitlers.user.has_perm %}
+                                readonly='readonly'
+                                {% endif %}>
+                                
+                                {% if filters.user.has_perm %}
+                                {% for s in filters.user.store %}
+                                <option value="{{ s.pk }}"
+                                    {% if s.pk == filters.user.store.selected %}
+                                    selected='selected'
+                                    {% endif %}>
+                                    {{ s.name }}
+                                </option>
+                                {% endfor %}
+                                {% else %}
+                                <option value="{{ fitlers.user.store.pk }}">
+                                    {{ filters.user.store.name }}
+                                </option>
+                                {% endif %}
+                            </select>
+                        </div>
+                        <div class="filter">
+                            <label for="employee">员工：</label>
+                            <input class="form-control" id="employee" type="text" 
+                                    name="employee" value="{{ filters.user.username }}"/>
+                        </div>
+                    </div>
+                    <div class="filter-group">
+                        <div class="filter">
+                            <label for="app">应用名称：</label>
+                            <input type="text" id="app" class="form-control" 
+                                    name="app" data-name="{{ filters.app.name }}" 
+                                    data-id="{{ filters.app.pk }}" value="{{ filters.app.pk }}"/>
+                        </div>
+                    </div>
+                    <div class="filter-group">
+                        <div class="filter">
+                            <label for="brand">品牌：</label>
+                            <select id="brand" name="brand">
+                                {% for item in filter.brand.items %}
+                                <option value="{{ item }}"
+                                    {% if item == filters.brand.selected %}
+                                    selected='selected'
+                                    {% endif %}>
+                                    {{ item }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="filter-group last">
+                        <div class="filter">
+                            <label for="from_date">开始日期：</label>
+                            <input class="form-control date" type="text" readonly='readonly' 
+                                    id="from_date" name="from_date" value="{{ filters.period.from_date }}"/>
+                        </div>
+                        <div class="filter">
+                            <label for="to_date">结束时间：</label>
+                            <input class="form-control date" type="text" readonly='readonly' 
+                                    id="to_date" name="to_date" value="{{ filters.period.to_date }}"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="submit">
+                    <input type='submit'  class="btn btn-primary" value='筛选'</>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            共{{ total }}次安装
+            <button class='btn btn-default btn-xs pull-right' id="export-data">导出数据</button>
+        </div>
+        <div class="panel-body"> 
+            {% render_table logTable "table_template.html" %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block js %}
+{{ block.super }}
+<script type="text/javascript">
+$(function() {
+    $('select').select2(select2_tip_options);
+});
+</script>
+<script type="text/javascript">
+$(function() {
+});
+</script>
+{% endblock %}

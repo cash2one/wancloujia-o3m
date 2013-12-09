@@ -1,3 +1,4 @@
+# coding: utf-8
 from django.db import models
 from mgr.models import Company, Store
 # Create your models here.
@@ -11,7 +12,7 @@ class LogEntity(models.Model):
 
 
 class LogMeta(models.Model):
-    """
+    u"""
     装机数据查询的日志元数据
     """
     date = models.DateField(db_index=True, editable=False)
@@ -22,9 +23,14 @@ class LogMeta(models.Model):
     appID = models.CharField(max_length=16, editable=False)
     appPkg = models.CharField(max_length=32, editable=False)
 
+    class Meta:
+        permissions=(
+            ('view_organization_statistics', "Can view organization's statistics"),
+        )
+
 
 class InstalledAppLogEntity(models.Model):
-    """
+    u"""
     应用安装统计日志分析结果项
     """
     """
@@ -41,7 +47,7 @@ class InstalledAppLogEntity(models.Model):
 
 
 class UserDeviceLogEntity(models.Model):
-    """
+    u"""
     手机安装统计
     """
     """
@@ -58,7 +64,7 @@ class UserDeviceLogEntity(models.Model):
 
 
 class DeviceLogEntity(models.Model):
-    """
+    u"""
     机型统计
     """
     """
@@ -66,8 +72,8 @@ class DeviceLogEntity(models.Model):
     """
     date = models.DateField(db_index=True)
     uid = models.IntegerField(db_index=True)
-    brand = models.CharField()
-    appName = models.CharField()
+    brand = models.CharField(max_length=255)
+    appName = models.CharField(max_length=255)
     """
     values
     """

@@ -110,10 +110,15 @@
             </li>
             {% endif %}
 
-            <li>
+            <li {% if request.nav.active_tab == "statistics" %}class="active"{% endif %}>
                 <a href="">
                     <span class="glyphicon glyphicon-th"></span>&nbsp;&nbsp;数据统计
                 </a>
+                <ul id="sub" class="nav collapse in">
+                    <li {% if request.nav.sub_active_tab == "flow" %}class="active"{% endif %}>
+                        <a href="/statistics/flow/">流水统计</a>
+                    </li>
+                </ul>
             </li>
         </ul>
     </div>
