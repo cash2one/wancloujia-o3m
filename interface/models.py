@@ -12,20 +12,20 @@ class LogEntity(models.Model):
 
 class LogMeta(models.Model):
     """
-    装机数据查询的日志元数据
+
     """
     date = models.DateField(db_index=True, editable=False)
     uid = models.IntegerField(db_index=True, editable=False)
-    did = models.CharField(verbose_name=u'串号', max_length=16, editable=False)
-    brand = models.CharField(verbose_name=u'品牌', max_length=32, editable=False)
-    model = models.CharField(verbose_name=u'机型', max_length=16, editable=False)
+    did = models.CharField(verbose_name=u'chuanhao', max_length=16, editable=False)
+    brand = models.CharField(verbose_name=u'pinpai', max_length=32, editable=False)
+    model = models.CharField(verbose_name=u'jixing', max_length=16, editable=False)
     appID = models.CharField(max_length=16, editable=False)
     appPkg = models.CharField(max_length=32, editable=False)
 
 
 class InstalledAppLogEntity(models.Model):
     """
-    应用安装统计日志分析结果项
+
     """
     """
     keys
@@ -42,7 +42,7 @@ class InstalledAppLogEntity(models.Model):
 
 class UserDeviceLogEntity(models.Model):
     """
-    手机安装统计
+
     """
     """
     keys
@@ -59,7 +59,7 @@ class UserDeviceLogEntity(models.Model):
 
 class DeviceLogEntity(models.Model):
     """
-    机型统计
+
     """
     """
     keys
