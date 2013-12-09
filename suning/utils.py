@@ -6,3 +6,11 @@ from django.http import HttpResponse
 def render_json(obj):
     return HttpResponse(simplejson.dumps(obj), mimetype='application/json')
 
+
+def first_valid(test, items, default=None):
+    for item in items:
+        if test(item):
+            return item
+
+    return default
+

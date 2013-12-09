@@ -27,6 +27,7 @@
                                 {% endif %}>
 
                                 {% if filters.user.has_perm %}
+                                <option value="">--------</option>
                                 {% for r in filters.user.region.items %} 
                                 <option value="{{ r.pk }}"
                                     {% if r.pk == filters.user.region.selected %}
@@ -50,6 +51,7 @@
                                 {% endif %}>
                                 
                                 {% if filters.user.has_perm %}
+                                <option value="">--------</option>
                                 {% for c in filters.user.company.items %}
                                 <option value="{{ c.pk }}"
                                     {% if c.pk == filters.user.company.selected %}
@@ -67,12 +69,13 @@
                         </div>
                         <div class="filter">
                             <label for="filter_store">门店：</label>
-                            <select id="fitler_store" name="store"
+                            <select id="filter_store" name="store"
                                 {% if not fitlers.user.has_perm %}
                                 readonly='readonly'
                                 {% endif %}>
                                 
                                 {% if filters.user.has_perm %}
+                                <option value="">--------</option>
                                 {% for s in filters.user.store.items %}
                                 <option value="{{ s.pk }}"
                                     {% if s.pk == filters.user.store.selected %}
@@ -89,8 +92,8 @@
                             </select>
                         </div>
                         <div class="filter">
-                            <label for="employee">员工：</label>
-                            <input class="form-control" id="employee" type="text" 
+                            <label for="filter_employee">员工：</label>
+                            <input id="filter_employee" type="hidden" 
                                     name="employee" value="{{ filters.user.username }}"/>
                         </div>
                     </div>
@@ -159,13 +162,39 @@ $(function() {
 </script>
 <script type="text/javascript">
 $(function() {
-    var $filter_region = $("#filter_region").jCombo("regions");
-    var $filter_company = $("#filter_company").jCombo("companies?r=", {
-        parent: $filter_region
+    var combo_options = {
+        dataType: 'json',
+        initial_text: '--------',
+        first_optval: ''
+    };
+    var $filter_region = $("#filter_region");
+    $filter_region.jCombo("regions", combo_options);
+    var $filter_company = $("#filter_company")
+    $filter_company.jCombo("companies?r=", $.extend({parent: $filter_region}, combo_options));
+    var $filter_store = $("#filter_store");
+    $filter_store.jCombo("stores?c=", $.extend({parent: $filter_company}, combo_options));
+
+
+    var $filter_employee = $("#filter_employee");
+    var select2_options = $.extend({}, select2_tip_options, {
+        query: function(query) {
+            var store = $filter_store.val();
+            var company = $filter_company.val();
+            var region = $filter_region.val();
+            $.get('employee', {
+                s: store,
+                c: company,
+                r: region,
+                q: query.term
+            }, function(data) {
+                query.callback(data);
+            }, "json").error(function() {
+                query.callback([]);
+            });
+        }
     });
-    $("#filter_store").jCombo("stores?c=", {
-        parent: $filter_company
-    });
+
+    $filter_employee.select2(select2_options);
 });
 </script>
 {% endblock %}

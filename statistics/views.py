@@ -13,7 +13,7 @@ from django.http import HttpResponse
 
 from suning import settings
 from suning import permissions
-from suning.utils import render_json
+from suning.utils import render_json, first_valid
 from suning.decorators import active_tab
 from mgr.models import cast_staff, Region, Company, Store, Organization, Employee
 from interface.models import LogMeta
@@ -22,11 +22,14 @@ from tables import LogTable
 logger = logging.getLogger(__name__)
 
 
-def _filter_logs_by_organization(logs, organization):
+def _filter_employee_by_organization(organization):
     organizations = organization.descendants_and_self()
-    emps = Employee.objects.filter(organization__in=organizations)
-    empids = [emp.pk for emp in emps]
-    return logs.filter(uid__in=empids)
+    return Employee.objects.filter(organization__in=organizations)
+
+def _filter_logs_by_organization(logs, organization):
+    emps = _filter_employee_by_organization(organization)
+    pks = emps.values_list('pk', flat=True)
+    return logs.filter(uid__in=pks)
 
 
 def _filter_logs_by_orgs(logs, region_id, company_id, store_id):
@@ -151,21 +154,21 @@ def _filter_logs_by_user_info(logs, filters, user, query):
 
         region_id, company_id, store_id = None, None, None
         region_id = query.get('region', None)
-        region = _get_model_by_id(Region.objects, region_id)
+        region = _get_model_by_id(Region.objects, region_id) if region_id else None
         if region:
             if user.is_superuser or user.is_staff:
                 region_options = {'selected': region.pk, 'items': Region.objects.all()}
             else:
                 region_options = {'selected': region.pk, 'items': [region]}
             company_id = query.get('company', None)
-            company = _get_model_by_id(Company.objects, company_id)
+            company = _get_model_by_id(Company.objects, company_id) if company_id else None
             if company:
                 if user.is_superuser or user.is_staff or user.in_region() or user.in_region():
                     company_options = {'selected': company.pk, 'items': region.children()}
                 else:
                     company_options = {'selected': company.pk, 'items': [company]}
                 store_id = query.get('store', None)
-                store = _get_model_by_id(Store.objects, store_id)
+                store = _get_model_by_id(Store.objects, store_id) if store_id else None
                 if store:
                     if user.is_superuser or user.is_staff or not user.in_store():
                         store_options = {'selected': store.pk, 'items': [company.children()]}
@@ -181,7 +184,7 @@ def _filter_logs_by_user_info(logs, filters, user, query):
             company_options = {'selected': '', 'items': []}
             store_options = {'selected': '', 'items': []}
         uid = query.get('employee', None)
-        emp = _get_model_by_id(Employee.objects, uid)
+        emp = _get_model_by_id(Employee.objects, uid) if uid else None
         filters["user"] = {
             'has_perm': True,
             'region': region_options,
@@ -262,4 +265,27 @@ def flow(request):
         'logTable': logTable,
         'total': total
     })
+
+
+@require_GET
+def employee(request):
+    if not request.user.is_authenticated():
+        return render_json([])
+
+    sid = request.GET.get('s', None)
+    cid = request.GET.get('c', None)
+    rid = request.GET.get('r', None)
+    org_id = first_valid(lambda i: i, [sid, cid, rid])
+    if not org_id:
+        emps = Employee.objects.all()
+    else:
+        organization = _get_model_by_id(Organization.objects, org_id)
+        logger.debug("organization: " + str(organization))
+        emps = _filter_employee_by_organization(organization.cast()) if organization else Employee.objects.all()
+
+    q = request.GET.get("q", "")
+    emps = emps.filter(Q(username__contains=q) | Q(email__contains=q) | Q(realname__contains=q))
+    emps = emps[0:10]
+    results = map(lambda e: {'id': e.pk, 'text': e.username}, emps)
+    return render_json({'results': results})
 

@@ -81,10 +81,10 @@
 
             {% if request.user|is_not_employee or perms.mgr %}
             <li {% if request.nav.active_tab == "system" %}class="active"{% endif %}>
-                <a class="accordin-toggle" data-toggle="collapse" data-parent="#accordin" href="#sub">
+                <a class="accordin-toggle" data-toggle="collapse" data-parent="#accordin" href="#sub_system">
                     <span class="glyphicon glyphicon-wrench"></span>&nbsp;&nbsp;系统管理
                 </a>
-                <ul id="sub" class="nav collapse in">
+                <ul id="sub_system" class="nav collapse in">
                     {% if request.user|can_view_organization %}
                     <li {% if request.nav.sub_active_tab == "organization" %}class="active"{% endif %}>
                         <a href="/mgr/organization/">组织管理</a>
@@ -111,12 +111,12 @@
             {% endif %}
 
             <li {% if request.nav.active_tab == "statistics" %}class="active"{% endif %}>
-                <a href="">
+                <a class="accordin-toggle" data-toggle="collapse" data-parent="#accordin" href="#sub_statistics">
                     <span class="glyphicon glyphicon-th"></span>&nbsp;&nbsp;数据统计
                 </a>
-                <ul id="sub" class="nav collapse in">
+                <ul class="nav collapse in" id="sub_statistics">
                     <li {% if request.nav.sub_active_tab == "flow" %}class="active"{% endif %}>
-                        <a href="/statistics/flow/">流水统计</a>
+                        <a href="/statistics/flow">流水统计</a>
                     </li>
                 </ul>
             </li>
