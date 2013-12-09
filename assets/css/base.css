@@ -250,3 +250,8 @@ td>p.warn {
 td {
     word-break:break-all;
 }
+
+.modal-body {
+    word-wrap: break-word;
+    word-break: break-all;
+}
