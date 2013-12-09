@@ -6,6 +6,7 @@ $(function() {
 	var modal = new modals.FormModal($("#add-edit-company")[0], {
 		title: modals.text_generator("新增公司", "编辑公司"),
 		msg: modals.text_generator("新增公司成功", "公司信息修改成功"),
+        process: Dajaxice.mgr.add_edit_company,
 		clear: function(form) {
 			form.id.value = "";
 			form.name.value = "";
