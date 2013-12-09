@@ -17,9 +17,9 @@ class LogMeta(models.Model):
     """
     date = models.DateField(db_index=True, editable=False)
     uid = models.IntegerField(db_index=True, editable=False)
-    did = models.CharField(verbose_name=u'串号', max_length=16, editable=False)
-    brand = models.CharField(verbose_name=u'品牌', max_length=32, editable=False)
-    model = models.CharField(verbose_name=u'机型', max_length=16, editable=False)
+    did = models.CharField(verbose_name=u'chuanhao', max_length=16, editable=False)
+    brand = models.CharField(verbose_name=u'pinpai', max_length=32, editable=False)
+    model = models.CharField(verbose_name=u'jixing', max_length=16, editable=False)
     appID = models.CharField(max_length=16, editable=False)
     appPkg = models.CharField(max_length=32, editable=False)
 
@@ -45,6 +45,7 @@ class UserDeviceLogEntity(models.Model):
     u"""
     手机安装统计
     """
+
     """
     keys
     """
