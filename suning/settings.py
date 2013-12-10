@@ -22,6 +22,7 @@ DATABASE_USER = 'root'
 DATABASE_PASSWORD = 'nameLR9969'
 DATABASE_NAME = 'suning_sw'
 
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
