@@ -66,8 +66,8 @@ class DeviceLogEntity(models.Model):
     """
     date = models.DateField(db_index=True)
     uid = models.IntegerField(db_index=True)
-    brand = models.CharField()
-    appName = models.CharField()
+    brand = models.CharField(max_length=32)
+    appName = models.CharField(max_length=32)
     """
     values
     """
