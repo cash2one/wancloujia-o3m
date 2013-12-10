@@ -1,8 +1,7 @@
 # coding: utf-8
 from django.db import models
-from mgr.models import Company, Store
+from mgr.models import Company, Store, Employee
 from app.models import App
-# Create your models here.
 
 class LogEntity(models.Model):
     content = models.CharField(max_length=10240, default='')
@@ -26,7 +25,8 @@ class LogMeta(models.Model):
     appID = models.CharField(max_length=16, editable=False)
     appPkg = models.CharField(max_length=App.PACKAGE_LENGTH_LIMIT, editable=False)
 
-    def filter_by_organization(logs, organization):
+    @classmethod
+    def filter_by_organization(cls, logs, organization):
         emps = Employee.filter_by_organization(organization)
         pks = emps.values_list('pk', flat=True)
         return logs.filter(uid__in=pks)

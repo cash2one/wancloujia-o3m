@@ -74,7 +74,7 @@ window.NETWORK_ERROR_MSG = '网路异常，请稍后重试';
             map: function(data, names) {
                 var result = {};
                 _.each(data, function(item) {
-                    if(~names.indexOf(item.name)) {
+                    if(names.indexOf(item.name) != -1) {
                        result[item.name] = item.value; 
                     }
                 });

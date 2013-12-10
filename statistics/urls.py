@@ -6,4 +6,5 @@ urlpatterns = patterns('statistics.views',
     url(r'^companies$', 'companies'),
     url(r'^stores$', 'stores'),
     url(r'^employee$', 'employee'),
+    url(r'^apps$', 'apps'),
 )

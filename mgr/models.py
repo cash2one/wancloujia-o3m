@@ -183,7 +183,8 @@ class Employee(Staff):
         store_type = ContentType.objects.get_for_model(Store)
         return None if org.real_type !=  store_type else org
 
-    def filter_by_organization(org):
+    @classmethod
+    def filter_by_organization(cls, org):
         orgs = org.descendants_and_self()
         return Employee.objects.filter(organization__in=orgs)
 

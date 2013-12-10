@@ -9,7 +9,7 @@ from dajaxice.utils import deserialize_form
 
 from interface.models import LogMeta
 from app.models import App
-from mgr.models import Employee
+from mgr.models import Employee, Organization
 from statistics.forms import LogMetaFilterForm
 from suning import utils
 from suning.decorators import *
@@ -26,19 +26,20 @@ class UserPermittedFilter:
         self.logs = logs
         self.emp_id = emp_id
         self.org_id = utils.first_valid(lambda e: e, [store_id, company_id, region_id])
+        logger.debug("%s emp_id: %s, org_id: %s:" %(__name__, str(self.emp_id), str(self.org_id)))
 
     def filter(self):
         if self.emp_id:
-            return self.logs.filter(uid=uid)
+            return self.logs.filter(uid=self.emp_id)
 
         if not self.org_id:
             return self.logs
 
-        org = utils.get_model_by_pk(self.org_id)
+        org = utils.get_model_by_pk(Organization.objects, self.org_id)
         if not org:
             return self.logs
 
-        return LogMeta.filter_by_organization(self.logs, org)
+        return LogMeta.filter_by_organization(self.logs, org.cast())
 
 
 class UserUnpermittedFilter:
@@ -86,6 +87,8 @@ def get_flow_logs(request, form, offset, length):
     logger.debug("length: " +  str(length))
     user = request.user
     form = deserialize_form(form)
+    logger.debug(form)
+
     filter_form = LogMetaFilterForm(form)
     if not filter_form.is_valid():
         logger.warn("form is invalid")
@@ -93,6 +96,7 @@ def get_flow_logs(request, form, offset, length):
         return _invalid_data_json
 
     logs = LogMeta.objects.all()
+    logger.debug("all logs: %d" % len(logs))
     if user.is_staff or user.is_superuser:
         region_id = filter_form.cleaned_data["region"]
         company_id = filter_form.cleaned_data["company"]
@@ -101,12 +105,16 @@ def get_flow_logs(request, form, offset, length):
         logs = UserPermittedFilter(logs, region_id, company_id, store_id, emp_id).filter()
     else:
         logs = UserUnpermittedFilter(logs, emp_id).filter()
+    logger.debug("logs filtered by user info: %d" % len(logs))
 
     logs = BrandFilter(logs, filter_form.cleaned_data["brand"]).filter()
+    logger.debug("logs filtered by brand: %d" % len(logs))
 
     from_date = filter_form.cleaned_data["from_date"]
     to_date = filter_form.cleaned_data["to_date"]
     logs = PeriodFilter(logs, from_date, to_date).filter()
+    logger.debug("logs filtered by period: %d" % len(logs))
+
     total = len(logs)
     logs = logs[offset: offset + length]
 

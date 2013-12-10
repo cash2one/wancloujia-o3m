@@ -25,7 +25,6 @@ $(function() {
     var $filter_store = $("#filter_store");
     $filter_store.jCombo("stores?c=", $.extend({parent: $filter_company}, combo_options));
 
-
     var $filter_employee = $("#filter_employee");
     var select2_options = $.extend({}, select2_tip_options, {
         query: function(query) {
@@ -46,6 +45,25 @@ $(function() {
     });
 
     $filter_employee.select2(select2_options);
+
+    var $filter_app = $("#filter_app");
+    $filter_app.select2($.extend({}, select2_tip_options, {
+        query: function(query) {
+            $.get('apps', {
+                q: query.term,
+                p: query.page
+            }, function(data) {
+                console.log(data);
+                query.callback(data);
+            }, "json").error(function() {
+                query.callback([]);
+            });
+        }
+    }));
+
+
+    var $filter_from_date = $("#filter_from_date");
+    var $filter_to_date = $("#filter_to_date");
 
     var $table = $(".table").dataTable($.extend({}, suning.dataTables.options, {
         sPaginationType: "bootstrap",

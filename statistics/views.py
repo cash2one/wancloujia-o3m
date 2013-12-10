@@ -1,5 +1,6 @@
 #coding: utf-8
 import logging
+import math
 
 from django import forms
 from django.utils import simplejson
@@ -16,8 +17,8 @@ from suning import permissions
 from suning.utils import render_json, first_valid
 from suning.decorators import active_tab
 from mgr.models import cast_staff, Region, Company, Store, Organization, Employee
+from app.models import App
 from interface.models import LogMeta
-from tables import LogTable
 from forms import LogMetaFilterForm
 
 logger = logging.getLogger(__name__)
@@ -244,7 +245,29 @@ def employee(request):
 
     q = request.GET.get("q", "")
     emps = emps.filter(Q(username__contains=q) | Q(email__contains=q) | Q(realname__contains=q))
+    # TODO
     emps = emps[0:10]
     results = map(lambda e: {'id': e.pk, 'text': e.username}, emps)
     return render_json({'results': results})
+
+
+@require_GET
+def apps(request):
+    if not request.user.is_authenticated():
+        return render_json([])
+
+    q = request.GET.get('q', "")
+    p = request.GET.get('p', "")
+    page = int(p) if p else 0
+
+    APPS_PER_PAGE = 10
+    apps = App.objects.filter(name__contains=q)
+    total = len(apps)
+    pages = int(math.ceil(total/float(APPS_PER_PAGE))) 
+
+    apps = apps[(page-1)*APPS_PER_PAGE:page*APPS_PER_PAGE]
+    results = map(lambda e: {'id': e.pk, 'text': e.name}, apps)
+
+    return render_json({'more': pages > page, 'results': results})
+
 
