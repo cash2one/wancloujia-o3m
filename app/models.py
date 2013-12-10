@@ -22,9 +22,10 @@ class Category(models.Model):
 
 
 class App(models.Model):
+    PACKAGE_LENGTH_LIMIT = 100
     apk = models.ForeignKey(UploadApk)
     name = models.CharField(verbose_name=u'应用名称', max_length=20)
-    package = models.CharField(max_length=100, unique=True)
+    package = models.CharField(max_length=PACKAGE_LENGTH_LIMIT, unique=True)
     category = models.ForeignKey(Category, verbose_name=u'应用类型')
     app_icon = models.CharField(verbose_name=u'应用图标', max_length=100)
     version = models.CharField(verbose_name=u'版本号', max_length=255)

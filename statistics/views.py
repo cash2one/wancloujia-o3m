@@ -18,6 +18,7 @@ from suning.decorators import active_tab
 from mgr.models import cast_staff, Region, Company, Store, Organization, Employee
 from interface.models import LogMeta
 from tables import LogTable
+from forms import LogMetaFilterForm
 
 logger = logging.getLogger(__name__)
 
@@ -47,17 +48,6 @@ def _filter_logs_by_orgs(logs, region_id, company_id, store_id):
 
     return logs
 
-
-def _filter_logs_by_period(logs, from_date, to_date):
-    if from_date:
-        from_date = datetime.strftime(from_date) 
-        logs = logs.filter(date__gte=from_date)
-
-    if to_date:
-        to_date = datetime.strftime(to_date)
-        logs = logs.filter(date__lte=to_date)
-
-    return logs
 
 @require_GET
 def regions(request):
@@ -223,47 +213,16 @@ def _filter_logs_by_user_info(logs, filters, user, query):
 
 
 def _get_brands():
-    return LogMeta.objects.all().values('brand').distinct()
+    return LogMeta.objects.all().values_list('brand', flat=True).distinct()
 
 
 @require_GET
 @login_required
 @active_tab("statistics", "flow")
 def flow(request):
-    logs = LogMeta.objects.all()
-    filters = {}
-    logs = _filter_logs_by_user_info(logs, filters, request.user, request.GET)
-    
-    appid = request.GET.get('app', None)
-    filters["app"] = _get_app_by_id(appid) 
-    if appid:
-        logs = logs.filter(appID=appid)
-
-    brand = request.GET.get('brand', "")
-    filters["brand"] = {
-        'selected': brand,
-        'items': _get_brands()
-    }
-    if brand:
-        logs = logs.filter(brand=brand)
-
-    from_date = request.GET.get("from_date", "")            
-    to_date = request.GET.get("to_date", "")
-    filters["period"] = {
-        'from_date': from_date,
-        'to_date': to_date
-    }
-    logs = _filter_logs_by_period(logs, from_date, to_date)
-
-    total = len(logs)
-    logTable = LogTable(logs)
-    RequestConfig(request, paginate={"per_page": 50}).configure(logTable) 
-
-    logger.debug("filters: %s" % filters)
     return render(request, "flow.html", {
-        'filters': filters,
-        'logTable': logTable,
-        'total': total
+        'brands': _get_brands(),
+        'filter': LogMetaFilterForm()
     })
 
 

@@ -14,3 +14,8 @@ def first_valid(test, items, default=None):
 
     return default
 
+
+def get_model_by_pk(manager, pk, default=None):
+    data = manager.filter(pk=pk)
+    return data[0] if data else default
+

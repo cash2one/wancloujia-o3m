@@ -158,6 +158,9 @@ class Employee(Staff):
     def in_store(self):
         return self.organization.real_type == ContentType.objects.get_for_model(Store)
 
+    def in_company(self):
+        return self.organization.real_type == ContentType.objects.get_for_model(Company)
+
     def in_region(self):
         return self.organization.real_type == ContentType.objects.get_for_model(Region)
 
@@ -179,6 +182,10 @@ class Employee(Staff):
         org = self.organization.cast()
         store_type = ContentType.objects.get_for_model(Store)
         return None if org.real_type !=  store_type else org
+
+    def filter_by_organization(org):
+        orgs = org.descendants_and_self()
+        return Employee.objects.filter(organization__in=orgs)
 
 
 class Administrator(Staff):

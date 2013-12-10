@@ -1,6 +1,7 @@
 # coding: utf-8
 from django.db import models
 from mgr.models import Company, Store
+from app.models import App
 # Create your models here.
 
 class LogEntity(models.Model):
@@ -15,13 +16,20 @@ class LogMeta(models.Model):
     u"""
     装机数据查询的日志元数据
     """
+
+    BRAND_LENGTH_LIMIT = 32
     date = models.DateField(db_index=True, editable=False)
     uid = models.IntegerField(db_index=True, editable=False)
     did = models.CharField(verbose_name=u'chuanhao', max_length=16, editable=False)
-    brand = models.CharField(verbose_name=u'pinpai', max_length=32, editable=False)
+    brand = models.CharField(verbose_name=u'pinpai', max_length=BRAND_LENGTH_LIMIT, editable=False)
     model = models.CharField(verbose_name=u'jixing', max_length=16, editable=False)
     appID = models.CharField(max_length=16, editable=False)
-    appPkg = models.CharField(max_length=32, editable=False)
+    appPkg = models.CharField(max_length=App.PACKAGE_LENGTH_LIMIT, editable=False)
+
+    def filter_by_organization(logs, organization):
+        emps = Employee.filter_by_organization(organization)
+        pks = emps.values_list('pk', flat=True)
+        return logs.filter(uid__in=pks)
 
     class Meta:
         permissions=(
