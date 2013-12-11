@@ -14,7 +14,7 @@
 		var obj = $(this);
 		if(opt.parent!=null) {
 		    var $parent = $(opt.parent);			
-			$parent.removeAttr("disabled","disabled");
+			//$parent.removeAttr("disabled","disabled");
 			$parent.bind('change',  function(e) {
 				obj.attr("disabled","disabled");
 				if($(this).val()!=opt.first_optval) obj.removeAttr("disabled");

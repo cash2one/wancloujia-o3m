@@ -47,15 +47,19 @@
         this.$to = $(to);
         this.$from.change(function() {
             var from_date = parseDate(that.$from.val());
+            if(!from_date) return;
+
             that.$to.datetimepicker('setStartDate', from_date);
 
             if (!that.$to.val()) return;
 
             var to_date = parseDate(that.$to.val());
-            if(to_date.getTime() < fromDate.getTime()) {
-                that.$to.datetimepicker('setDate', startDate);
+            if(to_date.getTime() < from_date.getTime()) {
+                that.$to.datetimepicker('setDate', from_date);
             }
         });
+
+        this.$from.trigger('change');
     }
 
     window.statistics = {

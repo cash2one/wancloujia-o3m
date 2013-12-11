@@ -1,5 +1,6 @@
 #coding: utf-8
 import logging
+import datetime
 import math
 
 from django import forms
@@ -49,7 +50,6 @@ def _filter_logs_by_orgs(logs, region_id, company_id, store_id):
 
     return logs
 
-
 @require_GET
 def regions(request):
     user = request.user
@@ -76,12 +76,17 @@ def companies(request):
     elif user.is_superuser or user.is_staff:
         companies = Company.objects.filter(region__pk=rid)
     else:
-        #TODO
-        companies = []
+        user = cast_staff(user)
+        if user.in_region():
+            companies = []
+        elif user.in_company():
+            companies = [user.organization.cast()]
+        else:
+            companies = [user.organization.cast().company]
 
     results = {}
     for c in companies:
-        results[str(c.pk)] = c.name
+        results[str(c.pk)] = "%s%s" % (c.code, c.name)
     return render_json(results)
 
 
@@ -95,14 +100,13 @@ def stores(request):
     elif user.is_superuser or user.is_staff:
         stores = Store.objects.filter(company__pk=cid)
     else:
-        #TODO
-        stores = []
+        user = cast_staff(user)
+        stores = [user.organization.cast()] if user.in_store() else []
+
     results = {}
     for s in stores:
-        results[str(s.pk)] = s.name
+        results[str(s.pk)] = "%s%s" % (s.code, s.name)
     return render_json(results)
-
- 
 
 
 def _get_model_by_id(manager, id):
@@ -221,8 +225,24 @@ def _get_brands():
 @login_required
 @active_tab("statistics", "flow")
 def flow(request):
+    today = datetime.date.today()
+    first_day = datetime.date(today.year, today.month, 1)
+    user = cast_staff(request.user)
+    user_filter = {'has_perm': True}
+    if not user.is_superuser and not user.is_staff and \
+        not user.has_perm("interface.view_organization_statistics"):
+        user_filter["has_perm"] = False
+        organizations = [None, None, None]
+        for i, org in enumerate(user.organizations()):
+            organizations[i] = org
+        user_filter["region"], user_filter["company"], user_filter["store"] = organizations
+        user_filter["emp"] = user
+        
     return render(request, "flow.html", {
         'brands': _get_brands(),
+        'user_filter': user_filter,
+        'first_day': str(first_day),
+        'today': str(today),
         'filter': LogMetaFilterForm()
     })
 

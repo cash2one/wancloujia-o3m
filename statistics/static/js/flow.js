@@ -8,17 +8,6 @@ $(function() {
 
 
 $(function() {
-    function parseDate(value) {
-        var regex = /(\d{4})-(\d\d)-(\d\d) (\d\d):(\d\d)/;
-        var result = value.match(regex);
-        var year = parseInt(result[1], 10);
-        var month = parseInt(result[2], 10);
-        var date = parseInt(result[3], 10);
-        var hours = parseInt(result[4], 10);
-        var minutes = parseInt(result[5], 10);
-        return new Date(year, month-1, date, hours, minutes);
-    }
-
     var $form = $(".form-filter");
     var form = $form[0];
 
@@ -28,11 +17,20 @@ $(function() {
         first_optval: ''
     };
     var $filter_region = $("#filter_region");
-    $filter_region.jCombo("regions", combo_options);
+    $filter_region.select2(select2_tip_options);
+
     var $filter_company = $("#filter_company")
-    $filter_company.jCombo("companies?r=", $.extend({parent: $filter_region}, combo_options));
+    $filter_company.select2(select2_tip_options);
+
     var $filter_store = $("#filter_store");
-    $filter_store.jCombo("stores?c=", $.extend({parent: $filter_company}, combo_options));
+    $filter_store.select2(select2_tip_options);
+
+    if ($("#user-filter").data("perm")) {
+        $filter_company.jCombo("companies?r=", $.extend({parent: $filter_region}, combo_options));
+        $filter_region.jCombo("regions", combo_options);
+        $filter_store.jCombo("stores?c=", $.extend({parent: $filter_company}, combo_options));
+    }
+
 
     var $filter_employee = $("#filter_employee");
     var select2_options = $.extend({}, select2_tip_options, {

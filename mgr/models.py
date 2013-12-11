@@ -52,9 +52,6 @@ class Organization(models.Model):
     def children(self):
         return []
 
-    def ancestor(self):
-        return None
-
     def descendants_and_self(self):
         return []
 
@@ -71,15 +68,38 @@ class Organization(models.Model):
         return self.cast().name
 
 
-class Region(Organization):
+class NodeMixin:
+    def belong_to(self, node):
+        current = self
+        while current and current.pk != node.pk:
+            current = current.parent()
+
+        return current is not None
+
+    def parents(self):
+        parents = []
+        current = self.parent()
+        while current is not None:
+            parents.insert(0, current)
+            current = current.parent()
+        return parents
+
+    def ancestor(self):
+        current = self
+        parent = current.parent()
+        while parent:
+            current = parent
+            parent = current.parent()
+        return current
+
+
+class Region(Organization, NodeMixin):
     name = models.CharField(verbose_name=u'名称', unique=True, 
                             max_length=Organization.NAME_LENGTH_LIMIT)
 
     def children(self):
         return Company.objects.filter(region__pk=self.pk) if self.pk else []
 
-    def ancestor(self):
-        return self 
 
     def descendants_and_self(self):
         if not self.pk:
@@ -98,7 +118,7 @@ class Region(Organization):
         verbose_name = u'大区'
 
 
-class Company(Organization):
+class Company(Organization, NodeMixin):
     code = models.CharField(verbose_name=u'编码', unique=True, 
                             max_length=Organization.CODE_LENGTH_LIMIT)
     name = models.CharField(verbose_name=u'名称', unique=True, 
@@ -106,9 +126,6 @@ class Company(Organization):
     region = models.ForeignKey(Region, verbose_name=u'所属大区')
 
     def parent(self):
-        return self.region
-
-    def ancestor(self):
         return self.region
 
     def children(self):
@@ -127,7 +144,7 @@ class Company(Organization):
         verbose_name = u'公司'
 
 
-class Store(Organization):
+class Store(Organization, NodeMixin):
     code = models.CharField(verbose_name=u'编码', unique=True, 
                             max_length=Organization.CODE_LENGTH_LIMIT)
     name = models.CharField(verbose_name=u'名称', unique=True, 
@@ -136,9 +153,6 @@ class Store(Organization):
 
     def parent(self):
         return self.company
-
-    def ancestor(self):
-        return self.company.region
 
     def descendants_and_self(self):
         return Organization.objects.filter(pk=self.pk) if self.pk else []
@@ -165,23 +179,22 @@ class Employee(Staff):
         return self.organization.real_type == ContentType.objects.get_for_model(Region)
 
     def get_region(self):
-        org = self.organization.cast()
-        region_type = ContentType.objects.get_for_model(Region)
-        return org if org.real_type == region_type else org.ancestor()
+        return self.organization.cast().ancestor()
 
-    def get_company(self):
+    def belong_to(self, org):
+        organization = self.organization.cast()
+        while organization and organization.pk != org.pk:
+            organization = organization.parent()
+
+        return organization is not None
+
+    def organizations(self):
+        organizations = []
         org = self.organization.cast()
-        if org.real_type == ContentType.objects.get_for_model(Region):
-            return None
-        elif org.real_type == ContentType.objects.get_for_model(Company):
-            return org
-        else:
-            return org.company
-    
-    def get_store(self):
-        org = self.organization.cast()
-        store_type = ContentType.objects.get_for_model(Store)
-        return None if org.real_type !=  store_type else org
+        while org is not None:
+            organizations.insert(0, org)
+            org = org.parent()
+        return organizations
 
     @classmethod
     def filter_by_organization(cls, org):

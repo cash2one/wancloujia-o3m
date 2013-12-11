@@ -19,22 +19,64 @@
         <div class="panel-body" style="padding: 0px"> 
             <form class="form-filter">
                 <div class="filters-wrap">
-                    <div class="filter-group">
+                    <div class="filter-group" id="user-filter" 
+                        {% if user_filter.has_perm %}
+                        data-perm="true"
+                        {% else %}
+                        data-perm="false"
+                        {% endif %}>
                         <div class="filter">
                             <label for="filter_region">{{ filter.region.label }}：</label>
-                            <select id="filter_region" name="region"></select>
+                            <select id="filter_region" 
+                                    {% if not user_filter.has_perm %}
+                                    disabled='disabled'
+                                    {% endif %}
+                                    name="region">
+                                {% if not user_filter.has_perm %}
+                                <option value="{{ user_filter.region.pk }}" selected='selected'>
+                                    {{ user_filter.region.code }}{{ user_filter.region.name }}
+                                </option>
+                                {% endif %}
+                             </select>
                         </div>
                         <div class="filter">
                             <label for="filter_company">{{ filter.company.label }}：</label>
-                            <select id="filter_company" name="company"> </select>
+                            <select id="filter_company" name="company"
+                                    {% if not user_filter.has_perm %}
+                                    disabled='disabled'
+                                    {% endif %}>
+                                {% if not user_filter.has_perm %}
+                                <option value="{{ user_filter.company.pk }}" selected='selected'>
+                                    {{ user_filter.company.code }}{{ user_filter.company.name }}
+                                </option>
+                                {% endif %}
+                            </select>
                         </div>
                         <div class="filter">
                             <label for="filter_store">{{ filter.store.label }}：</label>
-                            <select id="filter_store" name="store"></select>
+                            <select id="filter_store" name="store"
+                                    {% if not user_filter.has_perm %}
+                                    disabled='disabled'
+                                    {% endif %}>
+                                {% if not user_filter.has_perm %}
+                                <option value="{{ user_filter.store.pk }}" selected='selected'>
+                                    {{ user_filter.store.code }}{{ user_filter.store.name }}
+                                </option>
+                                {% endif %}
+                            </select>
                         </div>
                         <div class="filter">
                             <label for="filter_employee">{{ filter.emp.label }}：</label>
+                            {% if user_filter.has_perm %}
                             <input id="filter_employee" type="hidden" name="emp"/>
+                            {% else %}
+                            <select id="#filter_employee" name="emp" 
+                                    disabled='disabled' value="{{ user_filter">
+                                <option value="{{ user_filter.emp.pk }}">
+                                    {{ user_filter.emp.username }}
+                                </option>
+                            </select>
+                            {% endif %}
                         </div>
                     </div>
                     <div class="filter-group">
@@ -47,6 +89,7 @@
                         <div class="filter">
                             <label for="brand">{{ filter.brand.label }}：</label>
                             <select id="brand" name="brand">
+                                <option value="">------</option>
                                 {% for brand in brands %}
                                 <option value="{{ brand }}">{{ brand }}</option>
                                 {% endfor %}
@@ -62,6 +105,7 @@
                                     data-min-view='month'
                                     data-minView='month'
                                     data-provide='datetimepicker'
+                                    value='{{ first_day }}'
                                     id="filter_from_date" name="from_date"/>
                         </div>
                         <div class="filter">
@@ -72,6 +116,7 @@
                                     data-min-view='month'
                                     data-minView='month'
                                     data-provide='datetimepicker'
+                                    value="{{ today }}"
                                     id="filter_to_date" name="to_date"/>
                         </div>
                     </div>
