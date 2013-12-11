@@ -190,7 +190,7 @@ $(function() {
     $form.submit(function(e) {
         e.preventDefault();
 
-        $table.fnClearTable();
+        //$table.fnClearTable();
         $table.fnDraw();
     });
 });
