@@ -102,7 +102,6 @@ def snippet_detail(request, pk):
 @api_view(['GET', 'POST'])
 def upload(request):
     if request.method == "POST":
-        #log = request.raw_post_data
         log = zlib.decompress(str(request.raw_post_data), 16+zlib.MAX_WBITS, 16384)
         logger.info(log)
         return HttpResponse(status=status.HTTP_201_CREATED)
