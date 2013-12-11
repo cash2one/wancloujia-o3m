@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="{{ STATIC_URL }}css/bootstrap-datetimepicker.min.css" />
 <link rel="stylesheet" href="{{ STATIC_URL }}css/bootstrap-datetimepicker.bs3-fix.css" />
 <link rel="stylesheet" href="{{ STATIC_URL }}css/form_filter.css"/>
+<link rel="stylesheet" href="{{ STATIC_URL }}css/statistics.css"/>
 <link rel="stylesheet" href="{{ STATIC_URL }}css/datatables.css"/>
 {% endblock %}
 
@@ -54,24 +55,24 @@
                     </div>
                     <div class="filter-group last">
                         <div class="filter">
-                            <label for="from_date">{{ filter.from_date.label }}：</label>
+                            <label for="filter_from_date">{{ filter.from_date.label }}：</label>
                             <input class="form-control date" type="text" readonly='readonly' 
                                     data-date-format='yyyy-mm-dd'
                                     data-date-language='zh-CN' 
                                     data-min-view='month'
                                     data-minView='month'
                                     data-provide='datetimepicker'
-                                    id="from_date" name="from_date"/>
+                                    id="filter_from_date" name="from_date"/>
                         </div>
                         <div class="filter">
-                            <label for="to_date">{{ filter.to_date.label }}：</label>
+                            <label for="filter_to_date">{{ filter.to_date.label }}：</label>
                             <input class="form-control date" type="text" readonly='readonly' 
                                     data-date-format='yyyy-mm-dd'
                                     data-date-language='zh-CN' 
                                     data-min-view='month'
                                     data-minView='month'
                                     data-provide='datetimepicker'
-                                    id="to_date" name="to_date"/>
+                                    id="filter_to_date" name="to_date"/>
                         </div>
                     </div>
                 </div>
@@ -117,5 +118,6 @@
 <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.jcombo.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.dataTables.min.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap.datatables.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/statistics.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/flow.js"></script>
 {% endblock %}

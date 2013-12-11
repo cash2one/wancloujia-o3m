@@ -1,5 +1,6 @@
 # coding: utf-8
 import logging
+from datetime import datetime
 
 from django.utils import simplejson
 from django.contrib.auth.models import User
@@ -43,6 +44,7 @@ class UserPermittedFilter:
 
 
 class UserUnpermittedFilter:
+
     def __init(self, logs, user_id):
         self.logs = logs
         self.user_id = user_id
@@ -60,12 +62,10 @@ class PeriodFilter:
     def filter(self):
         logs = self.logs
         if self.from_date:
-            from_date = datetime.strftime(from_date) 
-            selflogs = logs.filter(date__gte=from_date)
+            logs = logs.filter(date__gte=self.from_date)
 
         if self.to_date:
-            to_date = datetime.strftime(to_date)
-            logs = logs.filter(date__lte=to_date)
+            logs = logs.filter(date__lte=self.to_date)
 
         return logs
 
@@ -78,6 +78,23 @@ class BrandFilter:
     def filter(self):
         logs = self.logs
         return logs if not self.brand else logs.filter(brand=self.brand)
+
+
+class AppFilter:
+    def __init__(self, logs, app):
+        self.app = app
+        self.logs = logs
+
+    def filter(self):
+        if not self.app:
+            return self.logs
+
+        apps = App.objects.filter(pk=self.app)
+        if len(apps) == 0:
+            return self.logs.none()
+                
+        app = apps[0]
+        return self.logs.filter(appPkg=app.package)
 
 
 @dajaxice_register(method='POST')
@@ -106,6 +123,9 @@ def get_flow_logs(request, form, offset, length):
     else:
         logs = UserUnpermittedFilter(logs, emp_id).filter()
     logger.debug("logs filtered by user info: %d" % len(logs))
+
+    logs = AppFilter(logs, filter_form.cleaned_data["app"]).filter()
+    logger.debug("logs filtered by app: %d" % len(logs))
 
     logs = BrandFilter(logs, filter_form.cleaned_data["brand"]).filter()
     logger.debug("logs filtered by brand: %d" % len(logs))

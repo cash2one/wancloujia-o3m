@@ -1,5 +1,3 @@
-
-
 var error_check = suning.decorators.error_check;
 var login_check = suning.decorators.login_check;
 var toastNetworkError = suning.toastNetworkError;
@@ -10,6 +8,17 @@ $(function() {
 
 
 $(function() {
+    function parseDate(value) {
+        var regex = /(\d{4})-(\d\d)-(\d\d) (\d\d):(\d\d)/;
+        var result = value.match(regex);
+        var year = parseInt(result[1], 10);
+        var month = parseInt(result[2], 10);
+        var date = parseInt(result[3], 10);
+        var hours = parseInt(result[4], 10);
+        var minutes = parseInt(result[5], 10);
+        return new Date(year, month-1, date, hours, minutes);
+    }
+
     var $form = $(".form-filter");
     var form = $form[0];
 
@@ -61,11 +70,17 @@ $(function() {
         }
     }));
 
+    statistics.period("#filter_from_date", "#filter_to_date");
 
-    var $filter_from_date = $("#filter_from_date");
-    var $filter_to_date = $("#filter_to_date");
 
-    var $table = $(".table").dataTable($.extend({}, suning.dataTables.options, {
+    var app_temp = _.template("<span class='app-name' " +
+                                "data-html='true' " +
+                                "data-placement='bottom' " +
+                                "data-content='包名:&nbsp;<%= package %><br>序号:&nbsp;<%= id %>'" +
+                                "data-trigger='hover' >" + 
+                                "<%= name %></span>");
+
+    var $table = $(".table").dataTable($.extend({}, statistics.table_options, {
         sPaginationType: "bootstrap",
         aoColumns: [{
             sTitle: '大区'
@@ -82,7 +97,11 @@ $(function() {
         }, {
             sTitle: '串号'
         }, {
-            sTitle: '应用名称'
+            sTitle: '应用名称',
+            mRender: function(data, type, full) {
+                console.log(data, type, full);
+                return app_temp(data);
+            },
         }, {
             sTitle: '是否推广'
         }, {
@@ -90,10 +109,13 @@ $(function() {
         }],
         iDisplayStart: 0,
         iDisplayLength: 50,
+        fnDrawCallback: function() {
+            $table.find(".app-name").popover();
+        },
         fnServerData: function(source, data, callback, settings) {
             console.log("source", source)
             console.log("settings", settings);
-            var values = suning.dataTables.map(data, ["sEcho", "iDisplayLength", "iDisplayStart"]);
+            var values = statistics.table_map(data, ["sEcho", "iDisplayLength", "iDisplayStart"]);
             console.log("values", values);
 
             Dajaxice.statistics.get_flow_logs(login_check(error_check(function(data) {
@@ -117,7 +139,7 @@ $(function() {
                         item.brand,
                         item.model,
                         item.device,
-                        item.app.name,
+                        item.app,
                         app_popularize,
                         item.date
                     ]);

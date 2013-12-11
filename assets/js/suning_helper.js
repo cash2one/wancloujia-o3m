@@ -49,38 +49,7 @@ window.NETWORK_ERROR_MSG = '网路异常，请稍后重试';
     var RET_NOT_LOGIN = 1001;
 
     var suning = {
-        dataTables: {
-            options: {
-                bProcessing: true,
-                bLengthChange: false,
-                bSort: false,
-                bFilter: false,
-                bServerSide: true,
-                bRetrieve: true,
-                oLanguage: {
-                    oPaginate: {
-                        sFirst: '第一页',
-                        sLast: '最后一页',
-                        sNext: '&raquo;',
-                        sPrevious: '&laquo;'
-                    },
-                    sEmptyTable: '暂无记录',
-                    sInfo: '共 _TOTAL_ 次安装',
-                    sInfoEmpty: '暂无记录',
-                    sProcessing: '正在查询，请稍等...',
-                    sZeroRecords: '暂无记录'
-                }
-            },
-            map: function(data, names) {
-                var result = {};
-                _.each(data, function(item) {
-                    if(names.indexOf(item.name) != -1) {
-                       result[item.name] = item.value; 
-                    }
-                });
-                return result;
-            }
-        }, reload: function(delay) {
+        reload: function(delay) {
             if (!delay) {
                 window.location.reload();
                 return;
