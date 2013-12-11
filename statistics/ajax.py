@@ -12,6 +12,7 @@ from interface.models import LogMeta
 from app.models import App
 from mgr.models import Employee, Organization, cast_staff
 from statistics.forms import LogMetaFilterForm
+from suning.settings import EMPTY_VALUE
 from suning import utils
 from suning.decorators import *
 
@@ -120,32 +121,33 @@ class AppFilter:
 def _logs_to_dict_array(logs):
     results = []
     for log in logs:
-        item = {
-            "brand": log.brand,
-            'model': log.model,
-            'device': log.did,
+        dict = {
+            "brand": log.brand or EMPTY_VALUE,
+            'model': log.model or EMPTYP_VALUE,
+            'device': log.did or EMPTY_VALUE,
             "date": str(log.date)
         }
 
         apps = App.objects.filter(package=log.appPkg)
         if len(apps) != 0:
             app = apps[0]
-            item["app"] = {'id': app.pk, 'package': app.package, 'name': app.name}
-            item["popularize"] = app.popularize 
+            dict["app"] = {'id': app.pk, 'package': app.package, 'name': app.name}
+            dict["popularize"] = app.popularize 
         else:
-            item["app"] = {'id': log.appID, 'package': log.appPkg, 'name': ''}
-            item["popularize"] = 'undefined'
+            dict["app"] = {'id': log.appID, 'package': log.appPkg, 'name': EMPTY_VALUE}
+            dict["popularize"] = 'undefined'
 
-        ancestors = ['', '', '']
+        organizations = [EMPTY_VALUE, EMPTY_VALUE, EMPTY_VALUE]
         emp = utils.get_model_by_pk(Employee.objects, log.uid)
         if emp:
-            for i, item in enumerate(emp.ancestors()):
-                ancestors[i] = item.name
+            for i, item in enumerate(emp.organizations()):
+                organizations[i] = item.name
+            dict["emp"] = emp.username
+        else:
+            dict["emp"] = EMPTY_VALUE
                 
-        item["region"] = ancestors[0]
-        item["company"] = ancestors[0]
-        item["store"] = ancestors[0]
-        results.append(item)
+        dict["region"], dict["company"], dict["store"] = organizations
+        results.append(dict)
     return results
 
 

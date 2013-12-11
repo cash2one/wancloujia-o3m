@@ -70,7 +70,7 @@
                             {% if user_filter.has_perm %}
                             <input id="filter_employee" type="hidden" name="emp"/>
                             {% else %}
-                            <select id="#filter_employee" name="emp" 
+                            <select id="filter_employee" name="emp" 
                                     disabled='disabled' value="{{ user_filter">
                                 <option value="{{ user_filter.emp.pk }}">
                                     {{ user_filter.emp.username }}
@@ -87,8 +87,8 @@
                     </div>
                     <div class="filter-group">
                         <div class="filter">
-                            <label for="brand">{{ filter.brand.label }}：</label>
-                            <select id="brand" name="brand">
+                            <label for="filter_brand">{{ filter.brand.label }}：</label>
+                            <select id="filter_brand" name="brand">
                                 <option value="">------</option>
                                 {% for brand in brands %}
                                 <option value="{{ brand }}">{{ brand }}</option>

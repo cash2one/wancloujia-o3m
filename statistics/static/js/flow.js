@@ -2,10 +2,6 @@ var error_check = suning.decorators.error_check;
 var login_check = suning.decorators.login_check;
 var toastNetworkError = suning.toastNetworkError;
 
-$(function() {
-    $('select').select2(select2_tip_options);
-});
-
 
 $(function() {
     var $form = $(".form-filter");
@@ -25,33 +21,64 @@ $(function() {
     var $filter_store = $("#filter_store");
     $filter_store.select2(select2_tip_options);
 
+    var $filter_employee = $("#filter_employee");
     if ($("#user-filter").data("perm")) {
         $filter_company.jCombo("companies?r=", $.extend({parent: $filter_region}, combo_options));
         $filter_region.jCombo("regions", combo_options);
         $filter_store.jCombo("stores?c=", $.extend({parent: $filter_company}, combo_options));
+        var select2_options = $.extend({}, select2_tip_options, {
+            query: function(query) {
+                var store = $filter_store.val();
+                var company = $filter_company.val();
+                var region = $filter_region.val();
+                $.get('employee', {
+                    s: store,
+                    c: company,
+                    r: region,
+                    q: query.term
+                }, function(data) {
+                    query.callback(data);
+                }, "json").error(function() {
+                    query.callback([]);
+                });
+            }
+        });
+        $filter_employee.select2(select2_options);
+    } else {
+        $filter_employee.select2(select2_tip_options);
+    }
+    
+    var region = $filter_region.val();
+    var company = $filter_company.val();
+    var store = $filter_store.val();
+    function ensure_emp() {
+        var changed = false;
+        if($filter_region.val() != region) {
+            region = $filter_region.val();
+            changed = true;
+        }
+
+        if($filter_company.val() != company) {
+            company = $filter_company.val();
+            changed = true;
+        }
+
+        if($filter_store.val() != store) {
+            store = $filter_store.val();
+            changed = true;
+        }
+
+        if (changed) {
+            $filter_employee.val('').trigger('change');
+        }
     }
 
+    $filter_region.change(ensure_emp);
+    $filter_company.change(ensure_emp);
+    $filter_store.change(ensure_emp);
 
-    var $filter_employee = $("#filter_employee");
-    var select2_options = $.extend({}, select2_tip_options, {
-        query: function(query) {
-            var store = $filter_store.val();
-            var company = $filter_company.val();
-            var region = $filter_region.val();
-            $.get('employee', {
-                s: store,
-                c: company,
-                r: region,
-                q: query.term
-            }, function(data) {
-                query.callback(data);
-            }, "json").error(function() {
-                query.callback([]);
-            });
-        }
-    });
-
-    $filter_employee.select2(select2_options);
+    var $filter_brand = $("#filter_brand");
+    $filter_brand.select2(select2_tip_options);
 
     var $filter_app = $("#filter_app");
     $filter_app.select2($.extend({}, select2_tip_options, {

@@ -10,6 +10,8 @@ ADMINS = (
     ('yangchen', 'yuhan534@126.com'),
 )
 
+EMPTY_VALUE = '&mdash;'
+
 MANAGERS = ADMINS
 
 DATABASE_ENGINE = 'mysql'
