@@ -26,33 +26,53 @@ class Command(BaseCommand):
         date_2_1 = date(year=2013, month=2, day=1)
         date_3_1 = date(year=2013, month=3, day=1)
 
-        LogMeta(date=date_1_1, uid=emp_region.pk, did=DEVICE_ID, brand=BRAND, model=MODEL, appID=appid, appPkg=package).save()
-        LogMeta(date=date_1_1, uid=emp_region.pk, did=DEVICE_ID, brand=BRAND, model=MODEL, appID=appid, appPkg=package_not_exists).save()
-        LogMeta(date=date_1_1, uid=emp_company.pk, did=DEVICE_ID, brand=BRAND, model=MODEL, appID=appid, appPkg=package).save()
-        LogMeta(date=date_1_1, uid=emp_company.pk, did=DEVICE_ID, brand=BRAND, model=MODEL, appID=appid, appPkg=package_not_exists).save()
-        LogMeta(date=date_1_1, uid=emp_store.pk, did=DEVICE_ID, brand=BRAND, model=MODEL, appID=appid, appPkg=package).save()
-        LogMeta(date=date_1_1, uid=emp_store.pk, did=DEVICE_ID, brand=BRAND, model=MODEL, appID=appid, appPkg=package_not_exists).save()
-        LogMeta(date=date_1_1, uid=empid_not_exists, did=DEVICE_ID, brand=BRAND, model=MODEL, appID=appid, appPkg=package).save()
+        LogMeta(date=date_1_1, uid=emp_region.pk, did=DEVICE_ID, 
+                brand=BRAND, model=MODEL, appID=appid, appPkg=package).save()
+        LogMeta(date=date_1_1, uid=emp_region.pk, did=DEVICE_ID, 
+                brand=BRAND, model=MODEL, appID=appid, appPkg=package_not_exists).save()
+        LogMeta(date=date_1_1, uid=emp_company.pk, did=DEVICE_ID, 
+                brand=BRAND, model=MODEL, appID=appid, appPkg=package).save()
+        LogMeta(date=date_1_1, uid=emp_company.pk, did=DEVICE_ID, 
+                brand=BRAND, model=MODEL, appID=appid, appPkg=package_not_exists).save()
+        LogMeta(date=date_1_1, uid=emp_store.pk, did=DEVICE_ID, 
+                brand=BRAND, model=MODEL, appID=appid, appPkg=package).save()
+        LogMeta(date=date_1_1, uid=emp_store.pk, did=DEVICE_ID, 
+                brand=BRAND, model=MODEL, appID=appid, appPkg=package_not_exists).save()
+        LogMeta(date=date_1_1, uid=empid_not_exists, did=DEVICE_ID, 
+                brand=BRAND, model=MODEL, appID=appid, appPkg=package).save()
         LogMeta(date=date_1_1, uid=empid_not_exists, did=DEVICE_ID, 
                 brand=BRAND, model=MODEL, appID=appid, appPkg=package_not_exists).save()
-
-        LogMeta(date=date_2_1, uid=emp_region.pk, did=DEVICE_ID, brand=BRAND, model=MODEL, appID=appid, appPkg=package).save()
-        LogMeta(date=date_2_1, uid=emp_region.pk, did=DEVICE_ID, brand=BRAND, model=MODEL, appID=appid, appPkg=package_not_exists).save()
-        LogMeta(date=date_2_1, uid=emp_company.pk, did=DEVICE_ID, brand=BRAND, model=MODEL, appID=appid, appPkg=package).save()
-        LogMeta(date=date_2_1, uid=emp_company.pk, did=DEVICE_ID, brand=BRAND, model=MODEL, appID=appid, appPkg=package_not_exists).save()
-        LogMeta(date=date_2_1, uid=emp_store.pk, did=DEVICE_ID, brand=BRAND, model=MODEL, appID=appid, appPkg=package).save()
-        LogMeta(date=date_2_1, uid=emp_store.pk, did=DEVICE_ID, brand=BRAND, model=MODEL, appID=appid, appPkg=package_not_exists).save()
-        LogMeta(date=date_2_1, uid=empid_not_exists, did=DEVICE_ID, brand=BRAND, model=MODEL, appID=appid, appPkg=package).save()
+        LogMeta(date=date_2_1, uid=emp_region.pk, did=DEVICE_ID, 
+                brand=BRAND, model=MODEL, appID=appid, appPkg=package).save()
+        LogMeta(date=date_2_1, uid=emp_region.pk, did=DEVICE_ID, 
+                brand=BRAND, model=MODEL, appID=appid, appPkg=package_not_exists).save()
+        LogMeta(date=date_2_1, uid=emp_company.pk, did=DEVICE_ID, 
+                brand=BRAND, model=MODEL, appID=appid, appPkg=package).save()
+        LogMeta(date=date_2_1, uid=emp_company.pk, did=DEVICE_ID, 
+                brand=BRAND, model=MODEL, appID=appid, appPkg=package_not_exists).save()
+        LogMeta(date=date_2_1, uid=emp_store.pk, did=DEVICE_ID, 
+                brand=BRAND, model=MODEL, appID=appid, appPkg=package).save()
+        LogMeta(date=date_2_1, uid=emp_store.pk, did=DEVICE_ID, 
+                brand=BRAND, model=MODEL, appID=appid, appPkg=package_not_exists).save()
+        LogMeta(date=date_2_1, uid=empid_not_exists, did=DEVICE_ID, 
+                brand=BRAND, model=MODEL, appID=appid, appPkg=package).save()
         LogMeta(date=date_2_1, uid=empid_not_exists, did=DEVICE_ID, 
                 brand=BRAND, model=MODEL, appID=appid, appPkg=package_not_exists).save()
 
-        LogMeta(date=date_3_1, uid=emp_region.pk, did=DEVICE_ID, brand=BRAND, model=MODEL, appID=appid, appPkg=package).save()
-        LogMeta(date=date_3_1, uid=emp_region.pk, did=DEVICE_ID, brand=BRAND, model=MODEL, appID=appid, appPkg=package_not_exists).save()
-        LogMeta(date=date_3_1, uid=emp_company.pk, did=DEVICE_ID, brand=BRAND, model=MODEL, appID=appid, appPkg=package).save()
-        LogMeta(date=date_3_1, uid=emp_company.pk, did=DEVICE_ID, brand=BRAND, model=MODEL, appID=appid, appPkg=package_not_exists).save()
-        LogMeta(date=date_3_1, uid=emp_store.pk, did=DEVICE_ID, brand=BRAND, model=MODEL, appID=appid, appPkg=package).save()
-        LogMeta(date=date_3_1, uid=emp_store.pk, did=DEVICE_ID, brand=BRAND, model=MODEL, appID=appid, appPkg=package_not_exists).save()
-        LogMeta(date=date_3_1, uid=empid_not_exists, did=DEVICE_ID, brand=BRAND, model=MODEL, appID=appid, appPkg=package).save()
+        LogMeta(date=date_3_1, uid=emp_region.pk, did=DEVICE_ID, 
+                brand=BRAND, model=MODEL, appID=appid, appPkg=package).save()
+        LogMeta(date=date_3_1, uid=emp_region.pk, did=DEVICE_ID, 
+                brand=BRAND, model=MODEL, appID=appid, appPkg=package_not_exists).save()
+        LogMeta(date=date_3_1, uid=emp_company.pk, did=DEVICE_ID, 
+                brand=BRAND, model=MODEL, appID=appid, appPkg=package).save()
+        LogMeta(date=date_3_1, uid=emp_company.pk, did=DEVICE_ID, 
+                brand=BRAND, model=MODEL, appID=appid, appPkg=package_not_exists).save()
+        LogMeta(date=date_3_1, uid=emp_store.pk, did=DEVICE_ID, 
+                brand=BRAND, model=MODEL, appID=appid, appPkg=package).save()
+        LogMeta(date=date_3_1, uid=emp_store.pk, did=DEVICE_ID, 
+                brand=BRAND, model=MODEL, appID=appid, appPkg=package_not_exists).save()
+        LogMeta(date=date_3_1, uid=empid_not_exists, did=DEVICE_ID, 
+                brand=BRAND, model=MODEL, appID=appid, appPkg=package).save()
         LogMeta(date=date_3_1, uid=empid_not_exists, did=DEVICE_ID, 
                 brand=BRAND, model=MODEL, appID=appid, appPkg=package_not_exists).save()
 

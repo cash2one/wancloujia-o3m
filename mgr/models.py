@@ -178,15 +178,15 @@ class Employee(Staff):
     def in_region(self):
         return self.organization.real_type == ContentType.objects.get_for_model(Region)
 
-    def get_region(self):
-        return self.organization.cast().ancestor()
-
     def belong_to(self, org):
         organization = self.organization.cast()
         while organization and organization.pk != org.pk:
             organization = organization.parent()
 
         return organization is not None
+
+    def org(self):
+        return self.organization.cast()
 
     def organizations(self):
         organizations = []

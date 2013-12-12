@@ -11,3 +11,4 @@ djangorestframework
 redis
 jinja2
 django-filter
+pysqlite

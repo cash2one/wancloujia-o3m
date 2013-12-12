@@ -59,7 +59,7 @@ def regions(request):
         regions = Region.objects.all()
     else:
         user = cast_staff(user)
-        regions = [user.get_region()]
+        regions = [user.organizations()[0]]
 
     results = {}
     for r in regions:
@@ -77,12 +77,7 @@ def companies(request):
         companies = Company.objects.filter(region__pk=rid)
     else:
         user = cast_staff(user)
-        if user.in_region():
-            companies = []
-        elif user.in_company():
-            companies = [user.organization.cast()]
-        else:
-            companies = [user.organization.cast().company]
+        companies = [] if user.in_region() >= 2 else user.organizations()[1]
 
     results = {}
     for c in companies:
@@ -101,7 +96,7 @@ def stores(request):
         stores = Store.objects.filter(company__pk=cid)
     else:
         user = cast_staff(user)
-        stores = [user.organization.cast()] if user.in_store() else []
+        stores = [user.org()] if user.in_store() else []
 
     results = {}
     for s in stores:
