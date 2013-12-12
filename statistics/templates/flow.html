@@ -28,11 +28,11 @@
                         <div class="filter">
                             <label for="filter_region">{{ filter.region.label }}：</label>
                             <select id="filter_region" 
-                                    {% if not user_filter.has_perm %}
+                                    {% if user_filter.region.disabled %}
                                     disabled='disabled'
                                     {% endif %}
                                     name="region">
-                                {% if not user_filter.has_perm %}
+                                {% if user_filter.region.disabled  %}
                                 <option value="{{ user_filter.region.pk }}" selected='selected'>
                                     {{ user_filter.region.code }}{{ user_filter.region.name }}
                                 </option>
@@ -42,10 +42,10 @@
                         <div class="filter">
                             <label for="filter_company">{{ filter.company.label }}：</label>
                             <select id="filter_company" name="company"
-                                    {% if not user_filter.has_perm %}
+                                    {% if user_filter.company.disabled %}
                                     disabled='disabled'
                                     {% endif %}>
-                                {% if not user_filter.has_perm %}
+                                {% if user_filter.company.disabled %}
                                 <option value="{{ user_filter.company.pk }}" selected='selected'>
                                     {{ user_filter.company.code }}{{ user_filter.company.name }}
                                 </option>
@@ -55,10 +55,10 @@
                         <div class="filter">
                             <label for="filter_store">{{ filter.store.label }}：</label>
                             <select id="filter_store" name="store"
-                                    {% if not user_filter.has_perm %}
+                                    {% if user_filter.store.disabled %}
                                     disabled='disabled'
                                     {% endif %}>
-                                {% if not user_filter.has_perm %}
+                                {% if user_filter.store.disabled %}
                                 <option value="{{ user_filter.store.pk }}" selected='selected'>
                                     {{ user_filter.store.code }}{{ user_filter.store.name }}
                                 </option>
@@ -67,7 +67,7 @@
                         </div>
                         <div class="filter">
                             <label for="filter_employee">{{ filter.emp.label }}：</label>
-                            {% if user_filter.has_perm %}
+                            {% if not user_filter.emp.disabled %}
                             <input id="filter_employee" type="hidden" name="emp"/>
                             {% else %}
                             <select id="filter_employee" name="emp" 

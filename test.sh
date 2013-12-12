@@ -1,3 +1,5 @@
 #!/bin/bash
 
-./manage.py test mgr --settings=suning.settings_test
+APPS="mgr statistics"
+
+./manage.py test $APPS --settings=suning.settings_test

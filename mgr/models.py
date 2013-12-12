@@ -1,5 +1,6 @@
 # coding: utf-8
 from django.db import models
+from django.db.models import Q
 from django.contrib.auth.models import User, Group, Permission
 from django.contrib.contenttypes.models import ContentType
 
@@ -50,7 +51,7 @@ class Organization(models.Model):
         super(Organization, self).save(*args, **kwargs)
 
     def children(self):
-        return []
+        Organization.objects.none()
 
     def descendants_and_self(self):
         return []
@@ -99,7 +100,6 @@ class Region(Organization, NodeMixin):
 
     def children(self):
         return Company.objects.filter(region__pk=self.pk) if self.pk else []
-
 
     def descendants_and_self(self):
         if not self.pk:
@@ -197,9 +197,19 @@ class Employee(Staff):
         return organizations
 
     @classmethod
-    def filter_by_organization(cls, org):
+    def filter_by_organization(cls, org, emps=None):
+        # TODO 自定义ModelManager
         orgs = org.descendants_and_self()
-        return Employee.objects.filter(organization__in=orgs)
+        if not emps:
+            return Employee.objects.filter(organization__in=orgs)
+        else:
+            return emps.filter(organization__in=orgs)
+
+    @classmethod
+    def query(cls, emps, q):
+        return emps.filter(Q(username__contains=q) | 
+                            Q(email__contains=q) | 
+                            Q(realname__contains=q))
 
 
 class Administrator(Staff):

@@ -14,18 +14,25 @@ $(function() {
     };
     var $filter_region = $("#filter_region");
     $filter_region.select2(select2_tip_options);
+    if($filter_region.attr('disabled') != 'disabled') {
+        $filter_region.jCombo("regions", combo_options);
+    }
 
     var $filter_company = $("#filter_company")
     $filter_company.select2(select2_tip_options);
+    if($filter_company.attr('disabled') != 'disabled') {
+        $filter_company.jCombo("companies?r=", 
+            $.extend({parent: $filter_region}, combo_options));
+    }
 
     var $filter_store = $("#filter_store");
     $filter_store.select2(select2_tip_options);
+    if($filter_store.attr('disabled') != 'disabled') {
+        $filter_store.jCombo("stores?c=", $.extend({parent: $filter_company}, combo_options));
+    }
 
     var $filter_employee = $("#filter_employee");
-    if ($("#user-filter").data("perm")) {
-        $filter_company.jCombo("companies?r=", $.extend({parent: $filter_region}, combo_options));
-        $filter_region.jCombo("regions", combo_options);
-        $filter_store.jCombo("stores?c=", $.extend({parent: $filter_company}, combo_options));
+    if ($filter_employee.attr('disabled') != 'disabled') {
         var select2_options = $.extend({}, select2_tip_options, {
             query: function(query) {
                 var store = $filter_store.val();
