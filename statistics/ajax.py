@@ -50,16 +50,21 @@ class UserPermittedFilter(AdminFilter):
         self.user = user
 
     def filter(self):
-        user_org = self.user.organization.cast()
+        user_org = self.user.org()
 
-        emp = utils.get_model_by_id(Employee.objects, self.emp_id) if self.emp_id else None
-        if emp and emp.belong_to(user_org):
-            return self.logs.filter(uid=self.emp_id)
+        if self.emp_id:
+            emp = utils.get_model_by_pk(Employee.objects, self.emp_id) 
+            if emp and emp.belong_to(user_org):
+                return self.logs.filter(uid=self.emp_id)
+            else: 
+                return self.logs.none()
 
-        org = utils.get_model_by_pk(Organization.objects, self.org_id) if self.org_id else None
-        org = org.cast() if org else None
-        if org and org.belong_to(user_org):
-            return LogMeta.filter_by_organization(self.logs, org)
+        if self.org_id:
+            org = utils.get_model_by_pk(Organization.objects, self.org_id) 
+            if org and org.belong_to(user_log):
+                return LogMeta.filter_by_organization(self.logs, org)
+            else:
+                return self.logs.none()
 
         return LogMeta.filter_by_organization(self.logs, user_org)
 

@@ -4,12 +4,15 @@ from models import Region, Company, Store, Employee
 from django.test import TestCase
 
 
-class TestOrganizationAncestor(TestCase):
+class TestOrganization(TestCase):
     def setUp(self):
         self.region = Region(name='test_region')
         self.region.save()
+
         self.company = Company(code='1001', name='test_company', region=self.region)
         self.company.save()
+        self.company2 = Company(code='1002', name='test_company_2', region=self.region)
+        self.company2.save()
 
         self.store = Store(code='10011001', name='test_store', company=self.company)
         self.store.save()
@@ -18,8 +21,13 @@ class TestOrganizationAncestor(TestCase):
         self.assertTrue(self.region.pk == self.company.ancestor().pk)
         self.assertTrue(self.region.pk == self.store.ancestor().pk)
 
+    def test_belong_to(self):
+        self.assertTrue(self.store.belong_to(self.company))
+        self.assertFalse(self.region.belong_to(self.company))
+        self.assertFalse(self.store.belong_to(self.company2))
 
-class TestEmployeeOrganizations(TestCase):
+
+class TestEmployee(TestCase):
     def setUp(self):
         self.region = Region(name='test_region')
         self.region.save()
