@@ -9,7 +9,7 @@ $(function() {
 
     var combo_options = {
         dataType: 'json',
-        initial_text: '--------',
+        initial_text: '---------',
         first_optval: ''
     };
     var $filter_region = $("#filter_region");
@@ -21,14 +21,22 @@ $(function() {
     var $filter_company = $("#filter_company")
     $filter_company.select2(select2_tip_options);
     if($filter_company.attr('disabled') != 'disabled') {
-        $filter_company.jCombo("companies?r=", 
-            $.extend({parent: $filter_region}, combo_options));
+        if ($filter_region.attr('disabled') != 'disabled') {
+            $filter_company.jCombo("companies?r=", 
+                $.extend({parent: $filter_region}, combo_options));
+        } else {
+            $filter_company.jCombo("companies?r=" + $filter_region.val(), combo_options);
+        }
     }
 
     var $filter_store = $("#filter_store");
     $filter_store.select2(select2_tip_options);
     if($filter_store.attr('disabled') != 'disabled') {
-        $filter_store.jCombo("stores?c=", $.extend({parent: $filter_company}, combo_options));
+        if($filter_company.attr("disabled") != 'disabled') {
+            $filter_store.jCombo("stores?c=", $.extend({parent: $filter_company}, combo_options));
+        } else {
+            $filter_store.jCombo("stores?c=" + $filter_company.val(), combo_options);
+        }
     }
 
     var $filter_employee = $("#filter_employee");
@@ -76,7 +84,7 @@ $(function() {
         }
 
         if (changed) {
-            $filter_employee.val('').trigger('change');
+            $filter_employee.select2('val', '');
         }
     }
 
@@ -131,8 +139,11 @@ $(function() {
         }, {
             sTitle: '应用名称',
             mRender: function(data, type, full) {
-                console.log(data, type, full);
-                return app_temp(data);
+                if(data.name) {
+                    return app_temp(data);
+                } else {
+                    return '&mdash;'
+                }
             },
         }, {
             sTitle: '是否推广'

@@ -17,6 +17,7 @@
     <div class="panel panel-default">
         <div class="panel-heading">筛选条件</div>
         <div class="panel-body" style="padding: 0px"> 
+            {% with select_empty_option='---------' %}
             <form class="form-filter">
                 <div class="filters-wrap">
                     <div class="filter-group" id="user-filter" 
@@ -32,9 +33,10 @@
                                     disabled='disabled'
                                     {% endif %}
                                     name="region">
+
                                 {% if user_filter.region.disabled  %}
-                                <option value="{{ user_filter.region.pk }}" selected='selected'>
-                                    {{ user_filter.region.code }}{{ user_filter.region.name }}
+                                <option value="{{ user_filter.region.value.pk }}" selected='selected'>
+                                    {{ user_filter.region.value.name }}
                                 </option>
                                 {% endif %}
                              </select>
@@ -46,8 +48,8 @@
                                     disabled='disabled'
                                     {% endif %}>
                                 {% if user_filter.company.disabled %}
-                                <option value="{{ user_filter.company.pk }}" selected='selected'>
-                                    {{ user_filter.company.code }}{{ user_filter.company.name }}
+                                <option value="{{ user_filter.company.value.pk }}" selected='selected'>
+                                    {{ user_filter.company.value.code }}{{ user_filter.company.value.name }}
                                 </option>
                                 {% endif %}
                             </select>
@@ -59,8 +61,8 @@
                                     disabled='disabled'
                                     {% endif %}>
                                 {% if user_filter.store.disabled %}
-                                <option value="{{ user_filter.store.pk }}" selected='selected'>
-                                    {{ user_filter.store.code }}{{ user_filter.store.name }}
+                                <option value="{{ user_filter.store.value.pk }}" selected='selected'>
+                                    {{ user_filter.store.value.code }}{{ user_filter.store.value.name }}
                                 </option>
                                 {% endif %}
                             </select>
@@ -71,9 +73,9 @@
                             <input id="filter_employee" type="hidden" name="emp"/>
                             {% else %}
                             <select id="filter_employee" name="emp" 
-                                    disabled='disabled' value="{{ user_filter">
-                                <option value="{{ user_filter.emp.pk }}">
-                                    {{ user_filter.emp.username }}
+                                    disabled='disabled' value="{{ user_filter }}">
+                                <option value="{{ user_filter.emp.value.pk }}">
+                                    {{ user_filter.emp.value.username }}
                                 </option>
                             </select>
                             {% endif %}
@@ -89,7 +91,7 @@
                         <div class="filter">
                             <label for="filter_brand">{{ filter.brand.label }}：</label>
                             <select id="filter_brand" name="brand">
-                                <option value="">------</option>
+                                <option value="">{{ select_empty_option }}</option>
                                 {% for brand in brands %}
                                 <option value="{{ brand }}">{{ brand }}</option>
                                 {% endfor %}
@@ -125,6 +127,7 @@
                     <input type='submit'  class="btn btn-primary" value='筛选'</>
                 </div>
             </form>
+            {% endwith %}
         </div>
     </div>
 

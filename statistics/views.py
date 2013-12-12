@@ -22,7 +22,9 @@ from app.models import App
 from interface.models import LogMeta
 from forms import LogMetaFilterForm
 
+
 logger = logging.getLogger(__name__)
+
 
 def query_companies(user, rid):
     if not rid:
@@ -138,16 +140,16 @@ def flow(request):
         user_filter["company"]["disabled"] = organizations[1] is not None
 
         user_filter["store"]["value"] = organizations[2]
-        user_filter["store"]["disabled"] = organizations[1] is not None
-
+        user_filter["store"]["disabled"] = organizations[2] is not None
+        user_filter["emp"]["value"] = user
 
         if not user.has_perm("interface.view_organization_statistics"):
+            logger.debug("user has no permission to view organization's statistices")
             user_filter["region"]["disabled"] = True
             user_filter["company"]["disabled"] = True
             user_filter["region"]["disabled"] = True
             user_filter["emp"]["disabled"] = True
 
-        user_filter["emp"]["value"] = user
         
     return render(request, "flow.html", {
         'brands': _get_brands(),
@@ -178,7 +180,8 @@ def employee(request):
 
     user = cast_staff(request.user)
     if not user.is_superuser and not user.is_staff and \
-        not user.has_perm("interface.view_orgnaization_statistics"):
+        not user.has_perm("interface.view_organization_statistics"):
+        logger.debug("user has no permission to view organization's statistics")
         emps = Employee.objects.filter(pk=user.pk)
         return render_json({'results': emps_to_dict_arr(emps)})
 
@@ -189,6 +192,7 @@ def employee(request):
     org = get_model_by_pk(Organization.objects, org_id) if org_id else None
     org = org.cast() if org else None
 
+    logger.debug("%s: org: %s" % (__name__, str(org)))
     if not org:
         return render_json({'results': emps_to_dict_arr(Employee.objects.none())})
 

@@ -16,8 +16,8 @@ from suning.settings import EMPTY_VALUE
 from suning import utils
 from suning.decorators import *
 
-logger = logging.getLogger(__name__)
 
+logger = logging.getLogger(__name__)
 _invalid_data_msg = u'数据出错，请检查'
 _invalid_data_json = simplejson.dumps({'ret_code': 1000, 'ret_msg': _invalid_data_msg})
 _ok_json = simplejson.dumps({'ret_code': 0})
@@ -46,7 +46,7 @@ class AdminFilter:
 
 class UserPermittedFilter(AdminFilter):
     def __init__(self, user, logs, region_id, company_id, store_id, emp_id):
-        AdminFiler.__int__(self, logs, region_id, company_id, store_id, emp_id)
+        AdminFilter.__init__(self, logs, region_id, company_id, store_id, emp_id)
         self.user = user
 
     def filter(self):
@@ -61,7 +61,8 @@ class UserPermittedFilter(AdminFilter):
 
         if self.org_id:
             org = utils.get_model_by_pk(Organization.objects, self.org_id) 
-            if org and org.belong_to(user_log):
+            org = org.cast() if org else None
+            if org and org.belong_to(user_org):
                 return LogMeta.filter_by_organization(self.logs, org)
             else:
                 return self.logs.none()
@@ -139,7 +140,7 @@ def _logs_to_dict_array(logs):
             dict["app"] = {'id': app.pk, 'package': app.package, 'name': app.name}
             dict["popularize"] = app.popularize 
         else:
-            dict["app"] = {'id': log.appID, 'package': log.appPkg, 'name': EMPTY_VALUE}
+            dict["app"] = {'id': log.appID, 'package': log.appPkg, 'name': ''}
             dict["popularize"] = 'undefined'
 
         organizations = [EMPTY_VALUE, EMPTY_VALUE, EMPTY_VALUE]
@@ -181,7 +182,7 @@ def get_flow_logs(request, form, offset, length):
     elif user.has_perm("interface.view_organization_statistics"):
         logs = UserPermittedFilter(user, logs, region_id, company_id, store_id, emp_id).filter()
     else:
-        logs = UserUnpermittedFilter(logs, emp_id).filter()
+        logs = UserUnpermittedFilter(logs, request.user.pk).filter()
     logger.debug("logs filtered by user info: %d" % len(logs))
 
     logs = AppFilter(logs, filter_form.cleaned_data["app"]).filter()
