@@ -20,3 +20,10 @@
 .icon-arrow-left:before {
     content: "\e091";
 }
+
+/* for ie */
+.datetimepicker  td,
+.datetimepicker th {
+    width: 30px;
+}
+

@@ -11,7 +11,7 @@
     function table_map(data, names) {
         var result = {};
         _.each(data, function(item) {
-            if(names.indexOf(item.name) != -1) {
+            if(~_.indexOf(names, item.name)) {
                 result[item.name] = item.value; 
             }
         });
