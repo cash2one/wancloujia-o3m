@@ -52,17 +52,21 @@ def sort_ad(pks):
 
 
 def _set_ad_visible(pk):
-    count = len(AD.objects.filter(visible=True))
-    ad = AD.objects.get(pk=pk)
-    ad.position = count
-    ad.save()
+    c = connection.cursor()
+    try:
+        c.execute("update ad_ad set position = position + 1 where visible = 1" )
+    finally:
+        c.close()
+    AD.objects.filter(pk=pk).update(position=0)
 
 
 def _set_ad_invisible(pk):
     ad = AD.objects.get(pk=pk)
     c = connection.cursor()
     try:
-        c.execute("update ad_ad set position = position - 1 where position > %d and visible = 1" % ad.position)
+        sql = "update ad_ad set position = position - 1 " + \
+                "where position > %d and visible = 1" % ad.position
+        c.execute(sql)
     finally:
         c.close()
     ad.position = _MAX_ADS
