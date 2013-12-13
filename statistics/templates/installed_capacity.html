@@ -96,7 +96,6 @@
                                     data-min-view='month'
                                     data-minView='month'
                                     data-provide='datetimepicker'
-                                    value='{{ first_day }}'
                                     id="filter_from_date" name="from_date"/>
                         </div>
                         <div class="filter">
@@ -107,7 +106,6 @@
                                     data-min-view='month'
                                     data-minView='month'
                                     data-provide='datetimepicker'
-                                    value="{{ today }}"
                                     id="filter_to_date" name="to_date"/>
                         </div>
                     </div>
@@ -148,5 +146,6 @@
 <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.jcombo.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.dataTables.min.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap.datatables.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/datef.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/statistics.js"></script>
 {% endblock %}

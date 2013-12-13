@@ -59,7 +59,10 @@
             }
         });
 
-        this.$from.trigger('change');
+        var today = new Date();
+        var first_day = new Date(today.getYear() + 1900, today.getMonth(), 1);
+        this.$from.val(datef('YYYY-MM-dd', first_day))
+        this.$to.val(datef('YYYY-MM-dd', today))
     }
 
     window.statistics = {

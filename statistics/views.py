@@ -223,8 +223,6 @@ def flow(request):
     return render(request, "flow.html", {
         'brands': _get_brands(),
         'user_filter': user_filter,
-        'first_day': str(first_day),
-        'today': str(today),
         'filter': LogMetaFilterForm()
     })
 
@@ -290,8 +288,6 @@ def flow_excel(request):
 @login_required
 @active_tab("statistics", "installed_capacity")
 def installed_capacity(request):
-    today = datetime.date.today()
-    first_day = datetime.date(today.year, today.month, 1)
     user = cast_staff(request.user)
     user_filter = { 
         'region': { 'disabled': False },
@@ -325,8 +321,6 @@ def installed_capacity(request):
         
     return render(request, "installed_capacity.html", {
         'user_filter': user_filter,
-        'first_day': str(first_day),
-        'today': str(today),
         'filter': LogMetaFilterForm()
     })
 
