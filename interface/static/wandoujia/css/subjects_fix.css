@@ -338,3 +338,16 @@ body {
   left: 50%;
   top: 40%;
 }
+ 
+.carousel .carousel-caption  {
+    left: 0px;
+    bottom: 0px;
+    right: 0px;
+    text-align: left;
+    background: rgba(0, 0, 0, .6);
+    text-shadow: none;
+    padding: 5px 15px;
+    font-size: 14px;
+    line-height: 20px;
+}
+

@@ -176,7 +176,7 @@ $(function() {
         $category.select2('destroy');
         $category.html("");
         var options = categories.getOptionsByParentPk(this.value);
-        var template = _.template("<option value='<%= pk %>'><%= name %></option>");
+        var template = _.template("<option value='<%- pk %>'><%- name %></option>");
         $(template({
             pk: "",
             name: "-----"
@@ -312,7 +312,7 @@ $(function() {
         var action = mode == PUBLISH_APP ? "上线应用" : "下线应用";
         $modal.find(".modal-title").html(action);
         if (mode == PUBLISH_APP) {
-            var template = _.template("确定要上线应用&nbsp;<strong><%= name %></strong>&nbsp;吗?");
+            var template = _.template("确定要上线应用&nbsp;<strong><%- name %></strong>&nbsp;吗?");
             $modal.find(".modal-body").html(template({
                 name: app.name
             }));

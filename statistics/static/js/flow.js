@@ -122,9 +122,9 @@ $(function() {
     var app_temp = _.template("<span class='app-name' " +
                                 "data-html='true' " +
                                 "data-placement='bottom' " +
-                                "data-content='包名:&nbsp;<%= package %><br>序号:&nbsp;<%= id %>'" +
+                                "data-content='包名:&nbsp;<%- package %><br>序号:&nbsp;<%- id %>'" +
                                 "data-trigger='hover' >" + 
-                                "<%= name %></span>");
+                                "<%- name %></span>");
 
     var $table = $(".table").dataTable($.extend({}, statistics.table_options, {
         sPaginationType: "bootstrap",

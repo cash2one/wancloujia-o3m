@@ -30,8 +30,8 @@ $(function() {
 });
 
 $(function() {
-	var modal = new modals.ActionModal($("#delete-group")[0], {
-		tip: _.template("确认要删除&nbsp;<strong><%= name %></strong>&nbsp;吗？"),
+	var modal = new ActionModal($("#delete-group")[0], {
+		tip: _.template("确认要删除&nbsp;<strong><%- name %></strong>&nbsp;吗？"),
 		msg: '删除成功',
 		process: Dajaxice.mgr.delete_group
 	});

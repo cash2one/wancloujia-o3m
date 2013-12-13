@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 class AD(models.Model):
     title = models.CharField(verbose_name=u'广告标题', max_length=50)
     cover = models.CharField(verbose_name=u'广告图片', max_length=100)
-    desc = models.CharField(verbose_name=u'广告介绍', max_length=50, blank=True)
+    desc = models.CharField(verbose_name=u'广告介绍', max_length=50)
     from_date = models.DateTimeField(verbose_name=u'上线时间')
     to_date = models.DateTimeField(verbose_name=u'下线时间')
     visible = models.BooleanField(verbose_name=u'广告状态')
@@ -52,17 +52,21 @@ def sort_ad(pks):
 
 
 def _set_ad_visible(pk):
-    count = len(AD.objects.filter(visible=True))
-    ad = AD.objects.get(pk=pk)
-    ad.position = count
-    ad.save()
+    c = connection.cursor()
+    try:
+        c.execute("update ad_ad set position = position + 1 where visible = 1" )
+    finally:
+        c.close()
+    AD.objects.filter(pk=pk).update(position=0)
 
 
 def _set_ad_invisible(pk):
     ad = AD.objects.get(pk=pk)
     c = connection.cursor()
     try:
-        c.execute("update ad_ad set position = position - 1 where position > %d and visible = 1" % ad.position)
+        sql = "update ad_ad set position = position - 1 " + \
+                "where position > %d and visible = 1" % ad.position
+        c.execute(sql)
     finally:
         c.close()
     ad.position = _MAX_ADS
