@@ -1,4 +1,6 @@
 #coding: utf-8
+from datetime import date
+
 from django.contrib.auth.models import User, Permission
 from django.contrib.contenttypes.models import ContentType
 from django.test import TestCase
@@ -6,6 +8,7 @@ from django.test import TestCase
 from interface.models import LogMeta
 from mgr.models import Region, Store, Company, Employee
 from views import query_employee, query_regions, query_companies, query_stores
+from ajax import AdminFilter, UserPermittedFilter, UserUnpermittedFilter
 
 
 def _equal(emp_qs, emp_arr):
@@ -184,4 +187,79 @@ class TestQueryStores(TestCase):
 
         stores = query_stores(self.emp_store, self.company.pk)
         self.assertTrue(len(stores) == 0)
+
+
+class TestUserFilter(TestCase):
+    def setUp(self):
+        self.region = Region(name='region')
+        self.region.save()
+        self.company = Company(code='1001', name='company', region=self.region)
+        self.company.save()
+        self.store = Store(code='10011001', name='store', company=self.company)
+        self.store.save()
+
+        self.emp_region = Employee(username='emp_region', organization=self.region)
+        self.emp_region.save()
+        self.emp_company = Employee(username='emp_company', organization=self.company)
+        self.emp_company.save()
+        self.emp_store = Employee(username='emp_store', organization=self.store)
+        self.emp_store.save()
+        self.empid_not_exists = 31415926
+
+        package = 'com.tiantian.ttclock'
+        appid = 10000
+
+        d = date(year=2013, month=12, day=1)
+        self.log1 = LogMeta(date=d, uid=self.emp_region.pk, appID=appid, appPkg=package)
+        self.log1.save()
+        self.log2 = LogMeta(date=d, uid=self.emp_company.pk, appID=appid, appPkg=package)
+        self.log2.save()
+        self.log3 = LogMeta(date=d, uid=self.emp_store.pk, appID=appid, appPkg=package)
+        self.log3.save()
+        self.logs = LogMeta.objects.all()
+
+    def test_admin_filter(self):
+        filter = AdminFilter(self.logs, None, self.company.pk, None, None)
+        logs = filter.filter()
+        self.assertItemsEqual([self.log2, self.log3], logs)
+
+        filter = AdminFilter(self.logs, None, None, None, self.emp_store.pk)
+        logs = filter.filter()
+        self.assertItemsEqual([self.log3], logs)
+
+        filter = AdminFilter(self.logs, None, None, None, None)
+        logs = filter.filter()
+        self.assertItemsEqual(logs, logs)
+
+    def test_user_permitted_filter(self):
+        filter = UserPermittedFilter(self.emp_company, self.logs,  
+                                     None, None, None, self.emp_company.pk)
+        logs = filter.filter()
+        self.assertItemsEqual([self.log2], logs)
+
+        filter = UserPermittedFilter(self.emp_company, self.logs, 
+                                     None, None, None, self.emp_region.pk)
+        logs = filter.filter()
+        self.assertTrue(len(logs) == 0)
+
+        filter = UserPermittedFilter(self.emp_company, self.logs,
+                                     None, None, self.store.pk, None)
+        logs = filter.filter()
+        self.assertItemsEqual([self.log3], logs)
+
+        filter = UserPermittedFilter(self.emp_company, self.logs, 
+                                     self.emp_region.pk, None, None, None)
+        logs = filter.filter()
+        self.assertTrue(len(logs) == 0)
+
+        filter = UserPermittedFilter(self.emp_company, self.logs, 
+                                     None, None, None, None)
+        logs = filter.filter()
+        self.assertItemsEqual([self.log2, self.log3], logs)
+
+
+    def test_user_unpermitted_filter(self):
+        filter = UserUnpermittedFilter(self.logs, self.emp_store.pk)
+        logs = filter.filter()
+        self.assertItemsEqual([self.log3], logs)
 
