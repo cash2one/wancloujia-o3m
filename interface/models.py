@@ -32,6 +32,7 @@ class InstalledAppLogEntity(models.Model):
     keys
     """
     date = models.DateField(db_index=True, editable=False)
+    uid = models.IntegerField(db_index=True, editable=False)
     appName = models.CharField(max_length=24)
     appID = models.CharField(db_index=True, max_length=16, editable=False)
     appPkg = models.CharField(max_length=32)
