@@ -118,6 +118,71 @@ def _get_brands():
     return LogMeta.objects.all().values_list('brand', flat=True).distinct()
 
 
+
+def query_employee(user, org):
+    if not org:
+        return Employee.objects.none()
+
+    if user.is_superuser or user.is_staff or org.belong_to(user.org()):
+        return Employee.filter_by_organization(org)
+    else: 
+        return Employee.objects.none()
+
+def emps_to_dict_arr(emps):
+    return map(lambda e: {'id': e.pk, 'text': e.username}, emps)
+
+
+@require_GET
+def employee(request):
+    if not request.user.is_authenticated():
+        return render_json({'results': emps_to_dict_arr(Employee.objects.none())})
+
+    user = cast_staff(request.user)
+    if not user.is_superuser and not user.is_staff and \
+        not user.has_perm("interface.view_organization_statistics"):
+        logger.debug("user has no permission to view organization's statistics")
+        emps = Employee.objects.filter(pk=user.pk)
+        return render_json({'results': emps_to_dict_arr(emps)})
+
+    sid = request.GET.get('s', None)
+    cid = request.GET.get('c', None)
+    rid = request.GET.get('r', None)
+    org_id = first_valid(lambda i: i, [sid, cid, rid])
+    org = get_model_by_pk(Organization.objects, org_id) if org_id else None
+    org = org.cast() if org else None
+
+    logger.debug("%s: org: %s" % (__name__, str(org)))
+    if not org:
+        return render_json({'results': emps_to_dict_arr(Employee.objects.none())})
+
+    emps = query_employee(user, org)
+    q = request.GET.get("q", "")
+    emps = Employee.query(emps, q)
+    emps = emps[0:10]
+    results = map(lambda e: {'id': e.pk, 'text': e.username}, emps)
+    return render_json({'results': results})
+
+
+@require_GET
+def apps(request):
+    if not request.user.is_authenticated():
+        return render_json([])
+
+    q = request.GET.get('q', "")
+    p = request.GET.get('p', "")
+    page = int(p) if p else 0
+
+    APPS_PER_PAGE = 10
+    apps = App.objects.filter(name__contains=q)
+    total = len(apps)
+    pages = int(math.ceil(total/float(APPS_PER_PAGE))) 
+
+    apps = apps[(page-1)*APPS_PER_PAGE:page*APPS_PER_PAGE]
+    results = map(lambda e: {'id': e.pk, 'text': e.name}, apps)
+
+    return render_json({'more': pages > page, 'results': results})
+
+
 @require_GET
 @login_required
 @active_tab("statistics", "flow")
@@ -221,67 +286,47 @@ def flow_excel(request):
     return response
 
 
-def query_employee(user, org):
-    if not org:
-        return Employee.objects.none()
-
-    if user.is_superuser or user.is_staff or org.belong_to(user.org()):
-        return Employee.filter_by_organization(org)
-    else: 
-        return Employee.objects.none()
-
-def emps_to_dict_arr(emps):
-    return map(lambda e: {'id': e.pk, 'text': e.username}, emps)
-
-
 @require_GET
-def employee(request):
-    if not request.user.is_authenticated():
-        return render_json({'results': emps_to_dict_arr(Employee.objects.none())})
-
+@login_required
+@active_tab("statistics", "installed_capacity")
+def installed_capacity(request):
+    today = datetime.date.today()
+    first_day = datetime.date(today.year, today.month, 1)
     user = cast_staff(request.user)
-    if not user.is_superuser and not user.is_staff and \
-        not user.has_perm("interface.view_organization_statistics"):
-        logger.debug("user has no permission to view organization's statistics")
-        emps = Employee.objects.filter(pk=user.pk)
-        return render_json({'results': emps_to_dict_arr(emps)})
+    user_filter = { 
+        'region': { 'disabled': False },
+        'company': { 'disabled': False },
+        'store': { 'disabled': False },
+        'emp': { 'disabled': False }
+    }
 
-    sid = request.GET.get('s', None)
-    cid = request.GET.get('c', None)
-    rid = request.GET.get('r', None)
-    org_id = first_valid(lambda i: i, [sid, cid, rid])
-    org = get_model_by_pk(Organization.objects, org_id) if org_id else None
-    org = org.cast() if org else None
+    if not user.is_superuser and not user.is_staff:
+        organizations = [None, None, None]
+        for i, org in enumerate(user.organizations()):
+            organizations[i] = org
 
-    logger.debug("%s: org: %s" % (__name__, str(org)))
-    if not org:
-        return render_json({'results': emps_to_dict_arr(Employee.objects.none())})
+        user_filter["region"]["value"] = organizations[0] 
+        user_filter["region"]["disabled"] = organizations[0] is not None
 
-    emps = query_employee(user, org)
-    q = request.GET.get("q", "")
-    emps = Employee.query(emps, q)
-    emps = emps[0:10]
-    results = map(lambda e: {'id': e.pk, 'text': e.username}, emps)
-    return render_json({'results': results})
+        user_filter["company"]["value"] = organizations[1] 
+        user_filter["company"]["disabled"] = organizations[1] is not None
 
+        user_filter["store"]["value"] = organizations[2]
+        user_filter["store"]["disabled"] = organizations[2] is not None
+        user_filter["emp"]["value"] = user
 
-@require_GET
-def apps(request):
-    if not request.user.is_authenticated():
-        return render_json([])
+        if not user.has_perm("interface.view_organization_statistics"):
+            logger.debug("user has no permission to view organization's statistices")
+            user_filter["region"]["disabled"] = True
+            user_filter["company"]["disabled"] = True
+            user_filter["region"]["disabled"] = True
+            user_filter["emp"]["disabled"] = True
 
-    q = request.GET.get('q', "")
-    p = request.GET.get('p', "")
-    page = int(p) if p else 0
-
-    APPS_PER_PAGE = 10
-    apps = App.objects.filter(name__contains=q)
-    total = len(apps)
-    pages = int(math.ceil(total/float(APPS_PER_PAGE))) 
-
-    apps = apps[(page-1)*APPS_PER_PAGE:page*APPS_PER_PAGE]
-    results = map(lambda e: {'id': e.pk, 'text': e.name}, apps)
-
-    return render_json({'more': pages > page, 'results': results})
-
+        
+    return render(request, "installed_capacity.html", {
+        'user_filter': user_filter,
+        'first_day': str(first_day),
+        'today': str(today),
+        'filter': LogMetaFilterForm()
+    })
 
