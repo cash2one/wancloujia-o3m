@@ -112,6 +112,12 @@ $(function() {
 
     statistics.period("#filter_from_date", "#filter_to_date");
 
+    $("#export-data").click(function(e) {
+        e.preventDefault();
+        var link = 'flow/excel?' + $form.serialize(true);
+        //$("<a href='" + link + "' target='_blanck'></a>").appendTo(document.body).click();
+        window.location = link;
+    });
 
     var app_temp = _.template("<span class='app-name' " +
                                 "data-html='true' " +
@@ -166,22 +172,22 @@ $(function() {
                 var aaData = [];
                 _.each(data.logs, function(item) {
                     var app_popularize;
-                    if (item.popularize === true) {
+                    if (item.app.popularize === true) {
                         app_popularize = '是';
-                    } else if (item.popularize == false) {
+                    } else if (item.app.popularize == false) {
                         app_popularize = '否';
                     } else {
                         app_popularize = '—';
                     }
 
                     aaData.push([
-                        item.region,
-                        item.company,
-                        item.store,
-                        item.emp,
-                        item.brand,
-                        item.model,
-                        item.device,
+                        item.region || '&mdash;',
+                        item.company || '&mdash;',
+                        item.store || '&mdash;',
+                        item.emp || '&mdash;',
+                        item.brand || '&mdash;',
+                        item.model || '&mdash;',
+                        item.device || '&mdash;',
                         item.app,
                         app_popularize,
                         item.date
