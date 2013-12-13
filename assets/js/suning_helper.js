@@ -64,7 +64,6 @@ window.NETWORK_ERROR_MSG = '网路异常，请稍后重试';
             toast('error', NETWORK_ERROR_MSG);
         },
 
-        // TODO 在bs-modal之上扩展，而不使用以下的helper function
         modal: {
             setTitle: function($modal, title) {
                 $(".modal-title", $modal).html(title);

@@ -11,3 +11,4 @@ echo "ensure groups and permissions" &&
 
 echo "create root user" &&
 ./manage.py set_root root suning --traceback
+

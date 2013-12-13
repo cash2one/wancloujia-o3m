@@ -178,7 +178,6 @@ def can_view_staff(user):
 @user_passes_test(can_view_staff, login_url=settings.PERMISSION_DENIED_URL)
 @active_tab("system", "user")
 def user(request):
-
     if request.user.is_superuser or request.user.is_staff:
         organizations = Organization.objects.all()
         if request.user.is_superuser:
