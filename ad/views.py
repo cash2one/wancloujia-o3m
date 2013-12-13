@@ -40,5 +40,5 @@ def ad(request):
         "query": query,
         "table": table,
         'form': ADForm()
-    });
+    })
 

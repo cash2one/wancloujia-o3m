@@ -179,3 +179,4 @@ def search_apps(request):
         'total': total
     })
     return HttpResponse(json, mimetype='application/json')
+

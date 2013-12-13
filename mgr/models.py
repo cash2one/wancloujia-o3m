@@ -1,5 +1,6 @@
 # coding: utf-8
 from django.db import models
+from django.db.models import Q
 from django.contrib.auth.models import User, Group, Permission
 from django.contrib.contenttypes.models import ContentType
 
@@ -50,7 +51,7 @@ class Organization(models.Model):
         super(Organization, self).save(*args, **kwargs)
 
     def children(self):
-        return []
+        Organization.objects.none()
 
     def descendants_and_self(self):
         return []
@@ -68,7 +69,32 @@ class Organization(models.Model):
         return self.cast().name
 
 
-class Region(Organization):
+class NodeMixin:
+    def belong_to(self, node):
+        current = self
+        while current and current.pk != node.pk:
+            current = current.parent()
+
+        return current is not None
+
+    def parents(self):
+        parents = []
+        current = self.parent()
+        while current is not None:
+            parents.insert(0, current)
+            current = current.parent()
+        return parents
+
+    def ancestor(self):
+        current = self
+        parent = current.parent()
+        while parent:
+            current = parent
+            parent = current.parent()
+        return current
+
+
+class Region(Organization, NodeMixin):
     name = models.CharField(verbose_name=u'名称', unique=True, 
                             max_length=Organization.NAME_LENGTH_LIMIT)
 
@@ -92,7 +118,7 @@ class Region(Organization):
         verbose_name = u'大区'
 
 
-class Company(Organization):
+class Company(Organization, NodeMixin):
     code = models.CharField(verbose_name=u'编码', unique=True, 
                             max_length=Organization.CODE_LENGTH_LIMIT)
     name = models.CharField(verbose_name=u'名称', unique=True, 
@@ -118,7 +144,7 @@ class Company(Organization):
         verbose_name = u'公司'
 
 
-class Store(Organization):
+class Store(Organization, NodeMixin):
     code = models.CharField(verbose_name=u'编码', unique=True, 
                             max_length=Organization.CODE_LENGTH_LIMIT)
     name = models.CharField(verbose_name=u'名称', unique=True, 
@@ -146,8 +172,44 @@ class Employee(Staff):
     def in_store(self):
         return self.organization.real_type == ContentType.objects.get_for_model(Store)
 
+    def in_company(self):
+        return self.organization.real_type == ContentType.objects.get_for_model(Company)
+
     def in_region(self):
         return self.organization.real_type == ContentType.objects.get_for_model(Region)
+
+    def belong_to(self, org):
+        organization = self.organization.cast()
+        while organization and organization.pk != org.pk:
+            organization = organization.parent()
+
+        return organization is not None
+
+    def org(self):
+        return self.organization.cast()
+
+    def organizations(self):
+        organizations = []
+        org = self.organization.cast()
+        while org is not None:
+            organizations.insert(0, org)
+            org = org.parent()
+        return organizations
+
+    @classmethod
+    def filter_by_organization(cls, org, emps=None):
+        # TODO 自定义ModelManager
+        orgs = org.descendants_and_self()
+        if not emps:
+            return Employee.objects.filter(organization__in=orgs)
+        else:
+            return emps.filter(organization__in=orgs)
+
+    @classmethod
+    def query(cls, emps, q):
+        return emps.filter(Q(username__contains=q) | 
+                            Q(email__contains=q) | 
+                            Q(realname__contains=q))
 
 
 class Administrator(Staff):

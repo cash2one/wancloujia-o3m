@@ -13,6 +13,8 @@ ADMINS = (
     ('yangchen', 'yuhan534@126.com'),
 )
 
+EMPTY_VALUE = '&mdash;'
+
 MANAGERS = ADMINS
 
 DATABASE_ENGINE = 'mysql'
@@ -20,8 +22,7 @@ DATABASE_HOST = 'localhost'
 DATABASE_PORT = '3306'
 DATABASE_USER = 'root'
 DATABASE_PASSWORD = 'nameLR9969'
-DATABASE_NAME = 'suning_sw'
-
+DATABASE_NAME = 'suning_statistics'
 
 DATABASES = {
     'default': {
@@ -200,6 +201,7 @@ INSTALLED_APPS = (
     'app',
     'rest_framework',
     'interface',
+    'statistics',
     'django_tables2',
     'ajax_upload',
     'django_select2',

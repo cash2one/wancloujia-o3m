@@ -1,7 +1,7 @@
 # coding: utf-8
 from django.db import models
-from mgr.models import Company, Store
-# Create your models here.
+from mgr.models import Company, Store, Employee
+from app.models import App
 
 class LogEntity(models.Model):
     content = models.CharField(max_length=10240, default='')
@@ -15,13 +15,26 @@ class LogMeta(models.Model):
     u"""
     装机数据查询的日志元数据
     """
+
+    BRAND_LENGTH_LIMIT = 32
     date = models.DateField(db_index=True, editable=False)
     uid = models.IntegerField(db_index=True, editable=False)
     did = models.CharField(verbose_name=u'chuanhao', max_length=16, editable=False)
-    brand = models.CharField(verbose_name=u'pinpai', max_length=32, editable=False)
+    brand = models.CharField(verbose_name=u'pinpai', max_length=BRAND_LENGTH_LIMIT, editable=False)
     model = models.CharField(verbose_name=u'jixing', max_length=16, editable=False)
     appID = models.CharField(max_length=16, editable=False)
-    appPkg = models.CharField(max_length=32, editable=False)
+    appPkg = models.CharField(max_length=App.PACKAGE_LENGTH_LIMIT, editable=False)
+
+    @classmethod
+    def filter_by_organization(cls, logs, organization):
+        emps = Employee.filter_by_organization(organization)
+        pks = emps.values_list('pk', flat=True)
+        return logs.filter(uid__in=pks)
+
+    class Meta:
+        permissions=(
+            ('view_organization_statistics', "Can view organization's statistics"),
+        )
 
 
 class InstalledAppLogEntity(models.Model):
@@ -68,8 +81,8 @@ class DeviceLogEntity(models.Model):
     """
     date = models.DateField(db_index=True)
     uid = models.IntegerField(db_index=True)
-    brand = models.CharField(max_length=200)
-    appName = models.CharField(max_length=200)
+    brand = models.CharField(max_length=255)
+    appName = models.CharField(max_length=255)
     """
     values
     """
