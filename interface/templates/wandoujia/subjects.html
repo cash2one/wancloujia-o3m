@@ -24,7 +24,7 @@
                             class="item"
                          {% endif %}>
                         <img src="{{ MEDIA_URL }}{{ ad.cover }}">
-                        <div class="carousel-caption"> </div>
+                        <div class="carousel-caption">{{ ad.title }}</div>
                     </div>
                     {% endfor %}
                 </div>

@@ -1,0 +1,25 @@
+.table.table-bordered>tbody>tr>td {
+    vertical-align: middle;
+}
+
+td.period {
+    width: 300px;
+}
+
+td.visible {
+    width: 120px;
+}
+
+td.title, td.desc {
+    word-wrap:break-word;
+    word-break: break-all;
+}
+
+#reorder-ad .ad:hover {
+    cursor: move;
+}
+
+.form-horizontal .form-group>div>input[type=text][readonly] {
+    cursor: auto;
+    background-color: #EEE;
+}

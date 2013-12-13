@@ -41,7 +41,7 @@ def cast_staff(user):
 
 class Organization(models.Model):
     CODE_LENGTH_LIMIT = 20
-    NAME_LENGTH_LIMIT = 200
+    NAME_LENGTH_LIMIT = 75
 
     real_type = models.ForeignKey(ContentType, editable=False)
 
