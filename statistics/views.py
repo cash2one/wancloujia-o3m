@@ -2,6 +2,7 @@
 import logging
 import datetime
 import math
+import HTMLParser 
 
 from django import forms
 from django.utils import simplejson
@@ -11,16 +12,19 @@ from django.db.models.query import QuerySet
 from django.db.models import Q
 from django.views.decorators.http import require_GET, require_POST
 from django_tables2.config import RequestConfig
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
+import xlwt
 
 from suning import settings
 from suning import permissions
+from suning.settings import EMPTY_VALUE
 from suning.utils import render_json, first_valid, get_model_by_pk
 from suning.decorators import active_tab
 from mgr.models import cast_staff, Region, Company, Store, Organization, Employee
 from app.models import App
 from interface.models import LogMeta
 from forms import LogMetaFilterForm
+from ajax import filter_flow_logs, log_to_dict
 
 
 logger = logging.getLogger(__name__)
@@ -158,6 +162,63 @@ def flow(request):
         'today': str(today),
         'filter': LogMetaFilterForm()
     })
+
+
+@require_GET
+@login_required
+def flow_excel(request):
+    filter_form = LogMetaFilterForm(request.GET)
+    if not filter_form.is_valid():
+        logger.warn("form is invalid")
+        logger.warn(filter_form.errors)
+        raise Http404
+
+
+    book = xlwt.Workbook(encoding='utf8')
+    sheet = book.add_sheet(u'流水统计')
+    default_style = xlwt.Style.default_style
+    #date_style = xlwt.easyxf(num_format_str='yyyy-mm-dd')
+    titles = [u'大区', u'公司', u'门店', u'员工', u'品牌', u'机型', u'串号', 
+               u'应用序号', u'应用名称', u'应用包名', u'是否推广', u'日期']
+    for i, title in enumerate(titles):
+        sheet.write(0, i, title, style=default_style)
+
+    user = cast_staff(request.user)
+    logs = filter_flow_logs(user, filter_form)
+    h = HTMLParser.HTMLParser()
+    for row, log in enumerate(logs):
+        logger.debug(log)
+        dict = log_to_dict(log) 
+
+        if dict['app']['popularize'] is None:
+            popularize = h.unescape(EMPTY_VALUE)
+        else:
+            popularize = u'是' if dict['app']['popularize'] else u'否'
+        app = dict['app']
+
+        rowdata = [
+            dict['region'] if dict['region'] else h.unescape(EMPTY_VALUE),
+            dict['company'] if dict['company'] else h.unescape(EMPTY_VALUE),
+            dict['store'] if dict['store'] else h.unescape(EMPTY_VALUE),
+            dict['emp'] if dict['emp'] else h.unescape(EMPTY_VALUE),
+            dict['brand'] if dict['brand'] else h.unescape(EMPTY_VALUE),
+            dict['model'] if dict['model'] else h.unescape(EMPTY_VALUE),
+            dict['device'] if dict['device'] else h.unescape(EMPTY_VALUE),
+            app['id'],
+            app['name'] if app['name'] else h.unescape(EMPTY_VALUE),
+            app['package'],
+            popularize,
+            dict['date'] 
+        ]
+        for col, val in enumerate(rowdata):
+            #style = date_style if isinstance(val, datetime.date) else default_style
+            style = default_style
+            sheet.write(row+1, col, val, style=style)
+
+    response = HttpResponse(mimetype='application/vnd.ms-excel')
+    response['Content-Disposition'] = 'attachment; filename=flow_statistics.xls'
+    book.save(response)
+    return response
 
 
 def query_employee(user, org):

@@ -12,7 +12,6 @@ from interface.models import LogMeta
 from app.models import App
 from mgr.models import Employee, Organization, cast_staff
 from statistics.forms import LogMetaFilterForm
-from suning.settings import EMPTY_VALUE
 from suning import utils
 from suning.decorators import *
 
@@ -123,60 +122,44 @@ class AppFilter:
         app = apps[0]
         return self.logs.filter(appPkg=app.package)
 
+def log_to_dict(log):
+    dict = {
+        'brand': log.brand,
+        'model': log.model,
+        'device': log.did,
+        'date': str(log.date)
+    }
 
-def _logs_to_dict_array(logs):
-    results = []
-    for log in logs:
-        dict = {
-            "brand": log.brand or EMPTY_VALUE,
-            'model': log.model or EMPTYP_VALUE,
-            'device': log.did or EMPTY_VALUE,
-            "date": str(log.date)
-        }
+    apps = App.objects.filter(package=log.appPkg)
+    app = apps[0] if len(apps) != 0 else None
+    dict["app"] = {
+        'id': app.pk if app else log.appID, 
+        'package': app.package if app else log.appPkg,
+        'name': app.name if app else None,
+        'popularize': app.popularize if app else None
+    }
 
-        apps = App.objects.filter(package=log.appPkg)
-        if len(apps) != 0:
-            app = apps[0]
-            dict["app"] = {'id': app.pk, 'package': app.package, 'name': app.name}
-            dict["popularize"] = app.popularize 
-        else:
-            dict["app"] = {'id': log.appID, 'package': log.appPkg, 'name': ''}
-            dict["popularize"] = 'undefined'
+    emp = utils.get_model_by_pk(Employee.objects, log.uid)
+    organizations = [None, None, None]
+    if emp:
+        dict["emp"] = emp.username
+        for i, item in enumerate(emp.organizations()):
+            organizations[i] = item.name
+    else:
+        dict["emp"] = None
+    dict["region"], dict["company"], dict["store"] = organizations
 
-        organizations = [EMPTY_VALUE, EMPTY_VALUE, EMPTY_VALUE]
-        emp = utils.get_model_by_pk(Employee.objects, log.uid)
-        if emp:
-            for i, item in enumerate(emp.organizations()):
-                organizations[i] = item.name
-            dict["emp"] = emp.username
-        else:
-            dict["emp"] = EMPTY_VALUE
-                
-        dict["region"], dict["company"], dict["store"] = organizations
-        results.append(dict)
-    return results
+    return dict;
 
-
-@dajaxice_register(method='POST')
-@check_login
-def get_flow_logs(request, form, offset, length):
-    user = cast_staff(request.user)
-    form = deserialize_form(form)
-    logger.debug(form)
-
-    filter_form = LogMetaFilterForm(form)
-    if not filter_form.is_valid():
-        logger.warn("form is invalid")
-        logger.warn(filter_form.errors)
-        return _invalid_data_json
-
+    
+def filter_flow_logs(user, form):
     logs = LogMeta.objects.all().order_by('-date')
     logger.debug("all logs: %d" % len(logs))
 
-    region_id = filter_form.cleaned_data["region"]
-    company_id = filter_form.cleaned_data["company"]
-    store_id = filter_form.cleaned_data["store"]
-    emp_id = filter_form.cleaned_data["emp"]
+    region_id = form.cleaned_data["region"]
+    company_id = form.cleaned_data["company"]
+    store_id = form.cleaned_data["store"]
+    emp_id = form.cleaned_data["emp"]
     if user.is_staff or user.is_superuser:
         logs = AdminFilter(logs, region_id, company_id, store_id, emp_id).filter()
     elif user.has_perm("interface.view_organization_statistics"):
@@ -185,22 +168,41 @@ def get_flow_logs(request, form, offset, length):
         logs = UserUnpermittedFilter(logs, request.user.pk).filter()
     logger.debug("logs filtered by user info: %d" % len(logs))
 
-    logs = AppFilter(logs, filter_form.cleaned_data["app"]).filter()
+    logs = AppFilter(logs, form.cleaned_data["app"]).filter()
     logger.debug("logs filtered by app: %d" % len(logs))
 
-    logs = BrandFilter(logs, filter_form.cleaned_data["brand"]).filter()
+    logs = BrandFilter(logs, form.cleaned_data["brand"]).filter()
     logger.debug("logs filtered by brand: %d" % len(logs))
 
-    from_date = filter_form.cleaned_data["from_date"]
-    to_date = filter_form.cleaned_data["to_date"]
+    from_date = form.cleaned_data["from_date"]
+    to_date = form.cleaned_data["to_date"]
     logs = PeriodFilter(logs, from_date, to_date).filter()
     logger.debug("logs filtered by period: %d" % len(logs))
+    return logs
 
+
+@dajaxice_register(method='POST')
+@check_login
+def get_flow_logs(request, form, offset, length):
+    user = cast_staff(request.user)
+    form = deserialize_form(form)
+
+    filter_form = LogMetaFilterForm(form)
+    if not filter_form.is_valid():
+        logger.warn("form is invalid")
+        logger.warn(filter_form.errors)
+        return _invalid_data_json
+
+    logs = filter_flow_logs(user, filter_form)
     total = len(logs)
     logs = logs[offset: offset + length]
+    dict_list = []
+    for log in logs:
+        dict_list.append(log_to_dict(log))
+
     return simplejson.dumps({
         'ret_code': 0,
-        'logs': _logs_to_dict_array(logs),
+        'logs': dict_list,
         'total': total
     })           
 
