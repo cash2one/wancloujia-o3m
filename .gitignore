@@ -5,6 +5,8 @@ suning.zip
 *log
 dump.rdb
 
+.cache
+
 # wandoujia extension
 *.wdx
 

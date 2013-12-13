@@ -1,2 +1,2 @@
-drop database suning_yangchen;
-create database suning_yangchen;
+drop database suning;
+create database suning;

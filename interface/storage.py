@@ -51,9 +51,9 @@ class hdfs_storage(Storage):
     def block(self, path, offset, length):
         return hdfs.readFile(path, str(offset), str(length))
 
-    def enum_file(self, path, offset, step_length=1024*24):
+    def enum_file(self, path, offset, step_length=1024*128):
         class hdfs_readstream_enumable:
-            def __init__(self, path, offset=0, step_length=1024*24):
+            def __init__(self, path, offset=0, step_length=1024*1024):
                 dfs = hdfs_storage()
                 size = dfs.size(path)
                 self.size = size
