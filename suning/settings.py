@@ -1,6 +1,9 @@
 #coding: utf-8
 # Django settings for suning project.
 import os
+import django.core.files.storage
+import interface.storage
+from pyhdfs import hdfs
 
 DEBUG = True
 #DEBUG = False
@@ -32,6 +35,14 @@ DATABASES = {
         'PORT': DATABASE_PORT,                      # Set to empty string for default.
     }
 }
+
+HDFS_CONFIG = {
+    'username': 'songwei', #HDFS linux owner username
+    'hostname': 'dev-node1.limijiaoyin.com', #HDFS web host name
+    'port': '50070' #HDFS web port
+}
+
+hdfs.setConfig(**HDFS_CONFIG)
 
 CACHES = {
     'default': {
@@ -283,3 +294,7 @@ LOGGING = {
         'propagate': False,
     }
 }
+
+django.core.files.storage.default_storage.listdir = interface.storage.hdfs_storage().listdir
+django.core.files.storage.default_storage.exist = interface.storage.hdfs_storage().exist
+django.core.files.storage.default_storage.delete = interface.storage.hdfs_storage().delete

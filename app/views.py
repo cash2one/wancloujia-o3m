@@ -21,8 +21,9 @@ from app.models import App, UploadApk, Subject
 from app.forms import AppForm, SubjectForm
 from app.tables import AppTable, SubjectTable
 from suning.decorators import active_tab
+from interface.storage import hdfs_storage
 import apk
-
+import os
 
 logger = logging.getLogger(__name__)
 
@@ -79,6 +80,8 @@ def upload(request):
 
     try:
         apk_info = apk.inspect(uploaded_file.file.path)
+        dfs = hdfs_storage()
+        dfs.create(uploaded_file.file.path, uploaded_file.file.path)
     except Exception as e:
         logger.exception(e)
         return HttpResponse(simplejson.dumps({
@@ -89,7 +92,10 @@ def upload(request):
     holder = {'icon_url': None}
     def copy_icon(name, f):
         path = "apk_icons/" + apk_info.getPackageName() + "/" + name
-        holder['icon_url'] = settings.MEDIA_URL + default_storage.save(path, ImageFile(f))
+        sub_path = default_storage.save(path, ImageFile(f))
+        key_path = settings.MEDIA_ROOT + "/" + sub_path
+        holder['icon_url'] = settings.MEDIA_URL + sub_path
+        dfs.create(key_path, key_path)
     apk.read_icon(uploaded_file.file.path, copy_icon)
     app_dict = {
         'ret_code': 0,

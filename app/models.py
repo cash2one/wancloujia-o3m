@@ -38,7 +38,9 @@ class App(models.Model):
         return self.online
 
     def size(self):
-        return os.path.getsize(self.apk.file.path)
+        import interface.storage
+        dfs = interface.storage.hdfs_storage()
+        return dfs.size(self.apk.file.path)
 
     class Meta:
         permissions = (
