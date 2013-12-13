@@ -203,7 +203,7 @@ $(function() {
 $(function() {
     var $modal = $("#delete-ad");
     var modal = new modals.ActionModal($modal[0], {
-        tip: _.template("确认要删除&nbsp;<strong><%= title %></strong>&nbsp;吗?"),
+        tip: _.template("确认要删除&nbsp;<strong><%- title %></strong>&nbsp;吗?"),
         msg: '删除成功',
         process: Dajaxice.ad.delete_ad
     });
