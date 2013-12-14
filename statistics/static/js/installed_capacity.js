@@ -111,8 +111,7 @@ $(function() {
 
     $("#export-data").click(function(e) {
         e.preventDefault();
-        var link = 'installed_capacity/excel?' + $form.serialize(true);
-        window.location = link;
+        window.location =  'installed_capacity/excel?' + $form.serialize(true);
     });
 
     var $table = $(".table").dataTable($.extend({}, statistics.table_options, {
@@ -127,39 +126,18 @@ $(function() {
         iDisplayStart: 0,
         iDisplayLength: 50,
         fnServerData: function(source, data, callback, settings) {
-            console.log("source", source)
-            console.log("settings", settings);
             var values = statistics.table_map(data, ["sEcho", "iDisplayLength", "iDisplayStart"]);
-            console.log("values", values);
-
             /*
-            Dajaxice.statistics.get_flow_logs(login_check(error_check(function(data) {
-                console.log(data);
+            var get_installed_capacity = Dajaxice.statistics.get_installed_capacity;
+            get_installed_capacity(login_check(error_check(function(data) {
                 var aaData = [];
                 _.each(data.logs, function(item) {
-                    var app_popularize;
-                    if (item.app.popularize === true) {
-                        app_popularize = '是';
-                    } else if (item.app.popularize == false) {
-                        app_popularize = '否';
-                    } else {
-                        app_popularize = '—';
-                    }
-
                     aaData.push([
-                        item.region || '&mdash;',
-                        item.company || '&mdash;',
-                        item.store || '&mdash;',
-                        item.emp || '&mdash;',
-                        item.brand || '&mdash;',
-                        item.model || '&mdash;',
-                        item.device || '&mdash;',
                         item.app,
-                        app_popularize,
-                        item.date
+                        item.app.popularize,
+                        item.count
                     ]);
                 });
-                console.log(aaData);
                 $(".total").html(data.total);
                 callback({
                     sEcho: values.sEcho,
