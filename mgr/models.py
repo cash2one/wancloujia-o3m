@@ -1,6 +1,7 @@
 # coding: utf-8
 from django.db import models
 from django.db.models import Q
+from django.db.models.query import QuerySet
 from django.contrib.auth.models import User, Group, Permission
 from django.contrib.contenttypes.models import ContentType
 
@@ -159,12 +160,28 @@ class Store(Organization, NodeMixin):
 
     class Meta:
         verbose_name = u'门店'
-    
+
+
+class EmployeeQuerySet(QuerySet):
+    def filter_by_organization(self, org):
+        orgs = org.descendants_and_self()
+        return self.filter(organization__in=orgs)
+        
+
+class EmployeeManager(models.Manager):
+    def get_query_set(self):
+        return EmployeeQuerySet(self.model)
+
+    def filter_by_organization(self, org):
+        return self.get_query_set().filter_by_organization(org)
+
 
 class Employee(Staff):
     organization = models.ForeignKey(Organization, verbose_name=u'所属机构')
     contact_person = models.CharField(verbose_name=u'联系人', max_length=20)
     contact_phone = models.CharField(verbose_name=u'联系电话', max_length=20)
+
+    objects = EmployeeManager()
 
     def __unicode__(self):
         return self.username
@@ -195,15 +212,6 @@ class Employee(Staff):
             organizations.insert(0, org)
             org = org.parent()
         return organizations
-
-    @classmethod
-    def filter_by_organization(cls, org, emps=None):
-        # TODO 自定义ModelManager
-        orgs = org.descendants_and_self()
-        if not emps:
-            return Employee.objects.filter(organization__in=orgs)
-        else:
-            return emps.filter(organization__in=orgs)
 
     @classmethod
     def query(cls, emps, q):

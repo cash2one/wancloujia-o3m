@@ -11,7 +11,7 @@ from dajaxice.utils import deserialize_form
 from interface.models import LogMeta, InstalledAppLogEntity
 from app.models import App
 from mgr.models import Employee, Organization, cast_staff
-from statistics.forms import LogMetaFilterForm
+from statistics.forms import LogMetaFilterForm, InstalledCapacityFilterForm
 from suning import utils
 from suning.decorators import *
 
@@ -226,9 +226,6 @@ def filter_installed_capacity_logs(user, form):
     logs = AppFilter(logs, form.cleaned_data["app"]).filter()
     logger.debug("logs filtered by app: %d" % len(logs))
 
-    logs = BrandFilter(logs, form.cleaned_data["brand"]).filter()
-    logger.debug("logs filtered by brand: %d" % len(logs))
-
     from_date = form.cleaned_data["from_date"]
     to_date = form.cleaned_data["to_date"]
     logs = PeriodFilter(logs, from_date, to_date).filter()
@@ -236,7 +233,19 @@ def filter_installed_capacity_logs(user, form):
     return logs
 
 
-'''
+def installed_capacity_to_dict(log):
+    dict = {}
+    apps = App.objects.filter(package=log.appPkg)
+    app = apps[0] if len(apps) != 0 else None
+    dict["app"] = {
+        'id': app.pk if app else log.appID, 
+        'package': app.package if app else log.appPkg,
+        'name': app.name if app else log.appName,
+        'popularize': app.popularize if app else None
+    }
+    dict["count"] = log.installedTimes
+    return dict;
+    
 
 @dajaxice_register(method='POST')
 @check_login
@@ -244,18 +253,18 @@ def get_installed_capacity(request, form, offset, length):
     user = cast_staff(request.user)
     form = deserialize_form(form)
 
-    filter_form = LogMetaFilterForm(form)
+    filter_form = InstalledCapacityFilterForm(form)
     if not filter_form.is_valid():
         logger.warn("form is invalid")
         logger.warn(filter_form.errors)
         return _invalid_data_json
 
-    logs = filter_flow_logs(user, filter_form)
+    logs = filter_installed_capacity_logs(user, filter_form)
     total = len(logs)
     logs = logs[offset: offset + length]
     dict_list = []
     for log in logs:
-        dict_list.append(log_to_dict(log))
+        dict_list.append(installed_capacity_to_dict(log))
 
     return simplejson.dumps({
         'ret_code': 0,
@@ -263,4 +272,3 @@ def get_installed_capacity(request, form, offset, length):
         'total': total
     })
 
-'''

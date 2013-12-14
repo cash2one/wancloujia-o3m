@@ -14,9 +14,8 @@ class LogEntity(models.Model):
 
 
 class LogQuerySet(QuerySet):
-    @classmethod
-    def filter_by_organization(cls, organization):
-        emps = Employee.filter_by_organization(organization)
+    def filter_by_organization(self, organization):
+        emps = Employee.objects.filter_by_organization(organization)
         pks = emps.values_list('pk', flat=True)
         return self.filter(uid__in=pks)
         
@@ -24,6 +23,9 @@ class LogQuerySet(QuerySet):
 class LogManager(models.Manager):
     def get_query_set(self):
         return LogQuerySet(self.model)
+
+    def filter_by_organization(self, organization):
+        return self.get_query_set().filter_by_organization(organization)
 
 
 class LogMeta(models.Model):

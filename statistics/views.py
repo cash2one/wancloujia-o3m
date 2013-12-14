@@ -22,8 +22,8 @@ from suning.utils import render_json, first_valid, get_model_by_pk
 from suning.decorators import active_tab
 from mgr.models import cast_staff, Region, Company, Store, Organization, Employee
 from app.models import App
-from interface.models import LogMeta
-from forms import LogMetaFilterForm
+from interface.models import LogMeta, InstalledAppLogEntity
+from forms import LogMetaFilterForm, InstalledCapacityFilterForm
 from ajax import filter_flow_logs, log_to_dict
 
 
@@ -124,7 +124,7 @@ def query_employee(user, org):
         return Employee.objects.none()
 
     if user.is_superuser or user.is_staff or org.belong_to(user.org()):
-        return Employee.filter_by_organization(org)
+        return Employee.objects.filter_by_organization(org)
     else: 
         return Employee.objects.none()
 
@@ -323,4 +323,54 @@ def installed_capacity(request):
         'user_filter': user_filter,
         'filter': LogMetaFilterForm()
     })
+
+
+@require_GET
+@login_required
+def installed_capacity_excel(request):
+    filter_form = InstalledCapacityFilterForm(request.GET)
+    if not filter_form.is_valid():
+        logger.warn("form is invalid")
+        logger.warn(filter_form.errors)
+        raise Http404
+
+
+    book = xlwt.Workbook(encoding='utf8')
+    sheet = book.add_sheet(u'安装统计')
+    default_style = xlwt.Style.default_style
+    #date_style = xlwt.easyxf(num_format_str='yyyy-mm-dd')
+    titles = [u'应用序号', u'应用名称', u'应用包名', u'是否推广', u'日期', u'安装总量']
+    for i, title in enumerate(titles):
+        sheet.write(0, i, title, style=default_style)
+
+    user = cast_staff(request.user)
+    logs = filter_installed_capacity_logs(user, filter_form)
+    h = HTMLParser.HTMLParser()
+    for row, log in enumerate(logs):
+        logger.debug(log)
+        dict = log_to_dict(log) 
+
+        if dict['app']['popularize'] is None:
+            popularize = h.unescape(EMPTY_VALUE)
+        else:
+            popularize = u'是' if dict['app']['popularize'] else u'否'
+        app = dict['app']
+
+        rowdata = [
+            app['id'],
+            app['name'] if app['name'] else h.unescape(EMPTY_VALUE),
+            app['package'],
+            popularize,
+            dict['date'],
+            dict['count']
+        ]
+        for col, val in enumerate(rowdata):
+            #style = date_style if isinstance(val, datetime.date) else default_style
+            style = default_style
+            sheet.write(row+1, col, val, style=style)
+
+    response = HttpResponse(mimetype='application/vnd.ms-excel')
+    response['Content-Disposition'] = 'attachment; filename=intalled_capacity.xls'
+    book.save(response)
+    return response
 

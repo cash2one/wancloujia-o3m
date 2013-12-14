@@ -1,7 +1,9 @@
+// deps
 var error_check = suning.decorators.error_check;
 var login_check = suning.decorators.login_check;
 var toastNetworkError = suning.toastNetworkError;
-
+var get_installed_capacity = Dajaxice.statistics.get_installed_capacity;
+var app_temp = statistics.app_temp;
 
 $(function() {
     var $form = $(".form-filter");
@@ -117,9 +119,23 @@ $(function() {
     var $table = $(".table").dataTable($.extend({}, statistics.table_options, {
         sPaginationType: "bootstrap",
         aoColumns: [{
-            sTitle: '应用名称'
+            sTitle: '应用名称',
+            mRender: function(data) {
+                if(data.name) {
+                    return app_temp(data);
+                } else {
+                    return '&mdash;'
+                }
+            }
         }, {
-            sTitle: '是否推广'
+            sTitle: '是否推广',
+            mRender: function(data) {
+                if(data === null) {
+                    return '&mdash;';
+                } else {
+                    return data ? '是' : '否';
+                }
+            }
         }, {
             sTitle: '安装综数'
         }],
@@ -127,8 +143,6 @@ $(function() {
         iDisplayLength: 50,
         fnServerData: function(source, data, callback, settings) {
             var values = statistics.table_map(data, ["sEcho", "iDisplayLength", "iDisplayStart"]);
-            /*
-            var get_installed_capacity = Dajaxice.statistics.get_installed_capacity;
             get_installed_capacity(login_check(error_check(function(data) {
                 var aaData = [];
                 _.each(data.logs, function(item) {
@@ -152,7 +166,6 @@ $(function() {
             }, { 
                 errorCallback: error_check(toastNetworkError)
             });
-            */
         }
     }));
 

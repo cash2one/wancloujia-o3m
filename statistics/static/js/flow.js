@@ -1,6 +1,8 @@
+// deps
 var error_check = suning.decorators.error_check;
 var login_check = suning.decorators.login_check;
 var toastNetworkError = suning.toastNetworkError;
+var app_temp = statistics.app_temp;
 
 
 $(function() {
@@ -118,13 +120,6 @@ $(function() {
         //$("<a href='" + link + "' target='_blanck'></a>").appendTo(document.body).click();
         window.location = link;
     });
-
-    var app_temp = _.template("<span class='app-name' " +
-                                "data-html='true' " +
-                                "data-placement='bottom' " +
-                                "data-content='包名:&nbsp;<%- package %><br>序号:&nbsp;<%- id %>'" +
-                                "data-trigger='hover' >" + 
-                                "<%- name %></span>");
 
     var $table = $(".table").dataTable($.extend({}, statistics.table_options, {
         sPaginationType: "bootstrap",

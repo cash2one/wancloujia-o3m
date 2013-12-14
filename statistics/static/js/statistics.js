@@ -65,7 +65,15 @@
         this.$to.val(datef('YYYY-MM-dd', today))
     }
 
+    var app_temp = _.template("<span class='app-name' " +
+                                "data-html='true' " +
+                                "data-placement='bottom' " +
+                                "data-content='包名:&nbsp;<%- package %><br>序号:&nbsp;<%- id %>'" +
+                                "data-trigger='hover' >" + 
+                                "<%- name %></span>");
+
     window.statistics = {
+        app_temp: app_temp,
         parseDate: parseDate,
         table_map: table_map,
         table_options: table_options,
