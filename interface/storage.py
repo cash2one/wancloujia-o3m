@@ -1,4 +1,4 @@
-from django.core.files.storage import Storage
+from django.core.files.storage import Storage, FileSystemStorage
 from django.conf import settings
 from pyhdfs import hdfs
 import os
@@ -7,7 +7,7 @@ oneM = 1024*1024
 blockSizeTable = [oneM, oneM*2, oneM*4, oneM*8, oneM*16, oneM*32]
 maxBlockSize = oneM*64
 
-class hdfs_storage(Storage):
+class hdfs_storage(FileSystemStorage):   #(Storage):
     def __init__(self, option=None):
         if not option:
             pass
@@ -75,15 +75,3 @@ class hdfs_storage(Storage):
                 return result
         result = hdfs_readstream_enumable(path, offset, step_length)
         return result
-
-    def open(self, name, mode='rb'):
-        pass
-
-    def save(self, name, content):
-        pass
-
-    def _open(self, name, mode='rb'):
-        pass
-
-    def _save(self, name, mode='wb'):
-        pass
