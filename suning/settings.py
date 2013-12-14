@@ -1,8 +1,8 @@
 #coding: utf-8
 # Django settings for suning project.
 import os
-import django.core.files.storage
-import interface.storage
+
+
 from pyhdfs import hdfs
 
 DEBUG = True
@@ -295,6 +295,11 @@ LOGGING = {
     }
 }
 
-django.core.files.storage.default_storage.listdir = interface.storage.hdfs_storage().listdir
-django.core.files.storage.default_storage.exist = interface.storage.hdfs_storage().exist
-django.core.files.storage.default_storage.delete = interface.storage.hdfs_storage().delete
+if DEBUG:
+    import django.core.files.storage
+    import interface.storage
+    storage = interface.storage.hdfs_storage()
+    django.core.files.storage.default_storage.listdir = storage.listdir
+    django.core.files.storage.default_storage.exist = storage.exist
+    django.core.files.storage.default_storage.delete = storage.delete
+    #DEFAULT_FILE_STORAGE = 'interface.storage.hdfs_storage'
