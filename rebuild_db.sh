@@ -1,13 +1,21 @@
 #!/bin/bash
 
-echo "clear database" &&
-mysql -u root -p < replace_db.sql && 
+DBNAME=suning_statistics
+
+sql=$(cat <<-EOF
+drop database $DBNAME;
+create database $DBNAME;
+EOF
+)
+
+echo "clear database" && 
+echo $sql | mysql --user=root --password=nameLR9969 &&
 
 echo "synchroize db" &&
-./manage.py syncdb --noinput --traceback && 
+./manage.py syncdb --noinput --traceback &&
 
 echo "ensure groups and permissions" &&
-./manage.py ensure_groups_and_permissions --traceback && 
+./manage.py ensure_groups_and_permissions --traceback &&
 
 echo "create root user" &&
 ./manage.py set_root root suning --traceback

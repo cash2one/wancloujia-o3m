@@ -8,10 +8,10 @@ from django.db import models
 from dajaxice.decorators import dajaxice_register
 from dajaxice.utils import deserialize_form
 
-from interface.models import LogMeta
+from interface.models import LogMeta, InstalledAppLogEntity
 from app.models import App
 from mgr.models import Employee, Organization, cast_staff
-from statistics.forms import LogMetaFilterForm, InstalledAppLogEntity
+from statistics.forms import LogMetaFilterForm
 from suning import utils
 from suning.decorators import *
 

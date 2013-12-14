@@ -298,3 +298,4 @@ LOGGING = {
 django.core.files.storage.default_storage.listdir = interface.storage.hdfs_storage().listdir
 django.core.files.storage.default_storage.exist = interface.storage.hdfs_storage().exist
 django.core.files.storage.default_storage.delete = interface.storage.hdfs_storage().delete
+
