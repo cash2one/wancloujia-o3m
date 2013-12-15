@@ -86,6 +86,18 @@
                             <label for="filter_app">{{ filter.app.label }}：</label>
                             <input type="hidden" id="filter_app" name="app"/>
                         </div>
+                        <div class="filter" style="width: 300px;">
+                            <label for="filter_popularize">{{ filter.app.label }}：</label>
+                            <input type="radio" id='filter_popularize_none' 
+                                    name='popularize' value=''/>
+                            <label style="width: 50px;" for="filter_popularize_none">不限</label>
+                            <input type="radio" id='filter_popularize_true' 
+                                    name='popularize' value='true'/>
+                            <label style="width: 50px;" for="filter_popularize_true">推广</label>
+                            <input type="radio" id='filter_popularize_false' 
+                                    name='popularize' value='false'/>
+                            <label style="width: 50px;" for="filter_popularize_false">不推广</label>
+                        </div>
                     </div>
                     <div class="filter-group last">
                         <div class="filter">

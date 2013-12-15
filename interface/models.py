@@ -1,5 +1,5 @@
 # coding: utf-8
-from django.db import models
+from django.db import models, connection
 from django.db.models.query import QuerySet
 
 from mgr.models import Company, Store, Employee
@@ -63,6 +63,7 @@ class InstalledAppLogEntity(models.Model):
     store = models.IntegerField(db_index=True)
     uid = models.IntegerField(db_index=True, editable=False)
     appName = models.CharField(max_length=24)
+    popularize = models.BooleanField(editable=False)
     appID = models.CharField(db_index=True, max_length=16, editable=False)
     appPkg = models.CharField(max_length=32)
     """
@@ -72,7 +73,7 @@ class InstalledAppLogEntity(models.Model):
 
     objects = LogManager()
 
-
+    
 class UserDeviceLogEntity(models.Model):
     u"""
     手机安装统计

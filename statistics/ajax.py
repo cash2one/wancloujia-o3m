@@ -4,7 +4,7 @@ from datetime import datetime
 
 from django.utils import simplejson
 from django.contrib.auth.models import User
-from django.db import models
+from django.db.models import Sum
 from dajaxice.decorators import dajaxice_register
 from dajaxice.utils import deserialize_form
 
@@ -208,19 +208,20 @@ def get_flow_logs(request, form, offset, length):
 
 
 def filter_installed_capacity_logs(user, form):
-    logs = InstalledAppLogEntity.objects.all().order_by('-date')
-    logger.debug("all logs: %d" % len(logs))
-
     region_id = form.cleaned_data["region"]
     company_id = form.cleaned_data["company"]
     store_id = form.cleaned_data["store"]
     emp_id = form.cleaned_data["emp"]
-    if user.is_staff or user.is_superuser:
-        logs = AdminFilter(logs, region_id, company_id, store_id, emp_id).filter()
-    elif user.has_perm("interface.view_organization_statistics"):
-        logs = UserPermittedFilter(user, logs, region_id, company_id, store_id, emp_id).filter()
+    if emp_id:
+        logs = InstalledAppLogEntity.objects.filter(uid=emp_id)
+    elif store_id:
+        logs = InstalledAppLogEntity.objects.filter(store=store_id)
+    elif company_id:
+        logs = InstalledAppLogEntity.objects.filter(company=company_id)
+    elif region_id:
+        logs = InstalledAppLogEntity.objects.filter(region=region_id)
     else:
-        logs = UserUnpermittedFilter(logs, request.user.pk).filter()
+        logs = InstalledAppLogEntity.objects.all()
     logger.debug("logs filtered by user info: %d" % len(logs))
 
     logs = AppFilter(logs, form.cleaned_data["app"]).filter()
@@ -230,20 +231,27 @@ def filter_installed_capacity_logs(user, form):
     to_date = form.cleaned_data["to_date"]
     logs = PeriodFilter(logs, from_date, to_date).filter()
     logger.debug("logs filtered by period: %d" % len(logs))
-    return logs
+
+    popularize = form.cleaned_data['popularize']
+    if popularize is not None and popularize != "":
+        logs = logs.filter(popularize=popularize)
+
+    results = logs.values('appPkg', 'appID', 'appName', 'popularize' ,'installedTimes').annotate(count=Sum('installedTimes'))
+    return results
 
 
-def installed_capacity_to_dict(log):
+def installed_capacity_to_dict(capacity):
+    logger.debug(capacity)
     dict = {}
-    apps = App.objects.filter(package=log.appPkg)
+    apps = App.objects.filter(package=capacity['appPkg'])
     app = apps[0] if len(apps) != 0 else None
     dict["app"] = {
-        'id': app.pk if app else log.appID, 
-        'package': app.package if app else log.appPkg,
-        'name': app.name if app else log.appName,
-        'popularize': app.popularize if app else None
+        'id': capacity['appID'],
+        'package': capacity['appPkg'],
+        'name': capacity['appName'],
+        'popularize': capacity['popularize']
     }
-    dict["count"] = log.installedTimes
+    dict["count"] = capacity['count']
     return dict;
     
 
@@ -259,12 +267,12 @@ def get_installed_capacity(request, form, offset, length):
         logger.warn(filter_form.errors)
         return _invalid_data_json
 
-    logs = filter_installed_capacity_logs(user, filter_form)
-    total = len(logs)
-    logs = logs[offset: offset + length]
+    results = filter_installed_capacity_logs(user, filter_form)
+    total = len(results)
+    results = results[offset: offset + length]
     dict_list = []
-    for log in logs:
-        dict_list.append(installed_capacity_to_dict(log))
+    for result in results:
+        dict_list.append(installed_capacity_to_dict(result))
 
     return simplejson.dumps({
         'ret_code': 0,
