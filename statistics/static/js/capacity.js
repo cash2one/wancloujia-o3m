@@ -114,7 +114,7 @@ $(function() {
 
     $("#export-data").click(function(e) {
         e.preventDefault();
-        window.location =  'installed_capacity/excel?' + $form.serialize(true);
+        window.location =  'capacity/excel?' + $form.serialize(true);
     });
 
     var $table = $(".table").dataTable($.extend({}, statistics.table_options, {

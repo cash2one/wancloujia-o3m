@@ -143,9 +143,8 @@ $(function() {
 
     $("#export-data").click(function(e) {
         e.preventDefault();
-        var link = 'flow/excel?' + $form.serialize(true);
-        //$("<a href='" + link + "' target='_blanck'></a>").appendTo(document.body).click();
-        window.location = link;
+        var link = 
+        window.location = 'flow/excel?' + $form.serialize(true);
     });
 
     var $table = $(".table").dataTable($.extend({}, statistics.table_options, {
