@@ -22,8 +22,8 @@ from suning.utils import render_json, first_valid, get_model_by_pk
 from suning.decorators import active_tab
 from mgr.models import cast_staff, Region, Company, Store, Organization, Employee
 from app.models import App
-from interface.models import LogMeta
-from forms import LogMetaFilterForm
+from interface.models import LogMeta, InstalledAppLogEntity
+from forms import LogMetaFilterForm, InstalledCapacityFilterForm
 from ajax import filter_flow_logs, log_to_dict
 
 
@@ -118,6 +118,71 @@ def _get_brands():
     return LogMeta.objects.all().values_list('brand', flat=True).distinct()
 
 
+
+def query_employee(user, org):
+    if not org:
+        return Employee.objects.none()
+
+    if user.is_superuser or user.is_staff or org.belong_to(user.org()):
+        return Employee.objects.filter_by_organization(org)
+    else: 
+        return Employee.objects.none()
+
+def emps_to_dict_arr(emps):
+    return map(lambda e: {'id': e.pk, 'text': e.username}, emps)
+
+
+@require_GET
+def employee(request):
+    if not request.user.is_authenticated():
+        return render_json({'results': emps_to_dict_arr(Employee.objects.none())})
+
+    user = cast_staff(request.user)
+    if not user.is_superuser and not user.is_staff and \
+        not user.has_perm("interface.view_organization_statistics"):
+        logger.debug("user has no permission to view organization's statistics")
+        emps = Employee.objects.filter(pk=user.pk)
+        return render_json({'results': emps_to_dict_arr(emps)})
+
+    sid = request.GET.get('s', None)
+    cid = request.GET.get('c', None)
+    rid = request.GET.get('r', None)
+    org_id = first_valid(lambda i: i, [sid, cid, rid])
+    org = get_model_by_pk(Organization.objects, org_id) if org_id else None
+    org = org.cast() if org else None
+
+    logger.debug("%s: org: %s" % (__name__, str(org)))
+    if not org:
+        return render_json({'results': emps_to_dict_arr(Employee.objects.none())})
+
+    emps = query_employee(user, org)
+    q = request.GET.get("q", "")
+    emps = Employee.query(emps, q)
+    emps = emps[0:10]
+    results = map(lambda e: {'id': e.pk, 'text': e.username}, emps)
+    return render_json({'results': results})
+
+
+@require_GET
+def apps(request):
+    if not request.user.is_authenticated():
+        return render_json([])
+
+    q = request.GET.get('q', "")
+    p = request.GET.get('p', "")
+    page = int(p) if p else 0
+
+    APPS_PER_PAGE = 10
+    apps = App.objects.filter(name__contains=q)
+    total = len(apps)
+    pages = int(math.ceil(total/float(APPS_PER_PAGE))) 
+
+    apps = apps[(page-1)*APPS_PER_PAGE:page*APPS_PER_PAGE]
+    results = map(lambda e: {'id': e.pk, 'text': e.name}, apps)
+
+    return render_json({'more': pages > page, 'results': results})
+
+
 @require_GET
 @login_required
 @active_tab("statistics", "flow")
@@ -158,8 +223,6 @@ def flow(request):
     return render(request, "flow.html", {
         'brands': _get_brands(),
         'user_filter': user_filter,
-        'first_day': str(first_day),
-        'today': str(today),
         'filter': LogMetaFilterForm()
     })
 
@@ -221,67 +284,93 @@ def flow_excel(request):
     return response
 
 
-def query_employee(user, org):
-    if not org:
-        return Employee.objects.none()
+@require_GET
+@login_required
+@active_tab("statistics", "installed_capacity")
+def installed_capacity(request):
+    user = cast_staff(request.user)
+    user_filter = { 
+        'region': { 'disabled': False },
+        'company': { 'disabled': False },
+        'store': { 'disabled': False },
+        'emp': { 'disabled': False }
+    }
 
-    if user.is_superuser or user.is_staff or org.belong_to(user.org()):
-        return Employee.filter_by_organization(org)
-    else: 
-        return Employee.objects.none()
+    if not user.is_superuser and not user.is_staff:
+        organizations = [None, None, None]
+        for i, org in enumerate(user.organizations()):
+            organizations[i] = org
 
-def emps_to_dict_arr(emps):
-    return map(lambda e: {'id': e.pk, 'text': e.username}, emps)
+        user_filter["region"]["value"] = organizations[0] 
+        user_filter["region"]["disabled"] = organizations[0] is not None
+
+        user_filter["company"]["value"] = organizations[1] 
+        user_filter["company"]["disabled"] = organizations[1] is not None
+
+        user_filter["store"]["value"] = organizations[2]
+        user_filter["store"]["disabled"] = organizations[2] is not None
+        user_filter["emp"]["value"] = user
+
+        if not user.has_perm("interface.view_organization_statistics"):
+            logger.debug("user has no permission to view organization's statistices")
+            user_filter["region"]["disabled"] = True
+            user_filter["company"]["disabled"] = True
+            user_filter["region"]["disabled"] = True
+            user_filter["emp"]["disabled"] = True
+
+        
+    return render(request, "installed_capacity.html", {
+        'user_filter': user_filter,
+        'filter': LogMetaFilterForm()
+    })
 
 
 @require_GET
-def employee(request):
-    if not request.user.is_authenticated():
-        return render_json({'results': emps_to_dict_arr(Employee.objects.none())})
+@login_required
+def installed_capacity_excel(request):
+    filter_form = InstalledCapacityFilterForm(request.GET)
+    if not filter_form.is_valid():
+        logger.warn("form is invalid")
+        logger.warn(filter_form.errors)
+        raise Http404
+
+
+    book = xlwt.Workbook(encoding='utf8')
+    sheet = book.add_sheet(u'安装统计')
+    default_style = xlwt.Style.default_style
+    #date_style = xlwt.easyxf(num_format_str='yyyy-mm-dd')
+    titles = [u'应用序号', u'应用名称', u'应用包名', u'是否推广', u'日期', u'安装总量']
+    for i, title in enumerate(titles):
+        sheet.write(0, i, title, style=default_style)
 
     user = cast_staff(request.user)
-    if not user.is_superuser and not user.is_staff and \
-        not user.has_perm("interface.view_organization_statistics"):
-        logger.debug("user has no permission to view organization's statistics")
-        emps = Employee.objects.filter(pk=user.pk)
-        return render_json({'results': emps_to_dict_arr(emps)})
+    logs = filter_installed_capacity_logs(user, filter_form)
+    h = HTMLParser.HTMLParser()
+    for row, log in enumerate(logs):
+        logger.debug(log)
+        dict = log_to_dict(log) 
 
-    sid = request.GET.get('s', None)
-    cid = request.GET.get('c', None)
-    rid = request.GET.get('r', None)
-    org_id = first_valid(lambda i: i, [sid, cid, rid])
-    org = get_model_by_pk(Organization.objects, org_id) if org_id else None
-    org = org.cast() if org else None
+        if dict['app']['popularize'] is None:
+            popularize = h.unescape(EMPTY_VALUE)
+        else:
+            popularize = u'是' if dict['app']['popularize'] else u'否'
+        app = dict['app']
 
-    logger.debug("%s: org: %s" % (__name__, str(org)))
-    if not org:
-        return render_json({'results': emps_to_dict_arr(Employee.objects.none())})
+        rowdata = [
+            app['id'],
+            app['name'] if app['name'] else h.unescape(EMPTY_VALUE),
+            app['package'],
+            popularize,
+            dict['date'],
+            dict['count']
+        ]
+        for col, val in enumerate(rowdata):
+            #style = date_style if isinstance(val, datetime.date) else default_style
+            style = default_style
+            sheet.write(row+1, col, val, style=style)
 
-    emps = query_employee(user, org)
-    q = request.GET.get("q", "")
-    emps = Employee.query(emps, q)
-    emps = emps[0:10]
-    results = map(lambda e: {'id': e.pk, 'text': e.username}, emps)
-    return render_json({'results': results})
-
-
-@require_GET
-def apps(request):
-    if not request.user.is_authenticated():
-        return render_json([])
-
-    q = request.GET.get('q', "")
-    p = request.GET.get('p', "")
-    page = int(p) if p else 0
-
-    APPS_PER_PAGE = 10
-    apps = App.objects.filter(name__contains=q)
-    total = len(apps)
-    pages = int(math.ceil(total/float(APPS_PER_PAGE))) 
-
-    apps = apps[(page-1)*APPS_PER_PAGE:page*APPS_PER_PAGE]
-    results = map(lambda e: {'id': e.pk, 'text': e.name}, apps)
-
-    return render_json({'more': pages > page, 'results': results})
-
+    response = HttpResponse(mimetype='application/vnd.ms-excel')
+    response['Content-Disposition'] = 'attachment; filename=intalled_capacity.xls'
+    book.save(response)
+    return response
 

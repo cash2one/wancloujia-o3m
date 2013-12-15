@@ -1,7 +1,8 @@
-from settings import *
+from suning.settings import *
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3'
     }
 }
+
