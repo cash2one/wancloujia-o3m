@@ -28,44 +28,44 @@ class Command(BaseCommand):
 
         # emp(4) x package(2) x date(2) = cases(16)
         #same date same organization but not same package
-        InstalledAppLogEntity(date=date_12_1, uid=1, store=1, company=1, region=1,
+        InstalledAppLogEntity(date=date_12_1, uid=1, store=1, company=1, region=1, popularize=True,
                 appName=appname, appID=appid, appPkg=package, installedTimes=1).save()
-        InstalledAppLogEntity(date=date_12_1, uid=1, store=1, company=1, region=1, 
+        InstalledAppLogEntity(date=date_12_1, uid=1, store=1, company=1, region=1, popularize=True,
                 appName=appname, appID=appid, appPkg=package_not_exists, installedTimes=1).save()
 
-        InstalledAppLogEntity(date=date_12_1, uid=1, store=1, company=1, region=1, 
+        InstalledAppLogEntity(date=date_12_1, uid=1, store=1, company=1, region=1, popularize=True,
                 appName=appname, appID=appid, appPkg=package, installedTimes=1).save()
-        InstalledAppLogEntity(date=date_12_1, uid=1, store=1, company=1, region=1, 
+        InstalledAppLogEntity(date=date_12_1, uid=1, store=1, company=1, region=1, popularize=True,
                 appName=appname, appID=appid, appPkg=package_not_exists, installedTimes=1).save()
 
-        InstalledAppLogEntity(date=date_12_1, uid=1, store=1, company=1, region=1, 
+        InstalledAppLogEntity(date=date_12_1, uid=1, store=1, company=1, region=1, popularize=True,
                 appName=appname, appID=appid, appPkg=package, installedTimes=1).save()
-        InstalledAppLogEntity(date=date_12_1, uid=1, store=1, company=1, region=1, 
+        InstalledAppLogEntity(date=date_12_1, uid=1, store=1, company=1, region=1, popularize=True,
                 appName=appname, appID=appid, appPkg=package_not_exists, installedTimes=1).save()
 
-        InstalledAppLogEntity(date=date_12_1, uid=empid_not_exists, store=1, company=1, region=1, 
+        InstalledAppLogEntity(date=date_12_1, uid=empid_not_exists, store=1, company=1, region=1, popularize=True,
                 appName=appname, appID=appid, appPkg=package, installedTimes=1).save()
-        InstalledAppLogEntity(date=date_12_1, uid=empid_not_exists, store=1, company=1, region=1, 
+        InstalledAppLogEntity(date=date_12_1, uid=empid_not_exists, store=1, company=1, region=1, popularize=True,
                 appName=appname, appID=appid, appPkg=package_not_exists, installedTimes=1).save()
 
-        InstalledAppLogEntity(date=date_12_2, uid=1, store=1, company=1, region=1, 
+        InstalledAppLogEntity(date=date_12_2, uid=1, store=1, company=1, region=1, popularize=True,
                 appName=appname, appID=appid, appPkg=package, installedTimes=1).save()
-        InstalledAppLogEntity(date=date_12_2, uid=1, store=1, company=1, region=1, 
+        InstalledAppLogEntity(date=date_12_2, uid=1, store=1, company=1, region=1, popularize=True,
                 appName=appname, appID=appid, appPkg=package_not_exists, installedTimes=1).save()
 
-        InstalledAppLogEntity(date=date_12_2, uid=1, store=1, company=1, region=1, 
+        InstalledAppLogEntity(date=date_12_2, uid=1, store=1, company=1, region=1, popularize=True,
                 appName=appname, appID=appid, appPkg=package, installedTimes=1).save()
-        InstalledAppLogEntity(date=date_12_2, uid=1, store=1, company=1, region=1, 
+        InstalledAppLogEntity(date=date_12_2, uid=1, store=1, company=1, region=1, popularize=True,
                 appName=appname, appID=appid, appPkg=package_not_exists, installedTimes=1).save()
 
-        InstalledAppLogEntity(date=date_12_2, uid=1, store=1, company=1, region=1, 
+        InstalledAppLogEntity(date=date_12_2, uid=1, store=1, company=1, region=1, popularize=True,
                 appName=appname, appID=appid, appPkg=package, installedTimes=1).save()
-        InstalledAppLogEntity(date=date_12_2, uid=1, store=1, company=1, region=1, 
+        InstalledAppLogEntity(date=date_12_2, uid=1, store=1, company=1, region=1, popularize=True,
                 appName=appname, appID=appid, appPkg=package_not_exists, installedTimes=1).save()
 
-        InstalledAppLogEntity(date=date_12_2, uid=empid_not_exists, store=1, company=1, region=1, 
+        InstalledAppLogEntity(date=date_12_2, uid=empid_not_exists, store=1, company=1, region=1, popularize=True,
                 appName=appname, appID=appid, appPkg=package, installedTimes=1).save()
-        InstalledAppLogEntity(date=date_12_2, uid=empid_not_exists, store=1, company=1, region=1, 
+        InstalledAppLogEntity(date=date_12_2, uid=empid_not_exists, store=1, company=1, region=1, popularize=True,
                 appName=appname, appID=appid, appPkg=package_not_exists, installedTimes=1).save()
         
 

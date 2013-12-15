@@ -233,8 +233,8 @@ def filter_installed_capacity_logs(user, form):
     logger.debug("logs filtered by period: %d" % len(logs))
 
     popularize = form.cleaned_data['popularize']
-    if popularize is not None and popularize != "":
-        logs = logs.filter(popularize=popularize)
+    if popularize:
+        logs = logs.filter(popularize=(popularize=='True'))
 
     results = logs.values('appPkg', 'appID', 'appName', 'popularize' ,'installedTimes').annotate(count=Sum('installedTimes'))
     return results
