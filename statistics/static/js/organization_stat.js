@@ -71,6 +71,7 @@ $(function() {
     var region = $filter_region.val();
     var company = $filter_company.val();
     var store = $filter_store.val();
+    var emp = '';
     function ensure_emp() {
         var changed = false;
         if($filter_region.val() != region) {
@@ -89,9 +90,13 @@ $(function() {
         }
 
         if (changed) {
-            $filter_employee.select2('val', '');
+            $filter_employee.val('').trigger('chagne');
         }
     }
+
+    $filter_employee.change(function() {
+        emp = $filter_employee.val();
+    });
 
     $filter_region.change(ensure_emp);
     $filter_company.change(ensure_emp);
@@ -141,101 +146,122 @@ $(function() {
 
     statistics.period("#filter_from_date", "#filter_to_date");
 
+    // TABLE
+    var table = (function() {
+
     $("#export-data").click(function(e) {
-        e.preventDefault();
-        window.location = 'flow/excel?' + $form.serialize(true);
+        // TODO
     });
 
-    var $table = $(".table").dataTable($.extend({}, statistics.table_options, {
-        sPaginationType: "bootstrap",
-        aoColumns: [{
-            sTitle: '大区'
-        }, {
-            sTitle: '公司'
-        }, {
-            sTitle: '门店'
-        }, {
-            sTitle: '员工'
-        }, {
-            sTitle: '品牌'
-        }, {
-            sTitle: '机型'
-        }, {
-            sTitle: '串号'
-        }, {
-            sTitle: '应用名称',
-            mRender: function(data, type, full) {
-                if(data.name) {
-                    return app_temp(data);
-                } else {
-                    return '&mdash;'
-                }
-            },
-        }, {
-            sTitle: '是否推广'
-        }, {
-            sTitle: '日期'
-        }],
-        iDisplayStart: 0,
-        iDisplayLength: 50,
-        fnDrawCallback: function() {
-            $table.find(".app-name").popover();
+    function filter_params() {
+        return {
+                    },
+    }
+
+    var $table = null;
+    var options = {
+        region: {
+            to_row: function(item) { },
+            titles: ['大区', '机器台数', '推广数', '安装总数']
         },
-        fnServerData: function(source, data, callback, settings) {
-            console.log("source", source)
-            console.log("settings", settings);
-            var values = statistics.table_map(data, ["sEcho", "iDisplayLength", "iDisplayStart"]);
-            console.log("values", values);
-
-            Dajaxice.statistics.get_flow_logs(login_check(error_check(function(data) {
-                console.log(data);
-                var aaData = [];
-                _.each(data.logs, function(item) {
-                    var app_popularize;
-                    if (item.app.popularize === true) {
-                        app_popularize = '是';
-                    } else if (item.app.popularize == false) {
-                        app_popularize = '否';
-                    } else {
-                        app_popularize = '—';
-                    }
-
-                    aaData.push([
-                        item.region || '&mdash;',
-                        item.company || '&mdash;',
-                        item.store || '&mdash;',
-                        item.emp || '&mdash;',
-                        item.brand || '&mdash;',
-                        item.model || '&mdash;',
-                        item.device || '&mdash;',
-                        item.app,
-                        app_popularize,
-                        item.date
-                    ]);
-                });
-                console.log(aaData);
-                $(".total").html(data.total);
-                callback({
-                    sEcho: values.sEcho,
-                    iTotalRecords: data.total,
-                    iTotalDisplayRecords: data.total,
-                    aaData: aaData
-                });
-            })), {
-                form: $form.serialize(true),
-                offset: values.iDisplayStart,
-                length: values.iDisplayLength
-            }, { 
-                errorCallback: error_check(toastNetworkError)
-            });
+        company: {
+            to_row: function(item) {},
+            titles: ['公司编码', '公司名称', '机器台数', '推广数', '安装总数']
+        },
+        store: {
+            to_row: function(item) {},
+            titles: ['门店编码', '门店名称', '机器台数', '推广数', '安装总数']
+        },
+        emp: {
+            to_row: function(item) {},
+            titles: ['员工编码', '员工姓名', '机器台数', '推广数', '安装总数']
+        },
+        emp_only: {
+            to_row: function(item) {},
+            titles: options.emp.titles
         }
-    }));
+    };
+
+    var sub_options; 
+    function reload_data(region, company, store, emp) {
+        var _sub_options; 
+        var mode;
+        if (emp) {
+            mode = 'emp';
+            _sub_options = options.emp_only;
+        } else if (store) {
+            mode = 'store';
+            _sub_options = options.emp;
+        } else if (company) {
+            mode = 'company';
+            _sub_options = options.store;
+        } else if (region) {
+            mode = 'region';
+            _sub_options = options.company;
+        } else {
+            mode = 'emp_only';
+            _sub_options = options.region;
+        }
+
+        if (_sub_options == sub_options) {
+            $table && $table.fnDraw();
+            return;
+        }
+
+        sub_options = _sub_options;
+        $table && $table.fnDestroy();
+
+        var table_options = $.extend({}, statistics.table_options, {
+            bDestroy: true,
+            sPaginationTyep: "bootstrap",
+            iDisplayStart: 0,
+            iDisplayLength: 50
+        });
+
+        $table = $(".table").dataTable($.extend({}, table_options, {
+            alColumns: _.map(sub_options.titles, function(title) {
+                return {sTitle: title};
+            }),
+            fnServerData: function(source, data, callback, settings) {
+                var values = statistics.table_map(data, 
+                        ["sEcho", "iDisplayLength", "iDisplayStart"]);
+
+                sub_options.filter(login_check(error_check(function(data) {
+                    var aaData = [];
+                    _.each(data.items, function(item) {
+                        aaData.push(sub_options.to_row(item));
+                    });
+                    $(".total").html(data.capacity);
+                    callback({
+                        sEcho: values.sEcho,
+                        iTotalRecords: data.total,
+                        iTotalDisplayRecords: data.total,
+                        aaData: aaData
+                    });
+                })), {
+                    form: $form.serialize(true),
+                    offset: values.iDisplayStart,
+                    length: values.iDisplayLength,
+                    mode: mode
+                }, {
+                    errorCallback: error_check(toastNetworkError)
+                });
+            }
+        }));
+    }
+
+    return { reload: reload_data };
+
+    })();
+
+
+    table.reload($filter_region.val(), $filter_company_region.val(), 
+                 $filter_store.val(), $filter_emp.val());
 
     $form.submit(function(e) {
         e.preventDefault();
-
-        //$table.fnClearTable();
-        $table.fnDraw();
+        table.reload($filter_region.val(), $filter_company_region.val(), 
+                     $filter_store.val(), $filter_emp.val());
     });
 });
 

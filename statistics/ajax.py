@@ -4,7 +4,7 @@ from datetime import datetime
 
 from django.utils import simplejson
 from django.contrib.auth.models import User
-from django.db.models import Sum
+from django.db.models import Sum, Count
 from dajaxice.decorators import dajaxice_register
 from dajaxice.utils import deserialize_form
 
@@ -12,7 +12,8 @@ from interface.models import LogMeta, InstalledAppLogEntity, DeviceLogEntity
 from app.models import App
 from mgr.models import Employee, Organization, cast_staff
 from statistics.forms import LogMetaFilterForm, InstalledCapacityFilterForm
-from statistics.forms import DeviceStatForm
+from statistics.forms import DeviceStatForm, OrganizationStatForm
+from statistics.forms import UserDeviceLogEntity
 from suning import utils
 from suning.decorators import *
 
@@ -340,7 +341,7 @@ def stat_device(user, form, detail=False):
                              total_app_count=Sum('appCount'))
     else:
         logs =logs.values('model')
-        return logs.annotate(total_device_count=Sum('did'), 
+        return logs.annotate(total_device_count=Count('did'), 
                              total_popularize_count=Sum('popularizeAppCount'), 
                              total_app_count=Sum('appCount'))
 
@@ -418,4 +419,99 @@ def get_device_stat_detail(request, form, offset, length):
         'total': total,
         'capacity': capacity
     })
+
+
+def _filter_org_logs(logs, filter_form):
+    logs = AppFilter(logs, form.cleaned_data["app"]).filter()
+    logger.debug("logs filtered by app: %d" % len(logs))
+
+    logs = BrandFilter(logs, form.cleaned_data["brand"]).filter()
+    logger.debug("logs filtered by brand: %d" % len(logs))
+
+    from_date = form.cleaned_data["from_date"]
+    to_date = form.cleaned_data["to_date"]
+    logs = PeriodFilter(logs, from_date, to_date).filter()
+    logger.debug("logs filtered by period: %d" % len(logs))
+    return logs
+
+
+def stat_org_by_region(filter_form):
+    logs = UserDeviceLogEntity.objects.all()
+    logs = _filter_org_logs(logs, filter_form)
+    return logs.values('region').annotate(total_device_count=Sum('deviceCount'),
+                                          total_popularize_count=Sum('popularizeCount'),
+                                          total_app_count=Sum('appCount'))
+
+
+def stat_org_by_company(filter_form):
+    region = filter_form.cleaned_data['region']
+    logs = UserDeviceLogEntity.objects.filter(region=region)
+    logs = _filter_org_logs(logs, filter_form)
+    return logs.values('company').annotate(total_device_count=Sum('deviceCount'),
+                                           total_popularize_count=Sum('popularizeCount'),
+                                           total_app_count=Sum('appCount'))
+
+
+def stat_org_by_store(filter_form):
+    company = filter_form.cleaned_data['company']
+    logs = UserDeviceLogEntity.objects.filter(company=company)
+    logs = _filter_org_logs(logs, filter_form)
+    return logs.values('store').annotate(total_device_count=Sum('deviceCount'),
+                                         total_popularize_count=Sum('popularizeCount'),
+                                         total_app_count=Sum('appCount'))
+
+
+def stat_org_by_emp(filter_form):
+    store = filter_form.cleaned_data['store']
+    logs = UserDeviceLogEntity.objects.filter(store=store)
+    logs = _filter_org_logs(logs, filter_form)
+    return logs.values('uid').annotate(total_device_count=Sum('deviceCount'),
+                                       total_popularize_count=Sum('popularizeCount'),
+                                       total_app_count=Sum('appCount'))
+
+
+def stat_org_by_emp_only(filter_form):
+    emp = filter_form.cleaned_data['emp']
+    logs = UserDeviceLogEntity.objects.filter(uid=uid)
+    logs = _filter_org_logs(logs, filter_form)
+    return logs.values('uid').annotate(total_device_count=Sum('deviceCount'),
+                                       total_popularize_count=Sum('popularizeCount'),
+                                       total_app_count=Sum('appCount'))
+
+
+def render_org_stat(records, offset, length):
+    capacity = records.aggregate(capacity=Sum('appCount'))['capacity']
+    records = records[offset: offset + length]
+    return simplejson.dumps({
+        'ret_code': 0,
+        'logs': records,
+        'total': total,
+        'capacity': capacity
+    })
+
+
+@dajaxice_register(method='POST')
+@check_login
+def filter_org_statistics(request, form, offset, length, mode):
+    user = cast_staff(request.user)
+    form = deserialize_form(form)
+
+    filter_form = OrganizationStatForm(form)
+    if not filter_form.is_valid():
+        logger.warn("form is invalid")
+        logger.warn(filter_form.errors)
+        return _invalid_data_json
+
+    if mode == 'region':
+        records = stat_org_by_region(filter_form)
+    elif mode == 'company':
+        records = stat_org_by_company(filter_form)
+    elif mode == 'store':
+        records = stat_org_by_store(filter_form)
+    elif mode == 'emp':
+        records = stat_org_by_emp(filter_form)
+    else:
+        records = stat_org_by_emp_only(filter_form)
+
+    return render_org_stat(records, offset, length)
 

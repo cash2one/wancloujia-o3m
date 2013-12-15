@@ -23,7 +23,8 @@ from suning.decorators import active_tab
 from mgr.models import cast_staff, Region, Company, Store, Organization, Employee
 from app.models import App
 from interface.models import LogMeta, InstalledAppLogEntity, DeviceLogEntity
-from forms import LogMetaFilterForm, InstalledCapacityFilterForm, DeviceStatForm
+from forms import LogMetaFilterForm, InstalledCapacityFilterForm
+from forms import OrganizationStatForm, DeviceStatForm
 from ajax import filter_flow_logs, log_to_dict, device_record_to_dict
 from ajax import filter_installed_capacity_logs, installed_capacity_to_dict
 from ajax import stat_device
@@ -439,4 +440,12 @@ def render_excel(filename, sheets):
     book.save(response)
     return response
 
+@require_GET
+@login_required
+@active_tab("statistics", "organization")
+def organization(request):        
+    return render(request, "organization_stat.html", {
+        'user_filter': user_filter(cast_staff(request.user)),
+        'filter': OrganizationStatForm()
+    })
 
