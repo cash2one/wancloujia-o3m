@@ -7,6 +7,8 @@ urlpatterns = patterns('statistics.views',
     url(r'^capacity/excel$', 'capacity_excel'),
     url(r'^device$', 'device'),
     url(r'^device/excel$', 'device_excel'),
+    url(r'^organization$', 'organization'),
+    url(r'^organization/(?P<mode>.*)/excel$', 'organization_excel'),
 
     # query
     url(r'^regions$', 'regions'),
