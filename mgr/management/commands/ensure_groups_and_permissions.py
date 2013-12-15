@@ -28,6 +28,8 @@ def _ensure_permissions_for_built_in_groups():
         Permission.objects.get(content_type=organization_type, codename='change_organization'), 
         Permission.objects.get(content_type=staff_type, codename="add_staff"),
         Permission.objects.get(content_type=staff_type, codename="change_staff"),
+        Permission.objects.get(content_type=log_meta_type, 
+                               codename='view_organization_statistics')
     ]
     group.save()
 
