@@ -214,7 +214,7 @@ $(function() {
                     ]);
                 });
                 console.log(aaData);
-                $(".total").html(data.total);
+                $(".total").html(data.total || 0);
                 callback({
                     sEcho: values.sEcho,
                     iTotalRecords: data.total,

@@ -33,11 +33,11 @@
                 sNext: '&raquo;',
                 sPrevious: '&laquo;'
             },
-            sEmptyTable: '共0次安装',
+            sEmptyTable: '暂无记录',
             sInfo: '共 _TOTAL_ 次安装',
-            sInfoEmpty: '共0次安装',
+            sInfoEmpty: '暂无记录',
             sProcessing: '正在查询，请稍等...',
-            sZeroRecords: '工0次安装'
+            sZeroRecords: '暂无记录'
         }
     };
 
