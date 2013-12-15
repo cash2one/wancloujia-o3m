@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="{{ STATIC_URL }}css/jquery.pnotify.default.css" />
     <link rel="stylesheet" href="{{ STATIC_URL }}css/jquery.pnotify.default.icons.css" />
     <link rel="stylesheet" href="{{ STATIC_URL }}css/pnotify-bs3-fix.css" />
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/jquery-ui-1.10.3.custom.min.css" />
     {% endblock %}
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -23,11 +24,12 @@
     <script type="text/javascript" src="{{ STATIC_URL }}js/html5shiv.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/respond.min.js"></script>
     <![endif]-->
+	
+	<script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.9.1.min.js"></script>
 </head>
 <body>
     {% block content %}{% endblock %}
     {% block js %}
-    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.9.1.min.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.pnotify.min.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/underscore-min.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
