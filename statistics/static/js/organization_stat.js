@@ -90,7 +90,7 @@ $(function() {
         }
 
         if (changed) {
-            $filter_employee.val('').trigger('chagne');
+            $filter_employee.select2('val', '');
         }
     }
 
@@ -153,11 +153,6 @@ $(function() {
         // TODO
     });
 
-    function filter_params() {
-        return {
-                    },
-    }
-
     var $table = null;
     var options = {
         region: {
@@ -178,7 +173,7 @@ $(function() {
         },
         emp_only: {
             to_row: function(item) {},
-            titles: options.emp.titles
+            titles: ['员工编码', '员工姓名', '机器台数', '推广数', '安装总数']
         }
     };
 
@@ -187,19 +182,19 @@ $(function() {
         var _sub_options; 
         var mode;
         if (emp) {
-            mode = 'emp';
+            mode = 'emp_only';
             _sub_options = options.emp_only;
         } else if (store) {
-            mode = 'store';
+            mode = 'emp';
             _sub_options = options.emp;
         } else if (company) {
-            mode = 'company';
+            mode = 'store';
             _sub_options = options.store;
         } else if (region) {
-            mode = 'region';
+            mode = 'company';
             _sub_options = options.company;
         } else {
-            mode = 'emp_only';
+            mode = 'region';
             _sub_options = options.region;
         }
 
@@ -207,26 +202,27 @@ $(function() {
             $table && $table.fnDraw();
             return;
         }
-
+    
+        $table && $table.dataTable().fnDestroy();
+        $table && $table.html('<thead></thead><tbody></tbody>');
         sub_options = _sub_options;
-        $table && $table.fnDestroy();
-
         var table_options = $.extend({}, statistics.table_options, {
-            bDestroy: true,
+            bRetrieve: true,
             sPaginationTyep: "bootstrap",
             iDisplayStart: 0,
             iDisplayLength: 50
         });
 
         $table = $(".table").dataTable($.extend({}, table_options, {
-            alColumns: _.map(sub_options.titles, function(title) {
+            aoColumns: _.map(sub_options.titles, function(title) {
                 return {sTitle: title};
             }),
             fnServerData: function(source, data, callback, settings) {
                 var values = statistics.table_map(data, 
                         ["sEcho", "iDisplayLength", "iDisplayStart"]);
 
-                sub_options.filter(login_check(error_check(function(data) {
+                var filter = Dajaxice.statistics.filter_org_statistics;
+                filter(login_check(error_check(function(data) {
                     var aaData = [];
                     _.each(data.items, function(item) {
                         aaData.push(sub_options.to_row(item));
@@ -255,13 +251,13 @@ $(function() {
     })();
 
 
-    table.reload($filter_region.val(), $filter_company_region.val(), 
-                 $filter_store.val(), $filter_emp.val());
+    table.reload($filter_region.val(), $filter_company.val(), 
+                 $filter_store.val(), $filter_employee.val());
 
     $form.submit(function(e) {
         e.preventDefault();
-        table.reload($filter_region.val(), $filter_company_region.val(), 
-                     $filter_store.val(), $filter_emp.val());
+        table.reload($filter_region.val(), $filter_company.val(), 
+                     $filter_store.val(), $filter_employee.val());
     });
 });
 
