@@ -29,6 +29,7 @@ class App(models.Model):
     category = models.ForeignKey(Category, verbose_name=u'应用类型')
     app_icon = models.CharField(verbose_name=u'应用图标', max_length=100)
     version = models.CharField(verbose_name=u'版本号', max_length=255)
+    version_code = models.IntegerField(verbose_name=u'版本代码')
     popularize = models.BooleanField(verbose_name=u'是否推广')
     create_date = models.DateTimeField(verbose_name=u'创建时间', auto_now_add=True)
     online = models.BooleanField(verbose_name=u'是否上线')
