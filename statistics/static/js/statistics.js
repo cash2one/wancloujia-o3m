@@ -41,6 +41,7 @@
         }
     };
 
+
     function Period(from, to) {
         var that = this;
         this.$from = $(from);
