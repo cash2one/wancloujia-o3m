@@ -88,19 +88,19 @@
                 </a>
                 <ul id="sub_system" class="nav collapse in">
                     {% if request.user|can_view_organization %}
-                    <li {% if request.nav.sub_active_tab == "organization" %}class="active"{% endif %}>
+                    <li {% if request.nav.active_tab == "system" and request.nav.sub_active_tab == "organization" %}class="active"{% endif %}>
                         <a href="/mgr/organization/">组织管理</a>
                     </li>
                     {% endif %}
 
                     {% if request.user|is_not_employee %}
-                    <li {% if request.nav.sub_active_tab == "group" %}class="active"{% endif %}>
+                    <li {% if request.nav.active_tab == "system" and request.nav.sub_active_tab == "group" %}class="active"{% endif %}>
                         <a href="/mgr/group/">用户组管理</a>
                     </li>
                     {% endif %}
 
                     {% if request.user|can_view_staff %}
-                    <li {% if request.nav.sub_active_tab == "user" %}class="active"{% endif %}>
+                    <li {% if request.nav.active_tab == "system" and request.nav.sub_active_tab == "user" %}class="active"{% endif %}>
                         <a href="/mgr/user/">用户管理</a>
                     </li>
                     {% endif %}
@@ -122,22 +122,22 @@
                     <span class="glyphicon glyphicon-th"></span>&nbsp;&nbsp;数据统计
                 </a>
                 <ul class="nav collapse in" id="sub_statistics">
-                    <li {% if request.nav.sub_active_tab == "flow" %}
+                    <li {% if request.nav.active_tab == "statistics" and request.nav.sub_active_tab == "flow" %}
                         class="active"
                         {% endif %}>
                         <a href="/statistics/flow">流水统计</a>
                     </li>
-                    <li {% if request.nav.sub_active_tab == "capacity" %}
+                    <li {% if request.nav.active_tab == "statistics" and request.nav.sub_active_tab == "capacity" %}
                         class="active"
                         {% endif %}>
                         <a href="/statistics/capacity">安装统计</a>
                     </li>
-                    <li {% if request.nav.sub_active_tab == "device" %}
+                    <li {% if request.nav.active_tab == "statistics" and request.nav.sub_active_tab == "device" %}
                         class="active"
                         {% endif %}>
                         <a href="/statistics/device">机型统计</a>
                     </li>
-                    <li {% if request.nav.sub_active_tab == "organization" %}
+                    <li {% if request.nav.active_tab == "statistics" and request.nav.sub_active_tab == "organization" %}
                         class="active"
                         {% endif %}>
                         <a href="/statistics/organization">组织统计</a>
