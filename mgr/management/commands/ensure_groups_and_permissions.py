@@ -7,6 +7,7 @@ from django.contrib.contenttypes.models import ContentType
 from mgr.models import Organization, Staff, get_built_in_group_names
 from ad.models import AD
 from app.models import App, Subject
+from interface.models import LogMeta
 
 
 def _ensure_built_in_groups():
@@ -21,6 +22,7 @@ def _ensure_permissions_for_built_in_groups():
     ad_type = ContentType.objects.get_for_model(AD)
     app_type = ContentType.objects.get_for_model(App)
     subject_type = ContentType.objects.get_for_model(Subject)
+    log_meta_type = ContentType.objects.get_for_model(LogMeta)
 
     group = Group.objects.get(name=u'管理组') 
     group.permissions = [
