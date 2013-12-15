@@ -165,7 +165,7 @@ def filter_flow_logs(user, form):
     elif user.has_perm("interface.view_organization_statistics"):
         logs = UserPermittedFilter(user, logs, region_id, company_id, store_id, emp_id).filter()
     else:
-        logs = UserUnpermittedFilter(logs, request.user.pk).filter()
+        logs = UserUnpermittedFilter(logs, user.pk).filter()
     logger.debug("logs filtered by user info: %d" % len(logs))
 
     logs = AppFilter(logs, form.cleaned_data["app"]).filter()
