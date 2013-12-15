@@ -1,3 +1,4 @@
+import random
 from datetime import datetime, timedelta, date
 
 from django.core.management.base import BaseCommand
@@ -114,9 +115,12 @@ class Command(BaseCommand):
         
 
     def add_test_logs_for_flow(self):
-        DEVICE_ID = 'device_id?'
-        BRAND = 'brand?'
-        MODEL = 'model?'
+        date_12_1 = date(year=2013, month=12, day=1)
+        self.add_test_logs_for_flow_by_date_brand_model(date_12_1, 'hTC', 'hTC One S')
+        self.add_test_logs_for_flow_by_date_brand_model(date_12_1, 'Google', 'Google Nexus 5')
+
+    def add_test_logs_for_flow_by_date_brand_model(self, date, brand, model):
+        device = random.randint(10 * 13, 10 * 14-1)
 
         emp_region = Employee.objects.get(username='emp_region')
         emp_company = Employee.objects.get(username='emp_company')
@@ -127,67 +131,23 @@ class Command(BaseCommand):
         package_not_exists = 'com.limijiaoyin.app'
         appid = 10000
 
-        date_12_1 = date(year=2013, month=12, day=1)
-        date_12_2 = date(year=2013, month=12, day=2)
-        date_12_3 = date(year=2013, month=12, day=3)
+        # emp(4) x package(2) x date(3) x brand(1) x model(1) = cases(12)
+        LogMeta(date=date, uid=emp_region.pk, did=device, 
+                brand=brand, model=model, appID=appid, appPkg=package).save()
+        LogMeta(date=date, uid=emp_region.pk, did=device, 
+                brand=brand, model=model, appID=appid, appPkg=package_not_exists).save()
 
-        # emp(4) x package(2) x date(3) = cases(24)
+        LogMeta(date=date, uid=emp_company.pk, did=device, 
+                brand=brand, model=model, appID=appid, appPkg=package).save()
+        LogMeta(date=date, uid=emp_company.pk, did=device, 
+                brand=brand, model=model, appID=appid, appPkg=package_not_exists).save()
 
-        #same date same organization but not same package
-        LogMeta(date=date_12_1, uid=emp_region.pk, did=DEVICE_ID, 
-                brand=BRAND, model=MODEL, appID=appid, appPkg=package).save()
-        LogMeta(date=date_12_1, uid=emp_region.pk, did=DEVICE_ID, 
-                brand=BRAND, model=MODEL, appID=appid, appPkg=package_not_exists).save()
+        LogMeta(date=date, uid=emp_store.pk, did=device, 
+                brand=brand, model=model, appID=appid, appPkg=package).save()
+        LogMeta(date=date, uid=emp_store.pk, did=device, 
+                brand=brand, model=model, appID=appid, appPkg=package_not_exists).save()
 
-        LogMeta(date=date_12_1, uid=emp_company.pk, did=DEVICE_ID, 
-                brand=BRAND, model=MODEL, appID=appid, appPkg=package).save()
-        LogMeta(date=date_12_1, uid=emp_company.pk, did=DEVICE_ID, 
-                brand=BRAND, model=MODEL, appID=appid, appPkg=package_not_exists).save()
-
-        LogMeta(date=date_12_1, uid=emp_store.pk, did=DEVICE_ID, 
-                brand=BRAND, model=MODEL, appID=appid, appPkg=package).save()
-        LogMeta(date=date_12_1, uid=emp_store.pk, did=DEVICE_ID, 
-                brand=BRAND, model=MODEL, appID=appid, appPkg=package_not_exists).save()
-
-        LogMeta(date=date_12_1, uid=empid_not_exists, did=DEVICE_ID, 
-                brand=BRAND, model=MODEL, appID=appid, appPkg=package).save()
-        LogMeta(date=date_12_1, uid=empid_not_exists, did=DEVICE_ID, 
-                brand=BRAND, model=MODEL, appID=appid, appPkg=package_not_exists).save()
-
-        LogMeta(date=date_12_2, uid=emp_region.pk, did=DEVICE_ID, 
-                brand=BRAND, model=MODEL, appID=appid, appPkg=package).save()
-        LogMeta(date=date_12_2, uid=emp_region.pk, did=DEVICE_ID, 
-                brand=BRAND, model=MODEL, appID=appid, appPkg=package_not_exists).save()
-
-        LogMeta(date=date_12_2, uid=emp_company.pk, did=DEVICE_ID, 
-                brand=BRAND, model=MODEL, appID=appid, appPkg=package).save()
-        LogMeta(date=date_12_2, uid=emp_company.pk, did=DEVICE_ID, 
-                brand=BRAND, model=MODEL, appID=appid, appPkg=package_not_exists).save()
-
-        LogMeta(date=date_12_2, uid=emp_store.pk, did=DEVICE_ID, 
-                brand=BRAND, model=MODEL, appID=appid, appPkg=package).save()
-        LogMeta(date=date_12_2, uid=emp_store.pk, did=DEVICE_ID, 
-                brand=BRAND, model=MODEL, appID=appid, appPkg=package_not_exists).save()
-
-        LogMeta(date=date_12_2, uid=empid_not_exists, did=DEVICE_ID, 
-                brand=BRAND, model=MODEL, appID=appid, appPkg=package).save()
-        LogMeta(date=date_12_2, uid=empid_not_exists, did=DEVICE_ID, 
-                brand=BRAND, model=MODEL, appID=appid, appPkg=package_not_exists).save()
-
-        LogMeta(date=date_12_3, uid=emp_region.pk, did=DEVICE_ID, 
-                brand=BRAND, model=MODEL, appID=appid, appPkg=package).save()
-        LogMeta(date=date_12_3, uid=emp_region.pk, did=DEVICE_ID, 
-                brand=BRAND, model=MODEL, appID=appid, appPkg=package_not_exists).save()
-        LogMeta(date=date_12_3, uid=emp_company.pk, did=DEVICE_ID, 
-                brand=BRAND, model=MODEL, appID=appid, appPkg=package).save()
-        LogMeta(date=date_12_3, uid=emp_company.pk, did=DEVICE_ID, 
-                brand=BRAND, model=MODEL, appID=appid, appPkg=package_not_exists).save()
-        LogMeta(date=date_12_3, uid=emp_store.pk, did=DEVICE_ID, 
-                brand=BRAND, model=MODEL, appID=appid, appPkg=package).save()
-        LogMeta(date=date_12_3, uid=emp_store.pk, did=DEVICE_ID, 
-                brand=BRAND, model=MODEL, appID=appid, appPkg=package_not_exists).save()
-        LogMeta(date=date_12_3, uid=empid_not_exists, did=DEVICE_ID, 
-                brand=BRAND, model=MODEL, appID=appid, appPkg=package).save()
-        LogMeta(date=date_12_3, uid=empid_not_exists, did=DEVICE_ID, 
-                brand=BRAND, model=MODEL, appID=appid, appPkg=package_not_exists).save()
-
+        LogMeta(date=date, uid=empid_not_exists, did=device, 
+                brand=brand, model=model, appID=appid, appPkg=package).save()
+        LogMeta(date=date, uid=empid_not_exists, did=device, 
+                brand=brand, model=model, appID=appid, appPkg=package_not_exists).save()

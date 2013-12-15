@@ -303,7 +303,8 @@ class MgrInfoFilter():
         else:
             return logs
 
-def filter_device_stat(user, form):
+
+def _filter_device_statistics(user, form):
     region_id = form.cleaned_data["region"]
     company_id = form.cleaned_data["company"]
     store_id = form.cleaned_data["store"]
@@ -316,35 +317,31 @@ def filter_device_stat(user, form):
     logs = AppFilter(logs, form.cleaned_data["app"]).filter()
     logger.debug("logs filtered by app: %d" % len(logs))
 
+    brand = form.cleaned_data["brand"]
+    if brand:
+        logs = logs.filter(brand=brand)
+    model = form.cleaned_data["model"]
+    if model:
+        logs = logs.filter(model=model)
+        
+
     from_date = form.cleaned_data["from_date"]
     to_date = form.cleaned_data["to_date"]
     logs = PeriodFilter(logs, from_date, to_date).filter()
     logger.debug("logs filtered by period: %d" % len(logs))
+    return logs
 
+
+def stat_device(user, form):
+    logs = _filter_device_statistics(user, form) 
     results = logs.values('model').annotate(total_device_count=Sum('deviceCount'), 
                                             total_popularize_count=Sum('popularizeAppCount'), 
                                             total_app_count=Sum('appCount'))
     return results
 
-def count_device_stat(user, form):
-    region_id = form.cleaned_data["region"]
-    company_id = form.cleaned_data["company"]
-    store_id = form.cleaned_data["store"]
-    emp_id = form.cleaned_data["emp"]
-    logs = MgrInfoFilter(DeviceLogEntity.objects.all(), form.cleaned_data["region"],
-                         form.cleaned_data["company"], form.cleaned_data["store"], 
-                         form.cleaned_data["emp"]).filter()
-    logger.debug("logs filtered by mgr info: %d" % len(logs))
-
-    logs = AppFilter(logs, form.cleaned_data["app"]).filter()
-    logger.debug("logs filtered by app: %d" % len(logs))
-
-    from_date = form.cleaned_data["from_date"]
-    to_date = form.cleaned_data["to_date"]
-    logs = PeriodFilter(logs, from_date, to_date).filter()
-    logger.debug("logs filtered by period: %d" % len(logs))
-
-    return logs.aggregate(total=Sum('deviceCount'))['total']
+def count_device(user, form):
+    logs = _filter_device_statistics(user, form) 
+    return logs.aggregate(total=Sum('appCount'))['total']
 
 
 @dajaxice_register(method='POST')
@@ -359,13 +356,12 @@ def get_device_stat(request, form, offset, length):
         logger.warn(filter_form.errors)
         return _invalid_data_json
 
-    results = filter_device_stat(user, filter_form)
+    results = stat_device(user, filter_form)
     total = len(results)
-    capacity = count_device_stat(user, filter_form)
+    capacity = count_device(user, filter_form)
     results = results[offset: offset + length]
     dict_list = []
     for result in results:
-        #dict_list.append(devcie_record_to_dict(result))
         dict_list.append(result)
 
     return simplejson.dumps({

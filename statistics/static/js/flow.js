@@ -56,7 +56,10 @@ $(function() {
                 }, function(data) {
                     query.callback(data);
                 }, "json").error(function() {
-                    query.callback([]);
+                    query.callback({
+                        resutls: [],
+                        more: false
+                    });
                 });
             }
         });
@@ -95,7 +98,28 @@ $(function() {
     $filter_store.change(ensure_emp);
 
     var $filter_brand = $("#filter_brand");
-    $filter_brand.select2(select2_tip_options);
+    $filter_brand.select2($.extend({}, select2_tip_options, {
+        query: function(query) {
+            $.get('brands', {
+                q: query.term,
+                p: query.page
+            }, function(data) {
+                results = _.map(data.brands, function(brand) {
+                    return {'id': brand, 'text': brand};
+                });
+                results.unshift({'id': '', 'text': '--------'});
+                query.callback({
+                    results: results,
+                    more: data.more
+                });
+            }, "json").error(function() {
+                query.callback({
+                    results: [],
+                    more: false
+                });
+            });
+        }
+    }));
 
     var $filter_app = $("#filter_app");
     $filter_app.select2($.extend({}, select2_tip_options, {
@@ -107,7 +131,10 @@ $(function() {
                 console.log(data);
                 query.callback(data);
             }, "json").error(function() {
-                query.callback([]);
+                query.callback({
+                    results: [],
+                    more: false
+                });
             });
         }
     }));

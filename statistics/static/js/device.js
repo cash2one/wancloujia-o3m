@@ -95,18 +95,57 @@ $(function() {
     $filter_company.change(ensure_emp);
     $filter_store.change(ensure_emp);
 
-    var $filter_app = $("#filter_app");
     var $filter_brand = $("#filter_brand");
-    $filter_brand.select2($.extend({}, select2_tip_options))
+    $filter_brand.select2($.extend({}, select2_tip_options, {
+        query: function(query) {
+            $.get('brands', {
+                q: query.term,
+                p: query.page
+            }, function(data) {
+                var results = _.map(data.brands, function(brand) {
+                    return {'id': brand, 'text': brand};
+                });
+                results.unshift({'id': '', 'text': '--------'});
+                query.callback({ results: results, more: data.more });
+            }, "json").error(function() {
+                query.callback({ results: [], more: false });
+            });
+        }
+    }));
+
     var $filter_model = $("#filter_model");
-    $filter_model.select2($.extend({}, select2_tip_options))
+    $filter_brand.change(function() {
+        $filter_model.select2('readonly', !$filter_brand.val());
+        $filter_model.select2('val', '');
+    });
+
+    $filter_model.select2($.extend({}, select2_tip_options, {
+        allowClear: true,
+        query: function(query) {
+            $.get('models', {
+                b: $filter_brand.val(),
+                q: query.term,
+                p: query.page
+            }, function(data) {
+                var results = _.map(data.models, function(model) {
+                    return {'id': model, 'text': model};
+                });
+                results.unshift({'id': '', 'text': '--------'});
+                query.callback({ results: results, more: data.more });
+            }, "json").error(function() {
+                query.callback({ results: [], more: false });
+            });
+        }
+    }));
+    $filter_model.select2('readonly', true);
+
+    var $filter_app = $("#filter_app");
     $filter_app.select2($.extend({}, select2_tip_options, {
         query: function(query) {
             $.get('apps', {
                 q: query.term,
                 p: query.page
             }, function(data) {
-                console.log(data);
                 query.callback(data);
             }, "json").error(function() {
                 query.callback([]);

@@ -91,12 +91,7 @@
                     <div class="filter-group">
                         <div class="filter">
                             <label for="filter_brand">{{ filter.brand.label }}：</label>
-                            <select id="filter_brand" name="brand">
-                                <option value="">{{ select_empty_option }}</option>
-                                {% for brand in brands %}
-                                <option value="{{ brand }}">{{ brand }}</option>
-                                {% endfor %}
-                            </select>
+                            <input type='hidden' id="filter_brand" name="brand"/>
                         </div>
                     </div>
                     <div class="filter-group last">

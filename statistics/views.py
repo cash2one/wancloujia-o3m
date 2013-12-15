@@ -115,10 +115,6 @@ def stores(request):
     return render_json(dict)
 
 
-def _get_brands():
-    return LogMeta.objects.all().values_list('brand', flat=True).distinct()
-
-
 def query_employee(user, org):
     if not org:
         return Employee.objects.none()
@@ -187,6 +183,36 @@ def apps(request):
     return render_json({'more': pages > page, 'results': results})
 
 
+@require_GET
+def models(request):
+    LENGTH = 10
+    b = request.GET.get('b', '')
+    q = request.GET.get('q', '') 
+    p = int(request.GET.get('p', '1'))
+
+    logs = LogMeta.objects.all()
+    logs = logs.filter(brand=b) if b else logs
+    logs = logs.filter(model__contains=q)
+    models = logs.values_list('model', flat=True).distinct()
+    return render_json({
+        'more': len(models) > p * LENGTH,
+        'models': models[(p-1) * LENGTH : p * LENGTH]
+    })
+
+
+@require_GET
+def brands(request):
+    LENGTH = 10
+    q = request.GET.get('q', '') 
+    p = int(request.GET.get('p', '1'))
+    logs = LogMeta.objects.filter(brand__contains=q)
+    brands = logs.values_list('brand', flat=True).distinct()
+    return render_json({
+        'more': len(brands) > p * LENGTH,
+        'brands': brands[(p-1) * LENGTH : p * LENGTH]
+    })
+
+        
 def user_filter(user):
     empty_value = {'pk': '', 'code': '', 'name': '--------'}
     user_filter = { 
@@ -225,7 +251,6 @@ def user_filter(user):
 @active_tab("statistics", "flow")
 def flow(request):
     return render(request, "flow.html", {
-        'brands': _get_brands(),
         'user_filter': user_filter(cast_staff(request.user)),
         'filter': LogMetaFilterForm()
     })
@@ -338,17 +363,11 @@ def capacity_excel(request):
     return response
 
 
-def _get_models():
-    return DeviceLogEntity.objects.values_list('model', flat=True).distinct()
-
-
 @require_GET
 @login_required
 @active_tab("statistics", "device")
 def device(request):        
     return render(request, "device.html", {
-        'brands': _get_brands(),
-        'models': _get_models(),
         'user_filter': user_filter(cast_staff(request.user)),
         'filter': DeviceStatForm()
     })
