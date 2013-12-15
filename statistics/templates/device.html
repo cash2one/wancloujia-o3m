@@ -94,9 +94,9 @@
                         </div>
                         <div class="filter">
                             <label for="filter_app">{{ filter.model.label }}：</label>
-                            <select id="filter_brand" name="model">
+                            <select id="filter_model" name="model">
                                 <option value="">{{ select_empty_option }}</option>
-                                {% for brand in models %}
+                                {% for model in models %}
                                 <option value="{{ model }}">{{ model }}</option>
                                 {% endfor %}
                             </select>
@@ -139,10 +139,15 @@
         </div>
     </div>
 
-    <div class="panel panel-default">
+    <ul class="nav nav-pills">
+        <li class='active'><a href="#summary" data-toggle="pill">汇总</a></li>
+        <li><a href="#detail" data-toggle="pill">明细</a></li>
+    </ul>
+    <div class='tab-content'>
+    <div id="summary" class="tab-pane panel active panel-default">
         <div class="panel-heading">
             共<span class='total'></span>次安装
-            <button class='btn btn-default btn-xs pull-right' id="export-data">导出数据</button>
+            <button class='btn btn-default btn-xs pull-right' id="export-summary">导出数据</button>
         </div>
         <div class="panel-body"> 
             <table class="table table-hover table-bordered">
@@ -158,6 +163,29 @@
             </table>
         </div>
     </div>
+    <div id="detail" class="tab-pane panel panel-default">
+        <div class="panel-heading">
+            共<span class='total'></span>次安装
+            <button class='btn btn-default btn-xs pull-right' id="export-detail">导出数据</button>
+        </div>
+        <div class="panel-body"> 
+            <table class="table table-hover table-bordered">
+                <thead>
+                    <tr>
+                        <th>员工</th>
+                        <th>品牌</th>
+                        <th>机型</th>
+                        <th>串号</th>
+                        <th>推广数</th>
+                        <th>安装总数</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+    </div>
+
 </div>
 {% endblock %}
 {% block js %}

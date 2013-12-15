@@ -96,6 +96,10 @@ $(function() {
     $filter_store.change(ensure_emp);
 
     var $filter_app = $("#filter_app");
+    var $filter_brand = $("#filter_brand");
+    $filter_brand.select2($.extend({}, select2_tip_options))
+    var $filter_model = $("#filter_model");
+    $filter_model.select2($.extend({}, select2_tip_options))
     $filter_app.select2($.extend({}, select2_tip_options, {
         query: function(query) {
             $.get('apps', {
@@ -112,12 +116,12 @@ $(function() {
 
     statistics.period("#filter_from_date", "#filter_to_date");
 
-    $("#export-data").click(function(e) {
+    $("#export-summary").click(function(e) {
         e.preventDefault();
         window.location =  'installed_capacity/excel?' + $form.serialize(true);
     });
 
-    var $table = $(".table").dataTable($.extend({}, statistics.table_options, {
+    var $table = $("#summary .table").dataTable($.extend({}, statistics.table_options, {
         sPaginationType: "bootstrap",
         aoColumns: [{
             sTitle: '机型'
