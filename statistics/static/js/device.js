@@ -186,7 +186,7 @@ $(function() {
                         item.total_app_count
                     ]);
                 });
-                $(".total").html(data.capacity);
+                $(".total").html(data.capacity || 0);
                 callback({
                     sEcho: values.sEcho,
                     iTotalRecords: data.total,
@@ -234,7 +234,7 @@ $(function() {
                         item.total_app_count
                     ]);
                 });
-                $(".total").html(data.capacity);
+                $(".total").html(data.capacity || 0);
                 callback({
                     sEcho: values.sEcho,
                     iTotalRecords: data.total,
