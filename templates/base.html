@@ -114,16 +114,28 @@
             </li>
             {% endif %}
 
-            <li {% if request.nav.active_tab == "statistics" %}class="active"{% endif %}>
-                <a class="accordin-toggle" data-toggle="collapse" data-parent="#accordin" href="#sub_statistics">
+            <li {% if request.nav.active_tab == "statistics" %}
+                class="active"
+                {% endif %}>
+                <a class="accordin-toggle" data-toggle="collapse" 
+                    data-parent="#accordin" href="#sub_statistics">
                     <span class="glyphicon glyphicon-th"></span>&nbsp;&nbsp;数据统计
                 </a>
                 <ul class="nav collapse in" id="sub_statistics">
-                    <li {% if request.nav.sub_active_tab == "flow" %}class="active"{% endif %}>
+                    <li {% if request.nav.sub_active_tab == "flow" %}
+                        class="active"
+                        {% endif %}>
                         <a href="/statistics/flow">流水统计</a>
                     </li>
-                    <li {% if request.nav.sub_active_tab == "installed_capacity" %}class="active"{% endif %}>
-                        <a href="/statistics/installed_capacity">安装统计</a>
+                    <li {% if request.nav.sub_active_tab == "capacity" %}
+                        class="active"
+                        {% endif %}>
+                        <a href="/statistics/capacity">安装统计</a>
+                    </li>
+                    <li {% if request.nav.sub_active_tab == "device" %}
+                        class="active"
+                        {% endif %}>
+                        <a href="/statistics/device">机型统计</a>
                     </li>
                 </ul>
             </li>
