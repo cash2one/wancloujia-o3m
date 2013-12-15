@@ -73,7 +73,7 @@
                             <input id="filter_employee" type="hidden" name="emp"/>
                             {% else %}
                             <select id="filter_employee" name="emp" 
-                                    readonly='readonly' data-readonly='true'
+                                    readonly='readonly' data-readonly='true' 
                                     value="{{ user_filter }}">
                                 <option value="{{ user_filter.emp.value.pk }}">
                                     {{ user_filter.emp.value.username }}
@@ -84,14 +84,18 @@
                     </div>
                     <div class="filter-group">
                         <div class="filter">
-                            <label for="filter_app">{{ filter.app.label }}：</label>
-                            <input type="hidden" id="filter_app" name="app"/>
+                            <label for="filter_app">{{ filter.brand.label }}：</label>
+                            <input type='hidden' id="filter_brand" name="brand"/>
+                        </div>
+                        <div class="filter">
+                            <label for="filter_app">{{ filter.model.label }}：</label>
+                            <input type='hidden' id="filter_model" name="model"/>
                         </div>
                     </div>
                     <div class="filter-group">
                         <div class="filter">
-                            <label for="filter_brand">{{ filter.brand.label }}：</label>
-                            <input type='hidden' id="filter_brand" name="brand"/>
+                            <label for="filter_app">{{ filter.app.label }}：</label>
+                            <input type="hidden" id="filter_app" name="app"/>
                         </div>
                     </div>
                     <div class="filter-group last">
@@ -125,31 +129,53 @@
         </div>
     </div>
 
-    <div class="panel panel-default">
+    <ul class="nav nav-pills">
+        <li class='active'><a href="#summary" data-toggle="pill">汇总</a></li>
+        <li><a href="#detail" data-toggle="pill">明细</a></li>
+    </ul>
+    <div class='tab-content'>
+    <div id="summary" class="tab-pane panel active panel-default">
         <div class="panel-heading">
             共<span class='total'></span>次安装
-            <button class='btn btn-default btn-xs pull-right' id="export-data">导出数据</button>
+            <button class='btn btn-default btn-xs pull-right export-data'>导出数据</button>
         </div>
         <div class="panel-body"> 
             <table class="table table-hover table-bordered">
                 <thead>
                     <tr>
-                        <th>大区</th>
-                        <th>公司</th>
-                        <th>门店</th>
-                        <th>员工</th>
-                        <th>品牌</th>
                         <th>机型</th>
-                        <th>串号</th>
-                        <th>应用名称</th>
-                        <th>是否推广</th>
-                        <th>日期</th>
+                        <th>机器数</th>
+                        <th>推广数</th>
+                        <th>安装总数</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
             </table>
         </div>
     </div>
+    <div id="detail" class="tab-pane panel panel-default">
+        <div class="panel-heading">
+            共<span class='total'></span>次安装
+            <button class='btn btn-default btn-xs pull-right export-data'>导出数据</button>
+        </div>
+        <div class="panel-body"> 
+            <table class="table table-hover table-bordered">
+                <thead>
+                    <tr>
+                        <th>员工</th>
+                        <th>品牌</th>
+                        <th>机型</th>
+                        <th>串号</th>
+                        <th>推广数</th>
+                        <th>安装总数</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+    </div>
+
 </div>
 {% endblock %}
 {% block js %}
@@ -162,5 +188,5 @@
 <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap.datatables.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/datef.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/statistics.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}js/flow.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/device.js"></script>
 {% endblock %}

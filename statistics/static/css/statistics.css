@@ -1,3 +1,7 @@
 .popover.bottom .arrow {
     /* left: 20%; */
 }
+
+.nav-pills {
+    margin-bottom: 20px;
+}

@@ -2,8 +2,9 @@
 var error_check = suning.decorators.error_check;
 var login_check = suning.decorators.login_check;
 var toastNetworkError = suning.toastNetworkError;
+var get_device_stat = Dajaxice.statistics.get_device_stat;
+var get_device_stat_detail = Dajaxice.statistics.get_device_stat_detail;
 var app_temp = statistics.app_temp;
-
 
 $(function() {
     var $form = $(".form-filter");
@@ -35,7 +36,8 @@ $(function() {
     $filter_store.select2(select2_tip_options);
     if(!$filter_store.data('readonly')) {
         if(!$filter_company.data("readonly")) {
-            $filter_store.jCombo("stores?c=", $.extend({parent: $filter_company}, combo_options));
+            $filter_store.jCombo("stores?c=", 
+                    $.extend({parent: $filter_company}, combo_options));
         } else {
             $filter_store.jCombo("stores?c=" + $filter_company.val(), combo_options);
         }
@@ -56,10 +58,7 @@ $(function() {
                 }, function(data) {
                     query.callback(data);
                 }, "json").error(function() {
-                    query.callback({
-                        resutls: [],
-                        more: false
-                    });
+                    query.callback([]);
                 });
             }
         });
@@ -104,22 +103,42 @@ $(function() {
                 q: query.term,
                 p: query.page
             }, function(data) {
-                results = _.map(data.brands, function(brand) {
+                var results = _.map(data.brands, function(brand) {
                     return {'id': brand, 'text': brand};
                 });
                 results.unshift({'id': '', 'text': '--------'});
-                query.callback({
-                    results: results,
-                    more: data.more
-                });
+                query.callback({ results: results, more: data.more });
             }, "json").error(function() {
-                query.callback({
-                    results: [],
-                    more: false
-                });
+                query.callback({ results: [], more: false });
             });
         }
     }));
+
+    var $filter_model = $("#filter_model");
+    $filter_brand.change(function() {
+        $filter_model.select2('readonly', !$filter_brand.val());
+        $filter_model.select2('val', '');
+    });
+
+    $filter_model.select2($.extend({}, select2_tip_options, {
+        allowClear: true,
+        query: function(query) {
+            $.get('models', {
+                b: $filter_brand.val(),
+                q: query.term,
+                p: query.page
+            }, function(data) {
+                var results = _.map(data.models, function(model) {
+                    return {'id': model, 'text': model};
+                });
+                results.unshift({'id': '', 'text': '--------'});
+                query.callback({ results: results, more: data.more });
+            }, "json").error(function() {
+                query.callback({ results: [], more: false });
+            });
+        }
+    }));
+    $filter_model.select2('readonly', true);
 
     var $filter_app = $("#filter_app");
     $filter_app.select2($.extend({}, select2_tip_options, {
@@ -128,94 +147,46 @@ $(function() {
                 q: query.term,
                 p: query.page
             }, function(data) {
-                console.log(data);
                 query.callback(data);
             }, "json").error(function() {
-                query.callback({
-                    results: [],
-                    more: false
-                });
+                query.callback([]);
             });
         }
     }));
 
     statistics.period("#filter_from_date", "#filter_to_date");
 
-    $("#export-data").click(function(e) {
+    $(".export-data").click(function(e) {
         e.preventDefault();
-        var link = 
-        window.location = 'flow/excel?' + $form.serialize(true);
+        window.location =  'device/excel?' + $form.serialize(true);
     });
 
-    var $table = $(".table").dataTable($.extend({}, statistics.table_options, {
+    var $summaryTable = $("#summary .table").dataTable($.extend({}, statistics.table_options, {
         sPaginationType: "bootstrap",
         aoColumns: [{
-            sTitle: '大区'
-        }, {
-            sTitle: '公司'
-        }, {
-            sTitle: '门店'
-        }, {
-            sTitle: '员工'
-        }, {
-            sTitle: '品牌'
-        }, {
             sTitle: '机型'
         }, {
-            sTitle: '串号'
+            sTitle: '机器数'
         }, {
-            sTitle: '应用名称',
-            mRender: function(data, type, full) {
-                if(data.name) {
-                    return app_temp(data);
-                } else {
-                    return '&mdash;'
-                }
-            },
+            sTitle: '推广数'
         }, {
-            sTitle: '是否推广'
-        }, {
-            sTitle: '日期'
+            sTitle: '安装总数'
         }],
         iDisplayStart: 0,
         iDisplayLength: 50,
-        fnDrawCallback: function() {
-            $table.find(".app-name").popover();
-        },
         fnServerData: function(source, data, callback, settings) {
-            console.log("source", source)
-            console.log("settings", settings);
             var values = statistics.table_map(data, ["sEcho", "iDisplayLength", "iDisplayStart"]);
-            console.log("values", values);
-
-            Dajaxice.statistics.get_flow_logs(login_check(error_check(function(data) {
-                console.log(data);
+            get_device_stat(login_check(error_check(function(data) {
                 var aaData = [];
                 _.each(data.logs, function(item) {
-                    var app_popularize;
-                    if (item.app.popularize === true) {
-                        app_popularize = '是';
-                    } else if (item.app.popularize == false) {
-                        app_popularize = '否';
-                    } else {
-                        app_popularize = '—';
-                    }
-
                     aaData.push([
-                        item.region || '&mdash;',
-                        item.company || '&mdash;',
-                        item.store || '&mdash;',
-                        item.emp || '&mdash;',
-                        item.brand || '&mdash;',
-                        item.model || '&mdash;',
-                        item.device || '&mdash;',
-                        item.app,
-                        app_popularize,
-                        item.date
+                        item.model,
+                        item.total_device_count,
+                        item.total_popularize_count,
+                        item.total_app_count
                     ]);
                 });
-                console.log(aaData);
-                $(".total").html(data.total);
+                $(".total").html(data.capacity);
                 callback({
                     sEcho: values.sEcho,
                     iTotalRecords: data.total,
@@ -232,11 +203,60 @@ $(function() {
         }
     }));
 
+    var $detailTable = $("#detail .table").dataTable($.extend({}, statistics.table_options, {
+        sPaginationType: "bootstrap",
+        aoColumns: [{
+            sTitle: '员工'
+        }, {
+            sTitle: '品牌'
+        }, {
+            sTitle: '机型'
+        }, {
+            sTitle: '串号'
+        }, {
+            sTitle: '推广数'
+        }, {
+            sTitle: '安装总数'
+        }],
+        iDisplayStart: 0,
+        iDisplayLength: 50,
+        fnServerData: function(source, data, callback, settings) {
+            var values = statistics.table_map(data, ["sEcho", "iDisplayLength", "iDisplayStart"]);
+            get_device_stat_detail(login_check(error_check(function(data) {
+                var aaData = [];
+                _.each(data.logs, function(item) {
+                    aaData.push([
+                        item.emp || '&mdash;',
+                        item.brand,
+                        item.model,
+                        item.device,
+                        item.total_popularize_count,
+                        item.total_app_count
+                    ]);
+                });
+                $(".total").html(data.capacity);
+                callback({
+                    sEcho: values.sEcho,
+                    iTotalRecords: data.total,
+                    iTotalDisplayRecords: data.total,
+                    aaData: aaData
+                });
+            })), {
+                form: $form.serialize(true),
+                offset: values.iDisplayStart,
+                length: values.iDisplayLength
+            }, { 
+                errorCallback: error_check(toastNetworkError)
+            });
+        }
+    }));
+
+
     $form.submit(function(e) {
         e.preventDefault();
 
-        //$table.fnClearTable();
-        $table.fnDraw();
+        $summaryTable.fnDraw();
+        $detailTable.fnDraw();
     });
 });
 

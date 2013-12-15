@@ -1,0 +1,594 @@
+[
+{
+    "pk": 1, 
+    "model": "interface.logmeta", 
+    "fields": {
+        "uid": 2, 
+        "did": "device_id?", 
+        "brand": "brand?", 
+        "appID": "10000", 
+        "date": "2013-12-01", 
+        "model": "model?", 
+        "appPkg": "com.tiantian.ttclock"
+    }
+},
+{
+    "pk": 2, 
+    "model": "interface.logmeta", 
+    "fields": {
+        "uid": 2, 
+        "did": "device_id?", 
+        "brand": "brand?", 
+        "appID": "10000", 
+        "date": "2013-12-01", 
+        "model": "model?", 
+        "appPkg": "com.limijiaoyin.app"
+    }
+},
+{
+    "pk": 3, 
+    "model": "interface.logmeta", 
+    "fields": {
+        "uid": 3, 
+        "did": "device_id?", 
+        "brand": "brand?", 
+        "appID": "10000", 
+        "date": "2013-12-01", 
+        "model": "model?", 
+        "appPkg": "com.tiantian.ttclock"
+    }
+},
+{
+    "pk": 4, 
+    "model": "interface.logmeta", 
+    "fields": {
+        "uid": 3, 
+        "did": "device_id?", 
+        "brand": "brand?", 
+        "appID": "10000", 
+        "date": "2013-12-01", 
+        "model": "model?", 
+        "appPkg": "com.limijiaoyin.app"
+    }
+},
+{
+    "pk": 5, 
+    "model": "interface.logmeta", 
+    "fields": {
+        "uid": 4, 
+        "did": "device_id?", 
+        "brand": "brand?", 
+        "appID": "10000", 
+        "date": "2013-12-01", 
+        "model": "model?", 
+        "appPkg": "com.tiantian.ttclock"
+    }
+},
+{
+    "pk": 6, 
+    "model": "interface.logmeta", 
+    "fields": {
+        "uid": 4, 
+        "did": "device_id?", 
+        "brand": "brand?", 
+        "appID": "10000", 
+        "date": "2013-12-01", 
+        "model": "model?", 
+        "appPkg": "com.limijiaoyin.app"
+    }
+},
+{
+    "pk": 7, 
+    "model": "interface.logmeta", 
+    "fields": {
+        "uid": 31415926, 
+        "did": "device_id?", 
+        "brand": "brand?", 
+        "appID": "10000", 
+        "date": "2013-12-01", 
+        "model": "model?", 
+        "appPkg": "com.tiantian.ttclock"
+    }
+},
+{
+    "pk": 8, 
+    "model": "interface.logmeta", 
+    "fields": {
+        "uid": 31415926, 
+        "did": "device_id?", 
+        "brand": "brand?", 
+        "appID": "10000", 
+        "date": "2013-12-01", 
+        "model": "model?", 
+        "appPkg": "com.limijiaoyin.app"
+    }
+},
+{
+    "pk": 9, 
+    "model": "interface.logmeta", 
+    "fields": {
+        "uid": 2, 
+        "did": "device_id?", 
+        "brand": "brand?", 
+        "appID": "10000", 
+        "date": "2013-12-02", 
+        "model": "model?", 
+        "appPkg": "com.tiantian.ttclock"
+    }
+},
+{
+    "pk": 10, 
+    "model": "interface.logmeta", 
+    "fields": {
+        "uid": 2, 
+        "did": "device_id?", 
+        "brand": "brand?", 
+        "appID": "10000", 
+        "date": "2013-12-02", 
+        "model": "model?", 
+        "appPkg": "com.limijiaoyin.app"
+    }
+},
+{
+    "pk": 11, 
+    "model": "interface.logmeta", 
+    "fields": {
+        "uid": 3, 
+        "did": "device_id?", 
+        "brand": "brand?", 
+        "appID": "10000", 
+        "date": "2013-12-02", 
+        "model": "model?", 
+        "appPkg": "com.tiantian.ttclock"
+    }
+},
+{
+    "pk": 12, 
+    "model": "interface.logmeta", 
+    "fields": {
+        "uid": 3, 
+        "did": "device_id?", 
+        "brand": "brand?", 
+        "appID": "10000", 
+        "date": "2013-12-02", 
+        "model": "model?", 
+        "appPkg": "com.limijiaoyin.app"
+    }
+},
+{
+    "pk": 13, 
+    "model": "interface.logmeta", 
+    "fields": {
+        "uid": 4, 
+        "did": "device_id?", 
+        "brand": "brand?", 
+        "appID": "10000", 
+        "date": "2013-12-02", 
+        "model": "model?", 
+        "appPkg": "com.tiantian.ttclock"
+    }
+},
+{
+    "pk": 14, 
+    "model": "interface.logmeta", 
+    "fields": {
+        "uid": 4, 
+        "did": "device_id?", 
+        "brand": "brand?", 
+        "appID": "10000", 
+        "date": "2013-12-02", 
+        "model": "model?", 
+        "appPkg": "com.limijiaoyin.app"
+    }
+},
+{
+    "pk": 15, 
+    "model": "interface.logmeta", 
+    "fields": {
+        "uid": 31415926, 
+        "did": "device_id?", 
+        "brand": "brand?", 
+        "appID": "10000", 
+        "date": "2013-12-02", 
+        "model": "model?", 
+        "appPkg": "com.tiantian.ttclock"
+    }
+},
+{
+    "pk": 16, 
+    "model": "interface.logmeta", 
+    "fields": {
+        "uid": 31415926, 
+        "did": "device_id?", 
+        "brand": "brand?", 
+        "appID": "10000", 
+        "date": "2013-12-02", 
+        "model": "model?", 
+        "appPkg": "com.limijiaoyin.app"
+    }
+},
+{
+    "pk": 17, 
+    "model": "interface.logmeta", 
+    "fields": {
+        "uid": 2, 
+        "did": "device_id?", 
+        "brand": "brand?", 
+        "appID": "10000", 
+        "date": "2013-12-03", 
+        "model": "model?", 
+        "appPkg": "com.tiantian.ttclock"
+    }
+},
+{
+    "pk": 18, 
+    "model": "interface.logmeta", 
+    "fields": {
+        "uid": 2, 
+        "did": "device_id?", 
+        "brand": "brand?", 
+        "appID": "10000", 
+        "date": "2013-12-03", 
+        "model": "model?", 
+        "appPkg": "com.limijiaoyin.app"
+    }
+},
+{
+    "pk": 19, 
+    "model": "interface.logmeta", 
+    "fields": {
+        "uid": 3, 
+        "did": "device_id?", 
+        "brand": "brand?", 
+        "appID": "10000", 
+        "date": "2013-12-03", 
+        "model": "model?", 
+        "appPkg": "com.tiantian.ttclock"
+    }
+},
+{
+    "pk": 20, 
+    "model": "interface.logmeta", 
+    "fields": {
+        "uid": 3, 
+        "did": "device_id?", 
+        "brand": "brand?", 
+        "appID": "10000", 
+        "date": "2013-12-03", 
+        "model": "model?", 
+        "appPkg": "com.limijiaoyin.app"
+    }
+},
+{
+    "pk": 21, 
+    "model": "interface.logmeta", 
+    "fields": {
+        "uid": 4, 
+        "did": "device_id?", 
+        "brand": "brand?", 
+        "appID": "10000", 
+        "date": "2013-12-03", 
+        "model": "model?", 
+        "appPkg": "com.tiantian.ttclock"
+    }
+},
+{
+    "pk": 22, 
+    "model": "interface.logmeta", 
+    "fields": {
+        "uid": 4, 
+        "did": "device_id?", 
+        "brand": "brand?", 
+        "appID": "10000", 
+        "date": "2013-12-03", 
+        "model": "model?", 
+        "appPkg": "com.limijiaoyin.app"
+    }
+},
+{
+    "pk": 23, 
+    "model": "interface.logmeta", 
+    "fields": {
+        "uid": 31415926, 
+        "did": "device_id?", 
+        "brand": "brand?", 
+        "appID": "10000", 
+        "date": "2013-12-03", 
+        "model": "model?", 
+        "appPkg": "com.tiantian.ttclock"
+    }
+},
+{
+    "pk": 24, 
+    "model": "interface.logmeta", 
+    "fields": {
+        "uid": 31415926, 
+        "did": "device_id?", 
+        "brand": "brand?", 
+        "appID": "10000", 
+        "date": "2013-12-03", 
+        "model": "model?", 
+        "appPkg": "com.limijiaoyin.app"
+    }
+},
+{
+    "pk": 1, 
+    "model": "interface.installedapplogentity", 
+    "fields": {
+        "uid": 4, 
+        "appName": "ttclock", 
+        "region": 1, 
+        "installedTimes": 1, 
+        "popularize": true, 
+        "appID": "10000", 
+        "date": "2013-12-01", 
+        "company": 2, 
+        "store": 3, 
+        "appPkg": "com.tiantian.ttclock"
+    }
+},
+{
+    "pk": 2, 
+    "model": "interface.installedapplogentity", 
+    "fields": {
+        "uid": 4, 
+        "appName": "ttclock", 
+        "region": 1, 
+        "installedTimes": 1, 
+        "popularize": true, 
+        "appID": "10000", 
+        "date": "2013-12-01", 
+        "company": 2, 
+        "store": 3, 
+        "appPkg": "com.limijiaoyin.app"
+    }
+},
+{
+    "pk": 3, 
+    "model": "interface.installedapplogentity", 
+    "fields": {
+        "uid": 3, 
+        "appName": "ttclock", 
+        "region": 1, 
+        "installedTimes": 1, 
+        "popularize": true, 
+        "appID": "10000", 
+        "date": "2013-12-01", 
+        "company": 2, 
+        "store": null, 
+        "appPkg": "com.tiantian.ttclock"
+    }
+},
+{
+    "pk": 4, 
+    "model": "interface.installedapplogentity", 
+    "fields": {
+        "uid": 3, 
+        "appName": "ttclock", 
+        "region": 1, 
+        "installedTimes": 1, 
+        "popularize": true, 
+        "appID": "10000", 
+        "date": "2013-12-01", 
+        "company": 2, 
+        "store": null, 
+        "appPkg": "com.limijiaoyin.app"
+    }
+},
+{
+    "pk": 5, 
+    "model": "interface.installedapplogentity", 
+    "fields": {
+        "uid": 2, 
+        "appName": "ttclock", 
+        "region": 1, 
+        "installedTimes": 1, 
+        "popularize": true, 
+        "appID": "10000", 
+        "date": "2013-12-01", 
+        "company": null, 
+        "store": null, 
+        "appPkg": "com.tiantian.ttclock"
+    }
+},
+{
+    "pk": 6, 
+    "model": "interface.installedapplogentity", 
+    "fields": {
+        "uid": 2, 
+        "appName": "ttclock", 
+        "region": 1, 
+        "installedTimes": 1, 
+        "popularize": true, 
+        "appID": "10000", 
+        "date": "2013-12-01", 
+        "company": null, 
+        "store": null, 
+        "appPkg": "com.limijiaoyin.app"
+    }
+},
+{
+    "pk": 7, 
+    "model": "interface.installedapplogentity", 
+    "fields": {
+        "uid": 31415926, 
+        "appName": "ttclock", 
+        "region": null, 
+        "installedTimes": 1, 
+        "popularize": true, 
+        "appID": "10000", 
+        "date": "2013-12-01", 
+        "company": null, 
+        "store": null, 
+        "appPkg": "com.tiantian.ttclock"
+    }
+},
+{
+    "pk": 8, 
+    "model": "interface.installedapplogentity", 
+    "fields": {
+        "uid": 31415926, 
+        "appName": "ttclock", 
+        "region": null, 
+        "installedTimes": 1, 
+        "popularize": true, 
+        "appID": "10000", 
+        "date": "2013-12-01", 
+        "company": null, 
+        "store": null, 
+        "appPkg": "com.limijiaoyin.app"
+    }
+},
+{
+    "pk": 1, 
+    "model": "interface.devicelogentity", 
+    "fields": {
+        "popularizeAppCount": 1, 
+        "uid": 2, 
+        "appName": "ttclock", 
+        "region": 1, 
+        "deviceCount": 1, 
+        "appCount": 2, 
+        "appID": "1000", 
+        "date": "2013-12-01", 
+        "model": "hTC One", 
+        "company": null, 
+        "brand": "hTC", 
+        "store": null, 
+        "appPkg": "com.tiantian.ttclock"
+    }
+},
+{
+    "pk": 2, 
+    "model": "interface.devicelogentity", 
+    "fields": {
+        "popularizeAppCount": 2, 
+        "uid": 3, 
+        "appName": "ttclock", 
+        "region": 1, 
+        "deviceCount": 1, 
+        "appCount": 2, 
+        "appID": "1000", 
+        "date": "2013-12-01", 
+        "model": "hTC One", 
+        "company": 2, 
+        "brand": "hTC", 
+        "store": null, 
+        "appPkg": "com.tiantian.ttclock"
+    }
+},
+{
+    "pk": 3, 
+    "model": "interface.devicelogentity", 
+    "fields": {
+        "popularizeAppCount": 2, 
+        "uid": 4, 
+        "appName": "ttclock", 
+        "region": 1, 
+        "deviceCount": 1, 
+        "appCount": 2, 
+        "appID": "1000", 
+        "date": "2013-12-01", 
+        "model": "hTC One", 
+        "company": 2, 
+        "brand": "hTC", 
+        "store": 3, 
+        "appPkg": "com.tiantian.ttclock"
+    }
+},
+{
+    "pk": 4, 
+    "model": "interface.devicelogentity", 
+    "fields": {
+        "popularizeAppCount": 2, 
+        "uid": 31415926, 
+        "appName": "ttclock", 
+        "region": null, 
+        "deviceCount": 1, 
+        "appCount": 2, 
+        "appID": "1000", 
+        "date": "2013-12-01", 
+        "model": "hTC One", 
+        "company": null, 
+        "brand": "hTC", 
+        "store": null, 
+        "appPkg": "com.tiantian.ttclock"
+    }
+},
+{
+    "pk": 5, 
+    "model": "interface.devicelogentity", 
+    "fields": {
+        "popularizeAppCount": 1, 
+        "uid": 2, 
+        "appName": "ttclock", 
+        "region": 1, 
+        "deviceCount": 1, 
+        "appCount": 2, 
+        "appID": "1000", 
+        "date": "2013-12-01", 
+        "model": "hTC butterfly", 
+        "company": null, 
+        "brand": "hTC", 
+        "store": null, 
+        "appPkg": "com.tiantian.ttclock"
+    }
+},
+{
+    "pk": 6, 
+    "model": "interface.devicelogentity", 
+    "fields": {
+        "popularizeAppCount": 1, 
+        "uid": 3, 
+        "appName": "ttclock", 
+        "region": 1, 
+        "deviceCount": 1, 
+        "appCount": 2, 
+        "appID": "1000", 
+        "date": "2013-12-01", 
+        "model": "hTC butterfly", 
+        "company": 2, 
+        "brand": "hTC", 
+        "store": null, 
+        "appPkg": "com.tiantian.ttclock"
+    }
+},
+{
+    "pk": 7, 
+    "model": "interface.devicelogentity", 
+    "fields": {
+        "popularizeAppCount": 1, 
+        "uid": 4, 
+        "appName": "ttclock", 
+        "region": 1, 
+        "deviceCount": 1, 
+        "appCount": 2, 
+        "appID": "1000", 
+        "date": "2013-12-01", 
+        "model": "hTC butterfly", 
+        "company": 2, 
+        "brand": "hTC", 
+        "store": 3, 
+        "appPkg": "com.tiantian.ttclock"
+    }
+},
+{
+    "pk": 8, 
+    "model": "interface.devicelogentity", 
+    "fields": {
+        "popularizeAppCount": 1, 
+        "uid": 31415926, 
+        "appName": "ttclock", 
+        "region": null, 
+        "deviceCount": 1, 
+        "appCount": 2, 
+        "appID": "1000", 
+        "date": "2013-12-01", 
+        "model": "hTC butterfly", 
+        "company": null, 
+        "brand": "hTC", 
+        "store": null, 
+        "appPkg": "com.tiantian.ttclock"
+    }
+}
+]

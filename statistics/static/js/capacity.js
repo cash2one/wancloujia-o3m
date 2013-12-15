@@ -2,8 +2,8 @@
 var error_check = suning.decorators.error_check;
 var login_check = suning.decorators.login_check;
 var toastNetworkError = suning.toastNetworkError;
+var get_installed_capacity = Dajaxice.statistics.get_installed_capacity;
 var app_temp = statistics.app_temp;
-
 
 $(function() {
     var $form = $(".form-filter");
@@ -35,7 +35,8 @@ $(function() {
     $filter_store.select2(select2_tip_options);
     if(!$filter_store.data('readonly')) {
         if(!$filter_company.data("readonly")) {
-            $filter_store.jCombo("stores?c=", $.extend({parent: $filter_company}, combo_options));
+            $filter_store.jCombo("stores?c=", 
+                    $.extend({parent: $filter_company}, combo_options));
         } else {
             $filter_store.jCombo("stores?c=" + $filter_company.val(), combo_options);
         }
@@ -56,10 +57,7 @@ $(function() {
                 }, function(data) {
                     query.callback(data);
                 }, "json").error(function() {
-                    query.callback({
-                        resutls: [],
-                        more: false
-                    });
+                    query.callback([]);
                 });
             }
         });
@@ -97,30 +95,6 @@ $(function() {
     $filter_company.change(ensure_emp);
     $filter_store.change(ensure_emp);
 
-    var $filter_brand = $("#filter_brand");
-    $filter_brand.select2($.extend({}, select2_tip_options, {
-        query: function(query) {
-            $.get('brands', {
-                q: query.term,
-                p: query.page
-            }, function(data) {
-                results = _.map(data.brands, function(brand) {
-                    return {'id': brand, 'text': brand};
-                });
-                results.unshift({'id': '', 'text': '--------'});
-                query.callback({
-                    results: results,
-                    more: data.more
-                });
-            }, "json").error(function() {
-                query.callback({
-                    results: [],
-                    more: false
-                });
-            });
-        }
-    }));
-
     var $filter_app = $("#filter_app");
     $filter_app.select2($.extend({}, select2_tip_options, {
         query: function(query) {
@@ -131,10 +105,7 @@ $(function() {
                 console.log(data);
                 query.callback(data);
             }, "json").error(function() {
-                query.callback({
-                    results: [],
-                    more: false
-                });
+                query.callback([]);
             });
         }
     }));
@@ -143,39 +114,31 @@ $(function() {
 
     $("#export-data").click(function(e) {
         e.preventDefault();
-        var link = 
-        window.location = 'flow/excel?' + $form.serialize(true);
+        window.location =  'capacity/excel?' + $form.serialize(true);
     });
 
     var $table = $(".table").dataTable($.extend({}, statistics.table_options, {
         sPaginationType: "bootstrap",
         aoColumns: [{
-            sTitle: '大区'
-        }, {
-            sTitle: '公司'
-        }, {
-            sTitle: '门店'
-        }, {
-            sTitle: '员工'
-        }, {
-            sTitle: '品牌'
-        }, {
-            sTitle: '机型'
-        }, {
-            sTitle: '串号'
-        }, {
             sTitle: '应用名称',
-            mRender: function(data, type, full) {
+            mRender: function(data) {
                 if(data.name) {
                     return app_temp(data);
                 } else {
                     return '&mdash;'
                 }
-            },
+            }
         }, {
-            sTitle: '是否推广'
+            sTitle: '是否推广',
+            mRender: function(data) {
+                if(data === null) {
+                    return '&mdash;';
+                } else {
+                    return data ? '是' : '否';
+                }
+            }
         }, {
-            sTitle: '日期'
+            sTitle: '安装总数'
         }],
         iDisplayStart: 0,
         iDisplayLength: 50,
@@ -183,38 +146,16 @@ $(function() {
             $table.find(".app-name").popover();
         },
         fnServerData: function(source, data, callback, settings) {
-            console.log("source", source)
-            console.log("settings", settings);
             var values = statistics.table_map(data, ["sEcho", "iDisplayLength", "iDisplayStart"]);
-            console.log("values", values);
-
-            Dajaxice.statistics.get_flow_logs(login_check(error_check(function(data) {
-                console.log(data);
+            get_installed_capacity(login_check(error_check(function(data) {
                 var aaData = [];
                 _.each(data.logs, function(item) {
-                    var app_popularize;
-                    if (item.app.popularize === true) {
-                        app_popularize = '是';
-                    } else if (item.app.popularize == false) {
-                        app_popularize = '否';
-                    } else {
-                        app_popularize = '—';
-                    }
-
                     aaData.push([
-                        item.region || '&mdash;',
-                        item.company || '&mdash;',
-                        item.store || '&mdash;',
-                        item.emp || '&mdash;',
-                        item.brand || '&mdash;',
-                        item.model || '&mdash;',
-                        item.device || '&mdash;',
                         item.app,
-                        app_popularize,
-                        item.date
+                        item.app.popularize,
+                        item.count
                     ]);
                 });
-                console.log(aaData);
                 $(".total").html(data.total);
                 callback({
                     sEcho: values.sEcho,
@@ -234,8 +175,6 @@ $(function() {
 
     $form.submit(function(e) {
         e.preventDefault();
-
-        //$table.fnClearTable();
         $table.fnDraw();
     });
 });

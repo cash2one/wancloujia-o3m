@@ -41,6 +41,7 @@
         }
     };
 
+
     function Period(from, to) {
         var that = this;
         this.$from = $(from);
@@ -59,10 +60,27 @@
             }
         });
 
-        this.$from.trigger('change');
+        var today = new Date();
+        var first_day = new Date();
+        first_day.setFullYear(today.getFullYear());
+        first_day.setMonth(today.getMonth(), 1);
+        first_day.setHours(0);
+        first_day.setMinutes(0);
+        first_day.setSeconds(0);
+        first_day.setMilliseconds(0);
+        this.$from.val(datef('YYYY-MM-dd', first_day))
+        this.$to.val(datef('YYYY-MM-dd', today))
     }
 
+    var app_temp = _.template("<span class='app-name' " +
+                                "data-html='true' " +
+                                "data-placement='right' " +
+                                "data-content='包名:&nbsp;<%- package %><br>序号:&nbsp;<%- id %>'" +
+                                "data-trigger='hover' >" + 
+                                "<%- name %></span>");
+
     window.statistics = {
+        app_temp: app_temp,
         parseDate: parseDate,
         table_map: table_map,
         table_options: table_options,
