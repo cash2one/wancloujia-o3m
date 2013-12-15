@@ -58,7 +58,7 @@ class InstalledAppLogEntity(models.Model):
     keys
     """
     date = models.DateField(db_index=True, editable=False)
-    region = models.IntegerField(db_index=True)
+    region = models.IntegerField(db_index=True, null=True)
     company = models.IntegerField(db_index=True, null=True)
     store = models.IntegerField(db_index=True, null=True)
     uid = models.IntegerField(db_index=True, editable=False)
@@ -103,11 +103,15 @@ class DeviceLogEntity(models.Model):
     keys
     """
     date = models.DateField(db_index=True, editable=False)
-    region = models.IntegerField(db_index=True)
-    company = models.IntegerField(db_index=True)
-    store = models.IntegerField(db_index=True)
+    region = models.IntegerField(db_index=True, null=True)
+    company = models.IntegerField(db_index=True, null=True)
+    store = models.IntegerField(db_index=True, null=True)
     uid = models.IntegerField(db_index=True)
     brand = models.CharField(max_length=255)
+
+    appPkg = models.CharField(max_length=App.PACKAGE_LENGTH_LIMIT, editable=False)
+    appID = models.CharField(max_length=16, editable=False)
+    appName = models.CharField(max_length=24)
 
     """
     values
