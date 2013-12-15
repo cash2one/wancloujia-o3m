@@ -11,7 +11,7 @@ from dajaxice.utils import deserialize_form
 from interface.models import LogMeta, InstalledAppLogEntity, DeviceLogEntity
 from interface.models import UserDeviceLogEntity
 from app.models import App
-from mgr.models import Employee, Organization, cast_staff
+from mgr.models import Employee, Organization, cast_staff, Region, Company, Store
 from statistics.forms import LogMetaFilterForm, InstalledCapacityFilterForm
 from statistics.forms import DeviceStatForm, OrganizationStatForm
 from suning import utils
@@ -446,6 +446,40 @@ def filter_org_logs(form, mode):
     logger.debug("logs filtered by period: %d" % len(logs))
     return logs
 
+
+def org_record_to_dict(record, mode):
+    dict = {
+        'total_device_count': record['total_device_count'],
+        'total_popularize_count': record['total_popularize_count'],
+        'total_app_count': record['total_app_count']
+    }
+
+    empty_value = {'code': '', 'name': ''}
+    if mode == 'region':
+        region = utils.get_model_by_pk(Region.objects, record['region'])
+        dict['region'] = region.name if region else None
+    elif mode == 'company':
+        company = utils.get_model_by_pk(Company.objects, record['company'])
+        if company:
+            dict['company'] = { 'code': company.code, 'name': company.name } 
+        else:
+            dict['company'] = empty_value
+    elif mode == 'store':
+        store = utils.get_model_by_pk(Store.objects, record['store'])
+        if store:
+            dict['store'] = { 'code': store.code, 'name': store.name } 
+        else:
+            dict['store'] = empty_value
+    else:
+        emp = utils.get_model_by_pk(Employee.objects, record['uid'])
+        if emp:
+            dict['emp'] = {'username': emp.username, 'realname': emp.realname } 
+        else:
+            dict['emp'] = {'username': None, 'realname': None}
+
+    return dict
+
+
 @dajaxice_register(method='POST')
 @check_login
 def filter_org_statistics(request, form, offset, length, mode):
@@ -459,15 +493,22 @@ def filter_org_statistics(request, form, offset, length, mode):
         return _invalid_data_json
 
     logs = filter_org_logs(filter_form, mode)
-    capacity = logs.aggregate(capacity=Sum('appCount'))['capacity']
-    records = logs.values('uid').annotate(total_device_count=Sum('deviceCount'),
+    aggregate_result = logs.aggregate(capacity=Sum('appCount'))
+    logger.debug(aggregate_result)
+    capacity = aggregate_result['capacity'] or 0
+    key = mode if mode != 'emp' and mode != 'emp_only' else 'uid'
+    records = logs.values(key).annotate(total_device_count=Sum('deviceCount'),
                                        total_popularize_count=Sum('popularizeAppCount'),
                                        total_app_count=Sum('appCount'))
     total = len(records)
     records = records[offset: offset + length]
+    items = []
+    for record in records:
+        items.append(org_record_to_dict(record, mode))
+        
     return simplejson.dumps({
         'ret_code': 0,
-        'logs': records,
+        'logs': items,
         'total': total,
         'capacity': capacity
     })

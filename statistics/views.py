@@ -27,7 +27,7 @@ from forms import LogMetaFilterForm, InstalledCapacityFilterForm
 from forms import OrganizationStatForm, DeviceStatForm
 from ajax import filter_flow_logs, log_to_dict, device_record_to_dict
 from ajax import filter_installed_capacity_logs, installed_capacity_to_dict
-from ajax import stat_device
+from ajax import stat_device, filter_org_logs, org_record_to_dict
 
 
 logger = logging.getLogger(__name__)
@@ -385,36 +385,37 @@ def device_excel(request):
         raise Http404
 
     user = cast_staff(request.user)
-    logs = stat_device(user, filter_form)
-    records = [[
-        log['model'],
-        log['total_device_count'],
-        log['total_popularize_count'],
-        log['total_app_count']
-    ] for log in logs]
+
+    def _device_record_to_array(record):
+        return [
+            record['model'],
+            record['total_device_count'],
+            record['total_popularize_count'],
+            record['total_app_count']
+        ]
     sheet_summary = {
         'name': u'机型统计_汇总',
         'titles': [u'机型', u'机器数', u'推广数', u'安装总数'],
-        'records': records
+        'records': stat_device(user, filter_form),
+        'record_to_array': _device_record_to_array
     }
 
-    logs = stat_device(user, filter_form, True)
-    records = []
-    h = HTMLParser.HTMLParser()
-    for log in logs:
+    def _device_detail_record_to_array(log):
+        h = HTMLParser.HTMLParser()
         dict = device_record_to_dict(log)
-        records.append([
+        return [
             dict['emp'] or h.unescape(EMPTY_VALUE),
             dict['brand'],
             dict['model'],
             dict['device'],
             dict['total_popularize_count'],
             dict['total_app_count'],
-        ])
+        ]
     sheet_detail = {
         'name': u'机型统计_明细',
         'titles': [u'员工', u'品牌', u'机型', u'串号', u'推广数', u'安装总数'],
-        'records': records
+        'record_to_array': _device_detail_record_to_array,
+        'records': stat_device(user, filter_form, True)
     }
     sheets = [sheet_summary, sheet_detail]
     return render_excel('device_summary_statistics.xls', sheets)
@@ -430,7 +431,8 @@ def render_excel(filename, sheets):
             sheet.write(0, i, title, style=default_style)
 
         for row, record in enumerate(sheet_info['records']):
-            for col, val in enumerate(record):
+            array = sheet_info['record_to_array'](record)
+            for col, val in enumerate(array):
                 #style = date_style if isinstance(val, datetime.date) else default_style
                 style = default_style
                 sheet.write(row+1, col, val, style=style)
@@ -448,4 +450,52 @@ def organization(request):
         'user_filter': user_filter(cast_staff(request.user)),
         'filter': OrganizationStatForm()
     })
+
+@require_GET
+@login_required
+def organization_excel(request, mode):        
+    filter_form = OrganizationStatForm(request.GET)
+    if not filter_form.is_valid():
+        logger.warn("form is invalid")
+        logger.warn(filter_form.errors)
+        raise Http404
+
+    user = cast_staff(request.user)
+    logs = filter_org_logs(filter_form, mode)
+    key = mode if mode != 'emp' else 'uid'
+    records = logs.values(key).annotate(total_device_count=Sum('deviceCount'),
+                                       total_popularize_count=Sum('popularizeAppCount'),
+                                       total_app_count=Sum('appCount'))
+
+    def _record_to_array(record):
+        dict = org_record_to_dict(record, mode)
+        array = []
+        if mode == 'region':
+            array.append(dict['region'])
+        elif mode == 'store' or mode == 'company':
+            array.append(dict['mode']['code'])
+            array.append(dict['mode']['name'])
+        else:
+            array.append(dict['emp']['username']);
+            array.append(dict['emp']['realname']);
+        return array
+
+    titles = []
+    if mode == 'region':
+        titles = [u'分区', u'机器台数', u'推广数', u'安装总数']
+    elif mode == 'company':
+        titles = [u'编码', u'公司名称', u'机器台数', u'推广数', u'安装总数']
+    elif mode == 'store':
+        titles = [u'编码', u'门店名称', u'机器台数', u'推广数', u'安装总数']
+    else:
+        titles = [u'员工工号', u'员工姓名', u'机器台数', u'推广数', u'安装总数']
+
+    sheet = {
+        'name': u'组织统计',
+        'titles': titles,
+        'records': records,
+        'record_to_array': _record_to_array
+    }
+
+    return render_excel('organization_statisitcs.xls', [sheet])
 

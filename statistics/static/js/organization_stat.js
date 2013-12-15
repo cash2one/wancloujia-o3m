@@ -150,37 +150,58 @@ $(function() {
     var table = (function() {
 
     $("#export-data").click(function(e) {
-        // TODO
+        e.preventDefault()
+        if(!mode)  return;
+        window.location = 'organization/' + mode + '/excel';
     });
 
     var $table = null;
     var options = {
         region: {
-            to_row: function(item) { },
+            to_row: function(item) {
+                return [item.region || '&mdash;', item.total_device_count, 
+                        item.total_popularize_count, item.total_app_count] 
+            },
             titles: ['大区', '机器台数', '推广数', '安装总数']
         },
         company: {
-            to_row: function(item) {},
+            to_row: function(item) {
+                return [item.company.code || '&mdash;', item.company.name || '&mdash;', 
+                        item.total_device_count, item.total_popularize_count, 
+                        item.total_app_count] 
+            },
             titles: ['公司编码', '公司名称', '机器台数', '推广数', '安装总数']
         },
         store: {
-            to_row: function(item) {},
+            to_row: function(item) {
+                return [item.store.code || '&mdash;', item.store.name || '&mdash;', 
+                        item.total_device_count, item.total_popularize_count,
+                        item.total_app_count] 
+            },
             titles: ['门店编码', '门店名称', '机器台数', '推广数', '安装总数']
         },
         emp: {
-            to_row: function(item) {},
+            to_row: function(item) {
+                return [item.emp.username || '&mdash;' , item.emp.realname || '&mdash;', 
+                        item.total_device_count, item.total_popularize_count,
+                        item.total_app_count] 
+            },
             titles: ['员工编码', '员工姓名', '机器台数', '推广数', '安装总数']
         },
         emp_only: {
-            to_row: function(item) {},
+            to_row: function(item) {
+                return [item.emp.username || '&mdash;' , item.emp.realname || '&mdash;', 
+                        item.total_device_count, item.total_popularize_count,
+                        item.total_app_count] 
+            },
             titles: ['员工编码', '员工姓名', '机器台数', '推广数', '安装总数']
         }
     };
 
     var sub_options; 
+    var mode;
     function reload_data(region, company, store, emp) {
         var _sub_options; 
-        var mode;
         if (emp) {
             mode = 'emp_only';
             _sub_options = options.emp_only;
@@ -208,7 +229,7 @@ $(function() {
         sub_options = _sub_options;
         var table_options = $.extend({}, statistics.table_options, {
             bRetrieve: true,
-            sPaginationTyep: "bootstrap",
+            sPaginationType: "bootstrap",
             iDisplayStart: 0,
             iDisplayLength: 50
         });
@@ -224,7 +245,7 @@ $(function() {
                 var filter = Dajaxice.statistics.filter_org_statistics;
                 filter(login_check(error_check(function(data) {
                     var aaData = [];
-                    _.each(data.items, function(item) {
+                    _.each(data.logs, function(item) {
                         aaData.push(sub_options.to_row(item));
                     });
                     $(".total").html(data.capacity);

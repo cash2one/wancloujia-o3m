@@ -3,7 +3,8 @@ from datetime import datetime, timedelta, date
 
 from django.core.management.base import BaseCommand
 
-from interface.models import LogMeta, InstalledAppLogEntity, DeviceLogEntity
+from interface.models import LogMeta, InstalledAppLogEntity
+from interface.models import DeviceLogEntity, UserDeviceLogEntity
 from mgr.models import Employee, Region, Company, Store
 from app.models import App
 
@@ -13,6 +14,38 @@ class Command(BaseCommand):
         self.add_test_logs_for_flow()
         self.add_test_logs_for_installed_capacity()
         self.add_test_logs_for_device_stat()
+        self.add_test_logs_for_org()
+
+    def add_test_logs_for_org(self):
+        # emp(4) x model(1) x device(1) date(1) x app(1) = cases(4)
+        region = Region.objects.get(name='region')
+        company = Company.objects.get(name='company')
+        store = Store.objects.get(name='store')
+        emp_region = Employee.objects.get(username='emp_region')
+        emp_company = Employee.objects.get(username='emp_company')
+        emp_store = Employee.objects.get(username='emp_store')
+        empid_not_exists = 31415926
+
+        appPkg = 'com.tiantian.ttclock'
+        appID = 1000
+        appName = 'ttclock'
+        d = date(year=2013, month=12, day=1)
+
+        UserDeviceLogEntity(date=d,  uid=emp_region.pk, 
+                           region=region.pk, 
+                           deviceCount=1, popularizeAppCount=1, appCount=2).save()
+
+        UserDeviceLogEntity(date=d,  uid=emp_company.pk, 
+                           region=region.pk, company=company.pk,
+                           deviceCount=1, popularizeAppCount=1, appCount=2).save()
+
+        UserDeviceLogEntity(date=d,  uid=emp_store.pk, 
+                           region=region.pk, company=company.pk, store=store.pk,
+                           deviceCount=1, popularizeAppCount=1, appCount=2).save()
+
+        UserDeviceLogEntity(date=d,  uid=empid_not_exists, 
+                           deviceCount=1, popularizeAppCount=1, appCount=2).save()
+
 
     def add_test_logs_for_device_stat(self):
         htc = 'hTC'
@@ -20,6 +53,7 @@ class Command(BaseCommand):
         htc_butterfly = 'hTC butterfly'
         self.add_test_logs_for_device_stat_by_model_device(htc, htc_one, 1)
         self.add_test_logs_for_device_stat_by_model_device(htc, htc_butterfly, 2)
+
         
     def add_test_logs_for_device_stat_by_model_device(self, brand, model, device):
         # emp(4) x model(1) x device(1) date(1) x app(1) = cases(4)

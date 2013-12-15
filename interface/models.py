@@ -83,10 +83,11 @@ class UserDeviceLogEntity(models.Model):
     keys
     """
     date = models.DateField(db_index=True, editable=False)
-    region = models.IntegerField(db_index=True)
-    company = models.IntegerField(db_index=True)
-    store = models.IntegerField(db_index=True)
+    region = models.IntegerField(db_index=True, null=True)
+    company = models.IntegerField(db_index=True, null=True)
+    store = models.IntegerField(db_index=True, null=True)
     uid = models.IntegerField(db_index=True)
+    appPkg = models.CharField(max_length=App.PACKAGE_LENGTH_LIMIT, editable=False)
     """
     values
     """
