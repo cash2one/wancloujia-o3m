@@ -138,7 +138,7 @@ $(function() {
                 }
             }
         }, {
-            sTitle: '安装综数'
+            sTitle: '安装总数'
         }],
         iDisplayStart: 0,
         iDisplayLength: 50,
