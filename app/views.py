@@ -103,6 +103,7 @@ def upload(request):
         'name': apk_info.getAppName(),
         'packageName': apk_info.getPackageName(),
         'version': apk_info.versionName,
+		'versionCode': apk_info.versionCode,
         'size': apk_info.packageSize,
         'icon': holder['icon_url']
     }
@@ -114,7 +115,9 @@ def upload(request):
         app_dict["category"] = app.category.pk
         app_dict["desc"] = app.desc
         app_dict["popularize"] = "True" if app.popularize else "False"
-
+        app_dict["oldVersionCode"] = app.version_code
+        app_dict["oldVersion"] = app.version
+	
     return HttpResponse(simplejson.dumps(app_dict), 
                         mimetype='application/json')
 
