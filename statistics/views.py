@@ -148,14 +148,17 @@ def employee(request):
     cid = request.GET.get('c', None)
     rid = request.GET.get('r', None)
     org_id = first_valid(lambda i: i, [sid, cid, rid])
-    org = get_model_by_pk(Organization.objects, org_id) if org_id else None
-    org = org.cast() if org else None
+    if not org_id:
+        emps = Employee.objects.all()
+    else:
+        org = get_model_by_pk(Organization.objects, org_id) 
+        org = org.cast() if org else None
+        if not org:
+            emps = Employee.objects.none()
+        else:
+            logger.debug("%s: org: %s" % (__name__, str(org)))
+            emps = query_employee(user, org)
 
-    logger.debug("%s: org: %s" % (__name__, str(org)))
-    if not org:
-        return render_json({'results': emps_to_dict_arr(Employee.objects.none())})
-
-    emps = query_employee(user, org)
     q = request.GET.get("q", "")
     emps = Employee.query(emps, q)
     emps = emps[0:10]
