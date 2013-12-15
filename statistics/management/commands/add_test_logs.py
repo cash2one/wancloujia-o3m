@@ -15,6 +15,14 @@ class Command(BaseCommand):
         self.add_test_logs_for_device_stat()
 
     def add_test_logs_for_device_stat(self):
+        htc = 'hTC'
+        htc_one = 'hTC One'
+        htc_butterfly = 'hTC butterfly'
+        self.add_test_logs_for_device_stat_by_model_device(htc, htc_one, 1)
+        self.add_test_logs_for_device_stat_by_model_device(htc, htc_butterfly, 2)
+        
+    def add_test_logs_for_device_stat_by_model_device(self, brand, model, device):
+        # emp(4) x model(1) x device(1) date(1) x app(1) = cases(4)
         region = Region.objects.get(name='region')
         company = Company.objects.get(name='company')
         store = Store.objects.get(name='store')
@@ -23,58 +31,32 @@ class Command(BaseCommand):
         emp_store = Employee.objects.get(username='emp_store')
         empid_not_exists = 31415926
 
-        htc = 'hTC'
-        htc_one = 'hTC One'
-        htc_butterfly = 'hTC butterfly'
         appPkg = 'com.tiantian.ttclock'
         appID = 1000
         appName = 'ttclock'
+        d = date(year=2013, month=12, day=1)
 
-        date_12_1 = date(year=2013, month=12, day=1)
-
-        # emp(4) x model(2) x date(1) x app(1) = cases(8)
-        DeviceLogEntity(date=date_12_1, brand=htc, model=htc_one, 
+        DeviceLogEntity(date=d, brand=brand, model=model, 
                         uid=emp_region.pk, region=region.pk, 
                         appID=appID, appPkg=appPkg, appName=appName,
-                        deviceCount=1, popularizeAppCount=1, appCount=2).save()
+                        did=device, popularizeAppCount=1, appCount=2).save()
 
-        DeviceLogEntity(date=date_12_1, brand=htc, model=htc_one, 
+        DeviceLogEntity(date=d, brand=brand, model=model, 
                         uid=emp_company.pk, company=company.pk, region=region.pk, 
                         appID=appID, appPkg=appPkg, appName=appName,
-                        deviceCount=1, popularizeAppCount=2, appCount=2).save()
+                        did=device, popularizeAppCount=1, appCount=2).save()
 
-        DeviceLogEntity(date=date_12_1, brand=htc, model=htc_one, 
+        DeviceLogEntity(date=d, brand=brand, model=model, 
                         uid=emp_store.pk, store=store.pk, 
                         company=company.pk, region=region.pk, 
                         appID=appID, appPkg=appPkg, appName=appName,
-                        deviceCount=1, popularizeAppCount=2, appCount=2).save()
+                        did=device, popularizeAppCount=1, appCount=2).save()
 
-        DeviceLogEntity(date=date_12_1, brand=htc, model=htc_one, 
+        DeviceLogEntity(date=d, brand=brand, model=model, 
                         uid=empid_not_exists,
                         appID=appID, appPkg=appPkg, appName=appName,
-                        deviceCount=1, popularizeAppCount=2, appCount=2).save() 
-
-        DeviceLogEntity(date=date_12_1, brand=htc, model=htc_butterfly, 
-                        uid=emp_region.pk, region=region.pk, 
-                        appID=appID, appPkg=appPkg, appName=appName,
-                        deviceCount=1, popularizeAppCount=1, appCount=2).save()
-
-        DeviceLogEntity(date=date_12_1, brand=htc, model=htc_butterfly, 
-                        uid=emp_company.pk, company=company.pk, region=region.pk, 
-                        appID=appID, appPkg=appPkg, appName=appName,
-                        deviceCount=1, popularizeAppCount=1, appCount=2).save()
-
-        DeviceLogEntity(date=date_12_1, brand=htc, model=htc_butterfly, 
-                        uid=emp_store.pk, store=store.pk, 
-                        company=company.pk, region=region.pk, 
-                        appID=appID, appPkg=appPkg, appName=appName,
-                        deviceCount=1, popularizeAppCount=1, appCount=2).save()
-
-        DeviceLogEntity(date=date_12_1, brand=htc, model=htc_butterfly, 
-                        uid=empid_not_exists,
-                        appID=appID, appPkg=appPkg, appName=appName,
-                        deviceCount=1, popularizeAppCount=1, appCount=2).save() 
-
+                        did=device, popularizeAppCount=1, appCount=2).save() 
+        
     def add_test_logs_for_installed_capacity(self):
         region = Region.objects.get(name='region')
         company = Company.objects.get(name='company')

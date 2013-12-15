@@ -332,12 +332,19 @@ def _filter_device_statistics(user, form):
     return logs
 
 
-def stat_device(user, form):
+def stat_device(user, form, detail=False):
     logs = _filter_device_statistics(user, form) 
-    results = logs.values('model').annotate(total_device_count=Sum('deviceCount'), 
-                                            total_popularize_count=Sum('popularizeAppCount'), 
-                                            total_app_count=Sum('appCount'))
-    return results
+    if detail:
+        logs = logs.values('uid', 'brand', 'model', 'did') 
+        return logs.annotate(total_popularize_count=Sum('popularizeAppCount'), 
+                             total_app_count=Sum('appCount'))
+    else:
+        logs =logs.values('model')
+        return logs.annotate(total_device_count=Sum('did'), 
+                             total_popularize_count=Sum('popularizeAppCount'), 
+                             total_app_count=Sum('appCount'))
+
+
 
 def count_device(user, form):
     logs = _filter_device_statistics(user, form) 
@@ -363,6 +370,48 @@ def get_device_stat(request, form, offset, length):
     dict_list = []
     for result in results:
         dict_list.append(result)
+
+    return simplejson.dumps({
+        'ret_code': 0,
+        'logs': dict_list,
+        'total': total,
+        'capacity': capacity
+    })
+
+
+def device_record_to_dict(record):
+    emp = utils.get_model_by_pk(Employee.objects, record['uid'])
+    username = emp.username if emp else None
+    return {
+        'brand': record['brand'],
+        'model': record['model'],
+        'device': record['did'],
+        'total_popularize_count': record['total_popularize_count'],
+        'total_app_count': record['total_app_count'],
+        'emp': username
+    }
+
+
+@dajaxice_register(method='POST')
+@check_login
+def get_device_stat_detail(request, form, offset, length):
+    user = cast_staff(request.user)
+    form = deserialize_form(form)
+
+    filter_form = DeviceStatForm(form)
+    if not filter_form.is_valid():
+        logger.warn("form is invalid")
+        logger.warn(filter_form.errors)
+        return _invalid_data_json
+
+    results = stat_device(user, filter_form, True)
+    total = len(results)
+    capacity = count_device(user, filter_form)
+    results = results[offset: offset + length]
+    logger.debug(results)
+    dict_list = []
+    for result in results:
+        dict_list.append(device_record_to_dict(result))
 
     return simplejson.dumps({
         'ret_code': 0,

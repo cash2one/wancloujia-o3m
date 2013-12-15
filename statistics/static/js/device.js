@@ -3,6 +3,7 @@ var error_check = suning.decorators.error_check;
 var login_check = suning.decorators.login_check;
 var toastNetworkError = suning.toastNetworkError;
 var get_device_stat = Dajaxice.statistics.get_device_stat;
+var get_device_stat_detail = Dajaxice.statistics.get_device_stat_detail;
 var app_temp = statistics.app_temp;
 
 $(function() {
@@ -160,7 +161,7 @@ $(function() {
         window.location =  'installed_capacity/excel?' + $form.serialize(true);
     });
 
-    var $table = $("#summary .table").dataTable($.extend({}, statistics.table_options, {
+    var $summaryTable = $("#summary .table").dataTable($.extend({}, statistics.table_options, {
         sPaginationType: "bootstrap",
         aoColumns: [{
             sTitle: '机型'
@@ -202,9 +203,60 @@ $(function() {
         }
     }));
 
+    var $detailTable = $("#detail .table").dataTable($.extend({}, statistics.table_options, {
+        sPaginationType: "bootstrap",
+        aoColumns: [{
+            sTitle: '员工'
+        }, {
+            sTitle: '品牌'
+        }, {
+            sTitle: '机型'
+        }, {
+            sTitle: '串号'
+        }, {
+            sTitle: '推广数'
+        }, {
+            sTitle: '安装总数'
+        }],
+        iDisplayStart: 0,
+        iDisplayLength: 50,
+        fnServerData: function(source, data, callback, settings) {
+            var values = statistics.table_map(data, ["sEcho", "iDisplayLength", "iDisplayStart"]);
+            get_device_stat_detail(login_check(error_check(function(data) {
+                var aaData = [];
+                _.each(data.logs, function(item) {
+                    aaData.push([
+                        item.emp || '&mdash;',
+                        item.brand,
+                        item.model,
+                        item.device,
+                        item.total_popularize_count,
+                        item.total_app_count
+                    ]);
+                });
+                $(".total").html(data.capacity);
+                callback({
+                    sEcho: values.sEcho,
+                    iTotalRecords: data.total,
+                    iTotalDisplayRecords: data.total,
+                    aaData: aaData
+                });
+            })), {
+                form: $form.serialize(true),
+                offset: values.iDisplayStart,
+                length: values.iDisplayLength
+            }, { 
+                errorCallback: error_check(toastNetworkError)
+            });
+        }
+    }));
+
+
     $form.submit(function(e) {
         e.preventDefault();
-        $table.fnDraw();
+
+        $summaryTable.fnDraw();
+        $detailTable.fnDraw();
     });
 });
 
