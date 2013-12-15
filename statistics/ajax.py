@@ -4,14 +4,14 @@ from datetime import datetime
 
 from django.utils import simplejson
 from django.contrib.auth.models import User
-from django.db import models
+from django.db.models import Sum
 from dajaxice.decorators import dajaxice_register
 from dajaxice.utils import deserialize_form
 
-from interface.models import LogMeta
+from interface.models import LogMeta, InstalledAppLogEntity
 from app.models import App
 from mgr.models import Employee, Organization, cast_staff
-from statistics.forms import LogMetaFilterForm
+from statistics.forms import LogMetaFilterForm, InstalledCapacityFilterForm
 from suning import utils
 from suning.decorators import *
 
@@ -40,7 +40,7 @@ class AdminFilter:
         if not org:
             return self.logs
 
-        return LogMeta.filter_by_organization(self.logs, org.cast())
+        return self.logs.filter_by_organization(org.cast())
 
 
 class UserPermittedFilter(AdminFilter):
@@ -62,11 +62,11 @@ class UserPermittedFilter(AdminFilter):
             org = utils.get_model_by_pk(Organization.objects, self.org_id) 
             org = org.cast() if org else None
             if org and org.belong_to(user_org):
-                return LogMeta.filter_by_organization(self.logs, org)
+                return self.logs.filter_by_organization(org)
             else:
                 return self.logs.none()
 
-        return LogMeta.filter_by_organization(self.logs, user_org)
+        return self.logs.filter_by_organization(user_org)
 
 
 class UserUnpermittedFilter:
@@ -205,4 +205,78 @@ def get_flow_logs(request, form, offset, length):
         'logs': dict_list,
         'total': total
     })           
+
+
+def filter_installed_capacity_logs(user, form):
+    region_id = form.cleaned_data["region"]
+    company_id = form.cleaned_data["company"]
+    store_id = form.cleaned_data["store"]
+    emp_id = form.cleaned_data["emp"]
+    if emp_id:
+        logs = InstalledAppLogEntity.objects.filter(uid=emp_id)
+    elif store_id:
+        logs = InstalledAppLogEntity.objects.filter(store=store_id)
+    elif company_id:
+        logs = InstalledAppLogEntity.objects.filter(company=company_id)
+    elif region_id:
+        logs = InstalledAppLogEntity.objects.filter(region=region_id)
+    else:
+        logs = InstalledAppLogEntity.objects.all()
+    logger.debug("logs filtered by user info: %d" % len(logs))
+
+    logs = AppFilter(logs, form.cleaned_data["app"]).filter()
+    logger.debug("logs filtered by app: %d" % len(logs))
+
+    from_date = form.cleaned_data["from_date"]
+    to_date = form.cleaned_data["to_date"]
+    logs = PeriodFilter(logs, from_date, to_date).filter()
+    logger.debug("logs filtered by period: %d" % len(logs))
+
+    popularize = form.cleaned_data['popularize']
+    if popularize:
+        logs = logs.filter(popularize=(popularize=='True'))
+
+    results = logs.values('appPkg', 'appID', 'appName', 'popularize' ,'installedTimes').annotate(count=Sum('installedTimes'))
+    return results
+
+
+def installed_capacity_to_dict(capacity):
+    logger.debug(capacity)
+    dict = {}
+    apps = App.objects.filter(package=capacity['appPkg'])
+    app = apps[0] if len(apps) != 0 else None
+    dict["app"] = {
+        'id': capacity['appID'],
+        'package': capacity['appPkg'],
+        'name': capacity['appName'],
+        'popularize': capacity['popularize']
+    }
+    dict["count"] = capacity['count']
+    return dict;
+    
+
+@dajaxice_register(method='POST')
+@check_login
+def get_installed_capacity(request, form, offset, length):
+    user = cast_staff(request.user)
+    form = deserialize_form(form)
+
+    filter_form = InstalledCapacityFilterForm(form)
+    if not filter_form.is_valid():
+        logger.warn("form is invalid")
+        logger.warn(filter_form.errors)
+        return _invalid_data_json
+
+    results = filter_installed_capacity_logs(user, filter_form)
+    total = len(results)
+    results = results[offset: offset + length]
+    dict_list = []
+    for result in results:
+        dict_list.append(installed_capacity_to_dict(result))
+
+    return simplejson.dumps({
+        'ret_code': 0,
+        'logs': dict_list,
+        'total': total
+    })
 

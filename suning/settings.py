@@ -295,7 +295,8 @@ LOGGING = {
     }
 }
 
-if DEBUG:
+
+if not DEBUG:
     import django.core.files.storage
     import interface.storage
     storage = interface.storage.hdfs_storage()
@@ -303,3 +304,4 @@ if DEBUG:
     django.core.files.storage.default_storage.exist = storage.exist
     django.core.files.storage.default_storage.delete = storage.delete
     #DEFAULT_FILE_STORAGE = 'interface.storage.hdfs_storage'
+

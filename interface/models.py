@@ -1,5 +1,7 @@
 # coding: utf-8
-from django.db import models
+from django.db import models, connection
+from django.db.models.query import QuerySet
+
 from mgr.models import Company, Store, Employee
 from app.models import App
 
@@ -9,6 +11,21 @@ class LogEntity(models.Model):
 
     class Meta:
         ordering = ('create',)
+
+
+class LogQuerySet(QuerySet):
+    def filter_by_organization(self, organization):
+        emps = Employee.objects.filter_by_organization(organization)
+        pks = emps.values_list('pk', flat=True)
+        return self.filter(uid__in=pks)
+        
+
+class LogManager(models.Manager):
+    def get_query_set(self):
+        return LogQuerySet(self.model)
+
+    def filter_by_organization(self, organization):
+        return self.get_query_set().filter_by_organization(organization)
 
 
 class LogMeta(models.Model):
@@ -25,11 +42,7 @@ class LogMeta(models.Model):
     appID = models.CharField(max_length=16, editable=False)
     appPkg = models.CharField(max_length=App.PACKAGE_LENGTH_LIMIT, editable=False)
 
-    @classmethod
-    def filter_by_organization(cls, logs, organization):
-        emps = Employee.filter_by_organization(organization)
-        pks = emps.values_list('pk', flat=True)
-        return logs.filter(uid__in=pks)
+    objects = LogManager()
 
     class Meta:
         permissions=(
@@ -50,6 +63,7 @@ class InstalledAppLogEntity(models.Model):
     store = models.IntegerField(db_index=True)
     uid = models.IntegerField(db_index=True, editable=False)
     appName = models.CharField(max_length=24)
+    popularize = models.BooleanField(editable=False)
     appID = models.CharField(db_index=True, max_length=16, editable=False)
     appPkg = models.CharField(max_length=32)
     """
@@ -57,7 +71,9 @@ class InstalledAppLogEntity(models.Model):
     """
     installedTimes = models.IntegerField(editable=False)
 
+    objects = LogManager()
 
+    
 class UserDeviceLogEntity(models.Model):
     u"""
     手机安装统计
