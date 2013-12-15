@@ -60,7 +60,13 @@
         });
 
         var today = new Date();
-        var first_day = new Date(today.getYear() + 1900, today.getMonth(), 1);
+        var first_day = new Date();
+        first_day.setFullYear(today.getFullYear());
+        first_day.setMonth(today.getMonth(), 1);
+        first_day.setHours(0);
+        first_day.setMinutes(0);
+        first_day.setSeconds(0);
+        first_day.setMilliseconds(0);
         this.$from.val(datef('YYYY-MM-dd', first_day))
         this.$to.val(datef('YYYY-MM-dd', today))
     }

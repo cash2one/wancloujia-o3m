@@ -321,7 +321,7 @@ def installed_capacity(request):
         
     return render(request, "installed_capacity.html", {
         'user_filter': user_filter,
-        'filter': LogMetaFilterForm()
+        'filter': InstalledCapacityFilterForm()
     })
 
 
