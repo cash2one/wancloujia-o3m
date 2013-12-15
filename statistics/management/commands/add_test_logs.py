@@ -32,18 +32,18 @@ class Command(BaseCommand):
         d = date(year=2013, month=12, day=1)
 
         UserDeviceLogEntity(date=d,  uid=emp_region.pk, 
-                           region=region.pk, 
+                           region=region.pk, appPkg = appPkg,
                            deviceCount=1, popularizeAppCount=1, appCount=2).save()
 
         UserDeviceLogEntity(date=d,  uid=emp_company.pk, 
-                           region=region.pk, company=company.pk,
+                           region=region.pk, company=company.pk, appPkg = appPkg,
                            deviceCount=1, popularizeAppCount=1, appCount=2).save()
 
-        UserDeviceLogEntity(date=d,  uid=emp_store.pk, 
+        UserDeviceLogEntity(date=d,  uid=emp_store.pk,  appPkg = appPkg,
                            region=region.pk, company=company.pk, store=store.pk,
                            deviceCount=1, popularizeAppCount=1, appCount=2).save()
 
-        UserDeviceLogEntity(date=d,  uid=empid_not_exists, 
+        UserDeviceLogEntity(date=d,  uid=empid_not_exists,  appPkg = appPkg,
                            deviceCount=1, popularizeAppCount=1, appCount=2).save()
 
 

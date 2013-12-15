@@ -10,7 +10,7 @@ from django.utils import simplejson
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.db.models.query import QuerySet
-from django.db.models import Q
+from django.db.models import Q, Sum
 from django.views.decorators.http import require_GET, require_POST
 from django_tables2.config import RequestConfig
 from django.http import HttpResponse, Http404
@@ -432,6 +432,7 @@ def render_excel(filename, sheets):
 
         for row, record in enumerate(sheet_info['records']):
             array = sheet_info['record_to_array'](record)
+            logger.debug(array)
             for col, val in enumerate(array):
                 #style = date_style if isinstance(val, datetime.date) else default_style
                 style = default_style
@@ -461,23 +462,30 @@ def organization_excel(request, mode):
         raise Http404
 
     user = cast_staff(request.user)
+    logger.debug('mode: ' + mode)
     logs = filter_org_logs(filter_form, mode)
-    key = mode if mode != 'emp' else 'uid'
+    key = mode if mode != 'emp' and mode != 'emp_only' else 'uid'
     records = logs.values(key).annotate(total_device_count=Sum('deviceCount'),
                                        total_popularize_count=Sum('popularizeAppCount'),
                                        total_app_count=Sum('appCount'))
 
+
     def _record_to_array(record):
+        logger.debug(record)
+        h = HTMLParser.HTMLParser()
         dict = org_record_to_dict(record, mode)
         array = []
         if mode == 'region':
-            array.append(dict['region'])
+            array.append(dict['region'] or h.unescape(EMPTY_VALUE))
         elif mode == 'store' or mode == 'company':
-            array.append(dict['mode']['code'])
-            array.append(dict['mode']['name'])
+            array.append(dict[mode]['code'] or h.unescape(EMPTY_VALUE))
+            array.append(dict[mode]['name'] or h.unescape(EMPTY_VALUE))
         else:
-            array.append(dict['emp']['username']);
-            array.append(dict['emp']['realname']);
+            array.append(dict['emp']['username'] or h.unescape(EMPTY_VALUE));
+            array.append(dict['emp']['realname'] or h.unescape(EMPTY_VALUE));
+        array.append(dict['total_device_count']) 
+        array.append(dict['total_popularize_count']) 
+        array.append(dict['total_app_count']) 
         return array
 
     titles = []

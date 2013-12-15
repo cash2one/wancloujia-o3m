@@ -152,7 +152,7 @@ $(function() {
     $("#export-data").click(function(e) {
         e.preventDefault()
         if(!mode)  return;
-        window.location = 'organization/' + mode + '/excel';
+        window.location = 'organization/' + mode + '/excel?' + $form.serialize(true);
     });
 
     var $table = null;
