@@ -59,8 +59,8 @@ class InstalledAppLogEntity(models.Model):
     """
     date = models.DateField(db_index=True, editable=False)
     region = models.IntegerField(db_index=True)
-    company = models.IntegerField(db_index=True)
-    store = models.IntegerField(db_index=True)
+    company = models.IntegerField(db_index=True, null=True)
+    store = models.IntegerField(db_index=True, null=True)
     uid = models.IntegerField(db_index=True, editable=False)
     appName = models.CharField(max_length=24)
     popularize = models.BooleanField(editable=False)

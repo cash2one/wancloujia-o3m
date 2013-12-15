@@ -16,14 +16,14 @@ $(function() {
     };
     var $filter_region = $("#filter_region");
     $filter_region.select2(select2_tip_options);
-    if($filter_region.attr('disabled') != 'disabled') {
+    if(!$filter_region.data('readonly')) {
         $filter_region.jCombo("regions", combo_options);
     }
 
     var $filter_company = $("#filter_company")
     $filter_company.select2(select2_tip_options);
-    if($filter_company.attr('disabled') != 'disabled') {
-        if ($filter_region.attr('disabled') != 'disabled') {
+    if(!$filter_company.data('readonly')) {
+        if (!$filter_region.data('readonly')) {
             $filter_company.jCombo("companies?r=", 
                 $.extend({parent: $filter_region}, combo_options));
         } else {
@@ -33,16 +33,17 @@ $(function() {
 
     var $filter_store = $("#filter_store");
     $filter_store.select2(select2_tip_options);
-    if($filter_store.attr('disabled') != 'disabled') {
-        if($filter_company.attr("disabled") != 'disabled') {
-            $filter_store.jCombo("stores?c=", $.extend({parent: $filter_company}, combo_options));
+    if(!$filter_store.data('readonly')) {
+        if(!$filter_company.data("readonly")) {
+            $filter_store.jCombo("stores?c=", 
+                    $.extend({parent: $filter_company}, combo_options));
         } else {
             $filter_store.jCombo("stores?c=" + $filter_company.val(), combo_options);
         }
     }
 
     var $filter_employee = $("#filter_employee");
-    if ($filter_employee.attr('disabled') != 'disabled') {
+    if (!$filter_employee.data('readonly')) {
         var select2_options = $.extend({}, select2_tip_options, {
             query: function(query) {
                 var store = $filter_store.val();
@@ -141,6 +142,9 @@ $(function() {
         }],
         iDisplayStart: 0,
         iDisplayLength: 50,
+        fnDrawCallback: function() {
+            $table.find(".app-name").popover();
+        },
         fnServerData: function(source, data, callback, settings) {
             var values = statistics.table_map(data, ["sEcho", "iDisplayLength", "iDisplayStart"]);
             get_installed_capacity(login_check(error_check(function(data) {

@@ -24,7 +24,7 @@ from mgr.models import cast_staff, Region, Company, Store, Organization, Employe
 from app.models import App
 from interface.models import LogMeta, InstalledAppLogEntity
 from forms import LogMetaFilterForm, InstalledCapacityFilterForm
-from ajax import filter_flow_logs, log_to_dict
+from ajax import filter_flow_logs, log_to_dict, filter_installed_capacity_logs, installed_capacity_to_dict
 
 
 logger = logging.getLogger(__name__)
@@ -190,33 +190,34 @@ def flow(request):
     today = datetime.date.today()
     first_day = datetime.date(today.year, today.month, 1)
     user = cast_staff(request.user)
+    empty_value = {'pk': '', 'code': '', 'name': '--------'}
     user_filter = { 
-        'region': { 'disabled': False },
-        'company': { 'disabled': False },
-        'store': { 'disabled': False },
+        'region': { 'disabled': False, 'value': empty_value },
+        'company': { 'disabled': False, 'value': empty_value },
+        'store': { 'disabled': False, 'value': empty_value },
         'emp': { 'disabled': False }
     }
 
     if not user.is_superuser and not user.is_staff:
-        organizations = [None, None, None]
+        organizations = [empty_value, empty_value, empty_value]
         for i, org in enumerate(user.organizations()):
             organizations[i] = org
 
         user_filter["region"]["value"] = organizations[0] 
-        user_filter["region"]["disabled"] = organizations[0] is not None
+        user_filter["region"]["disabled"] = organizations[0] is not empty_value
 
         user_filter["company"]["value"] = organizations[1] 
-        user_filter["company"]["disabled"] = organizations[1] is not None
+        user_filter["company"]["disabled"] = organizations[1] is not empty_value
 
         user_filter["store"]["value"] = organizations[2]
-        user_filter["store"]["disabled"] = organizations[2] is not None
+        user_filter["store"]["disabled"] = organizations[2] is not empty_value
         user_filter["emp"]["value"] = user
 
         if not user.has_perm("interface.view_organization_statistics"):
             logger.debug("user has no permission to view organization's statistices")
             user_filter["region"]["disabled"] = True
             user_filter["company"]["disabled"] = True
-            user_filter["region"]["disabled"] = True
+            user_filter["store"]["disabled"] = True
             user_filter["emp"]["disabled"] = True
 
         
@@ -289,39 +290,40 @@ def flow_excel(request):
 @active_tab("statistics", "installed_capacity")
 def installed_capacity(request):
     user = cast_staff(request.user)
+    empty_value = {'pk': '', 'code': '', 'name': '--------'}
     user_filter = { 
-        'region': { 'disabled': False },
-        'company': { 'disabled': False },
-        'store': { 'disabled': False },
+        'region': { 'disabled': False, 'value': empty_value },
+        'company': { 'disabled': False, 'value': empty_value },
+        'store': { 'disabled': False, 'value': empty_value },
         'emp': { 'disabled': False }
     }
 
     if not user.is_superuser and not user.is_staff:
-        organizations = [None, None, None]
+        organizations = [empty_value, empty_value, empty_value]
         for i, org in enumerate(user.organizations()):
             organizations[i] = org
 
         user_filter["region"]["value"] = organizations[0] 
-        user_filter["region"]["disabled"] = organizations[0] is not None
+        user_filter["region"]["disabled"] = organizations[0] is not empty_value
 
         user_filter["company"]["value"] = organizations[1] 
-        user_filter["company"]["disabled"] = organizations[1] is not None
+        user_filter["company"]["disabled"] = organizations[1] is not empty_value
 
         user_filter["store"]["value"] = organizations[2]
-        user_filter["store"]["disabled"] = organizations[2] is not None
+        user_filter["store"]["disabled"] = organizations[2] is not empty_value
         user_filter["emp"]["value"] = user
 
         if not user.has_perm("interface.view_organization_statistics"):
             logger.debug("user has no permission to view organization's statistices")
             user_filter["region"]["disabled"] = True
             user_filter["company"]["disabled"] = True
-            user_filter["region"]["disabled"] = True
+            user_filter["store"]["disabled"] = True
             user_filter["emp"]["disabled"] = True
 
         
     return render(request, "installed_capacity.html", {
         'user_filter': user_filter,
-        'filter': LogMetaFilterForm()
+        'filter': InstalledCapacityFilterForm()
     })
 
 
@@ -334,12 +336,11 @@ def installed_capacity_excel(request):
         logger.warn(filter_form.errors)
         raise Http404
 
-
     book = xlwt.Workbook(encoding='utf8')
     sheet = book.add_sheet(u'安装统计')
     default_style = xlwt.Style.default_style
     #date_style = xlwt.easyxf(num_format_str='yyyy-mm-dd')
-    titles = [u'应用序号', u'应用名称', u'应用包名', u'是否推广', u'日期', u'安装总量']
+    titles = [u'应用序号', u'应用名称', u'应用包名', u'是否推广', u'安装总量']
     for i, title in enumerate(titles):
         sheet.write(0, i, title, style=default_style)
 
@@ -348,20 +349,12 @@ def installed_capacity_excel(request):
     h = HTMLParser.HTMLParser()
     for row, log in enumerate(logs):
         logger.debug(log)
-        dict = log_to_dict(log) 
-
-        if dict['app']['popularize'] is None:
-            popularize = h.unescape(EMPTY_VALUE)
-        else:
-            popularize = u'是' if dict['app']['popularize'] else u'否'
-        app = dict['app']
-
+        dict = installed_capacity_to_dict(log) 
         rowdata = [
-            app['id'],
-            app['name'] if app['name'] else h.unescape(EMPTY_VALUE),
-            app['package'],
-            popularize,
-            dict['date'],
+            dict['app']['id'],
+            dict['app']['name'],
+            dict['app']['package'],
+            u'是' if dict['app']['popularize'] else u'否',
             dict['count']
         ]
         for col, val in enumerate(rowdata):
@@ -370,7 +363,7 @@ def installed_capacity_excel(request):
             sheet.write(row+1, col, val, style=style)
 
     response = HttpResponse(mimetype='application/vnd.ms-excel')
-    response['Content-Disposition'] = 'attachment; filename=intalled_capacity.xls'
+    response['Content-Disposition'] = 'attachment; filename=installed_capacity.xls'
     book.save(response)
     return response
 

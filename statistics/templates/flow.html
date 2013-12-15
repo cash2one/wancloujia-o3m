@@ -30,7 +30,7 @@
                             <label for="filter_region">{{ filter.region.label }}：</label>
                             <select id="filter_region" 
                                     {% if user_filter.region.disabled %}
-                                    disabled='disabled'
+                                    readonly='readonly' data-readonly='true'
                                     {% endif %}
                                     name="region">
 
@@ -45,7 +45,7 @@
                             <label for="filter_company">{{ filter.company.label }}：</label>
                             <select id="filter_company" name="company"
                                     {% if user_filter.company.disabled %}
-                                    disabled='disabled'
+                                    readonly='readonly' data-readonly='true'
                                     {% endif %}>
                                 {% if user_filter.company.disabled %}
                                 <option value="{{ user_filter.company.value.pk }}" selected='selected'>
@@ -58,7 +58,7 @@
                             <label for="filter_store">{{ filter.store.label }}：</label>
                             <select id="filter_store" name="store"
                                     {% if user_filter.store.disabled %}
-                                    disabled='disabled'
+                                    readonly='readonly' data-readonly='true'
                                     {% endif %}>
                                 {% if user_filter.store.disabled %}
                                 <option value="{{ user_filter.store.value.pk }}" selected='selected'>
@@ -73,7 +73,8 @@
                             <input id="filter_employee" type="hidden" name="emp"/>
                             {% else %}
                             <select id="filter_employee" name="emp" 
-                                    disabled='disabled' value="{{ user_filter }}">
+                                    readonly='readonly' data-readonly='true'
+                                    value="{{ user_filter }}">
                                 <option value="{{ user_filter.emp.value.pk }}">
                                     {{ user_filter.emp.value.username }}
                                 </option>
