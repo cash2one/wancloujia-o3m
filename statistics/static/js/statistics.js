@@ -67,7 +67,7 @@
 
     var app_temp = _.template("<span class='app-name' " +
                                 "data-html='true' " +
-                                "data-placement='bottom' " +
+                                "data-placement='right' " +
                                 "data-content='包名:&nbsp;<%- package %><br>序号:&nbsp;<%- id %>'" +
                                 "data-trigger='hover' >" + 
                                 "<%- name %></span>");

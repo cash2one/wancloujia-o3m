@@ -141,6 +141,9 @@ $(function() {
         }],
         iDisplayStart: 0,
         iDisplayLength: 50,
+        fnDrawCallback: function() {
+            $table.find(".app-name").popover();
+        },
         fnServerData: function(source, data, callback, settings) {
             var values = statistics.table_map(data, ["sEcho", "iDisplayLength", "iDisplayStart"]);
             get_installed_capacity(login_check(error_check(function(data) {
