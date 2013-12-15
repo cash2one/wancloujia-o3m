@@ -1,0 +1,141 @@
+[
+{
+    "pk": 1, 
+    "model": "mgr.staff", 
+    "fields": {
+        "tel": "", 
+        "realname": "", 
+        "introduce": "", 
+        "phone": "", 
+        "real_type": 15, 
+        "groups": [], 
+        "user_permissions": []
+    }
+},
+{
+    "pk": 2, 
+    "model": "mgr.staff", 
+    "fields": {
+        "tel": "", 
+        "realname": "young", 
+        "introduce": "", 
+        "phone": "18640287525", 
+        "real_type": 13, 
+        "groups": [], 
+        "user_permissions": []
+    }
+},
+{
+    "pk": 3, 
+    "model": "mgr.staff", 
+    "fields": {
+        "tel": "", 
+        "realname": "young", 
+        "introduce": "", 
+        "phone": "18640287525", 
+        "real_type": 13, 
+        "groups": [], 
+        "user_permissions": []
+    }
+},
+{
+    "pk": 4, 
+    "model": "mgr.staff", 
+    "fields": {
+        "tel": "", 
+        "realname": "young", 
+        "introduce": "", 
+        "phone": "18640287525", 
+        "real_type": 13, 
+        "groups": [], 
+        "user_permissions": []
+    }
+},
+{
+    "pk": 1, 
+    "model": "mgr.organization", 
+    "fields": {
+        "real_type": 10
+    }
+},
+{
+    "pk": 2, 
+    "model": "mgr.organization", 
+    "fields": {
+        "real_type": 11
+    }
+},
+{
+    "pk": 3, 
+    "model": "mgr.organization", 
+    "fields": {
+        "real_type": 12
+    }
+},
+{
+    "pk": 1, 
+    "model": "mgr.region", 
+    "fields": {
+        "name": "region"
+    }
+},
+{
+    "pk": 2, 
+    "model": "mgr.company", 
+    "fields": {
+        "region": 1, 
+        "code": "1001", 
+        "name": "company"
+    }
+},
+{
+    "pk": 3, 
+    "model": "mgr.store", 
+    "fields": {
+        "company": 2, 
+        "code": "10011001", 
+        "name": "store"
+    }
+},
+{
+    "pk": 2, 
+    "model": "mgr.employee", 
+    "fields": {
+        "user_permissions": [], 
+        "organization": 1, 
+        "contact_person": "", 
+        "contact_phone": "", 
+        "groups": []
+    }
+},
+{
+    "pk": 3, 
+    "model": "mgr.employee", 
+    "fields": {
+        "user_permissions": [], 
+        "organization": 2, 
+        "contact_person": "", 
+        "contact_phone": "", 
+        "groups": []
+    }
+},
+{
+    "pk": 4, 
+    "model": "mgr.employee", 
+    "fields": {
+        "user_permissions": [], 
+        "organization": 3, 
+        "contact_person": "", 
+        "contact_phone": "", 
+        "groups": []
+    }
+},
+{
+    "pk": 1, 
+    "model": "mgr.superuser", 
+    "fields": {
+        "user_permissions": [], 
+        "groups": []
+    }
+}
+]
