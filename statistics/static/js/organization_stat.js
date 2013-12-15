@@ -248,7 +248,7 @@ $(function() {
                     _.each(data.logs, function(item) {
                         aaData.push(sub_options.to_row(item));
                     });
-                    $(".total").html(data.capacity);
+                    $(".total").html(data.capacity || 0);
                     callback({
                         sEcho: values.sEcho,
                         iTotalRecords: data.total,
