@@ -22,7 +22,7 @@ DATABASE_HOST = 'localhost'
 DATABASE_PORT = '3306'
 DATABASE_USER = 'root'
 DATABASE_PASSWORD = 'nameLR9969'
-DATABASE_NAME = 'suning_statistics'
+DATABASE_NAME = 'suning'
 
 DATABASES = {
     'default': {

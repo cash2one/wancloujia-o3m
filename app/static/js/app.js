@@ -66,6 +66,7 @@ $(function() {
     function clearForm() {
         form.id.value = "";
         form.package.value = "";
+		form.version_code.value = "";
 
         form.apk.value = "";
         form.name.value = "";
@@ -81,6 +82,7 @@ $(function() {
     function bindForm() {
         form.id.value = app.id;
         form.package.value = app.package;
+		form.version_code.value = app.version_code;
 
         form.apk.value = app.apk;
         form.name.value = app.name;
@@ -95,6 +97,7 @@ $(function() {
 
     function loadApkInfo() {
         form.package.value = app.package;
+		form.version_code.value = app.version_code;
         form.apk.value = app.apk;
         form.name.value = app.name;
         form.version.value = app.version;
@@ -111,21 +114,57 @@ $(function() {
             size: Number(data.size),
             icon: data.icon,
             package: data.packageName,
+			version_code: data.versionCode,
 
             desc: data.desc || "",
             popularize: data.popularize || "",
             category: data.category || "",
-            id: data.id || ""
+            id: data.id || "",
+			old_version_code: data.oldVersionCode || "",
+			old_version: data.oldVersion || ""
         };
         return result;
     }
 
     function reload_apk_info(data) {
-        if (mode == ADD_APP_MODE) {
+        console.log(data);
+		if (mode == ADD_APP_MODE) {
             if (data.id) {
                 mode = EDIT_APP_MODE;
                 app = create_app(data);
-                bindForm();
+
+				var hint_msg = "";
+				var confirm_label = "覆盖";
+				if (app.old_version_code < app.version_code) {
+					hint_msg = "本次上传版本高于已存在版本，是否需要覆盖？";
+				} else if (app.old_version_code == app.version_code) {
+					hint_msg = "本次上传版本与已存在版本一致，是否需要覆盖？";
+				} else {
+					hint_msg = "本次上传版本低于已存在版本，是否继续上传？";
+					confirm_label = "继续";
+				}
+				bootbox.dialog({
+					title: '提示',
+					message: '<p>该应用已存在，信息如下：</p><br /><p>应用名称：' + app.name + '</p><p>版本号：' + app.old_version + '</p><br /><p>' + hint_msg + '</p>',
+					closeButton: false,
+					className: 'app-dialog',
+					buttons: {
+						overwrite: {
+							label: confirm_label,
+							className: 'btn-primary',
+							callback: function() {
+								bindForm();
+							}
+						},
+						cancel: {
+							label: '取消',
+							className: 'btn-default',
+							callback: function() {
+								$('#add-edit-app').modal('hide');
+							}
+						}
+					}
+				});
             } else {
                 mode = ADD_APP_MODE;
                 app = create_app(data);
@@ -135,7 +174,61 @@ $(function() {
             if (data.id && app.package == data.packageName) {
                 mode = EDIT_APP_MODE;
                 app = create_app(data);
-                loadApkInfo();
+
+				var hint_msg = "";
+				var confirm_label = "覆盖";
+				if (app.version_code == app.old_version_code) {
+					hint_msg = "本次上传版本与已存在版本一致，是否需要覆盖？";
+					bootbox.dialog({
+						title: '提示',
+						message: '<p>该应用已存在，信息如下：</p><br /><p>应用名称：' + app.name + '</p><p>版本号：' + app.old_version + '</p><br /><p>' + hint_msg + '</p>',
+						closeButton: false,
+						className: 'app-dialog',
+						buttons: {
+							overwrite: {
+								label: confirm_label,
+								className: 'btn-primary',
+								callback: function() {
+									loadApkInfo();
+								}
+							},
+							cancel: {
+								label: '取消',
+								className: 'btn-default',
+								callback: function() {
+									$('#add-edit-app').modal('hide');
+								}
+							}
+						}
+					});
+				} else if (app.version_code < app.old_version_code) {
+					hint_msg = "本次上传版本低于已存在版本，是否继续上传？";
+					confirm_label = "继续";
+					bootbox.dialog({
+						title: '提示',
+						message: '<p>该应用已存在，信息如下：</p><br /><p>应用名称：' + app.name + '</p><p>版本号：' + app.old_version + '</p><br /><p>' + hint_msg + '</p>',
+						closeButton: false,
+						className: 'app-dialog',
+						buttons: {
+							overwrite: {
+								label: confirm_label,
+								className: 'btn-primary',
+								callback: function() {
+									loadApkInfo();
+								}
+							},
+							cancel: {
+								label: '取消',
+								className: 'btn-default',
+								callback: function() {
+									$('#add-edit-app').modal('hide');
+								}
+							}
+						}
+					});
+				} else {
+					loadApkInfo();
+				}
             } else if (data.id && app.package != data.packageName) {
                 mode = EDIT_APP_MODE;
                 app = create_app(data);
