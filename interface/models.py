@@ -108,12 +108,11 @@ class DeviceLogEntity(models.Model):
     store = models.IntegerField(db_index=True)
     uid = models.IntegerField(db_index=True)
     brand = models.CharField(max_length=255)
-    appName = models.CharField(max_length=255)
+
     """
     values
     """
     model = models.CharField(max_length=32)
-    did = models.CharField(max_length=16)
     deviceCount = models.IntegerField()
     popularizeAppCount = models.IntegerField()
     appCount = models.IntegerField()

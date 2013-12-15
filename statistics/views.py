@@ -163,6 +163,7 @@ def employee(request):
     emps = Employee.query(emps, q)
     emps = emps[0:10]
     results = map(lambda e: {'id': e.pk, 'text': e.username}, emps)
+    results.insert(0, {'id': '', 'text': '---------'})
     return render_json({'results': results})
 
 
