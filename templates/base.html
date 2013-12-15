@@ -138,6 +138,11 @@
                         {% endif %}>
                         <a href="/statistics/device">机型统计</a>
                     </li>
+                    <li {% if request.nav.sub_active_tab == "organization" %}
+                        class="active"
+                        {% endif %}>
+                        <a href="/statistics/organization">组织统计</a>
+                    </li>
                 </ul>
             </li>
         </ul>

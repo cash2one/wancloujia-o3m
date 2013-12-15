@@ -143,7 +143,6 @@ $(function() {
 
     $("#export-data").click(function(e) {
         e.preventDefault();
-        var link = 
         window.location = 'flow/excel?' + $form.serialize(true);
     });
 
