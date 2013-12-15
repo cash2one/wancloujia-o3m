@@ -24,8 +24,9 @@ from mgr.models import cast_staff, Region, Company, Store, Organization, Employe
 from app.models import App
 from interface.models import LogMeta, InstalledAppLogEntity, DeviceLogEntity
 from forms import LogMetaFilterForm, InstalledCapacityFilterForm, DeviceStatForm
-from ajax import filter_flow_logs, log_to_dict
+from ajax import filter_flow_logs, log_to_dict, device_record_to_dict
 from ajax import filter_installed_capacity_logs, installed_capacity_to_dict
+from ajax import stat_device
 
 
 logger = logging.getLogger(__name__)
@@ -288,15 +289,15 @@ def flow_excel(request):
         app = dict['app']
 
         rowdata = [
-            dict['region'] if dict['region'] else h.unescape(EMPTY_VALUE),
-            dict['company'] if dict['company'] else h.unescape(EMPTY_VALUE),
-            dict['store'] if dict['store'] else h.unescape(EMPTY_VALUE),
-            dict['emp'] if dict['emp'] else h.unescape(EMPTY_VALUE),
-            dict['brand'] if dict['brand'] else h.unescape(EMPTY_VALUE),
-            dict['model'] if dict['model'] else h.unescape(EMPTY_VALUE),
-            dict['device'] if dict['device'] else h.unescape(EMPTY_VALUE),
+            dict['region'] or h.unescape(EMPTY_VALUE),
+            dict['company'] or h.unescape(EMPTY_VALUE),
+            dict['store'] or h.unescape(EMPTY_VALUE),
+            dict['emp'] or h.unescape(EMPTY_VALUE),
+            dict['brand'] or h.unescape(EMPTY_VALUE),
+            dict['model'] or h.unescape(EMPTY_VALUE),
+            dict['device'] or h.unescape(EMPTY_VALUE),
             app['id'],
-            app['name'] if app['name'] else h.unescape(EMPTY_VALUE),
+            app['name'] or h.unescape(EMPTY_VALUE),
             app['package'],
             popularize,
             dict['date'] 
@@ -371,4 +372,71 @@ def device(request):
         'user_filter': user_filter(cast_staff(request.user)),
         'filter': DeviceStatForm()
     })
+
+@require_GET
+@login_required
+@active_tab("statistics", "device")
+def device_excel(request):        
+    filter_form = DeviceStatForm(request.GET)
+    if not filter_form.is_valid():
+        logger.warn("form is invalid")
+        logger.warn(filter_form.errors)
+        raise Http404
+
+    user = cast_staff(request.user)
+    logs = stat_device(user, filter_form)
+    records = [[
+        log['model'],
+        log['total_device_count'],
+        log['total_popularize_count'],
+        log['total_app_count']
+    ] for log in logs]
+    sheet_summary = {
+        'name': u'机型统计_汇总',
+        'titles': [u'机型', u'机器数', u'推广数', u'安装总数'],
+        'records': records
+    }
+
+    logs = stat_device(user, filter_form, True)
+    records = []
+    h = HTMLParser.HTMLParser()
+    for log in logs:
+        dict = device_record_to_dict(log)
+        records.append([
+            dict['emp'] or h.unescape(EMPTY_VALUE),
+            dict['brand'],
+            dict['model'],
+            dict['device'],
+            dict['total_popularize_count'],
+            dict['total_app_count'],
+        ])
+    sheet_detail = {
+        'name': u'机型统计_明细',
+        'titles': [u'员工', u'品牌', u'机型', u'串号', u'推广数', u'安装总数'],
+        'records': records
+    }
+    sheets = [sheet_summary, sheet_detail]
+    return render_excel('device_summary_statistics.xls', sheets)
+    
+
+def render_excel(filename, sheets):
+    book = xlwt.Workbook(encoding='utf8')
+    default_style = xlwt.Style.default_style
+    #date_style = xlwt.easyxf(num_format_str='yyyy-mm-dd')
+    for sheet_info in sheets:
+        sheet = book.add_sheet(sheet_info['name'])
+        for i, title in enumerate(sheet_info['titles']):
+            sheet.write(0, i, title, style=default_style)
+
+        for row, record in enumerate(sheet_info['records']):
+            for col, val in enumerate(record):
+                #style = date_style if isinstance(val, datetime.date) else default_style
+                style = default_style
+                sheet.write(row+1, col, val, style=style)
+
+    response = HttpResponse(mimetype='application/vnd.ms-excel')
+    response['Content-Disposition'] = 'attachment; filename=%s' % filename
+    book.save(response)
+    return response
+
 

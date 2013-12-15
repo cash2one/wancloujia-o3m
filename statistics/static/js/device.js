@@ -156,9 +156,9 @@ $(function() {
 
     statistics.period("#filter_from_date", "#filter_to_date");
 
-    $("#export-summary").click(function(e) {
+    $(".export-data").click(function(e) {
         e.preventDefault();
-        window.location =  'installed_capacity/excel?' + $form.serialize(true);
+        window.location =  'device/excel?' + $form.serialize(true);
     });
 
     var $summaryTable = $("#summary .table").dataTable($.extend({}, statistics.table_options, {

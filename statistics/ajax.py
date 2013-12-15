@@ -345,7 +345,6 @@ def stat_device(user, form, detail=False):
                              total_app_count=Sum('appCount'))
 
 
-
 def count_device(user, form):
     logs = _filter_device_statistics(user, form) 
     return logs.aggregate(total=Sum('appCount'))['total']
