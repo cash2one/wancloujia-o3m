@@ -16,7 +16,7 @@ class AppForm(forms.ModelForm):
 
     class Meta:
         model = App
-        fields = ('version', 'name', 'apk', 'category', 'online', 'popularize', 'desc')
+        fields = ('version', 'name', 'apk', 'category', 'online', 'popularize', 'desc', 'version_code')
         widgets = {
             'online': forms.HiddenInput,
             'version': forms.TextInput(attrs={
@@ -33,7 +33,8 @@ class AppForm(forms.ModelForm):
                 'readonly': 'readonly', 
                 'class': 'form-control'
             }),
-            'apk': forms.HiddenInput
+            'apk': forms.HiddenInput,
+            'version_code': forms.HiddenInput
         }
 
 

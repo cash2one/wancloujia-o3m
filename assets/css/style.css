@@ -2,3 +2,11 @@ body {
     font-family: "微软雅黑";
 }
 
+.app-dialog .modal-dialog {
+	width: 400px;
+	margin-top: 80px;
+}
+
+.app-dialog .modal-footer {
+	margin-top: 0;
+}

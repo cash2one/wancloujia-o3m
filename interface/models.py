@@ -83,10 +83,11 @@ class UserDeviceLogEntity(models.Model):
     keys
     """
     date = models.DateField(db_index=True, editable=False)
-    region = models.IntegerField(db_index=True)
+    region = models.IntegerField(db_index=True, null=True)
     company = models.IntegerField(db_index=True, null=True)
     store = models.IntegerField(db_index=True, null=True)
-    uid = models.IntegerField(db_index=True, editable=False, null=True)
+    uid = models.IntegerField(db_index=True)
+    appPkg = models.CharField(max_length=App.PACKAGE_LENGTH_LIMIT, editable=False)
     """
     values
     """
@@ -107,7 +108,7 @@ class DeviceLogEntity(models.Model):
     company = models.IntegerField(db_index=True, null=True)
     store = models.IntegerField(db_index=True, null=True)
     uid = models.IntegerField(db_index=True)
-    did = models.IntegerField(editable=False)
+    did = models.CharField(max_length=255, editable=False)
     brand = models.CharField(max_length=255)
 
     appPkg = models.CharField(max_length=App.PACKAGE_LENGTH_LIMIT, editable=False)
