@@ -103,7 +103,7 @@ def upload(request):
         'name': apk_info.getAppName(),
         'packageName': apk_info.getPackageName(),
         'version': apk_info.versionName,
-		'versionCode': apk_info.versionCode,
+		'versionCode': apk_info.versionCode or 0,
         'size': apk_info.packageSize,
         'icon': holder['icon_url']
     }
