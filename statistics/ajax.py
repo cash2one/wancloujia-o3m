@@ -341,7 +341,7 @@ def stat_device(user, form, detail=False):
                              total_app_count=Sum('appCount'))
     else:
         logs =logs.values('model')
-        return logs.annotate(total_device_count=Count('did'), 
+        return logs.annotate(total_device_count=Count('did', distinct=True), 
                              total_popularize_count=Sum('popularizeAppCount'), 
                              total_app_count=Sum('appCount'))
 
@@ -423,19 +423,19 @@ def get_device_stat_detail(request, form, offset, length):
 
 def filter_org_logs(form, mode):
     if mode == 'region':
-        logs = UserDeviceLogEntity.objects.all()
+        logs = DeviceLogEntity.objects.all()
     elif mode == 'company':
         region = form.cleaned_data['region']
-        logs = UserDeviceLogEntity.objects.filter(region=region)
+        logs = DeviceLogEntity.objects.filter(region=region)
     elif mode == 'store':
         company = form.cleaned_data['company']
-        logs = UserDeviceLogEntity.objects.filter(company=company)
+        logs = DeviceLogEntity.objects.filter(company=company)
     elif mode == 'emp':
         store = form.cleaned_data['store']
-        logs = UserDeviceLogEntity.objects.filter(store=store)
+        logs = DeviceLogEntity.objects.filter(store=store)
     else:
         uid = form.cleaned_data['emp']
-        logs = UserDeviceLogEntity.objects.filter(uid=uid)
+        logs = DeviceLogEntity.objects.filter(uid=uid)
 
     logs = AppFilter(logs, form.cleaned_data["app"]).filter()
     logger.debug("logs filtered by app: %d" % len(logs))
@@ -497,7 +497,7 @@ def filter_org_statistics(request, form, offset, length, mode):
     logger.debug(aggregate_result)
     capacity = aggregate_result['capacity'] or 0
     key = mode if mode != 'emp' and mode != 'emp_only' else 'uid'
-    records = logs.values(key).annotate(total_device_count=Sum('deviceCount'),
+    records = logs.values(key).annotate(total_device_count=Count('did', distinct=True),
                                        total_popularize_count=Sum('popularizeAppCount'),
                                        total_app_count=Sum('appCount'))
     total = len(records)
