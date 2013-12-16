@@ -142,9 +142,9 @@ def employee(request):
         emps = Employee.objects.filter(pk=user.pk)
         return render_json({'results': emps_to_dict_arr(emps)})
 
-    sid = request.GET.get('s', None)
-    cid = request.GET.get('c', None)
-    rid = request.GET.get('r', None)
+    sid = request.GET.get('store', None)
+    cid = request.GET.get('company', None)
+    rid = request.GET.get('region', None)
     org_id = first_valid(lambda i: i, [sid, cid, rid])
     if not org_id:
         emps = Employee.objects.all()
@@ -157,18 +157,20 @@ def employee(request):
             logger.debug("%s: org: %s" % (__name__, str(org)))
             emps = query_employee(user, org)
 
+    LENGTH = 10
     q = request.GET.get("q", "")
+    p = int(request.GET.get("p", '1'))
     emps = Employee.query(emps, q)
-    emps = emps[0:10]
+    total = len(emps)
+    emps = emps[(p-1) * LENGTH: p * LENGTH]
     results = map(lambda e: {'id': e.pk, 'text': e.username}, emps)
-    results.insert(0, {'id': '', 'text': '---------'})
-    return render_json({'results': results})
+    return render_json({'results': results, 'more': total > p * LENGTH})
 
 
 @require_GET
 def apps(request):
     if not request.user.is_authenticated():
-        return render_json([])
+        return render_json({'more': False, 'results': []})
 
     q = request.GET.get('q', "")
     p = request.GET.get('p', "")
@@ -177,12 +179,10 @@ def apps(request):
     APPS_PER_PAGE = 10
     apps = App.objects.filter(name__contains=q)
     total = len(apps)
-    pages = int(math.ceil(total/float(APPS_PER_PAGE))) 
-
     apps = apps[(page-1)*APPS_PER_PAGE:page*APPS_PER_PAGE]
     results = map(lambda e: {'id': e.pk, 'text': e.name}, apps)
 
-    return render_json({'more': pages > page, 'results': results})
+    return render_json({'more': total > page * APPS_PER_PAGE, 'results': results})
 
 
 @require_GET

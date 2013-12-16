@@ -19,9 +19,7 @@
             {% with select_empty_option='---------' %}
             <form class="form-filter">
                 <div class="filters-wrap">
-                    <div class="filter-group" id="user-filter">
-                        {% include 'mgr_filter.html' %}
-                    </div>
+                    {% include 'mgr_filter.html' %}
                     <div class="filter-group">
                         <div class="filter">
                             <label for="filter_app">{{ filter.app.label }}：</label>
