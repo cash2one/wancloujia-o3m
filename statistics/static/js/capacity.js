@@ -3,7 +3,10 @@ var error_check = suning.decorators.error_check;
 var login_check = suning.decorators.login_check;
 var toastNetworkError = suning.toastNetworkError;
 var get_installed_capacity = Dajaxice.statistics.get_installed_capacity;
+
 var app_temp = statistics.app_temp;
+var PeriodFilter = statistics.PeriodFilter;
+var AppFilter = statistics.AppFilter;
 
 $(function() {
     var $form = $(".form-filter");
@@ -95,22 +98,8 @@ $(function() {
     $filter_company.change(ensure_emp);
     $filter_store.change(ensure_emp);
 
-    var $filter_app = $("#filter_app");
-    $filter_app.select2($.extend({}, select2_tip_options, {
-        query: function(query) {
-            $.get('apps', {
-                q: query.term,
-                p: query.page
-            }, function(data) {
-                console.log(data);
-                query.callback(data);
-            }, "json").error(function() {
-                query.callback([]);
-            });
-        }
-    }));
-
-    statistics.period("#filter_from_date", "#filter_to_date");
+    var appFilter = new AppFilter("#filter_app");
+    var periodFilter = new PeriodFilter("#filter_from_date", "#filter_to_date");
 
     $("#export-data").click(function(e) {
         e.preventDefault();

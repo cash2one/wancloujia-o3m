@@ -168,7 +168,7 @@ def employee(request):
 @require_GET
 def apps(request):
     if not request.user.is_authenticated():
-        return render_json([])
+        return render_json({'more': False, 'results': []})
 
     q = request.GET.get('q', "")
     p = request.GET.get('p', "")
@@ -177,12 +177,10 @@ def apps(request):
     APPS_PER_PAGE = 10
     apps = App.objects.filter(name__contains=q)
     total = len(apps)
-    pages = int(math.ceil(total/float(APPS_PER_PAGE))) 
-
     apps = apps[(page-1)*APPS_PER_PAGE:page*APPS_PER_PAGE]
     results = map(lambda e: {'id': e.pk, 'text': e.name}, apps)
 
-    return render_json({'more': pages > page, 'results': results})
+    return render_json({'more': total > page * APPS_PER_PAGE, 'results': results})
 
 
 @require_GET

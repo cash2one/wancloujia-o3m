@@ -4,7 +4,10 @@ var login_check = suning.decorators.login_check;
 var toastNetworkError = suning.toastNetworkError;
 var get_device_stat = Dajaxice.statistics.get_device_stat;
 var get_device_stat_detail = Dajaxice.statistics.get_device_stat_detail;
+
 var app_temp = statistics.app_temp;
+var PeriodFilter = statistics.PeriodFilter;
+var AppFilter = statistics.AppFilter;
 
 $(function() {
     var $form = $(".form-filter");
@@ -140,21 +143,8 @@ $(function() {
     }));
     $filter_model.select2('readonly', true);
 
-    var $filter_app = $("#filter_app");
-    $filter_app.select2($.extend({}, select2_tip_options, {
-        query: function(query) {
-            $.get('apps', {
-                q: query.term,
-                p: query.page
-            }, function(data) {
-                query.callback(data);
-            }, "json").error(function() {
-                query.callback([]);
-            });
-        }
-    }));
-
-    statistics.period("#filter_from_date", "#filter_to_date");
+    var appFilter = new AppFilter("#filter_app");
+    var periodFilter = new PeriodFilter("#filter_from_date", "#filter_to_date");
 
     $(".export-data").click(function(e) {
         e.preventDefault();
