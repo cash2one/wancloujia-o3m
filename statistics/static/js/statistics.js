@@ -129,6 +129,7 @@
                         var brands = _.map(data.brands, function(brand) {
                             return {'id': brand, 'text': brand};
                         });
+                        brands.unshift(EMPTY_SELECTION);
                         result = {results: brands, more: data.more};
                     }
                     query.callback(result);
