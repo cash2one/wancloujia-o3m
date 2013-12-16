@@ -19,68 +19,7 @@
             {% with select_empty_option='---------' %}
             <form class="form-filter">
                 <div class="filters-wrap">
-                    <div class="filter-group" id="user-filter" 
-                        {% if user_filter.has_perm %}
-                        data-perm="true"
-                        {% else %}
-                        data-perm="false"
-                        {% endif %}>
-                        <div class="filter">
-                            <label for="filter_region">{{ filter.region.label }}：</label>
-                            <select id="filter_region" 
-                                    {% if user_filter.region.disabled %}
-                                    readonly='readonly' data-readonly='true'
-                                    {% endif %}
-                                    name="region">
-
-                                {% if user_filter.region.disabled  %}
-                                <option value="{{ user_filter.region.value.pk }}" selected='selected'>
-                                    {{ user_filter.region.value.name }}
-                                </option>
-                                {% endif %}
-                             </select>
-                        </div>
-                        <div class="filter">
-                            <label for="filter_company">{{ filter.company.label }}：</label>
-                            <select id="filter_company" name="company"
-                                    {% if user_filter.company.disabled %}
-                                    readonly='readonly' data-readonly='true'
-                                    {% endif %}>
-                                {% if user_filter.company.disabled %}
-                                <option value="{{ user_filter.company.value.pk }}" selected='selected'>
-                                    {{ user_filter.company.value.code }}{{ user_filter.company.value.name }}
-                                </option>
-                                {% endif %}
-                            </select>
-                        </div>
-                        <div class="filter">
-                            <label for="filter_store">{{ filter.store.label }}：</label>
-                            <select id="filter_store" name="store"
-                                    {% if user_filter.store.disabled %}
-                                    readonly='readonly' data-readonly='true'
-                                    {% endif %}>
-                                {% if user_filter.store.disabled %}
-                                <option value="{{ user_filter.store.value.pk }}" selected='selected'>
-                                    {{ user_filter.store.value.code }}{{ user_filter.store.value.name }}
-                                </option>
-                                {% endif %}
-                            </select>
-                        </div>
-                        <div class="filter">
-                            <label for="filter_employee">{{ filter.emp.label }}：</label>
-                            {% if not user_filter.emp.disabled %}
-                            <input id="filter_employee" type="hidden" name="emp"/>
-                            {% else %}
-                            <select id="filter_employee" name="emp" 
-                                    readonly='readonly' data-readonly='true'
-                                    value="{{ user_filter }}">
-                                <option value="{{ user_filter.emp.value.pk }}">
-                                    {{ user_filter.emp.value.username }}
-                                </option>
-                            </select>
-                            {% endif %}
-                        </div>
-                    </div>
+                    {% include "mgr_filter.html" %}
                     <div class="filter-group">
                         <div class="filter">
                             <label for="filter_app">{{ filter.app.label }}：</label>
@@ -94,26 +33,7 @@
                         </div>
                     </div>
                     <div class="filter-group last">
-                        <div class="filter">
-                            <label for="filter_from_date">{{ filter.from_date.label }}：</label>
-                            <input class="form-control date" type="text" readonly='readonly' 
-                                    data-date-format='yyyy-mm-dd'
-                                    data-date-language='zh-CN' 
-                                    data-min-view='month'
-                                    data-minView='month'
-                                    data-provide='datetimepicker'
-                                    id="filter_from_date" name="from_date"/>
-                        </div>
-                        <div class="filter">
-                            <label for="filter_to_date">{{ filter.to_date.label }}：</label>
-                            <input class="form-control date" type="text" readonly='readonly' 
-                                    data-date-format='yyyy-mm-dd'
-                                    data-date-language='zh-CN' 
-                                    data-min-view='month'
-                                    data-minView='month'
-                                    data-provide='datetimepicker'
-                                    id="filter_to_date" name="to_date"/>
-                        </div>
+                        {% include "period.html" %}
                     </div>
                 </div>
                 <div class="submit">
