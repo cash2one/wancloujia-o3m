@@ -23,9 +23,12 @@
         bProcessing: true,
         bLengthChange: false,
         bSort: false,
+        sPaginationType: "bootstrap",
         bFilter: false,
         bServerSide: true,
         bRetrieve: true,
+        iDisplayStart: 0,
+        iDisplayLength: 50,
         oLanguage: {
             oPaginate: {
                 sFirst: '第一页',
@@ -41,8 +44,35 @@
         }
     };
 
+    var EMPTY_SELECTION = {'id': '', 'text': '---------'};
 
-    function Period(from, to) {
+    function queryApps(query, page, callback) {
+        $.get('apps', { q: query, p: page }, function(data) {
+            callback(null, data);
+        }, "json").error(function() {
+            callback("error");
+        });
+    }
+
+    function AppFilter(selector) {
+        this.$el = $(selector);
+        this.$el.select2($.extend({}, select2_tip_options, {
+            query: function(query) {
+                queryApps(query.term, query.page, function(err, data) {
+                    var result;
+                    if(err) {
+                        result = {results: [EMPTY_SELECTION], more: false};
+                    } else {
+                        data.results.unshift(EMPTY_SELECTION);
+                        result = data;
+                    }
+                    query.callback(result);
+                });
+            }
+        }));
+    }
+
+    function PeriodFilter(from, to) {
         var that = this;
         this.$from = $(from);
         this.$to = $(to);
@@ -72,18 +102,143 @@
         this.$to.val(datef('YYYY-MM-dd', today))
     }
 
+    var popover_temp = "'包名:&nbsp;<%- package %><br>序号:&nbsp;<%- id %>'";
     var app_temp = _.template("<span class='app-name' " +
-                                "data-html='true' " +
-                                "data-placement='right' " +
-                                "data-content='包名:&nbsp;<%- package %><br>序号:&nbsp;<%- id %>'" +
-                                "data-trigger='hover' >" + 
+                                "data-html='true' data-placement='right' " +
+                                "data-content=" + popover_temp + 
+                                "data-trigger='hover'>" + 
                                 "<%- name %></span>");
+
+    function query_brands(query, page, callback) {
+        $.get('brands', { q: query, p: page }, function(data) {
+            callback(null, data);
+        }, "json").error(function() {
+            callback('error');
+        });
+    }
+
+    function BrandFilter(filter) {
+        this.$filter = $(filter);
+        this.$filter.select2($.extend({}, select2_tip_options, {
+            query: function(query) {
+                query_brands(query.term, query.page, function(err, data) {
+                    var result;
+                    if(err) {
+                        result = {results: [EMPTY_SELECTION], more: false};
+                    } else {
+                        var brands = _.map(data.brands, function(brand) {
+                            return {'id': brand, 'text': brand};
+                        });
+                        brands.unshift(EMPTY_SELECTION);
+                        result = {results: brands, more: data.more};
+                    }
+                    query.callback(result);
+                });
+            }
+        }));
+    }
+
+    var COMBO_OPTIONS = {
+        dataType: 'json',
+        initial_text: '---------',
+        first_optval: ''
+    };
+
+    function query_employee(params, callback) {
+        $.get('employee', params, function(data) {
+            callback(null, data);
+        }, "json").error(function() {
+            callback('error');
+        });
+    }
+
+    function MgrFilter(group) {
+        var that = this;
+        this.$group = $(group);
+        
+        var $region = this.$group.find("#filter_region");
+        $region.select2(select2_tip_options);
+        $region.data('readonly') || $region.jCombo('regions', COMBO_OPTIONS);
+        this.$region = $region;
+
+        var $company = this.$group.find("#filter_company");
+        this.$company = $company;
+        $company.select2(select2_tip_options);
+        if(!$company.data('readonly')) {
+            if (!$region.data('readonly')) {
+                $company.jCombo("companies?r=", 
+                    $.extend({parent: $region}, COMBO_OPTIONS));
+            } else {
+                $company.jCombo("companies?r=" + $region.val(), COMBO_OPTIONS);
+            }
+        }
+
+        var $store = $("#filter_store");
+        this.$store = $store;
+        $store.select2(select2_tip_options);
+        if(!$store.data('readonly')) {
+            if(!$company.data("readonly")) {
+                $store.jCombo("stores?c=", $.extend({parent: $company}, COMBO_OPTIONS));
+            } else {
+                $store.jCombo("stores?c=" + $company.val(), COMBO_OPTIONS);
+            }
+        }
+
+        var $employee = $("#filter_employee");
+        this.$employee = $employee;
+        if (!$employee.data('readonly')) {
+            var select2_options = $.extend({}, select2_tip_options, {
+                query: function(query) {
+                    query_employee($.extend({}, that.values(), {
+                        p: query.page,
+                        q: query.term
+                    }), function(err, data) {
+                        var result;
+                        if(err) {
+                            result = {'results': [EMPTY_SELECTION], 'more': false};
+                        } else {
+                            data.results.unshift(EMPTY_SELECTION);
+                            result = data;
+                        }
+                        query.callback(result);
+                    });
+                }
+            });
+            $employee.select2(select2_options);
+        } else {
+            $employee.select2(select2_tip_options);
+        }
+    
+        $region.change($.proxy(this._ensure_emp, this));
+        $company.change($.proxy(this._ensure_emp, this));
+        $store.change($.proxy(this._emsure_emp, this));
+    }
+
+    MgrFilter.prototype = {
+        consturctor: MgrFilter,
+
+        _ensure_emp: function() {
+            this.$employee.select2('val', '');
+        },
+
+        values: function() {
+            return {
+                region: this.$region.val(),
+                company: this.$company.val(),
+                store: this.$store.val(),
+                employee: this.$employee.val()
+            };
+        }
+    };
 
     window.statistics = {
         app_temp: app_temp,
         parseDate: parseDate,
         table_map: table_map,
         table_options: table_options,
-        period: Period
+        MgrFilter: MgrFilter,
+        BrandFilter: BrandFilter,
+        AppFilter: AppFilter, 
+        PeriodFilter: PeriodFilter
     };
 })(window);
