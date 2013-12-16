@@ -127,11 +127,12 @@ def login_test(func):
 
 @require_GET
 def welcome(request):
-    if request.COOKIES.get("username"):
+    if request.user.is_authenticated():
         return redirect("/interface/subjects")
     else:
         return render(request, "login.html", {"wandoujia": "true"}) 
 
+'''
 @require_POST
 def login(request):
     username = request.POST["username"]
@@ -165,18 +166,17 @@ def login(request):
     response = HttpResponse(simplejson.dumps({'ret_code': 0}), mimetype='application/json')
     set_cookie(response, "username", username)
     return response
-
+'''
 
 @require_GET
-@login_test
+@login_required(login_url='/interface/welcome')
 def logout(request):
-    response = redirect("/interface/welcome")
-    response.delete_cookie("username")
-    return response
+    auth.logout(request)
+    return redirect("/interface/welcome")
 
 
 @require_GET
-@login_test
+@login_required(login_url='/interface/welcome')
 def subjects(request):
     subjects = Subject.objects.filter(online=True).order_by('position')
     now = datetime.datetime.now()
@@ -224,7 +224,7 @@ def _get_app(grp):
 
 
 @require_GET
-@login_test
+@login_required(login_url='/interface/welcome')
 def apps(request, id):
     subjects = Subject.objects.filter(pk=id)
     if len(subjects) == 0:
@@ -236,5 +236,9 @@ def apps(request, id):
         return redirect("/interface/subjects")
 
     apps = map(_get_app, appgrps)
-    return render(request, "wandoujia/apps.html", {"subject": subject, "apps": apps})
+    return render(request, "wandoujia/apps.html", {
+        "subject": subject, 
+        "apps": apps
+    })
+
 

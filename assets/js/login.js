@@ -11,11 +11,15 @@ $(function() {
             username: this.username.value,
             password: this.password.value,
         };
+        /*
         if (!this.wandoujia.value) {
+            */
             params.remember_me = this.remember_me.checked;
+            /*
     } else {
             params.csrfmiddlewaretoken = this.csrfmiddlewaretoken.value;
         }
+        */
 
         function lock_check(func) {
             return function() {
@@ -47,10 +51,6 @@ $(function() {
         var onError = lock_check(toastNetworkError);
 
         $submit.button('loading');
-        if (this.wandoujia.value) {
-            $.post("/interface/login", params, onResult, "json").error(onError);
-        } else {
-            Dajaxice.framework.login(onResult, params, {error_callback: onError});
-        }
+        Dajaxice.framework.login(onResult, params, {error_callback: onError});
     });
 });
