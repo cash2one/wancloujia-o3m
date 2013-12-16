@@ -10,7 +10,7 @@ from django.utils import simplejson
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.db.models.query import QuerySet
-from django.db.models import Q, Sum
+from django.db.models import Q, Sum, Count
 from django.views.decorators.http import require_GET, require_POST
 from django_tables2.config import RequestConfig
 from django.http import HttpResponse, Http404
@@ -465,7 +465,7 @@ def organization_excel(request, mode):
     logger.debug('mode: ' + mode)
     logs = filter_org_logs(filter_form, mode)
     key = mode if mode != 'emp' and mode != 'emp_only' else 'uid'
-    records = logs.values(key).annotate(total_device_count=Sum('deviceCount'),
+    records = logs.values(key).annotate(total_device_count=Count('did', distinct=True),
                                        total_popularize_count=Sum('popularizeAppCount'),
                                        total_app_count=Sum('appCount'))
 
