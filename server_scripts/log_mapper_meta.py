@@ -112,12 +112,12 @@ lastDay = datetime.date.today() - datetime.timedelta(days=1)
 for line in sys.stdin:
 	try:
 		j =json.loads(line)
-		appid = j["app"]
-		brand = j["brand"]
-		did = j["deviceId"]
-		model = j["model"]
-		pkg = j["package"]
-		user = str(j["user"])
+		appid = _mysql.escape_string(j["app"].strip())
+		brand = _mysql.escape_string(j["brand"].strip().upper())
+		did = _mysql.escape_string(j["deviceId"].strip().upper())
+		model = _mysql.escape_string(j["model"].strip().upper())
+		pkg = _mysql.escape_string(j["package"].strip())
+		user = _mysql.escape_string(str(j["user"]).strip())
 		print "INSERT INTO interface_logmeta(date, uid, did, brand, model, appID, appPkg) VALUES('%d-%d-%d', '%s', '%s', '%s', '%s', %s, '%s');" % \
 			( lastDay.year, lastDay.month, lastDay.day, map[user][0], did, brand, model, appid, pkg )
 	except:

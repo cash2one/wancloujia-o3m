@@ -58,18 +58,10 @@ class InstalledAppLogEntity(models.Model):
     keys
     """
     date = models.DateField(db_index=True, editable=False)
-<<<<<<< HEAD
-    region = models.IntegerField(db_index=True)
-    company = models.IntegerField(db_index=True, null=True)
-    store = models.IntegerField(db_index=True, null=True)
-    uid = models.IntegerField(db_index=True, editable=False, null=True)
-    popularize = models.BooleanField(db_index=True)
-=======
     region = models.IntegerField(db_index=True, null=True)
     company = models.IntegerField(db_index=True, null=True)
     store = models.IntegerField(db_index=True, null=True)
     uid = models.IntegerField(db_index=True, editable=False)
->>>>>>> upstream/master
     appName = models.CharField(max_length=24)
     popularize = models.BooleanField(editable=False)
     appID = models.CharField(db_index=True, max_length=16, editable=False)
@@ -111,18 +103,11 @@ class DeviceLogEntity(models.Model):
     keys
     """
     date = models.DateField(db_index=True, editable=False)
-<<<<<<< HEAD
-    region = models.IntegerField(db_index=True)
-    company = models.IntegerField(db_index=True, null=True)
-    store = models.IntegerField(db_index=True, null=True)
-    uid = models.IntegerField(db_index=True, editable=False, null=True)
-=======
     region = models.IntegerField(db_index=True, null=True)
     company = models.IntegerField(db_index=True, null=True)
     store = models.IntegerField(db_index=True, null=True)
     uid = models.IntegerField(db_index=True)
     did = models.IntegerField(editable=False)
->>>>>>> upstream/master
     brand = models.CharField(max_length=255)
 
     appPkg = models.CharField(max_length=App.PACKAGE_LENGTH_LIMIT, editable=False)
