@@ -55,7 +55,8 @@
             <span class="required">*</span>{{ f.app_icon.label }}
         </label>
         <div class="col-xs-8">
-             <input class="ajax-upload" data-filename=""data-required="True" 
+             <input class="ajax-upload" data-filename="" data-required="True" 
+                parsley-required='true'
                 data-upload-url="/ajax-upload/" id="id_app_icon" name="app_icon" type="file" />
         </div>
     </div>
@@ -68,7 +69,7 @@
                 <option value="1">软件</option>
                 <option value="2">游戏</option>
             </select>
-            <select name="category" data-required="true">
+            <select name="category" data-required="true" parsley-required='true'>
             </select>
         </div>
     </div>
