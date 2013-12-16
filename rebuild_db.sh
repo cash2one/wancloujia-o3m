@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DBNAME=suning_statistics
+DBNAME=suning
 
 sql=$(cat <<-EOF
 drop database $DBNAME;

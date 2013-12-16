@@ -341,7 +341,7 @@ def stat_device(user, form, detail=False):
                              total_app_count=Sum('appCount'))
     else:
         logs =logs.values('model')
-        return logs.annotate(total_device_count=Count('did'), 
+        return logs.annotate(total_device_count=Count('did', distinct=True), 
                              total_popularize_count=Sum('popularizeAppCount'), 
                              total_app_count=Sum('appCount'))
 

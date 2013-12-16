@@ -20,6 +20,6 @@ urlpatterns = patterns('',
     url(r'ad/', include('ad.urls')),
     url(r'interface/', include('interface.urls')),
     url(r'statistics/', include('statistics.urls')),
-    url(r'p/', include('interface.purls')),
+    url(r'muce/', include('interface.purls')),
     url(r'media', include('interface.urls'))
 ) #+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

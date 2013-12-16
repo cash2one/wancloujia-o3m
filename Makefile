@@ -12,5 +12,8 @@ test:
 rebuild_db:
 	./rebuild_db.sh
 
-.PHONY: runserver test rebuild_db
+collectstatic:
+	./manage.py collectstatic
+
+.PHONY: runserver test rebuild_db collectstatic
 
