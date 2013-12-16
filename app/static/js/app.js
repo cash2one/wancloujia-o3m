@@ -71,6 +71,7 @@ $(function() {
         form.apk.value = "";
         form.name.value = "";
         form.version.value = "";
+        form.version_code.value = "";
         form.size.value = "";
         form.desc.value = "";
 
@@ -82,11 +83,11 @@ $(function() {
     function bindForm() {
         form.id.value = app.id;
         form.package.value = app.package;
-		form.version_code.value = app.version_code;
 
         form.apk.value = app.apk;
         form.name.value = app.name;
         form.version.value = app.version;
+		form.version_code.value = app.version_code;
         form.size.value = str_size(app.size);
         if (app.desc) form.desc.value = app.desc;
 
@@ -101,6 +102,7 @@ $(function() {
         form.apk.value = app.apk;
         form.name.value = app.name;
         form.version.value = app.version;
+        form.version_code.value = app.version_code;
         form.size.value = str_size(app.size);
         set_app_icon(app.icon);
     }

@@ -144,7 +144,7 @@
 
         $(".app-list").on("click", "a.install-link", function() {
             var $this = $(this);
-            var username = $.cookie("username");
+            var username = $(".user-area > .username").html();
             var appid = $this.data("id");
             var package = $this.data("package");
             var log = {
