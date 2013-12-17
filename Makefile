@@ -18,6 +18,8 @@ collectstatic:
 restart_nginx:
 	/etc/init.d/nginx restart
 
-.PHONY: runserver test rebuild_db collectstatic restart_nginx
+deploy_static: collectstatic restart_nginx
+
+.PHONY: runserver test rebuild_db collectstatic restart_nginx deploy_static
 
 

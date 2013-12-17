@@ -58,12 +58,13 @@
         this.$el = $(selector);
         this.$el.select2($.extend({}, select2_tip_options, {
             query: function(query) {
-                queryApps(query.term, query.page, function(err, data) {
+                var page = query.page;
+                queryApps(query.term, page, function(err, data) {
                     var result;
                     if(err) {
                         result = {results: [EMPTY_SELECTION], more: false};
                     } else {
-                        data.results.unshift(EMPTY_SELECTION);
+                        if(page == 1) data.results.unshift(EMPTY_SELECTION);
                         result = data;
                     }
                     query.callback(result);
@@ -121,6 +122,7 @@
         this.$filter = $(filter);
         this.$filter.select2($.extend({}, select2_tip_options, {
             query: function(query) {
+                var page = query.page;
                 query_brands(query.term, query.page, function(err, data) {
                     var result;
                     if(err) {
@@ -129,7 +131,7 @@
                         var brands = _.map(data.brands, function(brand) {
                             return {'id': brand, 'text': brand};
                         });
-                        brands.unshift(EMPTY_SELECTION);
+                        if(page == 1) brands.unshift(EMPTY_SELECTION);
                         result = {results: brands, more: data.more};
                     }
                     query.callback(result);

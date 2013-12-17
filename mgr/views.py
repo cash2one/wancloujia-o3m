@@ -193,6 +193,7 @@ def user(request):
                                      Q(email__contains=query) | 
                                      Q(realname__contains=query))
 
+    query_set = query_set.order_by("-pk");
     table = StaffTable(query_set)
     employeeForm = EmployeeForm()
     employeeForm.fields["organization"].queryset = organizations
