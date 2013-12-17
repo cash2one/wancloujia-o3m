@@ -32,7 +32,15 @@
                     {{ user.username|default:"用户名称" }}<b class="caret"></b>
                 </a>
                 <ul class="dropdown-menu">
-                    <li><a href="/logout"><span class="glyphicon glyphicon-off" style="top: 2px"></span> 退出</a></li>
+                    <li>
+                        <a {% if not request.session.wandoujia %}
+                           href="/logout"
+                           {% else %}
+                           href="/interface/logout"
+                           {% endif %}>
+                            <span class="glyphicon glyphicon-off" style="top: 2px"></span> 退出
+                        </a>
+                    </li>
                 </ul>
             </li>
         </ul>

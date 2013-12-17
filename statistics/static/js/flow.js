@@ -19,7 +19,14 @@ $(function() {
 
     $("#export-data").click(function(e) {
         e.preventDefault();
-        window.location = 'flow/excel?' + $form.serialize(true);
+        //window.OneRingRequest = true;
+        if (!window.OneRingRequest) {
+            window.location = 'flow/excel?' + $form.serialize(true);
+        } else {
+            var link = 'flow/excel?' + $form.serialize(true) + "#name=statistics.xls&content-type=file";
+            var anchor = $("<a href='" + link + "' download='statistics.xls'></a>");
+            anchor[0].click();
+        }
     });
 
     var $table = $(".table").dataTable($.extend({}, statistics.table_options, {

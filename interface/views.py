@@ -128,6 +128,7 @@ def login_test(func):
 @require_GET
 def welcome(request):
     if request.user.is_authenticated():
+        request.session['wandoujia'] = True
         return redirect("/interface/subjects")
     else:
         return render(request, "login.html", {"wandoujia": "true"}) 

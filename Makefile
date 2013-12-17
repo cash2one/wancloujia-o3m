@@ -15,5 +15,9 @@ rebuild_db:
 collectstatic:
 	./manage.py collectstatic
 
-.PHONY: runserver test rebuild_db collectstatic
+restart_nginx:
+	/etc/init.d/nginx restart
+
+.PHONY: runserver test rebuild_db collectstatic restart_nginx
+
 

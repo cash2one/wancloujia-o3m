@@ -55,7 +55,9 @@
     <div class="panel panel-default">
         <div class="panel-heading">
             共<span class='total'>0</span>次安装
+            {% if not request.session.wandoujia %}
             <button class='btn btn-default btn-xs pull-right' id="export-data">导出数据</button>
+            {% endif %}
         </div>
         <div class="panel-body"> 
             <table class="table table-hover table-bordered">
