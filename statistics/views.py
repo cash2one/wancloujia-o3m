@@ -297,7 +297,7 @@ def flow_excel(request):
             dict['brand'] or h.unescape(EMPTY_VALUE),
             dict['model'] or h.unescape(EMPTY_VALUE),
             dict['device'] or h.unescape(EMPTY_VALUE),
-            app['id'],
+            int(app['id']),
             app['name'] or h.unescape(EMPTY_VALUE),
             app['package'],
             popularize,
