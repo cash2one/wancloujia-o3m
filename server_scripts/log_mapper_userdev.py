@@ -99,16 +99,18 @@ lastDay = datetime.date.today() - datetime.timedelta(days=1)
 existed = set()
 
 for line in sys.stdin:
-	try:
-		j =json.loads(line)
-		appid = _mysql.escape_string(j["app"].strip())
-		brand = _mysql.escape_string(j["brand"].strip().upper())
-		did = _mysql.escape_string(j["deviceId"].strip().upper())
-		model = _mysql.escape_string(j["model"].strip().upper())
-		pkg = _mysql.escape_string(j["package"].strip())
-		user = _mysql.escape_string(str(j["user"]).strip())
-		print ("%s,%s,%s" % (user, did, appid)).strip()
-		#print "INSERT INTO interface_installedapplogentity(date, region, company, store, uid, appName, appID, appPkg, installedTimes) VALUES('%d-%d-%d', '%s', '%s', '%s', '%s', %s, '%s');" % \
-		#	( lastDay.year, lastDay.month, lastDay.day, map[user][1], map[user][2], map[user][3], map[user][0], did, brand, model, appid, pkg )
-	except:
-		pass
+    try:
+        j =json.loads(line)
+        appid = _mysql.escape_string(j["app"].strip())
+        brand = _mysql.escape_string(j["brand"].strip().upper())
+        did = _mysql.escape_string(j["deviceId"].strip().upper())
+        model = _mysql.escape_string(j["model"].strip().upper())
+        pkg = _mysql.escape_string(j["package"].strip())
+        user = _mysql.escape_string(str(j["user"]).strip())
+        if not brand or not model:
+            continue
+        print ("%s,%s,%s" % (user, did, appid)).strip()
+        #print "INSERT INTO interface_installedapplogentity(date, region, company, store, uid, appName, appID, appPkg, installedTimes) VALUES('%d-%d-%d', '%s', '%s', '%s', '%s', %s, '%s');" % \
+        #	( lastDay.year, lastDay.month, lastDay.day, map[user][1], map[user][2], map[user][3], map[user][0], did, brand, model, appid, pkg )
+    except:
+        pass

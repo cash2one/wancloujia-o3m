@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/python
 dbhost = 'dev-node1.limijiaoyin.com'
 dbport = 3306
 dbuser = 'root'
@@ -12,14 +12,16 @@ hdfsuser = 'songwei'
 hdfsport = 50070
 
 remove_logs = False
+last_day = True
+#config over
+
 
 import _mysql
-import sys
 import HTMLParser
-import json
 import datetime
 import os 
 from pyhdfs import hdfs
+os.popen("source /etc/profile")
 hdfs.setConfig(hostname=hdfshost, port=str(hdfsport), username=hdfsuser)
 db = _mysql.connect(host=dbhost, user=dbuser, passwd=dbpass, db=dbname)
 #scan hadoop fld
@@ -113,7 +115,13 @@ for i in files:
 	except:
 		pass
 
-filename = "~/windows2x.log.%d-%d-%d" % (lastDay.year, lastDay.month, lastDay.day)
+if last_day:
+    lastDay = datetime.date.today() - datetime.timedelta(days=1)
+else:
+    lastDay = datetime.date.today()
+
+
+filename = "/data/suning/tmp/windows2x.log.%d-%d-%d" % (lastDay.year, lastDay.month, lastDay.day)
 dstfilename = "/logs/windows2x.log.%d-%d-%d" % (lastDay.year, lastDay.month, lastDay.day)
 os.popen("rm -f %s" % filename)
 os.popen("/opt/hadoop/hadoop-2.2.0/bin/hadoop fs -getmerge  %s.* %s" % (dstfilename, filename))
@@ -121,7 +129,8 @@ os.popen("/opt/hadoop/hadoop-2.2.0/bin/hadoop fs -put -f %s %s" % (filename, dst
 os.popen("rm -f %s" % filename)
 os.popen("/opt/hadoop/hadoop-2.2.0/bin/hadoop fs -rm -f %s.*" % dstfilename)
 
-lastDay = datetime.date.today() - datetime.timedelta(days=1)
+
+
 jobs = [
 		("log_mapper_meta.py", "log_reducer_meta.py", "/logs/meta%d-%d-%d" % (lastDay.year, lastDay.month, lastDay.day )),
 		("log_mapper_appstat.py", "log_reducer_appstat.py", "/logs/appstat%d-%d-%d" % (lastDay.year, lastDay.month, lastDay.day )),
