@@ -156,36 +156,17 @@ $(function() {
 });
 
 $(function() {
-    var subject = null;
-    var $modal = $("#delete-subject");
-    var $saveBtn = $(".save", $modal);
+    var modal = new modals.ActionModal($("#delete-subject")[0], {
+        tip: _.template("确认要删除&nbsp;<strong><%- name %></strong>&nbsp;吗?"),
+        msg: '删除成功',
+        process: Dajaxice.app.delete_subject
+    });
 
     $("table").on('click', '.delete', function() {
-        subject = $(this.parentNode).data();
-        $('.model-name', $modal).html(subject.name);
-        $modal.modal('show');
-    });
-
-    function lock_check(func) {
-        return function(data) {
-            suning.modal.unlock($modal);
-            func(data);
-        }
-    }
-
-    $saveBtn.click(function() {
-        suning.modal.lock($modal);
-        Dajaxice.app.delete_subject(lock_check(login_check(error_check(function(data) {
-            $modal.modal('hide');
-            toast('success', '删除成功');
-            suning.reload(2000);
-        }))), {
-            id: subject.id
-        }, {
-            error_callback: lock_check(suning.toastNetworkError)
-        });
+        modal.show($(this.parentNode).data());
     });
 });
+
 
 $(function() {
     var mode = null;

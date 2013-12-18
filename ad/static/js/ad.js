@@ -138,19 +138,9 @@ $(function() {
         $form.parsley('destroy');
     });
 
-    function loading() {
-        $saveBtn.button('loading');
-        $cancelBtn.button('loading');
-    }
-
-    function reset() {
-        $saveBtn.button('reset');
-        $cancelBtn.button('reset');
-    }
-
     function btn_check(func) {
         return function(data) {
-            reset();
+            suning.modal.unlock($modal);
             func(data);
         }
     }
@@ -173,11 +163,9 @@ $(function() {
 
     $form.submit(function(e) {
         e.preventDefault();
-        if (!$form.parsley('validate')) {
-            return;
-        }
+        if (!$form.parsley('validate')) return;
 
-        loading(); 
+        suning.modal.lock($modal);
         Dajaxice.ad.add_edit_ad(btn_check
             (login_check
             (field_check
@@ -192,10 +180,9 @@ $(function() {
             form: $form.serialize(true),
             visible: form.visible.checked
         }, {
-            error_callback: function() {
-                reset();
+            error_callback: btn_check(function() {
                 toast('error', NETWORK_ERROR_MSG);
-            }
+            })
         });
     });
 });
