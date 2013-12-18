@@ -345,88 +345,38 @@ $(function() {
 });
 
 $(function() {
-    var app = null;
-    var $modal = $("#delete-app");
-    var $saveBtn = $(".save", $modal);
-
-    $("table").on('click', '.delete', function() {
-        app = $(this.parentNode).data();
-        $('.model-name', $modal).html(app.name);
-        $modal.modal('show');
+    var modal = new modals.ActionModal($("#delete-app")[0], {
+        tip: _.template("确认要删除&nbsp;<strong><%- name %></strong>&nbsp;吗?"),
+        msg: '删除成功',
+        process: Dajaxice.app.delete_app
     });
 
-    function lock_check(func) {
-        return function(data) {
-            suning.modal.unlock($modal);
-            func(data);
-        }
-    }
-
-    $saveBtn.click(function() {
-        suning.modal.lock($modal);
-        Dajaxice.app.delete_app(lock_check(login_check(error_check(function(data) {
-            $modal.modal('hide');
-            toast('success', '删除成功');
-            suning.reload(2000);
-        }))), {
-            id: app.id
-        }, {
-            error_callback: lock_check(suning.toastNetworkError)
-        });
+    $("table").on('click', '.delete', function() {
+        modal.show($(this.parentNode).data());
     });
 });
 
 $(function() {
-    var mode = null;
-    var PUBLISH_APP = "publish_app";
-    var DROP_APP = "drop_app";
-    var app = null;
-    var $modal = $("#prompt");
-    var $saveBtn = $modal.find(".save");
-
-    $("table").on("click", ".publish", function() {
-        mode = PUBLISH_APP;
-        app = $(this.parentNode).data();
-        $modal.modal('show');
+    var modal = new modals.ActionModal($("#publish-app")[0], {
+        tip: _.template("确定要上线应用&nbsp;<strong><%- name %></strong>&nbsp;吗?"),
+        msg: '应用已上线',
+        process: Dajaxice.app.publish_app
     });
 
-    $("table").on("click", ".drop", function() {
-        mode = DROP_APP;
-        app = $(this.parentNode).data();
-        $modal.modal('show');
+    $("table").on('click', '.publish', function() {
+        modal.show($(this.parentNode).data());
+    });
+});
+
+$(function() {
+    var modal = new modals.ActionModal($("#drop-app")[0], {
+        tip: _.template("如果应用下线了，将不能被手机助手用户看到，" +
+                        "并且会排在应用列表的后面。确认继续吗？"),
+        msg: '应用已下线',
+        process: Dajaxice.app.drop_app
     });
 
-    function lock_check(func) {
-        return function(data) {
-            suning.modal.unlock($modal);
-            func(data);
-        }
-    }
-
-    $modal.on('show.bs.modal', function() {
-        var action = mode == PUBLISH_APP ? "上线应用" : "下线应用";
-        $modal.find(".modal-title").html(action);
-        if (mode == PUBLISH_APP) {
-            var template = _.template("确定要上线应用&nbsp;<strong><%- name %></strong>&nbsp;吗?");
-            $modal.find(".modal-body").html(template({
-                name: app.name
-            }));
-        } else {
-            $modal.find(".modal-body").html("如果应用下线了，将不能被手机助手用户看到，并且会排在应用列表的后面。确认继续吗？");
-        }
-    });
-
-    $saveBtn.click(function() {
-        var func = Dajaxice.app[mode];
-        suning.modal.lock($modal);
-        func(lock_check(login_check(error_check(function(data) {
-            toast('success', mode == PUBLISH_APP ? '应用已上线' : '应用已下线');
-            $modal.modal('hide');
-            suning.reload(2000);
-        }))), {
-            id: app.id
-        }, {
-            error_callback: lock_check(suning.toastNetworkError)
-        });
+    $("table").on('click', '.drop', function() {
+        modal.show($(this.parentNode).data());
     });
 });

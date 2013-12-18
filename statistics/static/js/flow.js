@@ -70,7 +70,7 @@ $(function() {
                     var app_popularize;
                     if (item.app.popularize === true) {
                         app_popularize = '是';
-                    } else if (item.app.popularize == false) {
+                    } else if (item.app.popularize === false) {
                         app_popularize = '否';
                     } else {
                         app_popularize = '—';
