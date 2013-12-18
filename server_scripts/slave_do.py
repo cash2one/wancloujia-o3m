@@ -1,7 +1,10 @@
-debug = True
+# config begin
+debug = True  # open->windows2x.log, false->windows2x.log.<lastday>
+server_id = "1"
+# config over
 file = "/data/suning/logs/windows2x.log"
 file_tmp = "/data/suning/logs/windows2x.tmp.log"
-server_id = "1"
+
 import re
 import json
 import os
@@ -14,7 +17,7 @@ else:
 	file = "/data/suning/logs/windows2x.log.%d-%d-%d" % (lastDay.year, lastDay.month, lastDay.day)
 
 headerRE = re.compile(r"^\[windows2x\](?P<header>.*)")
-contentRE = re.compile(r"(?P<type>[a-zA-Z0-9_\.]+)\s(?P<content>\S+)\t\d+$")
+contentRE = re.compile(r"(?P<type>[a-zA-Z0-9_\.]+)\s(?P<content>\S+)\t\d+")
 
 #os.popen("dos2unix " + file)
 
@@ -47,7 +50,10 @@ for i in fp.readlines():
 		remap_log_content(i)
 fp.close()
 fp2.close()
-lastDay = datetime.date.today() - datetime.timedelta(days=1)
+if debug == True:
+    lastDay = datetime.date.today()
+else:
+    lastDay = datetime.date.today() - datetime.timedelta(days=1)
 file = "windows2x.log.%d-%d-%d" % (lastDay.year, lastDay.month, lastDay.day)
 app_cmd = '/opt/hadoop/hadoop-2.2.0/bin/hadoop fs -put -f ' + file_tmp + ' /logs/' + file + '.' + server_id + " && rm " + file_tmp
 os.popen(app_cmd)
@@ -57,5 +63,6 @@ else:
 	lastDay = datetime.date.today() - datetime.timedelta(days=1)
 	file = "/data/suning/logs/windows2x.log.%d-%d-%d" % (lastDay.year, lastDay.month, lastDay.day)
 if not debug:
-	os.popen('rm ' + file)
+    pass
+	#os.popen('rm ' + file)
 

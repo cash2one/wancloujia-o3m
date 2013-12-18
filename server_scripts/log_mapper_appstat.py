@@ -100,14 +100,16 @@ lastDay = datetime.date.today() - datetime.timedelta(days=1)
 existed = set()
 
 for line in sys.stdin:
-	try:
-		j =json.loads(line)
-		appid = _mysql.escape_string(j["app"].strip())
-		brand = _mysql.escape_string(j["brand"].strip().upper())
-		did = _mysql.escape_string(j["deviceId"].strip().upper())
-		model = _mysql.escape_string(j["model"].strip().upper())
-		pkg = _mysql.escape_string(j["package"].strip())
-		user = _mysql.escape_string(str(j["user"]).strip())
-		print "%s,%s" % (user, appid)
-	except:
-		pass
+    try:
+        j =json.loads(line)
+        appid = _mysql.escape_string(j["app"].strip())
+        brand = _mysql.escape_string(j["brand"].strip().upper())
+        did = _mysql.escape_string(j["deviceId"].strip().upper())
+        model = _mysql.escape_string(j["model"].strip().upper())
+        pkg = _mysql.escape_string(j["package"].strip())
+        user = _mysql.escape_string(str(j["user"]).strip())
+        if (not brand) or (not model):
+            continue
+        print "%s,%s" % (user, appid )
+    except:
+        pass
