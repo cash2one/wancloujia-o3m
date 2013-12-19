@@ -205,8 +205,7 @@ def user(request):
     permissionsWidget = None
     if request.user.is_superuser or request.user.is_staff:
         groupChoices=[(g.pk, g.name) for g in Group.objects.all()]
-        groupChoices.insert(0, ("", "-------"))
-        groupsWidget = forms.Select(choices=groupChoices)
+        groupsWidget = forms.SelectMultiple(choices=groupChoices)
         permissionsWidget = forms.SelectMultiple(choices=permissions.get_available_permissions())
 
     return render(request, "user.html", {

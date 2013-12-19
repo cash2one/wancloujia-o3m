@@ -129,9 +129,13 @@ $(function() {
 	empModal.params = function() {
 		var permissions = !this.form.user_permissions ? "" : 
 							($(this.form.user_permissions).val() || []).join(",");
+        var groups = !this.form.groups ? "" : 
+                            ($(this.form.groups).val() || []).join(",");
+
 		return {
 			form: this.$form.serialize(true),
-			permissions: permissions
+			permissions: permissions,
+            groups: groups
 		};
 	};
 
