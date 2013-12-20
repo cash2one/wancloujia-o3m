@@ -38,7 +38,6 @@
             .attr('name', this.name)
             .val(this.$element.data('filename'));
         this.$hiddenElement.data("required", this.$element.data("required"));
-        this.$hiddenElement.attr("parsley-required", this.$element.attr("parsley-required"));
         this.$hiddenElement.data("maxlength", this.$element.data("maxlength"));
         this.$hiddenElement.change($.proxy(this.displaySelection, this));
         this.$element.attr('name', ''); // because we don't want to conflict with our hidden field

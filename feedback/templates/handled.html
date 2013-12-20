@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% load render_table from django_tables2 %}
+{% load django_select2_tags %}
+{% load perm_filters %}
+
+{% block css %}
+{{ block.super }}
+<link rel="stylesheet" href="{{ STATIC_URL }}css/inbox.css"/>
+{% endblock %}
+
+{% block main %}
+<div class="main">
+    <ul class="nav nav-tabs">
+        <li>
+            <a href="/feedback/" id="fdtab"> 未处理
+            {% if count %}
+            <span class="badge">{{ count }}</span>
+            {% endif %}
+            </a>
+        </li>
+      <li class="active"><a href="#hdd"> 已处理 </a></li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane active" id="hdd">
+            <div class="panel panel-default">
+                <div class="panel-heading" style="height:40px">
+                    {% include "search_form.html" with query=query %}
+                </div>
+                <div class="panel-body">
+                        {% render_table table "table_template.html" %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% include "handled_prompt.html" with modal_id="delete-feedback" %}
+{% endblock %}
+
+{% block js %}
+{{ block.super }}
+<script type="text/javascript" src="{{ STATIC_URL }}js/modals.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/handled.js"></script>
+{% endblock %}
+
