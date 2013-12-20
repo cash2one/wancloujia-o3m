@@ -154,13 +154,15 @@ def group(request):
         query_set = query_set.filter(Q(name__contains=query))
 
     groupTable = GroupTable(query_set)
+    if query:
+        groupTable.empty_text = settings.NO_SEARCH_RESULTS
     groupForm = GroupForm()
     RequestConfig(request, paginate={"per_page": settings.PAGINATION_PAGE_SIZE}).configure(groupTable)
     return render(request, "group.html", {
         'query': query,
         'groupTable': groupTable,
         'groupForm': groupForm
-    }); 
+    })
 
 
 def can_view_staff(user):
@@ -193,7 +195,7 @@ def user(request):
                                      Q(email__contains=query) | 
                                      Q(realname__contains=query))
 
-    query_set = query_set.order_by("-pk");
+    query_set = query_set.order_by("-pk")
     table = StaffTable(query_set)
     employeeForm = EmployeeForm()
     employeeForm.fields["organization"].queryset = organizations
@@ -205,7 +207,8 @@ def user(request):
     permissionsWidget = None
     if request.user.is_superuser or request.user.is_staff:
         groupChoices=[(g.pk, g.name) for g in Group.objects.all()]
-        groupsWidget = forms.SelectMultiple(choices=groupChoices)
+        groupChoices.insert(0, ("", "-------"))
+        groupsWidget = forms.Select(choices=groupChoices)
         permissionsWidget = forms.SelectMultiple(choices=permissions.get_available_permissions())
 
     return render(request, "user.html", {

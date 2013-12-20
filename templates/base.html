@@ -7,7 +7,6 @@
 <link rel="stylesheet" href="{{ STATIC_URL }}css/base.css" />
 {% import_django_select2_css %}
 <link rel="stylesheet" href="{{ STATIC_URL }}css/select2-adaptation.css" />
-<!--<link rel="stylesheet" href="{{ STATIC_URL }}css/select2-bootstrap.css" />-->
 {% endblock %}
 
 {% block content %}
@@ -83,13 +82,9 @@
             </li>
             {% endif %}
 
-            {% if request.user|is_not_employee %}
-            <!--
-            <li><a href="">
+            <li {% if request.nav.active_tab == "feedback" %}class="active"{% endif %}><a href="/feedback/">
                 <span class="glyphicon glyphicon-phone-alt"></span>&nbsp;&nbsp;反馈管理
             </a></li>
-            -->
-            {% endif %}
 
             {% if request.user|is_not_employee or perms.mgr %}
             <li {% if request.nav.active_tab == "system" %}class="active"{% endif %}>

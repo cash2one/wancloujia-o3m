@@ -1,0 +1,11 @@
+th.ops, td.ops {
+    width: 75px;
+}
+
+.badge {
+    background-color: #d9534f;
+}
+
+.main .nav-tabs {
+    margin-bottom: 10px;
+}

@@ -202,6 +202,7 @@ INSTALLED_APPS = (
     'rest_framework',
     'interface',
     'statistics',
+    'feedback',
     'django_tables2',
     'ajax_upload',
     'django_select2',

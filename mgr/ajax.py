@@ -107,7 +107,7 @@ def _modify_groups_and_permissions(id, groups, permissions):
 
 @dajaxice_register(method='POST')
 @check_login
-def add_edit_employee(request, form, permissions, groups):
+def add_edit_employee(request, form, permissions):
     form = deserialize_form(form)
     logger.debug("form: " + str(map(lambda k: (k, form[k]), form)))
     logger.debug("permissions:" + permissions)
@@ -139,8 +139,9 @@ def add_edit_employee(request, form, permissions, groups):
     if not request.user.is_staff and not request.user.is_superuser:
         return _ok_json
 
-    if permissions is not None and groups is not None:
+    if permissions is not None and form.has_key("groups"):
         logger.debug("modify employee's groups and permissions")
+        groups = form["groups"]
         permissions = [int(p) for p in permissions.split(",")] if permissions else []
         groups = [int(g) for g in groups.split(",")] if groups else []
         _modify_groups_and_permissions(employee.pk, groups, permissions)
