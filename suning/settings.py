@@ -26,7 +26,7 @@ DATABASE_NAME = 'suning'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'ENGINE': 'django_mysqlpool.backends.mysqlpool',#'django.db.backends.mysqlpool', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
         'NAME': DATABASE_NAME,                      # Or path to database file if using sqlite3.
         # The following settings are not used with sqlite3:
         'USER': DATABASE_USER,
