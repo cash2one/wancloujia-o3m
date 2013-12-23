@@ -22,12 +22,12 @@
 
 .filter {
     float: left;
-    width: 245px;
+    width: 250px;
     margin-right: 15px;
 }
 
 .filter label {
-    width: 70px;
+    width: 75px;
     text-align: left;
 }
 

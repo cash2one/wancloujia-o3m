@@ -21,5 +21,6 @@ urlpatterns = patterns('',
     url(r'interface/', include('interface.urls')),
     url(r'statistics/', include('statistics.urls')),
     url(r'muce/', include('interface.purls')),
-    url(r'media', include('interface.urls'))
+    url(r'media', include('interface.urls')),
+    url(r'feedback/', include('feedback.urls')),
 ) #+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
