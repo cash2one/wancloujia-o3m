@@ -15,7 +15,7 @@ class ADForm(forms.ModelForm):
     class Meta:
         model = AD
         #excludes = ('title','position')
-        excludes = ('title',)
+        excludes = ('title', 'subject')
         widgets = {
             'to_date': forms.TextInput(attrs={
                 'readonly': '',

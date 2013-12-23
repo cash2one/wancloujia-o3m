@@ -188,7 +188,7 @@ def subjects(request):
                 "cover": item.cover,
                 "desc": item.desc,
                 "count": grps.count(),
-                "size": bitsize(get_subject_total_size(item)),       
+                "size": bitsize(get_subject_total_size(item)),
             })        
     
     return render(request, "wandoujia/subjects.html", {"subjects": results, "ads": ads})

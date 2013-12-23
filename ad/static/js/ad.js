@@ -77,6 +77,7 @@ $(function() {
         form.to_date.value = ad.to_date;
         form.desc.value = ad.desc;
         form.position.value = ad.position;
+        $(form.subject).val(ad.subject).trigger('change');
         $modal.modal('show');
     });
 
@@ -135,6 +136,7 @@ $(function() {
         form.to_date.value = "";
         form.desc.value = "";
         form.position.value = 0;
+        $(form.subject).val("").trigger('change');
         $form.parsley('destroy');
     });
 

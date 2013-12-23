@@ -49,7 +49,7 @@ body {
     background: #FFF;
 }
 
-.ad-banner .carousel-inner>.item>img {
+.ad-banner .carousel-inner>.item img {
   width: 950px;
   height: 235px;
 }
