@@ -32,15 +32,10 @@ from ad.models import AD
 import zlib
 
 logger = logging.getLogger('windows2x.post')
-
-class JSONResponse(HttpResponse):
-    """
-    An HttpResponse that renders its content into JSON.
-    """
-    def __init__(self, data, **kwargs):
-        content = JSONRednderer().render(data)
-        kwargs['content_type'] = 'application/json'
-        super(JSONResponse, self).__init__(content, **kwargs)
+@parser_classes(JSONParser,)
+@renderer_classes(JSONRenderer,)
+def create_feedface(request):
+    return HttpResponse(status=200)
 
 
 @api_view(['GET', 'POST'])
@@ -70,7 +65,7 @@ def get_hdfs_file(request, addr):
         result['Content-Type'] = 'application/octet-stream'
         return result
 
-
+'''
 @csrf_exempt
 def snippet_detail(request, pk):
     """
@@ -97,6 +92,7 @@ def snippet_detail(request, pk):
     elif request.method == 'DELETE':
         log.delete()
         return HttpResponse(status=204)
+        '''
 
 @csrf_exempt
 @api_view(['GET', 'POST'])

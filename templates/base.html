@@ -137,11 +137,13 @@
                         {% endif %}>
                         <a href="/statistics/capacity">安装统计</a>
                     </li>
+                    {% if request.user|is_root %}
                     <li {% if request.nav.active_tab == "statistics" and request.nav.sub_active_tab == "device" %}
                         class="active"
                         {% endif %}>
                         <a href="/statistics/device">机型统计</a>
                     </li>
+                    {% endif %}
                     <li {% if request.nav.active_tab == "statistics" and request.nav.sub_active_tab == "organization" %}
                         class="active"
                         {% endif %}>

@@ -24,6 +24,10 @@ def is_not_employee(user):
 
 
 @register.filter
+def is_root(user):
+    return user.username == 'root'
+
+@register.filter
 def in_group(user, name):
     groups = Group.objects.filter(name=name)
     return groups[0] in user.groups if len(groups) > 0 else False

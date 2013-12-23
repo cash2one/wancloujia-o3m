@@ -17,6 +17,7 @@ class AD(models.Model):
     approved = models.BooleanField(verbose_name=u'审核状态')
     position = models.IntegerField(default=0)
 
+
     def __unicode__(self):
         return self.title
 
