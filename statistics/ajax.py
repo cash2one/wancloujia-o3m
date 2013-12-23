@@ -437,9 +437,6 @@ def filter_org_logs(form, mode):
         uid = form.cleaned_data['emp']
         logs = DeviceLogEntity.objects.filter(uid=uid)
 
-    logs = AppFilter(logs, form.cleaned_data["app"]).filter()
-    logger.debug("logs filtered by app: %d" % len(logs))
-
     from_date = form.cleaned_data["from_date"]
     to_date = form.cleaned_data["to_date"]
     logs = PeriodFilter(logs, from_date, to_date).filter()
