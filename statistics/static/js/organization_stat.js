@@ -27,6 +27,19 @@ $(function() {
         window.location = 'organization/' + mode + '/excel?' + $form.serialize(true);
     });
 
+    var $levels = $("#levels");
+    var level;
+
+    $levels.on("click", "a", function() {
+        var $this = $(this);
+        if(level != $this.data('level')) {
+            level = $this.data('level'); 
+            $levels.find(".active").removeClass("active");
+            $(this.parentNode).addClass("active");
+            onLevelChange();
+        }
+    });
+
     var $table = null;
     var options = {
         region: {
@@ -34,7 +47,8 @@ $(function() {
                 return [item.region || '&mdash;', item.total_device_count, 
                         item.total_popularize_count, item.total_app_count] 
             },
-            titles: ['大区', '机器台数', '推广数', '安装总数']
+            titles: ['大区', '机器台数', '推广数', '安装总数'],
+            levels: ['region', 'company', 'store', 'emp']
         },
         company: {
             to_row: function(item) {
@@ -42,7 +56,8 @@ $(function() {
                         item.total_device_count, item.total_popularize_count, 
                         item.total_app_count] 
             },
-            titles: ['公司编码', '公司名称', '机器台数', '推广数', '安装总数']
+            titles: ['公司编码', '公司名称', '机器台数', '推广数', '安装总数'],
+            levels: ['company', 'store', 'emp']
         },
         store: {
             to_row: function(item) {
@@ -50,7 +65,8 @@ $(function() {
                         item.total_device_count, item.total_popularize_count,
                         item.total_app_count] 
             },
-            titles: ['门店编码', '门店名称', '机器台数', '推广数', '安装总数']
+            titles: ['门店编码', '门店名称', '机器台数', '推广数', '安装总数'],
+            levels: ['store', 'emp']
         },
         emp: {
             to_row: function(item) {
@@ -58,7 +74,8 @@ $(function() {
                         item.total_device_count, item.total_popularize_count,
                         item.total_app_count] 
             },
-            titles: ['员工编码', '员工姓名', '机器台数', '推广数', '安装总数']
+            titles: ['员工编码', '员工姓名', '机器台数', '推广数', '安装总数'],
+            levels: ['emp']
         },
         emp_only: {
             to_row: function(item) {
@@ -66,7 +83,8 @@ $(function() {
                         item.total_device_count, item.total_popularize_count,
                         item.total_app_count] 
             },
-            titles: ['员工编码', '员工姓名', '机器台数', '推广数', '安装总数']
+            titles: ['员工编码', '员工姓名', '机器台数', '推广数', '安装总数'],
+            levels: ['emp']
         }
     };
 
@@ -96,9 +114,41 @@ $(function() {
             return;
         }
     
+        sub_options = _sub_options;
+        reloadLevels();
+        reloadTable();
+    }
+
+    function desc_of_level(level) {
+        if(level === 'region') {
+            return '按大区';
+        } else if (level === 'company') {
+            return '按公司';
+        } else if (level === 'store') {
+            return '按门店';
+        } else if (level === 'emp') {
+            return '按员工';
+        }
+    }
+
+    var level_temp = _.template("<li><a href='#' data-level='<%= name %>'><%= desc %></a></li>");
+    function reloadLevels() {
+        var levels = sub_options.levels;
+        $levels.empty();
+        _.each(levels, function(level) {
+            var $el = $(level_temp({
+                name: level,
+                desc: desc_of_level(level)
+            })).appendTo($levels);
+        });
+
+        $levels.find("li:first-child").addClass("active");
+        level = levels[0];
+    }
+
+    function reloadTable() {
         $table && $table.dataTable().fnDestroy();
         $table && $table.html('<thead></thead><tbody></tbody>');
-        sub_options = _sub_options;
         var table_options = $.extend({}, statistics.table_options, {
             bRetrieve: true,
             sPaginationType: "bootstrap",
@@ -106,8 +156,9 @@ $(function() {
             iDisplayLength: 50
         });
 
+        var titles = options[level].titles;
         $table = $(".table").dataTable($.extend({}, table_options, {
-            aoColumns: _.map(sub_options.titles, function(title) {
+            aoColumns: _.map(titles, function(title) {
                 return {sTitle: title};
             }),
             fnServerData: function(source, data, callback, settings) {
@@ -118,7 +169,7 @@ $(function() {
                 filter(login_check(error_check(function(data) {
                     var aaData = [];
                     _.each(data.logs, function(item) {
-                        aaData.push(sub_options.to_row(item));
+                        aaData.push(options[level].to_row(item));
                     });
                     $(".total").html(data.capacity || 0);
                     callback({
@@ -131,12 +182,18 @@ $(function() {
                     form: $form.serialize(true),
                     offset: values.iDisplayStart,
                     length: values.iDisplayLength,
-                    mode: mode
+                    mode: mode,
+                    level: level
                 }, {
                     errorCallback: error_check(toastNetworkError)
                 });
             }
         }));
+
+    }
+
+    function onLevelChange() {
+        reloadTable();
     }
 
     return { reload: reload_data };

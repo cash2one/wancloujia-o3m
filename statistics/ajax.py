@@ -437,9 +437,6 @@ def filter_org_logs(form, mode):
         uid = form.cleaned_data['emp']
         logs = DeviceLogEntity.objects.filter(uid=uid)
 
-    logs = AppFilter(logs, form.cleaned_data["app"]).filter()
-    logger.debug("logs filtered by app: %d" % len(logs))
-
     from_date = form.cleaned_data["from_date"]
     to_date = form.cleaned_data["to_date"]
     logs = PeriodFilter(logs, from_date, to_date).filter()
@@ -447,7 +444,7 @@ def filter_org_logs(form, mode):
     return logs
 
 
-def org_record_to_dict(record, mode):
+def org_record_to_dict(record, mode, level):
     dict = {
         'total_device_count': record['total_device_count'],
         'total_popularize_count': record['total_popularize_count'],
@@ -455,16 +452,16 @@ def org_record_to_dict(record, mode):
     }
 
     empty_value = {'code': '', 'name': ''}
-    if mode == 'region':
+    if level == 'region':
         region = utils.get_model_by_pk(Region.objects, record['region'])
         dict['region'] = region.name if region else None
-    elif mode == 'company':
+    elif level == 'company':
         company = utils.get_model_by_pk(Company.objects, record['company'])
         if company:
             dict['company'] = { 'code': company.code, 'name': company.name } 
         else:
             dict['company'] = empty_value
-    elif mode == 'store':
+    elif level == 'store':
         store = utils.get_model_by_pk(Store.objects, record['store'])
         if store:
             dict['store'] = { 'code': store.code, 'name': store.name } 
@@ -482,7 +479,7 @@ def org_record_to_dict(record, mode):
 
 @dajaxice_register(method='POST')
 @check_login
-def filter_org_statistics(request, form, offset, length, mode):
+def filter_org_statistics(request, form, offset, length, mode, level):
     user = cast_staff(request.user)
     form = deserialize_form(form)
 
@@ -496,7 +493,7 @@ def filter_org_statistics(request, form, offset, length, mode):
     aggregate_result = logs.aggregate(capacity=Sum('appCount'))
     logger.debug(aggregate_result)
     capacity = aggregate_result['capacity'] or 0
-    key = mode if mode != 'emp' and mode != 'emp_only' else 'uid'
+    key = level if level != 'emp' and level != 'emp_only' else 'uid'
     records = logs.values(key).annotate(total_device_count=Count('did', distinct=True),
                                        total_popularize_count=Sum('popularizeAppCount'),
                                        total_app_count=Sum('appCount'))
@@ -504,7 +501,7 @@ def filter_org_statistics(request, form, offset, length, mode):
     records = records[offset: offset + length]
     items = []
     for record in records:
-        items.append(org_record_to_dict(record, mode))
+        items.append(org_record_to_dict(record, mode, level))
         
     return simplejson.dumps({
         'ret_code': 0,
