@@ -16,7 +16,7 @@ collectstatic:
 	./manage.py collectstatic
 
 restart_nginx:
-	/etc/init.d/nginx restart
+	service nginx restart
 
 deploy_static: collectstatic restart_nginx
 
