@@ -4,6 +4,7 @@ import logging
 
 from django.db import models, connection, transaction
 from django.utils import timezone
+from app.models import Subject
 
 logger = logging.getLogger(__name__)
 
@@ -16,7 +17,7 @@ class AD(models.Model):
     visible = models.BooleanField(verbose_name=u'广告状态')
     approved = models.BooleanField(verbose_name=u'审核状态')
     position = models.IntegerField(default=0)
-
+    subject = models.ForeignKey(Subject, null=True)
 
     def __unicode__(self):
         return self.title
