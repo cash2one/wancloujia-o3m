@@ -1,4 +1,3 @@
-#!/usr/bin/python
 dbhost = 'dev-node1.limijiaoyin.com'
 dbport = 3306
 dbuser = 'root'
@@ -12,16 +11,17 @@ hdfsuser = 'songwei'
 hdfsport = 50070
 
 remove_logs = False
-last_day = True
+last_day = False
+print "import scripts"
 #config over
-
-
+#os.popen("source /etc/profile")
 import _mysql
-import HTMLParser
+import json
 import datetime
-import os 
+import os
+import HTMLParser
 from pyhdfs import hdfs
-os.popen("source /etc/profile")
+print "end load modules"
 hdfs.setConfig(hostname=hdfshost, port=str(hdfsport), username=hdfsuser)
 db = _mysql.connect(host=dbhost, user=dbuser, passwd=dbpass, db=dbname)
 #scan hadoop fld
@@ -87,14 +87,13 @@ def scan_ref_subject_icon_files():
         id = r.fetch_row()[0][0]
         acc.add(header + id)
     return acc
-
+print "begin cleanup"
 files = []
 scanHdfsFiles(acc=files)
 tmp = {}
 for i in files:
     tmp[i.encode('utf8')] = True
 files = tmp
-
 apks = scan_ref_apk_files()
 apkicons = scan_ref_apk_icon_files()
 adicons = scan_ref_ad_icon_files()
@@ -102,8 +101,9 @@ subjecticons = scan_ref_subject_icon_files()
 refed = list(apks | apkicons | adicons | subjecticons)
 tmp = []
 html_parser = HTMLParser.HTMLParser()
+import urllib
 for i in refed:
-    tmp.append(html_parser.unescape(i))
+    tmp.append(urllib.unquote(i))
 refed = tmp
 for i in refed:
     if i in files:
@@ -111,16 +111,16 @@ for i in refed:
 files = sorted(files)
 for i in files:
 	try:
-		hdfs.remove(i, True)
+		print i
+		#hdfs.remove(i, True)
 	except:
 		pass
-
 if last_day:
     lastDay = datetime.date.today() - datetime.timedelta(days=1)
 else:
     lastDay = datetime.date.today()
 
-
+print "config hadoop"
 filename = "/data/suning/tmp/windows2x.log.%d-%d-%d" % (lastDay.year, lastDay.month, lastDay.day)
 dstfilename = "/logs/windows2x.log.%d-%d-%d" % (lastDay.year, lastDay.month, lastDay.day)
 os.popen("rm -f %s" % filename)
@@ -130,7 +130,7 @@ os.popen("rm -f %s" % filename)
 os.popen("/opt/hadoop/hadoop-2.2.0/bin/hadoop fs -rm -f %s.*" % dstfilename)
 
 
-
+print "begin hadoop"
 jobs = [
 		("log_mapper_meta.py", "log_reducer_meta.py", "/logs/meta%d-%d-%d" % (lastDay.year, lastDay.month, lastDay.day )),
 		("log_mapper_appstat.py", "log_reducer_appstat.py", "/logs/appstat%d-%d-%d" % (lastDay.year, lastDay.month, lastDay.day )),
@@ -154,3 +154,4 @@ for map, red, output in jobs:
 if remove_logs:
 	cmd = "%s fs -rm -f %s" % (hadoop, input)
 	os.popen(cmd)
+print "hadoop over"

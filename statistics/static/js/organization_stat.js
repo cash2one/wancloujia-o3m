@@ -172,6 +172,7 @@ $(function() {
                         aaData.push(options[level].to_row(item));
                     });
                     $(".total").html(data.capacity || 0);
+                    $(".brands").html(data.brands || 0);
                     callback({
                         sEcho: values.sEcho,
                         iTotalRecords: data.total,

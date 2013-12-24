@@ -95,7 +95,7 @@ map = map_staff(staffs, regions, companys, stores)
 
 import datetime
 import HTMLParser
-lastDay = datetime.date.today() - datetime.timedelta(days=1)
+lastDay = datetime.date.today() - datetime.timedelta(days=0)
 
 existed = set()
 

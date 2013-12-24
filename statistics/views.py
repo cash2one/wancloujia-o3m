@@ -28,7 +28,7 @@ from forms import OrganizationStatForm, DeviceStatForm
 from ajax import filter_flow_logs, log_to_dict, device_record_to_dict
 from ajax import filter_installed_capacity_logs, installed_capacity_to_dict
 from ajax import stat_device, filter_org_logs, org_record_to_dict
-
+from statistics.models import BrandModel
 
 logger = logging.getLogger(__name__)
 
@@ -192,7 +192,7 @@ def models(request):
     q = request.GET.get('q', '') 
     p = int(request.GET.get('p', '1'))
 
-    logs = LogMeta.objects.all()
+    logs = BrandModel.objects.all()
     logs = logs.filter(brand=b) if b else logs
     logs = logs.filter(model__contains=q)
     models = logs.values_list('model', flat=True).distinct()
@@ -207,8 +207,7 @@ def brands(request):
     LENGTH = 10
     q = request.GET.get('q', '') 
     p = int(request.GET.get('p', '1'))
-    logs = LogMeta.objects.filter(brand__contains=q)
-    brands = logs.values_list('brand', flat=True).distinct()
+    brands = BrandModel.objects.filter(brand__contains=q).values_list('brand', flat=True)
     return render_json({
         'more': len(brands) > p * LENGTH,
         'brands': brands[(p-1) * LENGTH : p * LENGTH]
