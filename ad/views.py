@@ -1,5 +1,6 @@
 #coding: utf-8
 import logging
+from django import forms
 
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required, user_passes_test
@@ -7,6 +8,7 @@ from django.db.models.query import QuerySet
 from django.db.models import Q
 from django.views.decorators.http import require_GET
 from django_tables2.config import RequestConfig
+from app.models import Subject
 
 from suning import settings
 from ad.models import AD

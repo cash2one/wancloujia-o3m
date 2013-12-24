@@ -444,6 +444,34 @@ def filter_org_logs(form, mode):
     return logs
 
 
+_LEVELS = ['region', 'company', 'store', 'emp']
+def available_levels(mode, level):
+    offset = _LEVELS.index(mode)
+    to = _LEVELS.index(level)
+    return _LEVELS[offset:to+1]
+
+
+def titles_for_org_stat(mode, level):
+    levels = available_levels(mode, level)
+    titles = []
+    for level in levels:
+        if level == 'region':
+            titles.append(u'大区')
+        elif level == 'company':
+            titles.append(u'公司编码')
+            titles.append(u'公司名称')
+        elif level == 'store':
+            titles.append(u'门店编码')
+            titles.append(u'门店名称')
+        elif level == 'emp':
+            titles.append(u'员工编码')
+            titles.append(u'门店编码')
+    titles.append(u'机器台数')
+    titles.append(u'推广数')
+    titles.append(u'安装总数')
+    return titles
+
+
 def org_record_to_dict(record, mode, level):
     dict = {
         'total_device_count': record['total_device_count'],
@@ -452,27 +480,29 @@ def org_record_to_dict(record, mode, level):
     }
 
     empty_value = {'code': '', 'name': ''}
-    if level == 'region':
-        region = utils.get_model_by_pk(Region.objects, record['region'])
-        dict['region'] = region.name if region else None
-    elif level == 'company':
-        company = utils.get_model_by_pk(Company.objects, record['company'])
-        if company:
-            dict['company'] = { 'code': company.code, 'name': company.name } 
+    levels = available_levels(mode, level)
+    for level in levels:
+        if level == 'region':
+            region = utils.get_model_by_pk(Region.objects, record['region'])
+            dict['region'] = region.name if region else None
+        elif level == 'company':
+            company = utils.get_model_by_pk(Company.objects, record['company'])
+            if company:
+                dict['company'] = { 'code': company.code, 'name': company.name } 
+            else:
+                dict['company'] = empty_value
+        elif level == 'store':
+            store = utils.get_model_by_pk(Store.objects, record['store'])
+            if store:
+                dict['store'] = { 'code': store.code, 'name': store.name } 
+            else:
+                dict['store'] = empty_value
         else:
-            dict['company'] = empty_value
-    elif level == 'store':
-        store = utils.get_model_by_pk(Store.objects, record['store'])
-        if store:
-            dict['store'] = { 'code': store.code, 'name': store.name } 
-        else:
-            dict['store'] = empty_value
-    else:
-        emp = utils.get_model_by_pk(Employee.objects, record['uid'])
-        if emp:
-            dict['emp'] = {'username': emp.username, 'realname': emp.realname } 
-        else:
-            dict['emp'] = {'username': None, 'realname': None}
+            emp = utils.get_model_by_pk(Employee.objects, record['uid'])
+            if emp:
+                dict['emp'] = {'username': emp.username, 'realname': emp.realname } 
+            else:
+                dict['emp'] = {'username': None, 'realname': None}
 
     return dict
 
@@ -493,8 +523,9 @@ def filter_org_statistics(request, form, offset, length, mode, level):
     aggregate_result = logs.aggregate(capacity=Sum('appCount'))
     logger.debug(aggregate_result)
     capacity = aggregate_result['capacity'] or 0
-    key = level if level != 'emp' and level != 'emp_only' else 'uid'
-    records = logs.values(key).annotate(total_device_count=Count('did', distinct=True),
+    levels = available_levels(mode, level)
+    keys = [l if l != 'emp' else 'uid' for l in levels]
+    records = logs.values(*keys).annotate(total_device_count=Count('did', distinct=True),
                                        total_popularize_count=Sum('popularizeAppCount'),
                                        total_app_count=Sum('appCount'))
     total = len(records)

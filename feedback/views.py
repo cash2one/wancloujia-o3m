@@ -55,3 +55,5 @@ def handled_feedback(request):
         'table': table,
         'count': count if count > 0 else None
     })
+
+
