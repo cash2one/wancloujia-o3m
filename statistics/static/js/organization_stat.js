@@ -24,7 +24,7 @@ $(function() {
     $("#export-data").click(function(e) {
         e.preventDefault()
         if(!mode)  return;
-        window.location = 'organization/' + mode + '/excel?' + $form.serialize(true);
+        window.location = 'organization/' + mode + '/' + level + '/excel?' + $form.serialize(true);
     });
 
     var $levels = $("#levels");
@@ -40,83 +40,89 @@ $(function() {
         }
     });
 
-    var $table = null;
-    var options = {
-        region: {
-            to_row: function(item) {
-                return [item.region || '&mdash;', item.total_device_count, 
-                        item.total_popularize_count, item.total_app_count] 
-            },
-            titles: ['大区', '机器台数', '推广数', '安装总数'],
-            levels: ['region', 'company', 'store', 'emp']
-        },
-        company: {
-            to_row: function(item) {
-                return [item.company.code || '&mdash;', item.company.name || '&mdash;', 
-                        item.total_device_count, item.total_popularize_count, 
-                        item.total_app_count] 
-            },
-            titles: ['公司编码', '公司名称', '机器台数', '推广数', '安装总数'],
-            levels: ['company', 'store', 'emp']
-        },
-        store: {
-            to_row: function(item) {
-                return [item.store.code || '&mdash;', item.store.name || '&mdash;', 
-                        item.total_device_count, item.total_popularize_count,
-                        item.total_app_count] 
-            },
-            titles: ['门店编码', '门店名称', '机器台数', '推广数', '安装总数'],
-            levels: ['store', 'emp']
-        },
-        emp: {
-            to_row: function(item) {
-                return [item.emp.username || '&mdash;' , item.emp.realname || '&mdash;', 
-                        item.total_device_count, item.total_popularize_count,
-                        item.total_app_count] 
-            },
-            titles: ['员工编码', '员工姓名', '机器台数', '推广数', '安装总数'],
-            levels: ['emp']
-        },
-        emp_only: {
-            to_row: function(item) {
-                return [item.emp.username || '&mdash;' , item.emp.realname || '&mdash;', 
-                        item.total_device_count, item.total_popularize_count,
-                        item.total_app_count] 
-            },
-            titles: ['员工编码', '员工姓名', '机器台数', '推广数', '安装总数'],
-            levels: ['emp']
-        }
-    };
+    var LEVELS = ['region', 'company', 'store', 'emp'];
+    
+    function to_row(mode, level, item) {
+        var items = [];
+        var from = _.indexOf(LEVELS, mode);
+        var to = _.indexOf(LEVELS, level);
+        _.each(LEVELS.slice(from, to + 1), function(level) {
+            if(level === 'region') {
+                items.push(item.region || "&mdash;");
+            } else if(level === 'company') {
+                items.push(item.company.code || '&mdash;');
+                items.push(item.company.name || '&mdash;');
+            } else if(level === 'store') {
+                items.push(item.store.code || '&mdash;');
+                items.push(item.store.name || '&mdash;');
+            } else if(level === 'emp') {
+                items.push(item.emp.username || '&mdash;');
+                items.push(item.emp.realname || '&mdash;');
+            }
+        });
+        items.push(item.total_device_count);
+        items.push(item.total_popularize_count);
+        items.push(item.total_app_count);
+        return items;
+    }
 
-    var sub_options; 
+    function titles(mode, level) {
+        var result = [];
+        var from = _.indexOf(LEVELS, mode);
+        var to = _.indexOf(LEVELS, level);
+        _.each(LEVELS.slice(from, to + 1), function(level) {
+            if(level === 'region') {
+                result.push('大区');
+            } else if(level === 'company') {
+                result.push('公司编码');
+                result.push('公司名称');
+            } else if(level === 'store') {
+                result.push('门店编码');
+                result.push('门店名称');
+            } else if(level === 'emp') {
+                result.push('员工编码');
+                result.push('员工姓名');
+            }
+        });
+        result.push('机器台数');
+        result.push('推广数');
+        result.push('安装总数');
+        return result;
+    }
+
+    function available_levels(mode) {
+        var pos = _.indexOf(LEVELS, mode);
+        return LEVELS.slice(pos);
+    }
+
+    var $table = null;
+
     var mode;
     function reload_data(region, company, store, emp) {
-        var _sub_options; 
+        var _mode; 
         if (emp) {
-            mode = 'emp_only';
-            _sub_options = options.emp_only;
+            _mode = 'emp';
         } else if (store) {
-            mode = 'emp';
-            _sub_options = options.emp;
+            _mode = 'emp';
         } else if (company) {
-            mode = 'store';
-            _sub_options = options.store;
+            _mode = 'store';
         } else if (region) {
-            mode = 'company';
-            _sub_options = options.company;
+            _mode = 'company';
         } else {
-            mode = 'region';
-            _sub_options = options.region;
+            _mode = 'region';
         }
 
-        if (_sub_options == sub_options) {
+        if (_mode == mode) {
             $table && $table.fnDraw();
             return;
         }
     
-        sub_options = _sub_options;
+        mode = _mode;
+        onModeChange();
+    }
+
+    function onModeChange() {
         reloadLevels();
-        reloadTable();
     }
 
     function desc_of_level(level) {
@@ -133,7 +139,7 @@ $(function() {
 
     var level_temp = _.template("<li><a href='#' data-level='<%= name %>'><%= desc %></a></li>");
     function reloadLevels() {
-        var levels = sub_options.levels;
+        var levels = available_levels(mode);
         $levels.empty();
         _.each(levels, function(level) {
             var $el = $(level_temp({
@@ -144,6 +150,7 @@ $(function() {
 
         $levels.find("li:first-child").addClass("active");
         level = levels[0];
+        onLevelChange();
     }
 
     function reloadTable() {
@@ -156,9 +163,8 @@ $(function() {
             iDisplayLength: 50
         });
 
-        var titles = options[level].titles;
         $table = $(".table").dataTable($.extend({}, table_options, {
-            aoColumns: _.map(titles, function(title) {
+            aoColumns: _.map(titles(mode, level), function(title) {
                 return {sTitle: title};
             }),
             fnServerData: function(source, data, callback, settings) {
@@ -169,7 +175,7 @@ $(function() {
                 filter(login_check(error_check(function(data) {
                     var aaData = [];
                     _.each(data.logs, function(item) {
-                        aaData.push(options[level].to_row(item));
+                        aaData.push(to_row(mode, level, item));
                     });
                     $(".total").html(data.capacity || 0);
                     callback({
@@ -189,7 +195,6 @@ $(function() {
                 });
             }
         }));
-
     }
 
     function onLevelChange() {
