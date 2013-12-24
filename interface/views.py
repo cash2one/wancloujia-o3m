@@ -104,6 +104,10 @@ def upload(request):
         return HttpResponse(status=status.HTTP_201_CREATED)
     return HttpResponse(status=status.HTTP_404_NOT_FOUND)
 
+@csrf_exempt
+@api_view(['GET', 'POST'])
+def feedback(request):
+    return HttpResponse(status=status.HTTP_201_CREATED)
 
 def set_cookie(response, key, value, days_expire = 14):
     max_age = days_expire * 24 * 60 * 60 

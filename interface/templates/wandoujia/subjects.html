@@ -23,10 +23,14 @@
                          {% else %}
                             class="item"
                          {% endif %}>
+                        {% if ad.subject.pk %}
                         <a href="/interface/subjects/{{ ad.subject.pk }}">
-                        <img src="{{ MEDIA_URL }}{{ ad.cover }}" href="/interface/subjects/{{ ad.subject.pk }}" >
-                        </img>
-                            </a>
+                        {% endif %}
+                            <img src="{{ MEDIA_URL }}{{ ad.cover }}" href="/interface/subjects/{{ ad.subject.pk }}" >
+                            </img>
+                        {% if ad.subject.pk %}
+                        </a>
+                        {% endif %}
                         <div class="carousel-caption">{{ ad.title }}</div>
                     </div>
                     {% endfor %}

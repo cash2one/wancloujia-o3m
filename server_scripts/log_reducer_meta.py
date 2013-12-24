@@ -11,7 +11,7 @@ import HTMLParser
 import json
 import datetime
 
-lastDay = datetime.date.today() - datetime.timedelta(days=1)
+lastDay = datetime.date.today() - datetime.timedelta(days=0)
 db = _mysql.connect(host=dbhost, user=dbuser, passwd=dbpass, db=dbname)
 db.query("DELETE FROM interface_logmeta WHERE date ='%d-%d-%d';" % (lastDay.year, lastDay.month, lastDay.day))
 r = db.store_result()
