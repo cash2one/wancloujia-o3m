@@ -9,6 +9,7 @@ from interface.models import LogMeta
 from mgr.models import Region, Store, Company, Employee
 from views import query_employee, query_regions, query_companies, query_stores
 from ajax import AdminFilter, UserPermittedFilter, UserUnpermittedFilter
+from ajax import available_levels, titles_for_org_stat
 
 
 def _equal(emp_qs, emp_arr):
@@ -262,4 +263,18 @@ class TestUserFilter(TestCase):
         filter = UserUnpermittedFilter(self.logs, self.emp_store.pk)
         logs = filter.filter()
         self.assertItemsEqual([self.log3], logs)
+
+
+class TestLevels(TestCase):
+
+    def test_available_levels(self):
+        self.assertItemsEqual(['region', 'company'], available_levels('region', 'company'))
+        self.assertItemsEqual(['company', 'store', 'emp'], available_levels('company', 'emp'))
+
+
+class TestTitlesForOrgStat(TestCase):
+    
+    def test_titles_for_org_stat(self):
+        expected = [u'大区', u'公司编码', u'公司名称', u'机器台数', u'推广数', u'安装总数']
+        self.assertItemsEqual(expected, titles_for_org_stat('region', 'company'))
 
