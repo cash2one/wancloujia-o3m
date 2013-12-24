@@ -213,7 +213,7 @@
     
         $region.change($.proxy(this._ensure_emp, this));
         $company.change($.proxy(this._ensure_emp, this));
-        $store.change($.proxy(this._emsure_emp, this));
+        $store.change($.proxy(this._ensure_emp, this));
     }
 
     MgrFilter.prototype = {

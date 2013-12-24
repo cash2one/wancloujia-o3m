@@ -27,8 +27,14 @@ from forms import LogMetaFilterForm, InstalledCapacityFilterForm
 from forms import OrganizationStatForm, DeviceStatForm
 from ajax import filter_flow_logs, log_to_dict, device_record_to_dict
 from ajax import filter_installed_capacity_logs, installed_capacity_to_dict
+<<<<<<< HEAD
 from ajax import stat_device, filter_org_logs, org_record_to_dict
 from statistics.models import BrandModel
+=======
+from ajax import stat_device, filter_org_logs, org_record_to_dict, available_levels
+from ajax import titles_for_org_stat
+
+>>>>>>> upstream/master
 
 logger = logging.getLogger(__name__)
 
@@ -451,9 +457,12 @@ def organization(request):
         'filter': OrganizationStatForm()
     })
 
+
 @require_GET
 @login_required
-def organization_excel(request, mode):        
+def organization_excel(request, mode, level):        
+    logger.debug('mode: ' + mode + ' level: ' + level)
+
     filter_form = OrganizationStatForm(request.GET)
     if not filter_form.is_valid():
         logger.warn("form is invalid")
@@ -461,45 +470,38 @@ def organization_excel(request, mode):
         raise Http404
 
     user = cast_staff(request.user)
-    logger.debug('mode: ' + mode)
     logs = filter_org_logs(filter_form, mode)
-    key = mode if mode != 'emp' and mode != 'emp_only' else 'uid'
-    records = logs.values(key).annotate(total_device_count=Count('did', distinct=True),
+    
+    levels = available_levels(mode, level)
+    keys = [l if l != 'emp' else 'uid' for l in levels]
+    records = logs.values(*keys).annotate(total_device_count=Count('did', distinct=True),
                                        total_popularize_count=Sum('popularizeAppCount'),
                                        total_app_count=Sum('appCount'))
 
-
     def _record_to_array(record):
-        logger.debug(record)
+        logger.debug(mode)
+        logger.debug(level)
         h = HTMLParser.HTMLParser()
-        dict = org_record_to_dict(record, mode)
+        dict = org_record_to_dict(record, mode, level)
         array = []
-        if mode == 'region':
-            array.append(dict['region'] or h.unescape(EMPTY_VALUE))
-        elif mode == 'store' or mode == 'company':
-            array.append(dict[mode]['code'] or h.unescape(EMPTY_VALUE))
-            array.append(dict[mode]['name'] or h.unescape(EMPTY_VALUE))
-        else:
-            array.append(dict['emp']['username'] or h.unescape(EMPTY_VALUE));
-            array.append(dict['emp']['realname'] or h.unescape(EMPTY_VALUE));
+        levels = available_levels(mode, level)
+        for l in levels:
+            if l == 'region':
+                array.append(dict['region'] or h.unescape(EMPTY_VALUE))
+            elif l == 'store' or l == 'company':
+                array.append(dict[l]['code'] or h.unescape(EMPTY_VALUE))
+                array.append(dict[l]['name'] or h.unescape(EMPTY_VALUE))
+            else:
+                array.append(dict['emp']['username'] or h.unescape(EMPTY_VALUE));
+                array.append(dict['emp']['realname'] or h.unescape(EMPTY_VALUE));
         array.append(dict['total_device_count']) 
         array.append(dict['total_popularize_count']) 
         array.append(dict['total_app_count']) 
         return array
 
-    titles = []
-    if mode == 'region':
-        titles = [u'分区', u'机器台数', u'推广数', u'安装总数']
-    elif mode == 'company':
-        titles = [u'编码', u'公司名称', u'机器台数', u'推广数', u'安装总数']
-    elif mode == 'store':
-        titles = [u'编码', u'门店名称', u'机器台数', u'推广数', u'安装总数']
-    else:
-        titles = [u'员工工号', u'员工姓名', u'机器台数', u'推广数', u'安装总数']
-
     sheet = {
         'name': u'组织统计',
-        'titles': titles,
+        'titles': titles_for_org_stat(mode, level),
         'records': records,
         'record_to_array': _record_to_array
     }
