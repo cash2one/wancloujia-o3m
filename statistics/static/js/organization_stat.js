@@ -24,7 +24,7 @@ $(function() {
     $("#export-data").click(function(e) {
         e.preventDefault()
         if(!mode)  return;
-        window.location = 'organization/' + mode + '/' + level + '/excel?' + $form.serialize(true);
+        window.location = 'organization/' + mode + '_' + level + '/excel?' + $form.serialize(true);
     });
 
     var $levels = $("#levels");

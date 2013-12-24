@@ -275,6 +275,6 @@ class TestLevels(TestCase):
 class TestTitlesForOrgStat(TestCase):
     
     def test_titles_for_org_stat(self):
-        self.assertItemsEqual([u'大区', u'公司编码', u'公司名称'], 
-                                titles_for_org_stat('region', 'company'))
+        expected = [u'大区', u'公司编码', u'公司名称', u'机器台数', u'推广数', u'安装总数']
+        self.assertItemsEqual(expected, titles_for_org_stat('region', 'company'))
 

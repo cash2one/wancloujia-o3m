@@ -453,9 +453,12 @@ def organization(request):
         'filter': OrganizationStatForm()
     })
 
+
 @require_GET
 @login_required
 def organization_excel(request, mode, level):        
+    logger.debug('mode: ' + mode + ' level: ' + level)
+
     filter_form = OrganizationStatForm(request.GET)
     if not filter_form.is_valid():
         logger.warn("form is invalid")
@@ -463,27 +466,27 @@ def organization_excel(request, mode, level):
         raise Http404
 
     user = cast_staff(request.user)
-    logger.debug('mode: ' + mode)
     logs = filter_org_logs(filter_form, mode)
     
     levels = available_levels(mode, level)
     keys = [l if l != 'emp' else 'uid' for l in levels]
-    records = logs.values(*key).annotate(total_device_count=Count('did', distinct=True),
+    records = logs.values(*keys).annotate(total_device_count=Count('did', distinct=True),
                                        total_popularize_count=Sum('popularizeAppCount'),
                                        total_app_count=Sum('appCount'))
 
     def _record_to_array(record):
-        logger.debug(record)
+        logger.debug(mode)
+        logger.debug(level)
         h = HTMLParser.HTMLParser()
-        dict = org_record_to_dict(record, mode)
+        dict = org_record_to_dict(record, mode, level)
         array = []
         levels = available_levels(mode, level)
-        for level in levels:
-            if level == 'region':
+        for l in levels:
+            if l == 'region':
                 array.append(dict['region'] or h.unescape(EMPTY_VALUE))
-            elif level == 'store' or mode == 'company':
-                array.append(dict[level]['code'] or h.unescape(EMPTY_VALUE))
-                array.append(dict[level]['name'] or h.unescape(EMPTY_VALUE))
+            elif l == 'store' or l == 'company':
+                array.append(dict[l]['code'] or h.unescape(EMPTY_VALUE))
+                array.append(dict[l]['name'] or h.unescape(EMPTY_VALUE))
             else:
                 array.append(dict['emp']['username'] or h.unescape(EMPTY_VALUE));
                 array.append(dict['emp']['realname'] or h.unescape(EMPTY_VALUE));
