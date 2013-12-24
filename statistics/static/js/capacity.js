@@ -59,6 +59,7 @@ $(function() {
                     ]);
                 });
                 $(".total").html(data.total || 0);
+                $(".brands").html(data.brands || 0);
                 callback({
                     sEcho: values.sEcho,
                     iTotalRecords: data.total,

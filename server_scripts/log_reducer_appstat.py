@@ -108,7 +108,7 @@ map = map_staff(staffs, regions, companys, stores)
 apps = read_app()
 #print map
 import datetime
-lastDay = datetime.date.today() - datetime.timedelta(days=1)
+lastDay = datetime.date.today() - datetime.timedelta(days=0)
 
 existed = set()
 db.query("DELETE FROM interface_installedapplogentity WHERE date ='%d-%d-%d';" % (lastDay.year, lastDay.month, lastDay.day))

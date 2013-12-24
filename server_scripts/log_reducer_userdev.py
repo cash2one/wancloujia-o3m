@@ -108,7 +108,7 @@ map = map_staff(staffs, regions, companys, stores)
 apps = read_app()
 #print map
 import datetime
-lastDay = datetime.date.today() - datetime.timedelta(days=1)
+lastDay = datetime.date.today() - datetime.timedelta(days=0)
 
 existed = set()
 existed2 = set()
@@ -118,7 +118,6 @@ for line in sys.stdin:
 	#print line
 	try:
 		user, did, appid = line.strip().split(',')
-		print (user, did,)
 		if (user, did,) in existed:
 			print "UPDATE interface_userdevicelogentity SET popularizeAppCount = popularizeAppCount + %s , appCount = appCount + 1 WHERE date = '%d-%d-%d' AND uid =%s;" \
 				% (apps[appid][2], lastDay.year, lastDay.month, lastDay.day, map[user][0])
@@ -127,8 +126,8 @@ for line in sys.stdin:
 				print "UPDATE interface_userdevicelogentity SET deviceCount = deviceCount + 1, popularizeAppCount = popularizeAppCount + %s , appCount = appCount + 1 WHERE date = '%d-%d-%d' AND uid =%s;" \
 					% (apps[appid][2], lastDay.year, lastDay.month, lastDay.day, map[user][0])
 			else:
-				print "INSERT INTO interface_userdevicelogentity(date, region, company, store, uid , deviceCount , popularizeAppCount, appCount) VALUES('%d-%d-%d', %s , %s, %s, %s, %s, %s, %s);" \
-					% ( lastDay.year, lastDay.month, lastDay.day, map[user][1], map[user][2], map[user][3], map[user][0], '1', apps[appid][2] , '1')
+				print "INSERT INTO interface_userdevicelogentity(date, region, company, store, uid , deviceCount , popularizeAppCount, appCount, appPkg) VALUES('%d-%d-%d', %s , %s, %s, %s, %s, %s, %s, '%s');" \
+					% ( lastDay.year, lastDay.month, lastDay.day, map[user][1], map[user][2], map[user][3], map[user][0], '1', apps[appid][2] , '1', apps[appid][0])
 				existed2.add(user)
 			existed.add((user, did,))
 	except:

@@ -7,8 +7,9 @@ urlpatterns = patterns('interface.views',
     url(r'^echo$', 'echo'),
 
     url(r'^welcome$', 'welcome'),
-    url(r'^subjects$', 'subjects'),
-    url(r'^subjects/(?P<id>\d+)$', "apps"),
 
+    url(r'^subjects/(?P<id>\d+)$', "apps"),
+    url(r'^subjects', 'subjects'),
     url(r'^(?P<addr>/\S+)', 'get_hdfs_file'),
+    url(r'^feedback', 'feedback')
 )
