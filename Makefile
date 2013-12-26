@@ -1,7 +1,7 @@
 all: runserver
 
 TEST_APPS=mgr statistics
-PORT=11111
+PORT=11112
 
 runserver:
 	nohup ./manage.py runserver $(PORT) &
@@ -16,7 +16,7 @@ collectstatic:
 	./manage.py collectstatic
 
 restart_nginx:
-	service nginx restart
+	/sbin/service nginx restart
 
 deploy_static: collectstatic restart_nginx
 

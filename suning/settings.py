@@ -2,11 +2,10 @@
 # Django settings for suning project.
 import os
 
-
 from pyhdfs import hdfs
 
-DEBUG = True
-#DEBUG = False
+DEBUG = False
+#DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
