@@ -54,6 +54,7 @@ def check_login(func):
         if not request.user.is_authenticated():
             return simplejson.dumps({'ret_code': 1001})
         return func(request, *args, **kwargs)
+
     return wrapper
 
 
@@ -63,3 +64,11 @@ def response_error(func):
         return simplejson.dumps({'ret_code': 1000, 'ret_msg': 'Easy. Just for test:)'})
     return wrapper
 
+def oplog_track(op):
+    def outer_wrapper(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            func(*args, **kwargs)
+            kwargs.has_key('model')
+        return wrapper
+    return outer_wrapper

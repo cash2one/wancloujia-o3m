@@ -165,3 +165,13 @@ def get_apps(request, subject, pks):
     results = [{'id': g.app.pk, 'text': g.app.name} for g in groups]
     logger.debug(results)
     return simplejson.dumps({'results': results})
+
+
+def __add(model, id):
+    pass
+
+def __edit(model, id):
+    pass
+
+def __remove(model, id):
+    pass

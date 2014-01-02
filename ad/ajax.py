@@ -19,7 +19,7 @@ _ok_json = simplejson.dumps({'ret_code': 0})
 @dajaxice_register(method='POST')
 @check_login
 def delete_ad(request, id):
-    models.delete_ad(id)
+    __delete(id)
     return _ok_json
 
 
@@ -37,22 +37,38 @@ def add_edit_ad(request, form, visible):
     ad = f.save(commit=False)
     ad.visible = visible
     if form["id"] == "":
+        __add(ad)
+        '''
         if models.AD.objects.filter(title=ad.title).exists():
             return simplejson.dumps({'ret_code': 1000, 'field': 'title', 'error': u'广告标题已存在'})
         models.add_ad(ad)
-        return _ok_json
+        '''
     else:
         ad.pk = form["id"]
-        if models.AD.objects.exclude(pk=ad.pk).filter(title=ad.title).exists():
-            return simplejson.dumps({'ret_code': 1000, 'field': 'title', 'error': u'广告标题已存在'})
-        models.edit_ad(ad)
-        return _ok_json
+        __edit(ad)
+    return _ok_json
 
 
 @dajaxice_register(method='POST')
 @check_login
 def sort_ad(request, pks):
-    ad_pks = [int(pk) for pk in pks.split(",")]
-    models.sort_ad(ad_pks)
+    __sort(pks)
     return _ok_json
 
+
+def __add(model):
+    if models.AD.objects.filter(title=model.title).exists():
+        return simplejson.dumps({'ret_code': 1000, 'field': 'title', 'error': u'广告标题已存在'})
+    models.add_ad(model)
+
+def __edit(model):
+    if models.AD.objects.exclude(pk=model.pk).filter(title=model.title).exists():
+        return simplejson.dumps({'ret_code': 1000, 'field': 'title', 'error': u'广告标题已存在'})
+    models.edit_ad(model)
+
+def __delete(id):
+    models.delete_ad(id)
+
+def __sort(pks):
+    ad_pks = [int(pk) for pk in pks.split(",")]
+    models.sort_ad(ad_pks)
