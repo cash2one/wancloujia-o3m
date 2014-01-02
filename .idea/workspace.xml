@@ -2,19 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c3dfefef-aaad-4104-b895-f49c5694acd3" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/base.html" afterPath="$PROJECT_DIR$/templates/base.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/email_service.py" afterPath="$PROJECT_DIR$/email_service.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mgr/management/commands/ensure_groups_and_permissions.py" afterPath="$PROJECT_DIR$/mgr/management/commands/ensure_groups_and_permissions.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/login.html" afterPath="$PROJECT_DIR$/templates/login.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mgr/models.py" afterPath="$PROJECT_DIR$/mgr/models.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/notify.html" afterPath="$PROJECT_DIR$/templates/notify.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/suning/permissions.py" afterPath="$PROJECT_DIR$/suning/permissions.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rebuild_db.sh" afterPath="$PROJECT_DIR$/rebuild_db.sh" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/scaffolding.html" afterPath="$PROJECT_DIR$/templates/scaffolding.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/suning/settings.py" afterPath="$PROJECT_DIR$/suning/settings.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/interface/templates/wandoujia/subjects.html" afterPath="$PROJECT_DIR$/interface/templates/wandoujia/subjects.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="suning.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -69,7 +57,7 @@
       <file leaf-file-name="rebuild_db.sh" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/rebuild_db.sh">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="20" column="33" selection-start="410" selection-end="410" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="420">
+            <state line="9" column="0" selection-start="100" selection-end="100" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="420">
               <folding />
             </state>
           </provider>
@@ -123,7 +111,7 @@
       <file leaf-file-name="settings.py" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/suning/settings.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="22" column="22" selection-start="337" selection-end="337" vertical-scroll-proportion="-0.18518518" vertical-offset="360" max-vertical-offset="4665">
+            <state line="27" column="16" selection-start="428" selection-end="428" vertical-scroll-proportion="0.4814815" vertical-offset="165" max-vertical-offset="4665">
               <folding />
             </state>
           </provider>
@@ -832,13 +820,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/rebuild_db.sh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="20" column="33" selection-start="410" selection-end="410" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="420">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/mgr/models.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="15" column="0" selection-start="389" selection-end="389" vertical-scroll-proportion="12.6" vertical-offset="480" max-vertical-offset="3645">
@@ -874,9 +855,16 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/rebuild_db.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="9" column="0" selection-start="100" selection-end="100" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="420">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/suning/settings.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="22" column="22" selection-start="337" selection-end="337" vertical-scroll-proportion="-0.18518518" vertical-offset="360" max-vertical-offset="4665">
+        <state line="27" column="16" selection-start="428" selection-end="428" vertical-scroll-proportion="0.4814815" vertical-offset="165" max-vertical-offset="4665">
           <folding />
         </state>
       </provider>
