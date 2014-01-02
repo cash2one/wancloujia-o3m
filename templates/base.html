@@ -22,7 +22,7 @@
         </button>
         <a class="navbar-brand" href="#">&nbsp;</a>
     </div>
-    <p class="navbar-text">苏宁豌豆荚手机助手管理后台</p>
+    <p class="navbar-text">天音豌豆荚手机助手管理后台</p>
     <div class="collapse navbar-collapse navbar-ex1-collapse">
         <ul class="nav navbar-nav navbar-right">
 			<li><a class="navbar-link" href="/interface/subjects"><span class="glyphicon glyphicon-share-alt" style="top: 2px; right: 2px;"></span>前往一键安装</a></li>
@@ -57,7 +57,7 @@
                     <span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;个人中心
                 </a>
             </li>
-
+            <!--
             {% if request.user|is_not_employee or perms.ad %}
             <li {% if request.nav.active_tab == "ad" %}class="active"{% endif %}>
                 <a href="/ad/">
@@ -65,7 +65,7 @@
                 </a>
             </li>
             {% endif %}
-
+            -->
             {% if request.user|can_view_app %}
             <li {% if request.nav.active_tab == "app" %}class="active"{% endif %}>
                 <a href="/app/">
@@ -81,11 +81,11 @@
                 </a>
             </li>
             {% endif %}
-
+            <!--
             <li {% if request.nav.active_tab == "feedback" %}class="active"{% endif %}><a href="/feedback/">
                 <span class="glyphicon glyphicon-phone-alt"></span>&nbsp;&nbsp;反馈管理
             </a></li>
-
+            -->
             {% if request.user|is_not_employee or perms.mgr %}
             <li {% if request.nav.active_tab == "system" %}class="active"{% endif %}>
                 <a class="accordin-toggle" data-toggle="collapse" data-parent="#accordin" href="#sub_system">
@@ -118,7 +118,7 @@
                 </ul>
             </li>
             {% endif %}
-
+            <!--
             <li {% if request.nav.active_tab == "statistics" %}
                 class="active"
                 {% endif %}>
@@ -151,6 +151,7 @@
                     </li>
                 </ul>
             </li>
+            -->
         </ul>
     </div>
 </div>

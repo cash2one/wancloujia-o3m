@@ -34,7 +34,7 @@ def _ensure_permissions_for_built_in_groups():
                                codename='view_organization_statistics')
     ]
     group.save()
-
+    '''
     group = Group.objects.get(name=u'广告组')
     group.permissions = [
         Permission.objects.get(content_type=ad_type, codename='add_ad'), 
@@ -43,7 +43,7 @@ def _ensure_permissions_for_built_in_groups():
         Permission.objects.get(content_type=ad_type, codename="sort_ad"),
     ]
     group.save()
-    
+    '''
     group = Group.objects.get(name=u'应用组')
     group.permissions = [
         Permission.objects.get(content_type=app_type, codename='add_app'), 

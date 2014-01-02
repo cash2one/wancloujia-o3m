@@ -7,7 +7,7 @@ from django.contrib.contenttypes.models import ContentType
 
 
 def get_built_in_group_names():
-    return [u"应用组", u"审核组", u"管理组", u"广告组"]
+    return [u"应用组", u"管理组"]
 
 
 def is_group_built_in(group):
