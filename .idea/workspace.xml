@@ -2,7 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c3dfefef-aaad-4104-b895-f49c5694acd3" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/suning/settings.py" afterPath="$PROJECT_DIR$/suning/settings.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/assets/css/bootstrap-theme.css" afterPath="$PROJECT_DIR$/assets/css/bootstrap-theme.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/assets/css/bootstrap-theme.min.css" afterPath="$PROJECT_DIR$/assets/css/bootstrap-theme.min.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/assets/css/bootstrap.css" afterPath="$PROJECT_DIR$/assets/css/bootstrap.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/assets/css/bootstrap.min.css" afterPath="$PROJECT_DIR$/assets/css/bootstrap.min.css" />
     </list>
     <ignored path="suning.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -25,17 +28,6 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="expire_sessions.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/framework/management/commands/expire_sessions.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-0.0" vertical-offset="0" max-vertical-offset="315">
-              <folding>
-                <element signature="e#0#14#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="__init__.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/framework/management/commands/__init__.py">
           <provider selected="true" editor-type-id="text-editor">
@@ -108,10 +100,19 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="settings.py" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="settings.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/suning/settings.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="27" column="16" selection-start="428" selection-end="428" vertical-scroll-proportion="0.4814815" vertical-offset="165" max-vertical-offset="4665">
+            <state line="27" column="16" selection-start="428" selection-end="428" vertical-scroll-proportion="-7.8" vertical-offset="165" max-vertical-offset="4665">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="bootstrap-theme.css" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/assets/css/bootstrap-theme.css">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="71" column="24" selection-start="2180" selection-end="2180" vertical-scroll-proportion="0.5069767" vertical-offset="847" max-vertical-offset="6960">
               <folding />
             </state>
           </provider>
@@ -135,7 +136,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/statistics/views.py" />
         <option value="$PROJECT_DIR$/oplog/models.py" />
         <option value="$PROJECT_DIR$/ad/ajax.py" />
         <option value="$PROJECT_DIR$/app/ajax.py" />
@@ -151,6 +151,7 @@
         <option value="$PROJECT_DIR$/interface/templates/wandoujia/subjects.html" />
         <option value="$PROJECT_DIR$/templates/base.html" />
         <option value="$PROJECT_DIR$/suning/settings.py" />
+        <option value="$PROJECT_DIR$/assets/css/bootstrap-theme.css" />
       </list>
     </option>
   </component>
@@ -753,13 +754,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/interface/purls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="460">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/suning/service.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="460">
@@ -864,7 +858,14 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/suning/settings.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="27" column="16" selection-start="428" selection-end="428" vertical-scroll-proportion="0.4814815" vertical-offset="165" max-vertical-offset="4665">
+        <state line="27" column="16" selection-start="428" selection-end="428" vertical-scroll-proportion="-7.8" vertical-offset="165" max-vertical-offset="4665">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/assets/css/bootstrap-theme.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="71" column="24" selection-start="2180" selection-end="2180" vertical-scroll-proportion="0.5069767" vertical-offset="847" max-vertical-offset="6960">
           <folding />
         </state>
       </provider>
