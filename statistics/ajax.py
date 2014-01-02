@@ -542,7 +542,7 @@ def filter_org_statistics(request, form, offset, length, mode, level):
     items = []
     for record in records:
         items.append(org_record_to_dict(record, mode, level))
-    print items[0]
+    print [i['total_device_count'] for i in items]
     brands = sum([i['total_device_count'] for i in items])
     return simplejson.dumps({
         'ret_code': 0,
