@@ -67,8 +67,8 @@ def response_error(func):
 def oplog_track(type):
     def outer_wrapper(func):
         @wraps(func)
-        def wrapper(request, *args, **kwargs):
-            result = func(request, *args, **kwargs)
+        def wrapper(*args, **kwargs):
+            result = func(*args, **kwargs)
             print type
             return result
         return wrapper
