@@ -20,6 +20,7 @@ _ok_json = simplejson.dumps({'ret_code': 0})
 @check_login
 def delete_ad(request, id):
     models.delete_ad(id)
+    __remove()
     return _ok_json
 
 
@@ -67,4 +68,5 @@ def __edit(model):
 
 @oplog_track('广告')
 def __remove(model):
-    models.delete_ad(id)
+    pass
+    #models.delete_ad(id)
