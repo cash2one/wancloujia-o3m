@@ -63,3 +63,13 @@ def response_error(func):
         return simplejson.dumps({'ret_code': 1000, 'ret_msg': 'Easy. Just for test:)'})
     return wrapper
 
+
+def oplog_track(type):
+    def outer_wrapper(func):
+        @wraps(func)
+        def wrapper(request, *args, **kwargs):
+            result = func(request, *args, **kwargs)
+            print type
+            return result
+        return wrapper
+    return outer_wrapper

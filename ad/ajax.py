@@ -56,3 +56,15 @@ def sort_ad(request, pks):
     models.sort_ad(ad_pks)
     return _ok_json
 
+
+@oplog_track('广告')
+def __add(model):
+    pass
+
+@oplog_track('广告')
+def __edit(model):
+    pass
+
+@oplog_track('广告')
+def __remove(model):
+    models.delete_ad(id)

@@ -474,7 +474,7 @@ def titles_for_org_stat(mode, level):
             titles.append(u'门店名称')
         elif level == 'emp':
             titles.append(u'员工编码')
-            titles.append(u'门店编码')
+            titles.append(u'员工姓名')
     titles.append(u'机器台数')
     titles.append(u'推广数')
     titles.append(u'安装总数')
