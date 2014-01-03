@@ -2,11 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="87860b74-3a83-4b23-9157-b9b1bf3c3379" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ad/ajax.py" afterPath="$PROJECT_DIR$/ad/ajax.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/ajax.py" afterPath="$PROJECT_DIR$/app/ajax.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/statistics/ajax.py" afterPath="$PROJECT_DIR$/statistics/ajax.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/suning/decorators.py" afterPath="$PROJECT_DIR$/suning/decorators.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/base.html" afterPath="$PROJECT_DIR$/templates/base.html" />
     </list>
     <ignored path="suningx.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -98,13 +94,22 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ajax.py" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="ajax.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ad/ajax.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="42" column="23" selection-start="1158" selection-end="1158" vertical-scroll-proportion="0.46594426" vertical-offset="329" max-vertical-offset="1140">
+            <state line="38" column="24" selection-start="951" selection-end="951" vertical-scroll-proportion="-22.8" vertical-offset="0" max-vertical-offset="1140">
               <folding>
                 <element signature="e#16#30#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="base.html" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/templates/base.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="87" column="3" selection-start="3593" selection-end="3593" vertical-scroll-proportion="0.59148264" vertical-offset="930" max-vertical-offset="2685">
+              <folding />
             </state>
           </provider>
         </entry>
@@ -118,15 +123,6 @@
                 <marker date="1388752262000" expanded="true" signature="1763:1955" placeholder="..." />
                 <marker date="1388752262000" expanded="true" signature="1831:1932" placeholder="..." />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="organization_stat.html" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/statistics/templates/organization_stat.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="40" column="46" selection-start="1461" selection-end="1461" vertical-scroll-proportion="-7.9166665" vertical-offset="410" max-vertical-offset="1080">
-              <folding />
             </state>
           </provider>
         </entry>
@@ -157,6 +153,7 @@
         <option value="$PROJECT_DIR$/app/ajax.py" />
         <option value="$PROJECT_DIR$/suning/decorators.py" />
         <option value="$PROJECT_DIR$/ad/ajax.py" />
+        <option value="$PROJECT_DIR$/templates/base.html" />
       </list>
     </option>
   </component>
@@ -207,6 +204,20 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="suningx" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="suningx" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="suningx" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="templates" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -551,10 +562,17 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/ad/ajax.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="42" column="23" selection-start="1158" selection-end="1158" vertical-scroll-proportion="0.46594426" vertical-offset="329" max-vertical-offset="1140">
+        <state line="38" column="24" selection-start="951" selection-end="951" vertical-scroll-proportion="-22.8" vertical-offset="0" max-vertical-offset="1140">
           <folding>
             <element signature="e#16#30#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/base.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="87" column="3" selection-start="3593" selection-end="3593" vertical-scroll-proportion="0.59148264" vertical-offset="930" max-vertical-offset="2685">
+          <folding />
         </state>
       </provider>
     </entry>

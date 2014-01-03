@@ -81,11 +81,11 @@
                 </a>
             </li>
             {% endif %}
-
+<!--
             <li {% if request.nav.active_tab == "feedback" %}class="active"{% endif %}><a href="/feedback/">
                 <span class="glyphicon glyphicon-phone-alt"></span>&nbsp;&nbsp;反馈管理
             </a></li>
-
+-->
             {% if request.user|is_not_employee or perms.mgr %}
             <li {% if request.nav.active_tab == "system" %}class="active"{% endif %}>
                 <a class="accordin-toggle" data-toggle="collapse" data-parent="#accordin" href="#sub_system">
