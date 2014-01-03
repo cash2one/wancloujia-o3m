@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="c3dfefef-aaad-4104-b895-f49c5694acd3" name="Default" comment="">
+    <list default="true" id="87860b74-3a83-4b23-9157-b9b1bf3c3379" name="Default" comment="">
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/suning.iml" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/.name" afterPath="$PROJECT_DIR$/.idea/.name" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/statistics/templates/capacity.html" afterPath="$PROJECT_DIR$/statistics/templates/capacity.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/statistics/templates/device.html" afterPath="$PROJECT_DIR$/statistics/templates/device.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/encodings.xml" afterPath="$PROJECT_DIR$/.idea/encodings.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/statistics/templates/flow.html" afterPath="$PROJECT_DIR$/statistics/templates/flow.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/oplog/models.py" afterPath="$PROJECT_DIR$/oplog/models.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/suning.iml" afterPath="$PROJECT_DIR$/.idea/suning.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/statistics/templates/organization_stat.html" afterPath="$PROJECT_DIR$/statistics/templates/organization_stat.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
-    <ignored path="suning.iws" />
+    <ignored path="suningx.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -24,146 +30,41 @@
   </component>
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FavoritesManager">
-    <favorites_list name="suning" />
+    <favorites_list name="suningx" />
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="ajax.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/statistics/ajax.py">
-          <provider selected="true" editor-type-id="text-editor">
-<<<<<<< HEAD
-            <state line="551" column="24" selection-start="17953" selection-end="17953" vertical-scroll-proportion="0.0" vertical-offset="9774" max-vertical-offset="10336">
-=======
-            <state line="538" column="32" selection-start="17473" selection-end="17473" vertical-scroll-proportion="0.0" vertical-offset="8070" max-vertical-offset="8400">
->>>>>>> dc284398972e69438092627f1c3c2c7b2dcf3ff0
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-<<<<<<< HEAD
-      <file leaf-file-name="ajax.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/ajax.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="25" column="13" selection-start="685" selection-end="685" vertical-scroll-proportion="0.0" vertical-offset="76" max-vertical-offset="3059">
-=======
-      <file leaf-file-name="capacity.html" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/statistics/templates/capacity.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="56" column="17" selection-start="2630" selection-end="2630" vertical-scroll-proportion="0.0" vertical-offset="840" max-vertical-offset="1410">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="master_do.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/server_scripts/master_do.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="48" column="25" selection-start="1221" selection-end="1221" vertical-scroll-proportion="0.0" vertical-offset="720" max-vertical-offset="2445">
->>>>>>> dc284398972e69438092627f1c3c2c7b2dcf3ff0
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="views.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/views.py">
-          <provider selected="true" editor-type-id="text-editor">
-<<<<<<< HEAD
-            <state line="81" column="27" selection-start="2659" selection-end="2659" vertical-scroll-proportion="0.0" vertical-offset="1007" max-vertical-offset="3173">
-=======
-            <state line="11" column="19" selection-start="296" selection-end="296" vertical-scroll-proportion="0.0" vertical-offset="165" max-vertical-offset="315">
->>>>>>> dc284398972e69438092627f1c3c2c7b2dcf3ff0
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="forms.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://C:/Python27/Lib/site-packages/django/forms/forms.py">
-          <provider selected="true" editor-type-id="text-editor">
-<<<<<<< HEAD
-            <state line="123" column="8" selection-start="4815" selection-end="4815" vertical-scroll-proportion="0.0" vertical-offset="1951" max-vertical-offset="10944">
-=======
-            <state line="35" column="32" selection-start="1603" selection-end="1603" vertical-scroll-proportion="0.0" vertical-offset="525" max-vertical-offset="2310">
->>>>>>> dc284398972e69438092627f1c3c2c7b2dcf3ff0
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="apk.py" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/app/apk.py">
-          <provider selected="true" editor-type-id="text-editor">
-<<<<<<< HEAD
-            <state line="182" column="24" selection-start="5264" selection-end="5264" vertical-scroll-proportion="0.57894737" vertical-offset="3249" max-vertical-offset="3610">
-              <folding>
-                <element signature="e#0#14#0" expanded="true" />
-              </folding>
-=======
-            <state line="49" column="16" selection-start="2009" selection-end="2009" vertical-scroll-proportion="0.0" vertical-offset="735" max-vertical-offset="1440">
-              <folding />
->>>>>>> dc284398972e69438092627f1c3c2c7b2dcf3ff0
-            </state>
-          </provider>
-        </entry>
-      </file>
-<<<<<<< HEAD
-      <file leaf-file-name="urls.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/interface/urls.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="11" column="19" selection-start="296" selection-end="296" vertical-scroll-proportion="0.0" vertical-offset="209" max-vertical-offset="399">
-=======
-      <file leaf-file-name="views.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/statistics/views.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="92" column="31" selection-start="3001" selection-end="3001" vertical-scroll-proportion="-10.8" vertical-offset="1110" max-vertical-offset="7665">
->>>>>>> dc284398972e69438092627f1c3c2c7b2dcf3ff0
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-<<<<<<< HEAD
-      <file leaf-file-name="subjects.html" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/interface/templates/wandoujia/subjects.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="35" column="32" selection-start="1603" selection-end="1603" vertical-scroll-proportion="0.0" vertical-offset="665" max-vertical-offset="2926">
-=======
-      <file leaf-file-name="models.py" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/oplog/models.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="7" column="0" selection-start="214" selection-end="214" vertical-scroll-proportion="0.24193548" vertical-offset="0" max-vertical-offset="434">
->>>>>>> dc284398972e69438092627f1c3c2c7b2dcf3ff0
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-<<<<<<< HEAD
       <file leaf-file-name="flow.html" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/statistics/templates/flow.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="49" column="16" selection-start="2009" selection-end="2009" vertical-scroll-proportion="0.0" vertical-offset="367" max-vertical-offset="1824">
-=======
-      <file leaf-file-name="views.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/interface/views.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="165" column="35" selection-start="5604" selection-end="5604" vertical-scroll-proportion="0.0" vertical-offset="2475" max-vertical-offset="3900">
->>>>>>> dc284398972e69438092627f1c3c2c7b2dcf3ff0
+            <state line="49" column="46" selection-start="2039" selection-end="2039" vertical-scroll-proportion="-5.625" vertical-offset="600" max-vertical-offset="1440">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="views.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/statistics/views.py">
+      <file leaf-file-name="capacity.html" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/statistics/templates/capacity.html">
           <provider selected="true" editor-type-id="text-editor">
-<<<<<<< HEAD
-            <state line="28" column="75" selection-start="1180" selection-end="1180" vertical-scroll-proportion="0.0" vertical-offset="532" max-vertical-offset="9709">
-=======
-            <state line="38" column="27" selection-start="1361" selection-end="1361" vertical-scroll-proportion="0.0" vertical-offset="570" max-vertical-offset="1080">
->>>>>>> dc284398972e69438092627f1c3c2c7b2dcf3ff0
+            <state line="57" column="31" selection-start="2691" selection-end="2691" vertical-scroll-proportion="0.3955224" vertical-offset="590" max-vertical-offset="1410">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="device.html" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/statistics/templates/device.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="81" column="46" selection-start="3306" selection-end="3306" vertical-scroll-proportion="-8.541667" vertical-offset="1010" max-vertical-offset="1860">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="organization_stat.html" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/statistics/templates/organization_stat.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="40" column="46" selection-start="1461" selection-end="1461" vertical-scroll-proportion="-7.9166665" vertical-offset="410" max-vertical-offset="1080">
               <folding />
             </state>
           </provider>
@@ -187,62 +88,17 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/statistics/models.py" />
-        <option value="$PROJECT_DIR$/server_scripts/log_mapper_meta.py" />
-        <option value="$PROJECT_DIR$/statistics/static/js/flow.js" />
         <option value="$PROJECT_DIR$/statistics/templates/flow.html" />
-        <option value="$PROJECT_DIR$/statistics/static/js/capacity.js" />
-        <option value="$PROJECT_DIR$/statistics/static/js/device.js" />
         <option value="$PROJECT_DIR$/statistics/templates/device.html" />
-        <option value="$PROJECT_DIR$/statistics/static/js/organization_stat.js" />
         <option value="$PROJECT_DIR$/statistics/templates/organization_stat.html" />
         <option value="$PROJECT_DIR$/statistics/templates/capacity.html" />
-        <option value="$PROJECT_DIR$/interface/views.py" />
-        <option value="$PROJECT_DIR$/interface/urls.py" />
-        <option value="$PROJECT_DIR$/interface/templates/wandoujia/subjects.html" />
-        <option value="$PROJECT_DIR$/statistics/views.py" />
-<<<<<<< HEAD
-        <option value="$PROJECT_DIR$/statistics/ajax.py" />
-        <option value="$PROJECT_DIR$/app/views.py" />
-=======
-        <option value="$PROJECT_DIR$/oplog/models.py" />
->>>>>>> dc284398972e69438092627f1c3c2c7b2dcf3ff0
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-<<<<<<< HEAD
-    <option name="x" value="-8" />
-    <option name="y" value="-8" />
-    <option name="width" value="1382" />
-    <option name="height" value="744" />
-=======
     <option name="y" value="22" />
     <option name="width" value="1440" />
-    <option name="height" value="812" />
->>>>>>> dc284398972e69438092627f1c3c2c7b2dcf3ff0
-  </component>
-  <component name="ProjectInspectionProfilesVisibleTreeState">
-    <entry key="Project Default">
-      <profile-state>
-        <expanded-state>
-          <State>
-            <id />
-          </State>
-          <State>
-            <id>Portability issues</id>
-          </State>
-          <State>
-            <id>Python</id>
-          </State>
-        </expanded-state>
-        <selected-state>
-          <State>
-            <id>Buildout</id>
-          </State>
-        </selected-state>
-      </profile-state>
-    </entry>
+    <option name="height" value="817" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -270,31 +126,32 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
             <PATH_ELEMENT>
-              <option name="myItemId" value="suning" />
+              <option name="myItemId" value="suningx" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
-              <option name="myItemId" value="suning" />
+              <option name="myItemId" value="suningx" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="suning" />
+              <option name="myItemId" value="suningx" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
-              <option name="myItemId" value="suning" />
+              <option name="myItemId" value="suningx" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="suning" />
+              <option name="myItemId" value="suningx" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
@@ -304,11 +161,11 @@
           </PATH>
           <PATH>
             <PATH_ELEMENT>
-              <option name="myItemId" value="suning" />
+              <option name="myItemId" value="suningx" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="suning" />
+              <option name="myItemId" value="suningx" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
@@ -322,11 +179,11 @@
           </PATH>
           <PATH>
             <PATH_ELEMENT>
-              <option name="myItemId" value="suning" />
+              <option name="myItemId" value="suningx" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="suning" />
+              <option name="myItemId" value="suningx" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
@@ -344,11 +201,11 @@
           </PATH>
           <PATH>
             <PATH_ELEMENT>
-              <option name="myItemId" value="suning" />
+              <option name="myItemId" value="suningx" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="suning" />
+              <option name="myItemId" value="suningx" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
@@ -360,437 +217,50 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="suning" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="suning" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="server_scripts" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="suning" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="suning" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="oplog" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="suning" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="suning" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="mgr" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="suning" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="suning" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="interface" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="suning" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="suning" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="interface" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="templates" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="wandoujia" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="suning" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="suning" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="framework" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="suning" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="suning" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="feedback" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="suning" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="suning" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="feedback" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="static" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="suning" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="suning" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="suning" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="suning" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="templates" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="GoToFile.includeJavaFiles" value="false" />
     <property name="options.splitter.main.proportions" value="0.3" />
-    <property name="recentsLimit" value="5" />
-<<<<<<< HEAD
-    <property name="options.lastSelected" value="File.Encoding" />
-=======
-    <property name="options.lastSelected" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
->>>>>>> dc284398972e69438092627f1c3c2c7b2dcf3ff0
-    <property name="last_opened_file_path" value="$USER_HOME$/Desktop/master_do.py" />
-    <property name="FullScreen" value="false" />
+    <property name="options.lastSelected" value="preferences.sourceCode" />
     <property name="options.searchVisible" value="true" />
     <property name="options.splitter.details.proportions" value="0.2" />
   </component>
-  <component name="PyConsoleOptionsProvider">
-    <option name="myPythonConsoleState">
-      <console-settings />
-    </option>
-  </component>
-  <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\young\Documents\GitHub\suning\server_scripts" />
-    </key>
-  </component>
-  <component name="RunManager" selected="Python.log_mapper_meta">
-    <configuration default="false" name="master_do" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$USER_HOME$/Desktop" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="suning" />
-      <option name="SCRIPT_NAME" value="$USER_HOME$/Desktop/master_do.py" />
-      <option name="PARAMETERS" value="" />
-      <RunnerSettings RunnerId="PyDebugRunner" />
-      <RunnerSettings RunnerId="PythonRunner" />
-      <ConfigurationWrapper RunnerId="PyDebugRunner" />
-      <ConfigurationWrapper RunnerId="PythonRunner" />
-      <method />
-    </configuration>
-    <configuration default="false" name="log_mapper_meta" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/server_scripts" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="suning" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/server_scripts/log_mapper_meta.py" />
-      <option name="PARAMETERS" value="" />
-      <RunnerSettings RunnerId="PythonRunner" />
-      <ConfigurationWrapper RunnerId="PythonRunner" />
-      <method />
-    </configuration>
-    <configuration default="true" type="tests" factoryName="py.test">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="suning" />
-      <option name="SCRIPT_NAME" value="" />
-      <option name="CLASS_NAME" value="" />
-      <option name="METHOD_NAME" value="" />
-      <option name="FOLDER_NAME" value="" />
-      <option name="TEST_TYPE" value="TEST_SCRIPT" />
-      <option name="PATTERN" value="" />
-      <option name="USE_PATTERN" value="false" />
-      <option name="testToRun" value="" />
-      <option name="keywords" value="" />
-      <option name="params" value="" />
-      <option name="USE_PARAM" value="false" />
-      <option name="USE_KEYWORD" value="false" />
-      <method />
-    </configuration>
-    <configuration default="true" type="tests" factoryName="Nosetests">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="suning" />
-      <option name="SCRIPT_NAME" value="" />
-      <option name="CLASS_NAME" value="" />
-      <option name="METHOD_NAME" value="" />
-      <option name="FOLDER_NAME" value="" />
-      <option name="TEST_TYPE" value="TEST_SCRIPT" />
-      <option name="PATTERN" value="" />
-      <option name="USE_PATTERN" value="false" />
-      <option name="PARAMS" value="" />
-      <option name="USE_PARAM" value="false" />
-      <method />
-    </configuration>
-    <configuration default="true" type="PythonConfigurationType" factoryName="Python">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="suning" />
-      <option name="SCRIPT_NAME" value="" />
-      <option name="PARAMETERS" value="" />
-      <method />
-    </configuration>
-    <configuration default="true" type="tests" factoryName="Unittests">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="suning" />
-      <option name="SCRIPT_NAME" value="" />
-      <option name="CLASS_NAME" value="" />
-      <option name="METHOD_NAME" value="" />
-      <option name="FOLDER_NAME" value="" />
-      <option name="TEST_TYPE" value="TEST_SCRIPT" />
-      <option name="PATTERN" value="" />
-      <option name="USE_PATTERN" value="false" />
-      <option name="PUREUNITTEST" value="true" />
-      <option name="PARAMS" value="" />
-      <option name="USE_PARAM" value="false" />
-      <method />
-    </configuration>
-    <configuration default="true" type="tests" factoryName="Doctests">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="suning" />
-      <option name="SCRIPT_NAME" value="" />
-      <option name="CLASS_NAME" value="" />
-      <option name="METHOD_NAME" value="" />
-      <option name="FOLDER_NAME" value="" />
-      <option name="TEST_TYPE" value="TEST_SCRIPT" />
-      <option name="PATTERN" value="" />
-      <option name="USE_PATTERN" value="false" />
-      <method />
-    </configuration>
-    <configuration default="true" type="tests" factoryName="Attests">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="suning" />
-      <option name="SCRIPT_NAME" value="" />
-      <option name="CLASS_NAME" value="" />
-      <option name="METHOD_NAME" value="" />
-      <option name="FOLDER_NAME" value="" />
-      <option name="TEST_TYPE" value="TEST_SCRIPT" />
-      <option name="PATTERN" value="" />
-      <option name="USE_PATTERN" value="false" />
-      <method />
-    </configuration>
-    <list size="2">
-      <item index="0" class="java.lang.String" itemvalue="Python.master_do" />
-      <item index="1" class="java.lang.String" itemvalue="Python.log_mapper_meta" />
-    </list>
-    <recent_temporary>
-      <list size="2">
-        <item index="0" class="java.lang.String" itemvalue="Python.log_mapper_meta" />
-        <item index="1" class="java.lang.String" itemvalue="Python.master_do" />
-      </list>
-    </recent_temporary>
+  <component name="RunManager">
+    <list size="0" />
   </component>
   <component name="ShelveChangesManager" show_recycled="false" />
-  <component name="SvnConfiguration" maxAnnotateRevisions="500" myUseAcceleration="nothing" myAutoUpdateAfterCommit="false" cleanupOnStartRun="false" SSL_PROTOCOLS="sslv3">
-    <option name="USER" value="" />
-    <option name="PASSWORD" value="" />
-    <option name="mySSHConnectionTimeout" value="30000" />
-    <option name="mySSHReadTimeout" value="30000" />
-    <option name="LAST_MERGED_REVISION" />
-    <option name="MERGE_DRY_RUN" value="false" />
-    <option name="MERGE_DIFF_USE_ANCESTRY" value="true" />
-    <option name="UPDATE_LOCK_ON_DEMAND" value="false" />
-    <option name="IGNORE_SPACES_IN_MERGE" value="false" />
-    <option name="CHECK_NESTED_FOR_QUICK_MERGE" value="false" />
-    <option name="IGNORE_SPACES_IN_ANNOTATE" value="true" />
-    <option name="SHOW_MERGE_SOURCES_IN_ANNOTATE" value="true" />
-    <option name="FORCE_UPDATE" value="false" />
-    <option name="IGNORE_EXTERNALS" value="false" />
-    <myIsUseDefaultProxy>false</myIsUseDefaultProxy>
-  </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="c3dfefef-aaad-4104-b895-f49c5694acd3" name="Default" comment="" />
-      <created>1384569201116</created>
-      <updated>1384569201116</updated>
+      <changelist id="87860b74-3a83-4b23-9157-b9b1bf3c3379" name="Default" comment="" />
+      <created>1388740921088</created>
+      <updated>1388740921088</updated>
     </task>
     <servers />
   </component>
   <component name="ToolWindowManager">
-<<<<<<< HEAD
-    <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
-=======
-    <frame x="0" y="22" width="1440" height="812" extended-state="6" />
->>>>>>> dc284398972e69438092627f1c3c2c7b2dcf3ff0
+    <frame x="0" y="22" width="1440" height="817" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.28870293" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32936078" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-<<<<<<< HEAD
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.17569546" sideWeight="0.6710311" order="0" side_tool="false" content_ui="combo" />
-=======
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.17569445" sideWeight="0.7112971" order="0" side_tool="false" content_ui="combo" />
->>>>>>> dc284398972e69438092627f1c3c2c7b2dcf3ff0
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39915523" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3289689" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33802816" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24305555" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-    </layout>
-    <layout-to-restore>
-      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.21523578" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="true" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.159375" sideWeight="0.78476423" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-    </layout-to-restore>
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+    </layout>
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
@@ -801,156 +271,34 @@
     </option>
   </component>
   <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <option name="time" value="1" />
-    </breakpoint-manager>
+    <breakpoint-manager />
   </component>
   <component name="editorHistoryManager">
-<<<<<<< HEAD
-    <entry file="file://$PROJECT_DIR$/statistics/static/js/statistics.js">
+    <entry file="file://$PROJECT_DIR$/statistics/templates/flow.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="127" column="29" selection-start="4152" selection-end="4152" vertical-scroll-proportion="0.0" vertical-offset="1824" max-vertical-offset="4788" />
+        <state line="49" column="46" selection-start="2039" selection-end="2039" vertical-scroll-proportion="-5.625" vertical-offset="600" max-vertical-offset="1440">
+          <folding />
+        </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/statistics/static/js/organization_stat.js">
-=======
-    <entry file="file://$PROJECT_DIR$/interface/models.py">
->>>>>>> dc284398972e69438092627f1c3c2c7b2dcf3ff0
+    <entry file="file://$PROJECT_DIR$/statistics/templates/device.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="180" column="49" selection-start="5825" selection-end="5825" vertical-scroll-proportion="0.0" vertical-offset="2967" max-vertical-offset="4275">
+        <state line="81" column="46" selection-start="3306" selection-end="3306" vertical-scroll-proportion="-8.541667" vertical-offset="1010" max-vertical-offset="1860">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/statistics/templates/organization_stat.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="38" column="27" selection-start="1361" selection-end="1361" vertical-scroll-proportion="0.0" vertical-offset="114" max-vertical-offset="1368">
+        <state line="40" column="46" selection-start="1461" selection-end="1461" vertical-scroll-proportion="-7.9166665" vertical-offset="410" max-vertical-offset="1080">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/statistics/templates/capacity.html">
       <provider selected="true" editor-type-id="text-editor">
-<<<<<<< HEAD
-        <state line="56" column="17" selection-start="2630" selection-end="2630" vertical-scroll-proportion="0.0" vertical-offset="456" max-vertical-offset="1786">
+        <state line="57" column="31" selection-start="2691" selection-end="2691" vertical-scroll-proportion="0.3955224" vertical-offset="590" max-vertical-offset="1410">
           <folding />
-        </state>
-=======
-        <state line="79" column="35" selection-start="3214" selection-end="3214" vertical-scroll-proportion="0.0" vertical-offset="969" max-vertical-offset="2356" />
->>>>>>> dc284398972e69438092627f1c3c2c7b2dcf3ff0
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/server_scripts/master_do.py">
-      <provider selected="true" editor-type-id="text-editor">
-<<<<<<< HEAD
-        <state line="48" column="25" selection-start="1221" selection-end="1221" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="3002">
-          <folding />
-        </state>
-=======
-        <state line="93" column="45" selection-start="3294" selection-end="3294" vertical-scroll-proportion="0.0" vertical-offset="1460" max-vertical-offset="2356" />
->>>>>>> dc284398972e69438092627f1c3c2c7b2dcf3ff0
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/interface/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-<<<<<<< HEAD
-        <state line="165" column="35" selection-start="5604" selection-end="5604" vertical-scroll-proportion="0.0" vertical-offset="2356" max-vertical-offset="4864">
-          <folding />
-        </state>
-=======
-        <state line="127" column="29" selection-start="4152" selection-end="4152" vertical-scroll-proportion="0.0" vertical-offset="1824" max-vertical-offset="4788" />
->>>>>>> dc284398972e69438092627f1c3c2c7b2dcf3ff0
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/interface/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="19" selection-start="296" selection-end="296" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="399">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/interface/templates/wandoujia/subjects.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="35" column="32" selection-start="1603" selection-end="1603" vertical-scroll-proportion="0.0" vertical-offset="665" max-vertical-offset="2926">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/statistics/templates/flow.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="49" column="16" selection-start="2009" selection-end="2009" vertical-scroll-proportion="0.0" vertical-offset="367" max-vertical-offset="1824">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/statistics/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="28" column="75" selection-start="1180" selection-end="1180" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="9709">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/statistics/ajax.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="551" column="24" selection-start="17953" selection-end="17953" vertical-scroll-proportion="0.0" vertical-offset="9774" max-vertical-offset="10336">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://C:/Python27/Lib/site-packages/django/forms/forms.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="123" column="8" selection-start="4815" selection-end="4815" vertical-scroll-proportion="0.0" vertical-offset="1951" max-vertical-offset="10944">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/ajax.py">
-      <provider selected="true" editor-type-id="text-editor">
-<<<<<<< HEAD
-        <state line="25" column="13" selection-start="685" selection-end="685" vertical-scroll-proportion="0.0" vertical-offset="76" max-vertical-offset="3059">
-=======
-        <state line="35" column="32" selection-start="1603" selection-end="1603" vertical-scroll-proportion="0.0" vertical-offset="525" max-vertical-offset="2310">
->>>>>>> dc284398972e69438092627f1c3c2c7b2dcf3ff0
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-<<<<<<< HEAD
-        <state line="81" column="27" selection-start="2659" selection-end="2659" vertical-scroll-proportion="0.0" vertical-offset="1007" max-vertical-offset="3173">
-=======
-        <state line="49" column="16" selection-start="2009" selection-end="2009" vertical-scroll-proportion="0.0" vertical-offset="735" max-vertical-offset="1440">
->>>>>>> dc284398972e69438092627f1c3c2c7b2dcf3ff0
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://C:/Python27/Lib/subprocess.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="647" column="8" selection-start="20658" selection-end="20658" vertical-scroll-proportion="0.33240998" vertical-offset="12173" max-vertical-offset="30894">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/apk.py">
-      <provider selected="true" editor-type-id="text-editor">
-<<<<<<< HEAD
-        <state line="182" column="24" selection-start="5264" selection-end="5264" vertical-scroll-proportion="0.57894737" vertical-offset="3249" max-vertical-offset="3610">
-          <folding>
-            <element signature="e#0#14#0" expanded="true" />
-          </folding>
-=======
-        <state line="92" column="31" selection-start="3001" selection-end="3001" vertical-scroll-proportion="-10.8" vertical-offset="1110" max-vertical-offset="7665">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/oplog/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="7" column="0" selection-start="214" selection-end="214" vertical-scroll-proportion="0.24193548" vertical-offset="0" max-vertical-offset="434">
-          <folding />
->>>>>>> dc284398972e69438092627f1c3c2c7b2dcf3ff0
         </state>
       </provider>
     </entry>
