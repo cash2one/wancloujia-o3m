@@ -68,5 +68,5 @@ def __edit(model):
 
 @oplog_track(_track_name)
 def __remove(model):
-    pass
+    print 'remove ad'
     #models.delete_ad(id)
