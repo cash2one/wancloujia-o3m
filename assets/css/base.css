@@ -173,7 +173,7 @@ td.ops, td.ops_2, td.ops_3 {
 
 .form-horizontal .form-group>div>input[type=password]:focus, 
 .form-horizontal .form-group>div>input[type=text]:focus {
-    border-color: #66afe9;
+    border-color: #355ba5;
     outline: 0;
     -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
@@ -210,7 +210,7 @@ table.table-bordered>thead>tr>th {
 
 
 .search input[type=text]:focus {
-    border: 1px solid #66AFE9;
+    border: 1px solid #355ba5;
     background: #fff;
     outline: none;
 }
