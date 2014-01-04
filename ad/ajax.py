@@ -21,6 +21,7 @@ _track_name = u'广告'
 def delete_ad(request, id):
     models.delete_ad(id)
     __remove()
+    print 'ssssss'
     return _ok_json
 
 
