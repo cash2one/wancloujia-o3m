@@ -65,11 +65,10 @@ def response_error(func):
 
 
 def oplog_track(type):
-    def outer_wrapper(func):
-        @wraps(func)
-        def wrapper(*args, **kwargs):
-            result = func(*args, **kwargs)
-            print type
-            return result
-        return wrapper
-    return outer_wrapper
+    def dec(fn):
+        def wraped(model=None, *argv,**kwgs):
+            fn(model = model, *argv,**kwgs)
+            if model:
+                print model.__unicode__
+        return wraped
+    return dec
