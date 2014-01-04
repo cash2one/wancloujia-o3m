@@ -19,9 +19,9 @@ _track_name = u'广告'
 @dajaxice_register(method='POST')
 @check_login
 def delete_ad(request, id):
+    model = models.AD.objects.get(pk=id)
     models.delete_ad(id)
-    __remove()
-    logger.warn("sssssss")
+    __remove(model)
     return _ok_json
 
 
@@ -67,7 +67,7 @@ def __add(model):
 def __edit(model):
     pass
 
-@oplog_track(_track_name)
+@oplog_track(u'删除广告')
 def __remove(model):
     print 'remove ad'
     #models.delete_ad(id)
