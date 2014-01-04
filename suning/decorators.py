@@ -69,6 +69,6 @@ def oplog_track(type):
         def wraped(model=None, *argv,**kwgs):
             fn(model = model, *argv,**kwgs)
             if model:
-                print model.__unicode__
+                logger.warn(model.__unicode__)
         return wraped
     return dec
