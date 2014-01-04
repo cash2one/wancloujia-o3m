@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="87860b74-3a83-4b23-9157-b9b1bf3c3379" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ad/ajax.py" afterPath="$PROJECT_DIR$/ad/ajax.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/suning/decorators.py" afterPath="$PROJECT_DIR$/suning/decorators.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/suningx.iml" />
     </list>
     <ignored path="suningx.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -93,7 +91,7 @@
       <file leaf-file-name="ajax.py" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/ad/ajax.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="68" column="24" selection-start="1762" selection-end="1762" vertical-scroll-proportion="0.989011" vertical-offset="0" max-vertical-offset="1050">
+            <state line="71" column="25" selection-start="1819" selection-end="1819" vertical-scroll-proportion="0.9065934" vertical-offset="120" max-vertical-offset="1050">
               <folding />
             </state>
           </provider>
@@ -541,7 +539,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/ad/ajax.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="68" column="24" selection-start="1762" selection-end="1762" vertical-scroll-proportion="0.989011" vertical-offset="0" max-vertical-offset="1050">
+        <state line="71" column="25" selection-start="1819" selection-end="1819" vertical-scroll-proportion="0.9065934" vertical-offset="120" max-vertical-offset="1050">
           <folding />
         </state>
       </provider>
