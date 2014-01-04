@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="87860b74-3a83-4b23-9157-b9b1bf3c3379" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ad/ajax.py" afterPath="$PROJECT_DIR$/ad/ajax.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ad/views.py" afterPath="$PROJECT_DIR$/ad/views.py" />
     </list>
     <ignored path="suningx.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -28,7 +29,7 @@
       <file leaf-file-name="ajax.py" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/ad/ajax.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="23" column="17" selection-start="594" selection-end="594" vertical-scroll-proportion="0.093406595" vertical-offset="140" max-vertical-offset="1065">
+            <state line="24" column="19" selection-start="623" selection-end="623" vertical-scroll-proportion="0.26373628" vertical-offset="0" max-vertical-offset="1065">
               <folding />
             </state>
           </provider>
@@ -48,8 +49,19 @@
       <file leaf-file-name="views.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ad/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="43" column="16" selection-start="1376" selection-end="1376" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="555">
+            <state line="1" column="0" selection-start="15" selection-end="15" vertical-scroll-proportion="-0.6" vertical-offset="0" max-vertical-offset="555">
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="views.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/views.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="74" column="53" selection-start="2487" selection-end="2532" vertical-scroll-proportion="-10.6" vertical-offset="845" max-vertical-offset="2865">
+              <folding>
+                <element signature="e#15#26#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -80,6 +92,7 @@
         <option value="$PROJECT_DIR$/app/ajax.py" />
         <option value="$PROJECT_DIR$/templates/base.html" />
         <option value="$PROJECT_DIR$/suning/decorators.py" />
+        <option value="$PROJECT_DIR$/ad/views.py" />
         <option value="$PROJECT_DIR$/ad/ajax.py" />
       </list>
     </option>
@@ -423,13 +436,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="45" column="26" selection-start="1504" selection-end="1504" vertical-scroll-proportion="0.0" vertical-offset="675" max-vertical-offset="2865">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/apk.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="16" column="18" selection-start="607" selection-end="607" vertical-scroll-proportion="0.0" vertical-offset="2204" max-vertical-offset="2850">
@@ -467,16 +473,25 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="74" column="53" selection-start="2487" selection-end="2532" vertical-scroll-proportion="-10.6" vertical-offset="845" max-vertical-offset="2865">
+          <folding>
+            <element signature="e#15#26#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/ad/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="43" column="16" selection-start="1376" selection-end="1376" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="555">
+        <state line="1" column="0" selection-start="15" selection-end="15" vertical-scroll-proportion="-0.6" vertical-offset="0" max-vertical-offset="555">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/ad/ajax.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="23" column="17" selection-start="594" selection-end="594" vertical-scroll-proportion="0.093406595" vertical-offset="140" max-vertical-offset="1065">
+        <state line="24" column="19" selection-start="623" selection-end="623" vertical-scroll-proportion="0.26373628" vertical-offset="0" max-vertical-offset="1065">
           <folding />
         </state>
       </provider>

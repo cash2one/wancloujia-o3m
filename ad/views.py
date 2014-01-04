@@ -15,7 +15,7 @@ from ad.models import AD
 from ad.forms import ADForm
 from ad.tables import ADTable
 from suning.decorators import active_tab
-
+logger = logging.getLogger(__name__)
 
 def can_view_ad(user):
     if user.is_superuser or user.is_staff:
