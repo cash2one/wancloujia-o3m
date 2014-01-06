@@ -2,7 +2,7 @@
 data_backup.json
 wandoujia.zip
 suning.zip
-*log
+[^o]*log
 dump.rdb
 .idea/
 .cache
