@@ -20,8 +20,7 @@ _track_name = u'广告'
 @check_login
 def delete_ad(request, id):
     model = models.AD.objects.get(pk=id)
-    models.delete_ad(id)
-    __remove(model)
+    __remove(model, request.user.username, id)
     return _ok_json
 
 
@@ -68,6 +67,5 @@ def __edit(model):
     pass
 
 @oplog_track(u'删除广告')
-def __remove(model):
-    print 'remove ad'
-    #models.delete_ad(id)
+def __remove(model, username, id):
+    models.delete_ad(id)

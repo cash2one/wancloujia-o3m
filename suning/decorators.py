@@ -7,7 +7,7 @@ from django.utils import simplejson
 from django.http import HttpResponse
 from django.contrib import auth
 from dajaxice.utils import deserialize_form
-
+from oplog.models import op_log
 
 logger = logging.getLogger(__name__)
 
@@ -64,11 +64,17 @@ def response_error(func):
     return wrapper
 
 
-def oplog_track(type):
+def oplog_track(type =u'未知操作'):
     def dec(fn):
-        def wraped(model=None, *argv,**kwgs):
-            fn(model = model, *argv,**kwgs)
+        def wraped(model=None, username='未知', *argv,**kwgs):
+            fn(model = model, username = username, *argv,**kwgs)
+            logger.warn(model.__unicode__)
+            log = op_log()
+            log.username = username
             if model:
-                logger.warn(model.__unicode__)
+                log.content = u'%s(%s)' % (type, model.__unicode__,)
+            else:
+                log.content = u'%s' % (type)
+            log.save()
         return wraped
     return dec
