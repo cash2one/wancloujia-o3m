@@ -58,11 +58,11 @@ def sort_ad(request, pks):
     return _ok_json
 
 
-@oplog_track(_track_name)
+#@oplog_track(_track_name)
 def __add(model):
     pass
 
-@oplog_track(_track_name)
+#@oplog_track(_track_name)
 def __edit(model):
     pass
 

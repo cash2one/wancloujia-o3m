@@ -64,21 +64,6 @@ def response_error(func):
     return wrapper
 
 
-def oplog_track(type =u'未知操作'):
-    def dec(fn):
-        def wraped(model=None, username=u'未知', *argv,**kwgs):
-            fn(model = model, username = username, *argv,**kwgs)
-            logger.warn(model.__unicode__)
-            log = op_log()
-            log.username = username
-            if model:
-                log.content = u'%s(%s)' % (type, model.__unicode__,)
-            else:
-                log.content = u'%s' % (type,)
-            log.save()
-        return wraped
-    return dec
-
 def oplogtrack(type, username, model = None):
     log = op_log()
     log.username = username
