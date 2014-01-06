@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="87860b74-3a83-4b23-9157-b9b1bf3c3379" name="Default" comment="" />
+    <list default="true" id="87860b74-3a83-4b23-9157-b9b1bf3c3379" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/suning/settings.py" afterPath="$PROJECT_DIR$/suning/settings.py" />
+    </list>
     <ignored path="suningx.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -23,10 +25,19 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="ajax.py" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="ajax.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ad/ajax.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="58" column="0" selection-start="1675" selection-end="1675" vertical-scroll-proportion="0.3387471" vertical-offset="604" max-vertical-offset="1035">
+            <state line="58" column="0" selection-start="1675" selection-end="1675" vertical-scroll-proportion="-5.84" vertical-offset="604" max-vertical-offset="1035">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="settings.py" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/suning/settings.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="198" column="10" selection-start="6380" selection-end="6380" vertical-scroll-proportion="0.27842227" vertical-offset="2805" max-vertical-offset="4680">
               <folding />
             </state>
           </provider>
@@ -126,6 +137,7 @@
         <option value="$PROJECT_DIR$/ad/ajax.py" />
         <option value="$PROJECT_DIR$/oplog/models.py" />
         <option value="$PROJECT_DIR$/suning/decorators.py" />
+        <option value="$PROJECT_DIR$/suning/settings.py" />
       </list>
     </option>
   </component>
@@ -175,6 +187,20 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="suningx" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="suningx" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="suningx" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="suning" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -406,11 +432,6 @@
     <breakpoint-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/statistics/templates/organization_stat.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="40" column="46" selection-start="1461" selection-end="1461" vertical-scroll-proportion="-7.9166665" vertical-offset="410" max-vertical-offset="1080" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/statistics/templates/capacity.html">
       <provider selected="true" editor-type-id="text-editor">
         <state line="63" column="23" selection-start="2961" selection-end="2961" vertical-scroll-proportion="-14.791667" vertical-offset="590" max-vertical-offset="1410" />
@@ -499,7 +520,14 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/ad/ajax.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="58" column="0" selection-start="1675" selection-end="1675" vertical-scroll-proportion="0.3387471" vertical-offset="604" max-vertical-offset="1035">
+        <state line="58" column="0" selection-start="1675" selection-end="1675" vertical-scroll-proportion="-5.84" vertical-offset="604" max-vertical-offset="1035">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/suning/settings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="198" column="10" selection-start="6380" selection-end="6380" vertical-scroll-proportion="0.27842227" vertical-offset="2805" max-vertical-offset="4680">
           <folding />
         </state>
       </provider>
