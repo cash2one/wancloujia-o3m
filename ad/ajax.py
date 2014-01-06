@@ -40,13 +40,13 @@ def add_edit_ad(request, form, visible):
     if form["id"] == "":
         if models.AD.objects.filter(title=ad.title).exists():
             return simplejson.dumps({'ret_code': 1000, 'field': 'title', 'error': u'广告标题已存在'})
-        models.add_ad(ad)
+        __add(ad, request.user.username)
         return _ok_json
     else:
         ad.pk = form["id"]
         if models.AD.objects.exclude(pk=ad.pk).filter(title=ad.title).exists():
             return simplejson.dumps({'ret_code': 1000, 'field': 'title', 'error': u'广告标题已存在'})
-        models.edit_ad(ad)
+        __edit(ad, request.user.username)
         return _ok_json
 
 
@@ -59,12 +59,14 @@ def sort_ad(request, pks):
 
 
 #@oplog_track(_track_name)
-def __add(model):
-    pass
+def __add(model, username=u'未知'):
+    models.add_ad(model)
+    oplogtrack(u'新增广告', username, model)
 
 #@oplog_track(_track_name)
-def __edit(model):
-    pass
+def __edit(model, username=u'未知'):
+    models.edit_ad(model)
+    oplogtrack(u'编辑广告', username, model)
 
 #@oplog_track(u'删除广告')
 def __remove(model=None, username=u'未知', id=-1):
