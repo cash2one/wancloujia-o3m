@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 _invalid_data_msg = u'数据出错，请检查'
 _invalid_data_json = simplejson.dumps({'ret_code': 1000, 'ret_msg': _invalid_data_msg})
 _ok_json = simplejson.dumps({'ret_code': 0})
-_track_name = u'广告'
+
 
 @dajaxice_register(method='POST')
 @check_login
@@ -66,6 +66,7 @@ def __add(model):
 def __edit(model):
     pass
 
-@oplog_track(u'删除广告')
+#@oplog_track(u'删除广告')
 def __remove(model=None, username=u'未知', id=-1):
     models.delete_ad(id)
+    oplogtrack(u'删除广告', username, model)

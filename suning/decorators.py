@@ -78,3 +78,12 @@ def oplog_track(type =u'未知操作'):
             log.save()
         return wraped
     return dec
+
+def oplogtrack(type, username, model = None):
+    log = op_log()
+    log.username = username
+    if model:
+        log.content = u'%s(%s)' % (type, model.__unicode__,)
+    else:
+        log.content = u'%s' % (type,)
+    log.save()
