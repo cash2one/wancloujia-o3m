@@ -8,7 +8,7 @@ from django.utils import simplejson
 from django.contrib.auth.models import User
 from dajaxice.decorators import dajaxice_register
 
-from suning.decorators import request_delay
+from suning.decorators import request_delay, oplogtrack
 from forms import *
 from suning.decorators import *
 from app import models
@@ -40,16 +40,12 @@ def add_edit_app(request, form):
     if form["id"] == "":
         if models.App.objects.filter(package=app.package).exists():
             return simplejson.dumps({'ret_code': 1000, 'ret_msg': u'应用已存在'})
-        app.online = True
-        app.save()
+        __add_app(app, request.user.username)
     else:
         app.pk = form["id"]
         if models.App.objects.get(pk=app.pk).package != app.package:
             return simplejson.dumps({'ret_code': 1000, 'ret_msg': u'应用包名不相同'})
-        app_stored = App.objects.get(pk=app.pk)
-        app.create_date = app_stored.create_date
-        app.online = app_stored.online
-        app.save()
+        __edit_app(app, request.user.username)
 
     return _ok_json
 
@@ -57,7 +53,8 @@ def add_edit_app(request, form):
 @dajaxice_register(method='POST')
 @check_login
 def delete_app(request, id):
-    models.App.objects.get(pk=id).delete()
+    model = models.App.objects.get(pk=id)
+    __remove_app(model, request.user.username)
     return _ok_json
 
 
@@ -167,11 +164,36 @@ def get_apps(request, subject, pks):
     return simplejson.dumps({'results': results})
 
 
-def __add(model):
-    pass
+def __add_app(model, username):
+    model.online = True
+    model.save()
+    oplogtrack(u'新增应用', username, model)
 
-def __edit(model):
-    pass
+def __edit_app(model, username):
+    app_stored = App.objects.get(pk=model.pk)
+    model.create_date = app_stored.create_date
+    model.online = app_stored.online
+    model.save()
+    oplogtrack(u'编辑应用', username, model)
 
-def __remove(model):
-    pass
+def __remove_app(model, username):
+    model.delete()
+    oplogtrack(u'删除应用', username, model)
+
+def __pub_app(model, username):
+    oplogtrack(u'上线应用', username, model)
+
+def __drop_app(model, username):
+    oplogtrack(u'下线应用', username, model)
+
+def __add_subj(model, username):
+    oplogtrack(u'下线应用', username, model)
+
+def __edit_subj(model, username):
+    oplogtrack(u'下线应用', username, model)
+
+def __remove_subj(model, username):
+    oplogtrack(u'下线应用', username, model)
+
+def __sort_subj(username):
+    oplogtrack(u'调整应用专题顺序', username)
