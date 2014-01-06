@@ -53,8 +53,7 @@ def add_edit_ad(request, form, visible):
 @dajaxice_register(method='POST')
 @check_login
 def sort_ad(request, pks):
-    ad_pks = [int(pk) for pk in pks.split(",")]
-    models.sort_ad(ad_pks)
+    __sort(pks, request.user.username)
     return _ok_json
 
 
@@ -72,3 +71,8 @@ def __edit(model, username=u'未知'):
 def __remove(model=None, username=u'未知', id=-1):
     models.delete_ad(id)
     oplogtrack(u'删除广告', username, model)
+
+def __sort(pks, username=u'未知'):
+    ad_pks = [int(pk) for pk in pks.split(",")]
+    models.sort_ad(ad_pks)
+    oplogtrack(u'调整广告顺序', username)
