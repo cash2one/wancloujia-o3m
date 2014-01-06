@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="87860b74-3a83-4b23-9157-b9b1bf3c3379" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/suning/settings.py" afterPath="$PROJECT_DIR$/suning/settings.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ad/ajax.py" afterPath="$PROJECT_DIR$/ad/ajax.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/suning/decorators.py" afterPath="$PROJECT_DIR$/suning/decorators.py" />
     </list>
     <ignored path="suningx.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -25,19 +26,19 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="ajax.py" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="ajax.py" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/ad/ajax.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="58" column="0" selection-start="1675" selection-end="1675" vertical-scroll-proportion="-5.84" vertical-offset="604" max-vertical-offset="1035">
+            <state line="69" column="38" selection-start="1846" selection-end="1846" vertical-scroll-proportion="0.7215777" vertical-offset="604" max-vertical-offset="1035">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="settings.py" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="settings.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/suning/settings.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="198" column="10" selection-start="6380" selection-end="6380" vertical-scroll-proportion="0.27842227" vertical-offset="2805" max-vertical-offset="4680">
+            <state line="198" column="10" selection-start="6380" selection-end="6380" vertical-scroll-proportion="-4.8" vertical-offset="2805" max-vertical-offset="4680">
               <folding />
             </state>
           </provider>
@@ -46,7 +47,7 @@
       <file leaf-file-name="decorators.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/suning/decorators.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="78" column="21" selection-start="2222" selection-end="2222" vertical-scroll-proportion="-12.44" vertical-offset="859" max-vertical-offset="1290">
+            <state line="80" column="0" selection-start="2240" selection-end="2240" vertical-scroll-proportion="-13.64" vertical-offset="859" max-vertical-offset="1290">
               <folding>
                 <element signature="e#15#29#0" expanded="true" />
               </folding>
@@ -134,10 +135,10 @@
         <option value="$PROJECT_DIR$/app/ajax.py" />
         <option value="$PROJECT_DIR$/ad/views.py" />
         <option value="$PROJECT_DIR$/templates/base.html" />
-        <option value="$PROJECT_DIR$/ad/ajax.py" />
         <option value="$PROJECT_DIR$/oplog/models.py" />
-        <option value="$PROJECT_DIR$/suning/decorators.py" />
         <option value="$PROJECT_DIR$/suning/settings.py" />
+        <option value="$PROJECT_DIR$/suning/decorators.py" />
+        <option value="$PROJECT_DIR$/ad/ajax.py" />
       </list>
     </option>
   </component>
@@ -502,15 +503,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/suning/decorators.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="78" column="21" selection-start="2222" selection-end="2222" vertical-scroll-proportion="-12.44" vertical-offset="859" max-vertical-offset="1290">
-          <folding>
-            <element signature="e#15#29#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/ad/views.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="1" column="0" selection-start="15" selection-end="15" vertical-scroll-proportion="4.36" vertical-offset="124" max-vertical-offset="555">
@@ -518,16 +510,25 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ad/ajax.py">
+    <entry file="file://$PROJECT_DIR$/suning/settings.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="58" column="0" selection-start="1675" selection-end="1675" vertical-scroll-proportion="-5.84" vertical-offset="604" max-vertical-offset="1035">
+        <state line="198" column="10" selection-start="6380" selection-end="6380" vertical-scroll-proportion="-4.8" vertical-offset="2805" max-vertical-offset="4680">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/suning/settings.py">
+    <entry file="file://$PROJECT_DIR$/suning/decorators.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="198" column="10" selection-start="6380" selection-end="6380" vertical-scroll-proportion="0.27842227" vertical-offset="2805" max-vertical-offset="4680">
+        <state line="80" column="0" selection-start="2240" selection-end="2240" vertical-scroll-proportion="-13.64" vertical-offset="859" max-vertical-offset="1290">
+          <folding>
+            <element signature="e#15#29#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ad/ajax.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="69" column="38" selection-start="1846" selection-end="1846" vertical-scroll-proportion="0.7215777" vertical-offset="604" max-vertical-offset="1035">
           <folding />
         </state>
       </provider>

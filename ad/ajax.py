@@ -67,5 +67,5 @@ def __edit(model):
     pass
 
 @oplog_track(u'删除广告')
-def __remove(model, username, id):
+def __remove(model=None, username=u'未知', id=-1):
     models.delete_ad(id)
