@@ -144,16 +144,16 @@ $(function() {
 
     function desc_of_level(level) {
         if(level === 'region') {
-            return '总明细';
-        } else if (level === 'company') {
             return '按大区';
-        } else if (level === 'store') {
+        } else if (level === 'company') {
             return '按公司';
-        } else if (level === 'emp') { 
+        } else if (level === 'store') {
             return '按门店';
+        } else if (level === 'emp') { 
+            return '按员工';
         } else if(level ==='did')
         {
-            return '按员工';
+            return '按手机';
         }
     }
 
