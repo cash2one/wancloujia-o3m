@@ -216,6 +216,10 @@ def filter_installed_capacity_logs(user, form):
     company_id = form.cleaned_data["company"]
     store_id = form.cleaned_data["store"]
     emp_id = form.cleaned_data["emp"]
+    from_date = form.cleaned_data["from_date"]
+    to_date = form.cleaned_data["to_date"]
+    logs = InstalledAppLogEntity.objects.all()
+    logs = PeriodFilter(logs, from_date, to_date).filter()
     if emp_id:
         logs = InstalledAppLogEntity.objects.filter(uid=emp_id)
     elif store_id:
@@ -225,27 +229,26 @@ def filter_installed_capacity_logs(user, form):
     elif region_id:
         logs = InstalledAppLogEntity.objects.filter(region=region_id)
     else:
-        logs = InstalledAppLogEntity.objects.all()
+        pass#logs = InstalledAppLogEntity.objects.all()
+
     logger.debug("logs filtered by user info: %d" % len(logs))
 
     logs = AppFilter(logs, form.cleaned_data["app"]).filter()
     logger.debug("logs filtered by app: %d" % len(logs))
 
-    from_date = form.cleaned_data["from_date"]
-    to_date = form.cleaned_data["to_date"]
-    logs = PeriodFilter(logs, from_date, to_date).filter()
+    
     logger.debug("logs filtered by period: %d" % len(logs))
 
     popularize = form.cleaned_data['popularize']
     if popularize:
         logs = logs.filter(popularize=(popularize=='True'))
 
-    results = logs.values('appPkg', 'appID', 'appName', 'popularize' ,'installedTimes').annotate(count=Sum('installedTimes'))
+    results = logs.values('appID', 'appName', 'appPkg', 'uid', 'region', 'company', 'store').annotate(count=Sum('installedTimes'))
     return results
 
 
 def installed_capacity_to_dict(capacity):
-    logger.debug(capacity)
+    logger.debug(capacity) 
     dict = {}
     apps = App.objects.filter(package=capacity['appPkg'])
     app = apps[0] if len(apps) != 0 else None
@@ -253,8 +256,17 @@ def installed_capacity_to_dict(capacity):
         'id': capacity['appID'],
         'package': capacity['appPkg'],
         'name': capacity['appName'],
-        'popularize': capacity['popularize']
     }
+    emp = utils.get_model_by_pk(Employee.objects, capacity['uid'])
+    organizations = [None, None, None]
+    if emp:
+        dict["empid"] = emp.username
+        dict["emp"] = emp.realname
+        for i, item in enumerate(emp.organizations()):
+            organizations[i] = item.name
+    else:
+        dict["emp"] = None
+    dict["region"], dict["company"], dict["store"] = organizations
     dict["count"] = capacity['count']
     return dict;
     

@@ -337,7 +337,7 @@ def capacity_excel(request):
     sheet = book.add_sheet(u'安装统计')
     default_style = xlwt.Style.default_style
     #date_style = xlwt.easyxf(num_format_str='yyyy-mm-dd')
-    titles = [u'应用序号', u'应用名称', u'应用包名', u'是否推广', u'安装总量']
+    titles = [u'应用', u'大区', u'分公司', u'门店', u'员工', u'姓名', u'下载次数']
     for i, title in enumerate(titles):
         sheet.write(0, i, title, style=default_style)
 
@@ -348,11 +348,17 @@ def capacity_excel(request):
         logger.debug(log)
         dict = installed_capacity_to_dict(log) 
         rowdata = [
-            dict['app']['id'],
+            #dict['app']['id'],
+            #dict['app']['name'],
+            #dict['app']['package'],
+            #u'是' if dict['app']['popularize'] else u'否',
             dict['app']['name'],
-            dict['app']['package'],
-            u'是' if dict['app']['popularize'] else u'否',
-            dict['count']
+            dict['region'] or h.unescape(EMPTY_VALUE),
+            dict['company'] or h.unescape(EMPTY_VALUE),
+            dict['store'] or h.unescape(EMPTY_VALUE),
+            dict['empid'],
+            dict['emp'],
+            dict['count'],
         ]
         for col, val in enumerate(rowdata):
             #style = date_style if isinstance(val, datetime.date) else default_style

@@ -111,18 +111,18 @@ import datetime
 lastDay = datetime.date.today() - datetime.timedelta(days=0)
 
 existed = set()
-db.query("DELETE FROM interface_devicelogentity WHERE date ='%d-%d-%d';" % (lastDay.year, lastDay.month, lastDay.day))
+db.query("DELETE FROM interface_devicelogentity WHERE date ='%s';" % (lastDay.isoformat()))
 r = db.store_result()
 for line in sys.stdin:
 	#print line
 	try:
 		user, did, appid, brand, model = line.strip().split(',')
 		if line in existed:
-			print "UPDATE interface_devicelogentity SET appCount = appCount + 1 %s WHERE date = '%d-%d-%d' AND uid =%s AND brand = '%s' AND model = '%s';" \
-			% ( ',popularizeAppCount = popularizeAppCount + 1' if apps[appid][2] == '1' else '' ,lastDay.year, lastDay.month, lastDay.day, map[user][0], brand, model)
+			print "UPDATE interface_devicelogentity SET appCount = appCount + 1 %s WHERE date = '%s' AND uid =%s AND did = '%s' AND appID=%s;" \
+			% ( ',popularizeAppCount = popularizeAppCount + 1' if apps[appid][2] == '1' else '' ,lastDay.isoformat(), map[user][0], did, appid)
 		else:
 			existed.add(line)
-			print """INSERT INTO interface_devicelogentity(date, region, company, store, uid , did , brand, model, appID, appPkg, appName, popularizeAppCount, appCount) VALUES('%d-%d-%d', %s , %s, %s, %s, '%s', '%s', '%s', %s, '%s', '%s', %s, %s);""" % (  lastDay.year, lastDay.month, lastDay.day, #
+			print """INSERT INTO interface_devicelogentity(date, region, company, store, uid , did , brand, model, appID, appPkg, appName, popularizeAppCount, appCount) VALUES('%s', %s , %s, %s, %s, '%s', '%s', '%s', %s, '%s', '%s', %s, %s);""" % (  lastDay.isoformat(), #
 				map[user][1], map[user][2], map[user][3], map[user][0], 
 				did, brand, model, 
 				appid , apps[appid][0], apps[appid][1], 

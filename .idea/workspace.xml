@@ -26,16 +26,7 @@
       <file leaf-file-name="ajax.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ad/ajax.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="77" column="10" selection-start="2167" selection-end="2167" vertical-scroll-proportion="0.0" vertical-offset="730" max-vertical-offset="1425">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="views.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/views.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="74" column="53" selection-start="2487" selection-end="2532" vertical-scroll-proportion="0.0" vertical-offset="2478" max-vertical-offset="3173">
+            <state line="77" column="10" selection-start="2167" selection-end="2167" vertical-scroll-proportion="0.0" vertical-offset="1463" max-vertical-offset="1577">
               <folding />
             </state>
           </provider>
@@ -44,7 +35,7 @@
       <file leaf-file-name="decorators.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/suning/decorators.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="55" column="35" selection-start="1516" selection-end="1516" vertical-scroll-proportion="0.0" vertical-offset="654" max-vertical-offset="1406">
+            <state line="55" column="35" selection-start="1516" selection-end="1516" vertical-scroll-proportion="0.0" vertical-offset="1045" max-vertical-offset="1558">
               <folding />
             </state>
           </provider>
@@ -54,9 +45,7 @@
         <entry file="file://$PROJECT_DIR$/app/ajax.py">
           <provider selected="true" editor-type-id="text-editor">
             <state line="83" column="12" selection-start="2429" selection-end="2429" vertical-scroll-proportion="0.0" vertical-offset="3135" max-vertical-offset="4275">
-              <folding>
-                <element signature="e#16#30#0" expanded="true" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -64,7 +53,7 @@
       <file leaf-file-name="models.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="51" column="38" selection-start="1685" selection-end="1685" vertical-scroll-proportion="0.0" vertical-offset="323" max-vertical-offset="3933">
+            <state line="51" column="38" selection-start="1685" selection-end="1685" vertical-scroll-proportion="0.0" vertical-offset="969" max-vertical-offset="4028">
               <folding />
             </state>
           </provider>
@@ -73,7 +62,7 @@
       <file leaf-file-name="views.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/mgr/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="35" column="54" selection-start="1024" selection-end="1024" vertical-scroll-proportion="0.0" vertical-offset="1254" max-vertical-offset="4104">
+            <state line="35" column="54" selection-start="1024" selection-end="1024" vertical-scroll-proportion="0.0" vertical-offset="665" max-vertical-offset="4389">
               <folding />
             </state>
           </provider>
@@ -82,25 +71,36 @@
       <file leaf-file-name="ajax.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/mgr/ajax.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="26" column="16" selection-start="691" selection-end="691" vertical-scroll-proportion="0.0" vertical-offset="27" max-vertical-offset="6707">
+            <state line="26" column="16" selection-start="691" selection-end="691" vertical-scroll-proportion="0.0" vertical-offset="494" max-vertical-offset="6954">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ajax.py" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="ajax.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/statistics/ajax.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="217" column="27" selection-start="6731" selection-end="6731" vertical-scroll-proportion="0.49208632" vertical-offset="3477" max-vertical-offset="10336">
+            <state line="278" column="20" selection-start="8851" selection-end="8851" vertical-scroll-proportion="0.0" vertical-offset="5282" max-vertical-offset="10640">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="app.html" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/templates/app.html">
+      <file leaf-file-name="views.py" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/oplog/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="20.357143" vertical-offset="570" max-vertical-offset="1748">
+            <state line="25" column="33" selection-start="731" selection-end="731" vertical-scroll-proportion="0.53956836" vertical-offset="100" max-vertical-offset="817">
+              <folding>
+                <element signature="e#15#29#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="views.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/feedback/views.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="22" column="8" selection-start="0" selection-end="1204" vertical-scroll-proportion="0.0" vertical-offset="418" max-vertical-offset="1235">
               <folding />
             </state>
           </provider>
@@ -109,7 +109,7 @@
       <file leaf-file-name="app_modal.html" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/templates/app_modal.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="33" column="43" selection-start="1202" selection-end="1202" vertical-scroll-proportion="-10.25" vertical-offset="340" max-vertical-offset="1900">
+            <state line="33" column="43" selection-start="1202" selection-end="1202" vertical-scroll-proportion="0.0" vertical-offset="340" max-vertical-offset="1900">
               <folding />
             </state>
           </provider>
@@ -148,6 +148,7 @@
         <option value="$PROJECT_DIR$/app/ajax.py" />
         <option value="$PROJECT_DIR$/app/models.py" />
         <option value="$PROJECT_DIR$/mgr/ajax.py" />
+        <option value="$PROJECT_DIR$/oplog/views.py" />
       </list>
     </option>
   </component>
@@ -211,7 +212,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="statistics" />
+              <option name="myItemId" value="oplog" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -225,7 +226,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="mgr" />
+              <option name="myItemId" value="feedback" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -239,8 +240,8 @@
     <property name="options.lastSelected" value="project.propVCSSupport.Mappings" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="FullScreen" value="false" />
-    <property name="options.splitter.details.proportions" value="0.2" />
     <property name="options.searchVisible" value="true" />
+    <property name="options.splitter.details.proportions" value="0.2" />
   </component>
   <component name="PyConsoleOptionsProvider">
     <option name="myPythonConsoleState">
@@ -432,60 +433,34 @@
     <breakpoint-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/suning/settings.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="198" column="10" selection-start="6380" selection-end="6380" vertical-scroll-proportion="0.0" vertical-offset="3762" max-vertical-offset="5985">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ad/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2584">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/interface/models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="30" selection-start="311" selection-end="353" vertical-scroll-proportion="0.0" vertical-offset="228" max-vertical-offset="2470">
-          <folding />
-        </state>
+        <state line="12" column="30" selection-start="311" selection-end="353" vertical-scroll-proportion="0.0" vertical-offset="228" max-vertical-offset="2470" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/ad/urls.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="433">
-          <folding />
-        </state>
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="433" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/suning/permissions.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1216">
-          <folding />
-        </state>
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1216" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/oplog/models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="46" selection-start="178" selection-end="178" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="266">
-          <folding />
-        </state>
+        <state line="5" column="46" selection-start="178" selection-end="178" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="266" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="74" column="53" selection-start="2487" selection-end="2532" vertical-scroll-proportion="0.0" vertical-offset="845" max-vertical-offset="2865">
-          <folding />
-        </state>
+        <state line="74" column="53" selection-start="2487" selection-end="2532" vertical-scroll-proportion="0.0" vertical-offset="845" max-vertical-offset="2865" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/templates/app.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="20.357143" vertical-offset="570" max-vertical-offset="1748">
-          <folding />
-        </state>
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="20.357143" vertical-offset="570" max-vertical-offset="1748" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/suning/decorators.py">
@@ -497,7 +472,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/templates/app_modal.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="33" column="43" selection-start="1202" selection-end="1202" vertical-scroll-proportion="-10.25" vertical-offset="340" max-vertical-offset="1900">
+        <state line="33" column="43" selection-start="1202" selection-end="1202" vertical-scroll-proportion="0.0" vertical-offset="340" max-vertical-offset="1900">
           <folding />
         </state>
       </provider>
@@ -512,9 +487,7 @@
     <entry file="file://$PROJECT_DIR$/app/ajax.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="83" column="12" selection-start="2429" selection-end="2429" vertical-scroll-proportion="0.0" vertical-offset="958" max-vertical-offset="4275">
-          <folding>
-            <element signature="e#16#30#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -541,8 +514,24 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/statistics/ajax.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="217" column="27" selection-start="6731" selection-end="6731" vertical-scroll-proportion="0.49208632" vertical-offset="3477" max-vertical-offset="10336">
+        <state line="278" column="20" selection-start="8851" selection-end="8851" vertical-scroll-proportion="0.0" vertical-offset="4560" max-vertical-offset="10336">
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/feedback/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="22" column="8" selection-start="0" selection-end="1204" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="988">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/oplog/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="25" column="33" selection-start="731" selection-end="731" vertical-scroll-proportion="0.53956836" vertical-offset="100" max-vertical-offset="817">
+          <folding>
+            <element signature="e#15#29#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

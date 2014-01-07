@@ -14,7 +14,7 @@ if debug:
 	file = "/data/suning/logs/windows2x.log"
 else:
 	lastDay = datetime.date.today() - datetime.timedelta(days=1)
-	file = "/data/suning/logs/windows2x.log.%d-%d-%d" % (lastDay.year, lastDay.month, lastDay.day)
+	file = "/data/suning/logs/windows2x.log.%s" % (lastDay.isoformat(),)
 
 headerRE = re.compile(r"^\[windows2x\](?P<header>.*)")
 contentRE = re.compile(r"(?P<type>[a-zA-Z0-9_\.]+)\s(?P<content>\S+)\t\d+")
@@ -54,14 +54,14 @@ if debug == True:
     lastDay = datetime.date.today()
 else:
     lastDay = datetime.date.today() - datetime.timedelta(days=1)
-file = "windows2x.log.%d-%d-%d" % (lastDay.year, lastDay.month, lastDay.day)
+file = "windows2x.log.%s" % (lastDay.isoformat(),)
 app_cmd = '/opt/hadoop/hadoop-2.2.0/bin/hadoop fs -put -f ' + file_tmp + ' /logs/' + file + '.' + server_id + " && rm " + file_tmp
 os.popen(app_cmd)
 if debug:
 	file = "/data/suning/logs/windows2x.log"
 else:
 	lastDay = datetime.date.today() - datetime.timedelta(days=1)
-	file = "/data/suning/logs/windows2x.log.%d-%d-%d" % (lastDay.year, lastDay.month, lastDay.day)
+	file = "/data/suning/logs/windows2x.log.%s" % (lastDay.isoformat(),)
 if not debug:
     pass
 	#os.popen('rm ' + file)
