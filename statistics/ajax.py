@@ -443,8 +443,12 @@ def get_device_stat_detail(request, form, offset, length):
 
 
 def filter_org_logs(form, mode):
+    logs = DeviceLogEntity.objects.all()
+    from_date = form.cleaned_data["from_date"]
+    to_date = form.cleaned_data["to_date"]
+    logs = PeriodFilter(logs, from_date, to_date).filter()
     if mode == 'region':
-        logs = DeviceLogEntity.objects.all()
+        pass#logs = DeviceLogEntity.objects.all()
     elif mode == 'company':
         region = form.cleaned_data['region']
         logs = DeviceLogEntity.objects.filter(region=region)
@@ -457,15 +461,13 @@ def filter_org_logs(form, mode):
     else:
         uid = form.cleaned_data['emp']
         logs = DeviceLogEntity.objects.filter(uid=uid)
-
-    from_date = form.cleaned_data["from_date"]
-    to_date = form.cleaned_data["to_date"]
-    logs = PeriodFilter(logs, from_date, to_date).filter()
+    #if mode == 'did':
+    #    results = logs.values('uid', 'did').annotate(total_popularize_count=Sum('popularizeAppCount'), total_app_count=Sum('appCount'))
     logger.debug("logs filtered by period: %d" % len(logs))
     return logs
 
 
-_LEVELS = ['region', 'company', 'store', 'emp']
+_LEVELS = ['region', 'company', 'store', 'emp','did'] 
 def available_levels(mode, level):
     offset = _LEVELS.index(mode)
     to = _LEVELS.index(level)
@@ -487,15 +489,21 @@ def titles_for_org_stat(mode, level):
         elif level == 'emp':
             titles.append(u'员工编码')
             titles.append(u'员工姓名')
-    titles.append(u'机器台数')
+    if level == u'did':
+        titles.append(u'串码')
+    else:
+        titles.append(u'机器台数')
     titles.append(u'推广数')
     titles.append(u'安装总数')
+    if level == 'did':
+        titles = [ u'大区',u'公司编码',u'公司名称',u'门店编码',u'门店名称',u'用户名',u'真实姓名',u'串码',u'推广数',u'应用总数',]
     return titles
 
 
 def org_record_to_dict(record, mode, level):
     dict = {
         'total_device_count': record['total_device_count'],
+        'did': record['did'] if record.has_key('did') else None,
         'total_popularize_count': record['total_popularize_count'],
         'total_app_count': record['total_app_count']
     }
@@ -518,7 +526,15 @@ def org_record_to_dict(record, mode, level):
                 dict['store'] = { 'code': store.code, 'name': store.name } 
             else:
                 dict['store'] = empty_value
+        elif level == 'emp':
+            emp = utils.get_model_by_pk(Employee.objects, record['uid'])
+            if emp:
+                dict['emp'] = {'username': emp.username, 'realname': emp.realname } 
+            else:
+                dict['emp'] = {'username': None, 'realname': None}
         else:
+            dict['did'] = record['did']
+            pass
             emp = utils.get_model_by_pk(Employee.objects, record['uid'])
             if emp:
                 dict['emp'] = {'username': emp.username, 'realname': emp.realname } 
@@ -554,7 +570,7 @@ def filter_org_statistics(request, form, offset, length, mode, level):
     items = []
     for record in records:
         items.append(org_record_to_dict(record, mode, level))
-    print [i['total_device_count'] for i in items]
+    #print [i['total_device_count'] for i in items]
     brands = sum([i['total_device_count'] for i in items])
     return simplejson.dumps({
         'ret_code': 0,

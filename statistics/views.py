@@ -492,10 +492,13 @@ def organization_excel(request, mode, level):
             elif l == 'store' or l == 'company':
                 array.append(dict[l]['code'] or h.unescape(EMPTY_VALUE))
                 array.append(dict[l]['name'] or h.unescape(EMPTY_VALUE))
+            elif l == 'did' and dict['did']:
+                array.append(dict['did'])
             else:
-                array.append(dict['emp']['username'] or h.unescape(EMPTY_VALUE));
-                array.append(dict['emp']['realname'] or h.unescape(EMPTY_VALUE));
-        array.append(dict['total_device_count']) 
+                array.append(dict['emp']['username'] or h.unescape(EMPTY_VALUE))
+                array.append(dict['emp']['realname'] or h.unescape(EMPTY_VALUE))
+        if level != 'did':
+            array.append(dict['total_device_count']) 
         array.append(dict['total_popularize_count']) 
         array.append(dict['total_app_count']) 
         return array

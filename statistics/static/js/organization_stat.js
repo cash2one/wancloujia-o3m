@@ -40,7 +40,7 @@ $(function() {
         }
     });
 
-    var LEVELS = ['region', 'company', 'store', 'emp'];
+    var LEVELS = ['region', 'company', 'store', 'emp','did'];
     
     function to_row(mode, level, item) {
         var items = [];
@@ -60,7 +60,14 @@ $(function() {
                 items.push(item.emp.realname || '&mdash;');
             }
         });
-        items.push(item.total_device_count);
+        if(item.did)
+        {
+            items.push(item.did);
+        }
+        else
+        {
+            items.push(item.total_device_count);
+        }
         items.push(item.total_popularize_count);
         items.push(item.total_app_count);
         return items;
@@ -84,7 +91,13 @@ $(function() {
                 result.push('员工姓名');
             }
         });
-        result.push('机器台数');
+        if(level==='did')
+        {
+            result.push('串号');
+        }else
+        {
+            result.push('机器台数');
+        }
         result.push('推广数');
         result.push('安装总数');
         return result;
@@ -98,10 +111,14 @@ $(function() {
     var $table = null;
 
     var mode;
-    function reload_data(region, company, store, emp) {
+    function reload_data(region, company, store, emp, did) {
         var _mode; 
-        if (emp) {
-            _mode = 'emp';
+        if(did)
+        {
+            _mode = 'did';
+        }
+        else if(emp){
+            _mode = 'did';
         } else if (store) {
             _mode = 'emp';
         } else if (company) {
@@ -127,12 +144,15 @@ $(function() {
 
     function desc_of_level(level) {
         if(level === 'region') {
-            return '按大区';
+            return '总明细';
         } else if (level === 'company') {
-            return '按公司';
+            return '按大区';
         } else if (level === 'store') {
+            return '按公司';
+        } else if (level === 'emp') { 
             return '按门店';
-        } else if (level === 'emp') {
+        } else if(level ==='did')
+        {
             return '按员工';
         }
     }
