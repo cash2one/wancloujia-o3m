@@ -1,4 +1,4 @@
-# coding: utf-8
+/# coding: utf-8
 import logging
 from datetime import datetime
 
@@ -495,8 +495,6 @@ def titles_for_org_stat(mode, level):
         titles.append(u'机器台数')
     titles.append(u'推广数')
     titles.append(u'安装总数')
-    if level == 'did':
-        titles = [ u'大区',u'公司编码',u'公司名称',u'门店编码',u'门店名称',u'用户名',u'真实姓名',u'串码',u'推广数',u'应用总数',]
     return titles
 
 
