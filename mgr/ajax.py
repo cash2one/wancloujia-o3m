@@ -42,7 +42,7 @@ def modify_password(request, form):
 
     password = f.cleaned_data["password"]
     user.set_password(password)
-    user.save()
+    __mod_pass(user, request.user.username)
     return _ok_json
 
 
@@ -125,7 +125,7 @@ def add_edit_employee(request, form, permissions):
         #password = str(random.randrange(100000, 999999))
         password = _DEFAULT_PASSWORD
         employee.set_password(password)
-        employee.save()
+        __add_user(employee, request.user.username)
         #notify(employee, password)
     else:
         id = form["id"]
@@ -134,7 +134,7 @@ def add_edit_employee(request, form, permissions):
         employee.pk = id
         #fixme
         employee.password = Employee.objects.get(pk=id).password
-        employee.save()
+        __edit_user(employee, request.user.username)
 
     if not request.user.is_staff and not request.user.is_superuser:
         return _ok_json
@@ -162,13 +162,13 @@ def add_edit_region(request, form):
         region = Region(name=f.cleaned_data["name"])
         if Region.objects.filter(name=region.name).exists():
             return simplejson.dumps({'ret_code': 1000, 'field': 'name', 'error': u'大区名已存在'})
-        region.save()
+        __add_region(region, request.user.username)
     else:
         region = Region.objects.get(pk=form["id"])
         region.name = f.cleaned_data["name"]
         if Region.objects.exclude(pk=region.pk).filter(name=region.name).exists():
             return simplejson.dumps({'ret_code': 1000, 'field': 'name', 'error': u'大区名已存在'})
-        region.save()
+        __edit_region(region, request.user.username)
 
     return _ok_json
 
@@ -193,7 +193,7 @@ def add_edit_company(request, form):
             return simplejson.dumps({'ret_code': 1000, 'field': 'code', 'error': u'公司编码重复'})
         if Company.objects.filter(name=company.name).exists():
             return simplejson.dumps({'ret_code': 1000, 'field': 'name', 'error': u'公司名已存在'})
-        company.save()
+        __add_company(company, request.user.username)
     else:
         id = form["id"]
         if Company.objects.exclude(pk=id).filter(code=company.code).exists():
@@ -201,7 +201,7 @@ def add_edit_company(request, form):
         if Company.objects.exclude(pk=id).filter(name=company.name).exists():
             return simplejson.dumps({'ret_code': 1000, 'field': 'name', 'error': u'公司名已存在'})
         company.pk = id
-        company.save()
+        __edit_company(company, request.user.username)
 
     return _ok_json
 
@@ -225,7 +225,7 @@ def add_edit_store(request, form):
             return simplejson.dumps({'ret_code': 1000, 'field': 'code', 'error': u'门店编码重复'})
         if Store.objects.filter(name=store.name).exists():
             return simplejson.dumps({'ret_code': 1000, 'field': 'name', 'error': u'门店名已存在'})
-        store.save()
+        __add_store(store, request.user.username)
     else:
         id = form["id"]
         if Store.objects.exclude(pk=id).filter(code=store.code).exists():
@@ -233,7 +233,7 @@ def add_edit_store(request, form):
         if Store.objects.exclude(pk=id).filter(name=store.name).exists():
             return simplejson.dumps({'ret_code': 1000, 'field': 'name', 'error': u'门店名已存在'})
         store.pk = id 
-        store.save()
+        __edit_store(store, request.user.username)
         
     return _ok_json
 
@@ -241,14 +241,23 @@ def add_edit_store(request, form):
 @dajaxice_register(method='POST')
 @check_login
 def delete_organization(request, id):
-    Organization.objects.get(pk=id).delete()
+    model = Organization.objects.get(pk=id)
+    model = model.cast()
+    model.delete()
+    if type(model) == Region:
+        __remove_region(model, request.user.username)
+    elif type(model) == Company:
+        __remove_company(model, request.user.username)
+    elif type(model) == Store:
+        __remove_store(model, request.user.username)
     return _ok_json
 
 
 @dajaxice_register(method='POST')
 @check_login
 def delete_user(request, id):
-    User.objects.get(pk=id).delete()
+    model = User.objects.get(pk=id)
+    __remove_user(model, request.user.username)
     return _ok_json
 
 
@@ -270,6 +279,7 @@ def add_edit_group(request, form):
             return simplejson.dumps({'ret_code': 1000, 'field': 'name', 'error': u'用户组名已存在'})
         group.save()    
         f.save_m2m()
+        __add_group(group, request.user.username)
         return _ok_json
     else:
         id = form["id"]
@@ -279,12 +289,73 @@ def add_edit_group(request, form):
         group.pk = id;
         group.save()
         f.save_m2m()
+        __edit_group(group, request.user.username)
         return _ok_json
 
 
 @dajaxice_register(method='POST')
 @check_login
 def delete_group(request, id):
-    Group.objects.get(pk=id).delete()
+    model = Group.objects.get(pk=id)
+    __remove_group(model, request.user.username)
     return _ok_json
 
+
+def __add_region(model, username):
+    model.save()
+    oplogtrack(u'新增大区', username, model)
+
+def __edit_region(model, username):
+    model.save()
+    oplogtrack(u'编辑大区', username, model)
+
+def __remove_region(model, username):
+    oplogtrack(u'删除大区', username, model)
+
+def __add_company(model, username):
+    model.save()
+    oplogtrack(u'新增公司', username, model)
+
+def __edit_company(model, username):
+    model.save()
+    oplogtrack(u'编辑公司', username, model)
+
+def __remove_company(model, username):
+    oplogtrack(u'删除公司', username, model)
+
+def __add_store(model, username):
+    model.save()
+    oplogtrack(u'新增门店', username, model)
+
+def __edit_store(model, username):
+    model.save()
+    oplogtrack(u'编辑门店', username, model)
+
+def __remove_store(model, username):
+    oplogtrack(u'删除门店', username, model)
+
+def __add_group(model, username):
+    oplogtrack(u'新增用户组', username, model)
+
+def __edit_group(model, username):
+    oplogtrack(u'编辑用户组', username, model)
+
+def __remove_group(model, username):
+    model.delete()
+    oplogtrack(u'删除用户组', username, model)
+
+def __add_user(model, username):
+    model.save()
+    oplogtrack(u'新增用户', username, model)
+
+def __edit_user(model, username):
+    model.save()
+    oplogtrack(u'编辑用户', username, model)
+
+def __remove_user(model, username):
+    model.delete()
+    oplogtrack(u'删除用户', username, model)
+
+def __mod_pass(model, username):
+    model.save()
+    oplogtrack(u'修改用户密码', username, model)

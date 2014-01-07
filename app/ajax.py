@@ -74,14 +74,17 @@ def _drop_app(id):
 @dajaxice_register(method='POST')
 @check_login
 def publish_app(request, id):
-    models.App.objects.filter(pk=id).update(online=True)
+    #models.App.objects.filter(pk=id).update(online=True)
+    model = models.App.objects.get(pk=id)
+    __pub_app(model, request.user.username)
     return _ok_json
 
 
 @dajaxice_register(method='POST')
 @check_login
 def drop_app(request, id):
-    _drop_app(id)
+    model = models.App.objects.get(pk=id)
+    __drop_app(model, request.user.username)
     return _ok_json
 
 
@@ -109,6 +112,7 @@ def add_edit_subject(request, form):
                 'error': u'应用专题名已存在' 
             })
         models.add_subject(subject, apps, request.user)
+        __add_subj(subject, request.user.username)
     else:
         subject = Subject.objects.get(pk=int(pk))
         subject.name = name
@@ -121,6 +125,7 @@ def add_edit_subject(request, form):
                 'error': u'应用专题名已存在' 
             })
         models.edit_subject(subject, apps, request.user)
+        __edit_subj(subject, request.user.username)
 
     return _ok_json
 
@@ -128,21 +133,24 @@ def add_edit_subject(request, form):
 @dajaxice_register(method='POST')
 @check_login
 def delete_subject(request, id):
-    models.delete_subject(id)
+    model = models.Subject.objects.get(pk=id)
+    __remove_subj(model, request.user.username)
     return _ok_json
 
 
 @dajaxice_register(method='POST')
 @check_login
 def drop_subject(request, id):
-    models.drop_subject(id)
+    model = models.Subject.objects.get(pk=id)
+    __drop_subj(model, request.user.username)
     return _ok_json
 
 
 @dajaxice_register(method='POST')
 @check_login
 def publish_subject(request, id):
-    models.publish_subject(id)
+    model = models.Subject.objects.get(pk=id)
+    __pub_subj(model, request.user.username)
     return _ok_json
 
 
@@ -150,7 +158,7 @@ def publish_subject(request, id):
 @check_login
 def sort_subjects(request, pks):
     pks = [int(pk) for pk in pks.split(",")]
-    models.sort_subjects(pks)
+    __sort_subj(request.user.username, pks)
     return _ok_json
 
 
@@ -181,19 +189,32 @@ def __remove_app(model, username):
     oplogtrack(u'删除应用', username, model)
 
 def __pub_app(model, username):
+    model.online = True
+    model.save()
     oplogtrack(u'上线应用', username, model)
 
 def __drop_app(model, username):
+    _drop_app(model.pk)
     oplogtrack(u'下线应用', username, model)
 
 def __add_subj(model, username):
-    oplogtrack(u'下线应用', username, model)
+    oplogtrack(u'新增应用专题', username, model)
 
 def __edit_subj(model, username):
-    oplogtrack(u'下线应用', username, model)
+    oplogtrack(u'编辑应用专题', username, model)
 
 def __remove_subj(model, username):
-    oplogtrack(u'下线应用', username, model)
+    models.delete_subject(model.pk)
+    oplogtrack(u'删除应用专题', username, model)
 
-def __sort_subj(username):
+def __sort_subj(username, pks):
+    models.sort_subjects(pks)
     oplogtrack(u'调整应用专题顺序', username)
+
+def __pub_subj(model, username):
+    models.publish_subject(model.pk)
+    oplogtrack(u'上线应用专题', username)
+
+def __drop_subj(model, username):
+    models.drop_subject(model.pk)
+    oplogtrack(u'下线应用专题', username)
