@@ -65,6 +65,7 @@ def response_error(func):
 
 
 def oplogtrack(type, username, model = None):
+    #import ipdb;ipdb.set_trace()
     log = op_log()
     log.username = username
     if model:
@@ -74,4 +75,5 @@ def oplogtrack(type, username, model = None):
             log.content = u'%s(%s)' % (type, model.__str__(),)
     else:
         log.content = u'%s' % (type,)
+    log.type = 0
     log.save()

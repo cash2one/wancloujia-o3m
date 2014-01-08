@@ -11,7 +11,6 @@ from suning import settings
 
 from suning.decorators import *
 from suning.service import notify
-from forms import *
 from models import *
 
 logger = logging.getLogger(__name__)
