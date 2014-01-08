@@ -15,7 +15,7 @@ from suning.decorators import active_tab
 from mgr.models import cast_staff, Staff, Company, Store, Region
 from mgr.forms import *
 from mgr.tables import *
-from oplog.views import get_oplog
+
 logger = logging.getLogger(__name__)
 
 @require_GET
@@ -223,10 +223,3 @@ def user(request):
         "resetPasswordForm": resetPasswordForm,
     })
 
-
-@require_GET
-@login_required
-@user_passes_test(can_view_staff, login_url=settings.PERMISSION_DENIED_URL)
-@active_tab("system", "oplog")
-def oplog(request):
-    return get_oplog(request)

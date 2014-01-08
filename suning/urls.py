@@ -23,4 +23,5 @@ urlpatterns = patterns('',
     url(r'muce/', include('interface.purls')),
     url(r'media', include('interface.urls')),
     url(r'feedback/', include('feedback.urls')),
+    url(r'oplog/', include('oplog.urls')),
 ) #+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

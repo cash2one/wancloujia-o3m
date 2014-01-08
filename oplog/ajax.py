@@ -19,3 +19,5 @@ _DEFAULT_PASSWORD= '123456'
 _invalid_data_msg = u'数据出错，请检查'
 _invalid_data_json = simplejson.dumps({'ret_code': 1000, 'ret_msg': _invalid_data_msg})
 _ok_json = simplejson.dumps({'ret_code': 0})
+
+

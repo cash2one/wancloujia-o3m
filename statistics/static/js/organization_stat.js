@@ -144,7 +144,7 @@ $(function() {
 
     function desc_of_level(level) {
         if(level === 'region') {
-            return '按大区';
+            return '按大区';   
         } else if (level === 'company') {
             return '按公司';
         } else if (level === 'store') {

@@ -156,6 +156,9 @@ def log_to_dict(log):
     
 def filter_flow_logs(user, form):
     logs = LogMeta.objects.all().order_by('-date')
+    from_date = form.cleaned_data["from_date"]
+    to_date = form.cleaned_data["to_date"]
+    logs = PeriodFilter(logs, from_date, to_date).filter()
     #logger.debug("all logs: %d" % len(logs))
 
     region_id = form.cleaned_data["region"]
@@ -176,9 +179,7 @@ def filter_flow_logs(user, form):
     logs = BrandFilter(logs, form.cleaned_data["brand"]).filter()
     logger.debug("logs filtered by brand: %d" % len(logs))
 
-    from_date = form.cleaned_data["from_date"]
-    to_date = form.cleaned_data["to_date"]
-    logs = PeriodFilter(logs, from_date, to_date).filter()
+    
     logger.debug("logs filtered by period: %d" % len(logs))
     return logs
 
@@ -326,7 +327,10 @@ def _filter_device_statistics(user, form):
     company_id = form.cleaned_data["company"]
     store_id = form.cleaned_data["store"]
     emp_id = form.cleaned_data["emp"]
-    logs = MgrInfoFilter(DeviceLogEntity.objects.all(), form.cleaned_data["region"],
+    from_date = form.cleaned_data["from_date"]
+    to_date = form.cleaned_data["to_date"]
+    logs = PeriodFilter(DeviceLogEntity.objects.all(), from_date, to_date).filter()
+    logs = MgrInfoFilter(logs, form.cleaned_data["region"],
                          form.cleaned_data["company"], form.cleaned_data["store"], 
                          form.cleaned_data["emp"]).filter()
     logger.debug("logs filtered by mgr info: %d" % len(logs))
@@ -342,9 +346,7 @@ def _filter_device_statistics(user, form):
         logs = logs.filter(model=model)
         
 
-    from_date = form.cleaned_data["from_date"]
-    to_date = form.cleaned_data["to_date"]
-    logs = PeriodFilter(logs, from_date, to_date).filter()
+    
     logger.debug("logs filtered by period: %d" % len(logs))
     return logs
 
@@ -451,16 +453,16 @@ def filter_org_logs(form, mode):
         pass#logs = DeviceLogEntity.objects.all()
     elif mode == 'company':
         region = form.cleaned_data['region']
-        logs = DeviceLogEntity.objects.filter(region=region)
+        logs = logs.filter(region=region)
     elif mode == 'store':
         company = form.cleaned_data['company']
-        logs = DeviceLogEntity.objects.filter(company=company)
+        logs = logs.filter(company=company)
     elif mode == 'emp':
         store = form.cleaned_data['store']
-        logs = DeviceLogEntity.objects.filter(store=store)
+        logs = logs.filter(store=store)
     else:
         uid = form.cleaned_data['emp']
-        logs = DeviceLogEntity.objects.filter(uid=uid)
+        logs = logs.filter(uid=uid)
     #if mode == 'did':
     #    results = logs.values('uid', 'did').annotate(total_popularize_count=Sum('popularizeAppCount'), total_app_count=Sum('appCount'))
     logger.debug("logs filtered by period: %d" % len(logs))

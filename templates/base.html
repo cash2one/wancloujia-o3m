@@ -111,8 +111,8 @@
                     {% endif %}
 
                     {% if request.user|is_not_employee %}
-                    <li {% if request.nav.active_tab == "oplog" and request.nav.sub_active_tab == "user" %}class="active"{% endif %}>
-                        <a href="/mgr/oplog/">操作日志</a>
+                    <li {% if request.nav.active_tab == "system" and request.nav.sub_active_tab == "oplog" %}class="active"{% endif %}>
+                        <a href="/oplog/">操作日志</a>
                     </li>
                     {% endif %}
                 </ul>
