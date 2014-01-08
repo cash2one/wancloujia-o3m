@@ -532,7 +532,10 @@ def org_record_to_dict(record, mode, level):
                 dict['emp'] = {'username': None, 'realname': None}
         else:
             dict['did'] = record['did']
+<<<<<<< HEAD
 
+=======
+>>>>>>> 39c1b306c1008119b2430c2f39e5ed8d2f4e60cd
     return dict
 
 
