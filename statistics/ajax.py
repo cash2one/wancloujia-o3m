@@ -532,12 +532,6 @@ def org_record_to_dict(record, mode, level):
                 dict['emp'] = {'username': None, 'realname': None}
         else:
             dict['did'] = record['did']
-            pass
-            emp = utils.get_model_by_pk(Employee.objects, record['uid'])
-            if emp:
-                dict['emp'] = {'username': emp.username, 'realname': emp.realname } 
-            else:
-                dict['emp'] = {'username': None, 'realname': None}
 
     return dict
 
