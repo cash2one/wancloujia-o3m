@@ -18,9 +18,6 @@ from feedback.tables import FeedbackTable, HandledFeedbackTable
 logger = logging.getLogger(__name__)
 
 
-@require_GET
-@login_required
-@active_tab("oplog")
 def get_oplog(request):
     query_set = Feedback.objects.all().order_by("-pk")
     query = request.GET.get("q", None)

@@ -5,4 +5,5 @@ urlpatterns = patterns('mgr.views',
     url(r'^organization/$', 'organization'),
     url(r'^group/$', 'group'),
     url(r'^user/$', 'user'),
+    url(r'^oplog/$','oplog')
 )
