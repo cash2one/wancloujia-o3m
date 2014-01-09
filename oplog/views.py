@@ -13,20 +13,20 @@ from oplog.models import op_log
 from django.db.models import Q
 from suning import settings
 from oplog.tables import OpLogTable
-from mgr.views import user_passes_test, can_view_staff
+from mgr.views import user_passes_test
 from mgr.models import Staff
 from suning.utils import render_json
 
 from mgr.models import Staff
 from oplog.forms import OpLogForm
 import datetime
-
+from framework.templatetags.perm_filters import can_view_oplog
 logger = logging.getLogger(__name__)
 
 
 @require_GET
 @login_required
-@user_passes_test(can_view_staff, login_url=settings.PERMISSION_DENIED_URL)
+@user_passes_test(can_view_oplog,login_url=settings.PERMISSION_DENIED_URL)
 @active_tab("system", "oplog")
 def get_oplog(request):
     form = OpLogForm(request.GET)

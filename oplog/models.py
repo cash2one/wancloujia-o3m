@@ -38,7 +38,7 @@ OPLOG_TYPE_CHOICE = (
 	(31, u'新增管理员'),
 	(32, u'编辑管理员'),
 	(33, u'删除管理员'),
-	(34, u'重置密码'),
+	(34, u'修改管理员密码'),
 	)
 
 # Create your models here.
@@ -49,6 +49,9 @@ class op_log(models.Model):
     content = models.CharField(max_length=80)
     class Meta:
         ordering = ('-pk',)
+        permissions = (
+            ('oplog', '12345'),
+        )
 
 for id, content in OPLOG_TYPE_CHOICE:
     OPLOG_DICT[id] = content

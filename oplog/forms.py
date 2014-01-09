@@ -10,7 +10,7 @@ def get_users():
 
 class OpLogForm(forms.Form):
 	username = forms.ChoiceField(choices=[(-1, "----")] + get_users(), initial=-1)
+	type = forms.ChoiceField(choices=[(-1, '----')] + list(OPLOG_TYPE_CHOICE), initial=-1 )
 	from_date = forms.DateTimeField(initial=datetime.today())
 	to_date = forms.DateTimeField(initial=datetime.today())
-	type = forms.ChoiceField(choices=[(-1, '----')] + list(OPLOG_TYPE_CHOICE), initial=-1 )
 

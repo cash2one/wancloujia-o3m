@@ -57,6 +57,12 @@ def can_change_company(user):
 
 
 @register.filter
+def can_view_oplog(user):
+    return user.is_superuser or \
+            user.is_staff or \
+            user.has_perm('oplog')
+
+@register.filter
 def can_change_store(user):
     return is_not_employee(user) or cast_staff(user).has_perm("mgr.change_organization")
 

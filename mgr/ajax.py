@@ -42,7 +42,10 @@ def modify_password(request, form):
 
     password = f.cleaned_data["password"]
     user.set_password(password)
-    __mod_pass(user, request.user.username)
+    if user.is_superuser or user.is_staff:
+        __mod_adminpass(user, request.user.username)
+    else:
+        __mod_pass(user, request.user.username)
     return _ok_json
 
 
@@ -80,7 +83,7 @@ def add_edit_admin(request, form):
         #password = str(random.randrange(100000, 999999))
         password = _DEFAULT_PASSWORD
         admin.set_password(password)
-        admin.save()
+        __add_admin(admin, request.user.username)
         #notify(admin, password)
         return _ok_json
     else:
@@ -90,7 +93,7 @@ def add_edit_admin(request, form):
         admin.pk = id 
         #fixme
         admin.password = Administrator.objects.get(pk=id).password
-        admin.save()
+        __edit_admin(admin, request.user.username)
         return _ok_json
 
 
@@ -359,3 +362,17 @@ def __remove_user(model, username):
 def __mod_pass(model, username):
     model.save()
     oplogtrack(30, username, model)
+
+def __add_admin(model, username):
+    model.save()
+    oplogtrack(31, username, model)
+
+def __edit_admin(model, username):
+    model.save()
+    oplogtrack(32, username, model)
+
+def __remove_admin(model, username):
+    oplogtrack(33, username, model)
+
+def __mod_adminpass(model, username):
+    oplogtrack(34, username, model)
