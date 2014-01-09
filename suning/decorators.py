@@ -75,6 +75,6 @@ def oplogtrack(type, username, model = None):
         elif model.__str__:
             log.content = u'%s"%s"' % (OPLOG_DICT[type], model.__str__(),)
     else:
-        log.content = u'%s' % (type,)
+        log.content = u'%s' % (OPLOG_DICT[type],)
     log.type = type
     log.save()
