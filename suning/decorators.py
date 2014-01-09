@@ -7,7 +7,8 @@ from django.utils import simplejson
 from django.http import HttpResponse
 from django.contrib import auth
 from dajaxice.utils import deserialize_form
-from oplog.models import op_log
+
+from oplog.models import op_log, OPLOG_DICT
 
 logger = logging.getLogger(__name__)
 
@@ -70,9 +71,9 @@ def oplogtrack(type, username, model = None):
     log.username = username
     if model:
         if model.__unicode__:
-            log.content = u'%s(%s)' % (type, model.__unicode__(),)
+            log.content = u'%s"%s"' % (OPLOG_DICT[type], model.__unicode__(),)
         elif model.__str__:
-            log.content = u'%s(%s)' % (type, model.__str__(),)
+            log.content = u'%s"%s"' % (OPLOG_DICT[type], model.__str__(),)
     else:
         log.content = u'%s' % (type,)
     log.type = type

@@ -1,6 +1,8 @@
 #coding: utf-8
 from django.db import models
 
+OPLOG_DICT = {}
+
 OPLOG_TYPE_CHOICE = (
 	(0, u'新增广告',),
 	(1, u'编辑广告'),
@@ -47,3 +49,6 @@ class op_log(models.Model):
     content = models.CharField(max_length=80)
     class Meta:
         ordering = ('-pk',)
+
+for id, content in OPLOG_TYPE_CHOICE:
+    OPLOG_DICT[id] = content
