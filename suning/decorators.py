@@ -75,5 +75,5 @@ def oplogtrack(type, username, model = None):
             log.content = u'%s(%s)' % (type, model.__str__(),)
     else:
         log.content = u'%s' % (type,)
-    log.type = 0
+    log.type = type
     log.save()

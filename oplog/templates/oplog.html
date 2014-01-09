@@ -2,6 +2,7 @@
 
 {% load django_select2_tags %}
 {% load perm_filters %}
+{% load render_table from django_tables2 %}
 
 {% block css %}
 {{ block.super }}
@@ -32,22 +33,12 @@
             {% endwith %}
         </div>
     </div>
-
     <div class="panel panel-default">
         <div class="panel-heading">
-            共<span class='total'>0</span>次操作
+            共<span class='total'>{{ count }}</span>次操作
         </div>
         <div class="panel-body"> 
-            <table class="table table-hover table-bordered">
-                <thead>
-                    <tr>
-                        <th>时间</th>
-                        <th>用户</th>
-                        <th>操作</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
+            {% render_table table "table_template.html" %}
         </div>
     </div>
 </div>

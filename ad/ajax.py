@@ -60,19 +60,19 @@ def sort_ad(request, pks):
 #@oplog_track(_track_name)
 def __add(model, username=u'未知'):
     models.add_ad(model)
-    oplogtrack(u'新增广告', username, model)
+    oplogtrack(0, username, model)
 
 #@oplog_track(_track_name)
 def __edit(model, username=u'未知'):
     models.edit_ad(model)
-    oplogtrack(u'编辑广告', username, model)
+    oplogtrack(1, username, model)
 
 #@oplog_track(u'删除广告')
 def __remove(model=None, username=u'未知', id=-1):
     models.delete_ad(id)
-    oplogtrack(u'删除广告', username, model)
+    oplogtrack(2, username, model)
 
 def __sort(pks, username=u'未知'):
     ad_pks = [int(pk) for pk in pks.split(",")]
     models.sort_ad(ad_pks)
-    oplogtrack(u'调整广告顺序', username)
+    oplogtrack(3, username)

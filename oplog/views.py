@@ -14,9 +14,13 @@ from django.db.models import Q
 from suning import settings
 from oplog.tables import OpLogTable
 from mgr.views import user_passes_test, can_view_staff
+from mgr.models import Staff
 from suning.utils import render_json
 
-from oplog.models import OPLOG_TYPE_CHOICE
+from mgr.models import Staff
+from oplog.forms import OpLogForm
+import datetime
+
 logger = logging.getLogger(__name__)
 
 
@@ -25,52 +29,28 @@ logger = logging.getLogger(__name__)
 @user_passes_test(can_view_staff, login_url=settings.PERMISSION_DENIED_URL)
 @active_tab("system", "oplog")
 def get_oplog(request):
+    form = OpLogForm(request.GET)
+    logger.debug(dir(form))
     query_set = op_log.objects.all().order_by("-pk")
-    query = request.GET.get("q", None)
-    if query:
-        query_set = query_set.filter(Q(content__contains=query))
+    if form.is_valid():
+        from_date = form.cleaned_data['from_date'] #datetime.strptime(form.cleaned_data['from_date'],'%Y-%m-%d')
+        to_date = form.cleaned_data['to_date'] + datetime.timedelta(days=1)#datetime.strptime(form.cleaned_data['to_date'],'%Y-%m-%d')
+        if from_date <= to_date:
+            query_set = query_set.filter(date__gte=from_date,date__lt=to_date)
+        if form.cleaned_data['username'] != '-1':
+            query_set = query_set.filter(username=Staff.objects.get(pk=form.cleaned_data['username']).username)
+        if form.cleaned_data['type'] != '-1':
+            query_set = query_set.filter(type=form.cleaned_data['type'])
+
     table = OpLogTable(query_set)
-    if query:
-        table.empty_text = settings.NO_SEARCH_RESULTS
-    count = len(op_log.objects.all())
-    RequestConfig(request, paginate={"per_page": settings.PAGINATION_PAGE_SIZE}).configure(table)
+    table.empty_text = settings.NO_SEARCH_RESULTS
+    count = query_set.count()
+    RequestConfig(request, paginate={"per_page": 50}).configure(table)
+    
     return render(request, "oplog.html", {
-        'query': query,
         'table': table,
-        'count': count if count > 0 else None
-    })
-
-@require_GET
-def track_type(request):
-    user = request.user
-    if not user.is_authenticated():
-        regions = Region.objects.none()
-
-    dict = {}
-    for id, type in OPLOG_TYPE_CHOICE:
-        dict[id] = type
-    return render_json(dict)
-
-@require_GET
-def users(request):
-    pass
-
-
-@require_GET
-@login_required
-@active_tab("feedback")
-def feedback(request):
-    query_set = Feedback.objects.all().order_by("-pk")
-    query = request.GET.get("q", None)
-    if query:
-        query_set = query_set.filter(Q(content__contains=query))
-    table = FeedbackTable(query_set)
-    if query:
-        table.empty_text = settings.NO_SEARCH_RESULTS
-    count = len(Feedback.objects.all())
-    RequestConfig(request, paginate={"per_page": settings.PAGINATION_PAGE_SIZE}).configure(table)
-    return render(request, "oplog.html", {
-        'query': query,
-        'table': table,
-        'count': count if count > 0 else None
+        'form': form,
+        'f_date': form.cleaned_data['from_date'].strftime('%Y-%m-%d') if form.cleaned_data.has_key('from_date') else datetime.date.today().strftime('%Y-%m-%d'),
+        't_date': form.cleaned_data['to_date'].strftime('%Y-%m-%d') if form.cleaned_data.has_key('to_date') else datetime.date.today().strftime('%Y-%m-%d'),
+        'count': count if count > 0 else 0,
     })

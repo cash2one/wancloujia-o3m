@@ -175,46 +175,46 @@ def get_apps(request, subject, pks):
 def __add_app(model, username):
     model.online = True
     model.save()
-    oplogtrack(u'新增应用', username, model)
+    oplogtrack(4, username, model)
 
 def __edit_app(model, username):
     app_stored = App.objects.get(pk=model.pk)
     model.create_date = app_stored.create_date
     model.online = app_stored.online
     model.save()
-    oplogtrack(u'编辑应用', username, model)
+    oplogtrack(5, username, model)
 
 def __remove_app(model, username):
     model.delete()
-    oplogtrack(u'删除应用', username, model)
+    oplogtrack(6, username, model)
 
 def __pub_app(model, username):
     model.online = True
     model.save()
-    oplogtrack(u'上线应用', username, model)
+    oplogtrack(7, username, model)
 
 def __drop_app(model, username):
     _drop_app(model.pk)
-    oplogtrack(u'下线应用', username, model)
+    oplogtrack(8, username, model)
 
 def __add_subj(model, username):
-    oplogtrack(u'新增应用专题', username, model)
+    oplogtrack(9, username, model)
 
 def __edit_subj(model, username):
-    oplogtrack(u'编辑应用专题', username, model)
+    oplogtrack(10, username, model)
 
 def __remove_subj(model, username):
     models.delete_subject(model.pk)
-    oplogtrack(u'删除应用专题', username, model)
+    oplogtrack(11, username, model)
 
 def __sort_subj(username, pks):
     models.sort_subjects(pks)
-    oplogtrack(u'调整应用专题顺序', username)
+    oplogtrack(14, username)
 
 def __pub_subj(model, username):
     models.publish_subject(model.pk)
-    oplogtrack(u'上线应用专题', username)
+    oplogtrack(12, username)
 
 def __drop_subj(model, username):
     models.drop_subject(model.pk)
-    oplogtrack(u'下线应用专题', username)
+    oplogtrack(13, username)

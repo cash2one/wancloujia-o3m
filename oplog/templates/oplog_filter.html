@@ -2,25 +2,11 @@
 
 <div class="filter">
     <label for="filter_user">用户：</label>
-    <select id="filter_user" 
-        name="region">
-        <option value="{{ user_filter.region.value.pk }}" selected='selected'>
-        {{ user_filter.region.value.name }}
-        </option>
-     </select>
+    {{ form.username }}
 </div>
 <div class="filter">
-    <label for="filter_company">操作：</label>
-    <select id="filter_company" name="company"
-        {% if user_filter.company.disabled %}
-        readonly='readonly' data-readonly='true'
-        {% endif %}>
-        {% if user_filter.company.disabled %}
-        <option value="{{ user_filter.company.value.pk }}" selected='selected'>
-        {{ user_filter.company.value.code }}{{ user_filter.company.value.name }}
-        </option>
-        {% endif %}
-    </select>
+    <label for="filter_operations">操作：</label>
+    {{ form.type }}
 </div>
 
 </div>

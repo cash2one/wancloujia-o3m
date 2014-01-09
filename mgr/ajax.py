@@ -303,59 +303,59 @@ def delete_group(request, id):
 
 def __add_region(model, username):
     model.save()
-    oplogtrack(u'新增大区', username, model)
+    oplogtrack(15, username, model)
 
 def __edit_region(model, username):
     model.save()
-    oplogtrack(u'编辑大区', username, model)
+    oplogtrack(16, username, model)
 
 def __remove_region(model, username):
-    oplogtrack(u'删除大区', username, model)
+    oplogtrack(17, username, model)
 
 def __add_company(model, username):
     model.save()
-    oplogtrack(u'新增公司', username, model)
+    oplogtrack(18, username, model)
 
 def __edit_company(model, username):
     model.save()
-    oplogtrack(u'编辑公司', username, model)
+    oplogtrack(19, username, model)
 
 def __remove_company(model, username):
-    oplogtrack(u'删除公司', username, model)
+    oplogtrack(20, username, model)
 
 def __add_store(model, username):
     model.save()
-    oplogtrack(u'新增门店', username, model)
+    oplogtrack(21, username, model)
 
 def __edit_store(model, username):
     model.save()
-    oplogtrack(u'编辑门店', username, model)
+    oplogtrack(22, username, model)
 
 def __remove_store(model, username):
-    oplogtrack(u'删除门店', username, model)
+    oplogtrack(23, username, model)
 
 def __add_group(model, username):
-    oplogtrack(u'新增用户组', username, model)
+    oplogtrack(24, username, model)
 
 def __edit_group(model, username):
-    oplogtrack(u'编辑用户组', username, model)
+    oplogtrack(25, username, model)
 
 def __remove_group(model, username):
     model.delete()
-    oplogtrack(u'删除用户组', username, model)
+    oplogtrack(26, username, model)
 
 def __add_user(model, username):
     model.save()
-    oplogtrack(u'新增用户', username, model)
+    oplogtrack(27, username, model)
 
 def __edit_user(model, username):
     model.save()
-    oplogtrack(u'编辑用户', username, model)
+    oplogtrack(28, username, model)
 
 def __remove_user(model, username):
     model.delete()
-    oplogtrack(u'删除用户', username, model)
+    oplogtrack(29, username, model)
 
 def __mod_pass(model, username):
     model.save()
-    oplogtrack(u'修改用户密码', username, model)
+    oplogtrack(30, username, model)
