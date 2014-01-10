@@ -1,16 +1,19 @@
+# -*- coding: utf-8 -*-
 from django import forms
 from oplog.models import OPLOG_TYPE_CHOICE
 from mgr.models import Staff
 from datetime import datetime
-
-def get_users():
-	users = [(i.pk, i.username) for i in Staff.objects.all()]
-	users = sorted(users, key=lambda x:x[1])
-	return users
+from django_select2 import *
 
 class OpLogForm(forms.Form):
-	username = forms.ChoiceField(choices=[(-1, "----")] + get_users(), initial=-1)
-	type = forms.ChoiceField(choices=[(-1, '----')] + list(OPLOG_TYPE_CHOICE), initial=-1 )
+	username_list = [(-1, '--------')]
+	username_list.extend(Staff.objects.order_by('username').values_list('id', 'username'))
+	username = Select2ChoiceField(choices=username_list, required=True, label=u'用户')
+	
+	type_list = [(-1, '--------')]
+	type_list.extend(OPLOG_TYPE_CHOICE)
+	type = Select2ChoiceField(choices=type_list, required=True, label=u'操作')
+	
 	from_date = forms.DateTimeField(initial=datetime.today())
 	to_date = forms.DateTimeField(initial=datetime.today())
 

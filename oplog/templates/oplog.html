@@ -19,8 +19,7 @@
     <div class="panel panel-default">
         <div class="panel-heading">筛选条件</div>
         <div class="panel-body" style="padding: 0px"> 
-            {% with select_empty_option='---------' %}
-            <form class="form-filter">
+            <form action="." class="form-filter" method="POST">{% csrf_token %}
                 <div class="filters-wrap">
                     {% include "oplog_filter.html" %}
                     <div class="filter-group last">
@@ -28,10 +27,9 @@
                     </div>
                 </div>
                 <div class="submit">
-                    <input type='submit'  class="btn btn-primary" value='筛选'</>
+                    <input type='submit' class="btn btn-primary" value='筛选'</>
                 </div>
             </form>
-            {% endwith %}
         </div>
     </div>
     <div class="panel panel-default">
