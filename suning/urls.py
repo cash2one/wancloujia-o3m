@@ -11,7 +11,7 @@ dajaxice_autodiscover()
 
 urlpatterns = patterns('',
     url(dajaxice_config.dajaxice_url, include('dajaxice.urls')),
-    url(r'^favicon\.ico$', RedirectView.as_view(url='/static/img/favicon.ico')),
+    url(r'^favicon\.ico$', RedirectView.as_view(url='/static/img/tianyin_favicon.png')),
     url(r'^ajax-upload/', include('ajax_upload.urls')),
     url(r'^select2/', include('django_select2.urls')),
     url(r'', include('framework.urls')),

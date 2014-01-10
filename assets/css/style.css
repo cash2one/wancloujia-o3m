@@ -10,3 +10,9 @@ body {
 .app-dialog .modal-footer {
 	margin-top: 0;
 }
+
+.btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active, .open .dropdown-toggle.btn-primary {
+color: #fff;
+background-color: #2e5091;
+border-color: #27447c;
+}

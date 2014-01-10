@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DBNAME=suning
+DBNAME=tianyin
 
 sql=$(cat <<-EOF
 drop database $DBNAME;
@@ -18,5 +18,5 @@ echo "ensure groups and permissions" &&
 ./manage.py ensure_groups_and_permissions --traceback &&
 
 echo "create root user" &&
-./manage.py set_root root suning --traceback
+./manage.py set_root root tianyin --traceback
 

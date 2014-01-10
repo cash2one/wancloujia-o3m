@@ -55,6 +55,7 @@ def check_login(func):
         if not request.user.is_authenticated():
             return simplejson.dumps({'ret_code': 1001})
         return func(request, *args, **kwargs)
+
     return wrapper
 
 

@@ -180,7 +180,7 @@ input[type="button"].btn-block {
 }
 
 .btn-link {
-  color: #0088cc;
+  color: #355ba5;
   cursor: pointer;
   border-color: transparent;
   -webkit-border-radius: 0;
@@ -190,7 +190,7 @@ input[type="button"].btn-block {
 
 .btn-link:hover,
 .btn-link:focus {
-  color: #005580;
+  color: #2e5091;
   text-decoration: underline;
   background-color: transparent;
 }

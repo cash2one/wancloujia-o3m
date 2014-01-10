@@ -15,7 +15,7 @@
     },
     "app": {
         "launch": {
-            "web_url": "http://suning.wandou.in/interface/welcome"
+            "web_url": "http://tianyin.wandou.in/interface/welcome"
         },
         "navigation": []
     },

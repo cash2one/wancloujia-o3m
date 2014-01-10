@@ -36,10 +36,10 @@ def get_available_permissions():
         (Permission.objects.get(content_type=staff_type, codename="change_staff").pk, u'编辑用户'),
         (Permission.objects.get(content_type=staff_type, codename="delete_staff").pk, u'删除用户'),
 
-        (Permission.objects.get(content_type=ad_type, codename="add_ad").pk, u'添加广告'),
-        (Permission.objects.get(content_type=ad_type, codename="change_ad").pk, u'编辑广告'),
-        (Permission.objects.get(content_type=ad_type, codename="sort_ad").pk, u'调整广告顺序'),
-        (Permission.objects.get(content_type=ad_type, codename="delete_ad").pk, u'删除广告'),
+        #(Permission.objects.get(content_type=ad_type, codename="add_ad").pk, u'添加广告'),
+        #(Permission.objects.get(content_type=ad_type, codename="change_ad").pk, u'编辑广告'),
+        #(Permission.objects.get(content_type=ad_type, codename="sort_ad").pk, u'调整广告顺序'),
+        #(Permission.objects.get(content_type=ad_type, codename="delete_ad").pk, u'删除广告'),
 
         (Permission.objects.get(content_type=app_type, codename="add_app").pk, u'添加应用'),
         (Permission.objects.get(content_type=app_type, codename="change_app").pk, u'编辑应用'),

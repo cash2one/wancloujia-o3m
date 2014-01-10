@@ -21,7 +21,7 @@ DATABASE_HOST = 'localhost'
 DATABASE_PORT = '3306'
 DATABASE_USER = 'root'
 DATABASE_PASSWORD = 'nameLR9969'
-DATABASE_NAME = 'suning'
+DATABASE_NAME = 'tianyin'
 
 DATABASES = {
     'default': {
@@ -37,7 +37,7 @@ DATABASES = {
 
 HDFS_CONFIG = {
     'username': 'songwei', #HDFS linux owner username
-    'hostname': 'dev-node1.limijiaoyin.com', #HDFS web host name
+    'hostname': 'localhost', #HDFS web host name
     'port': '50070' #HDFS web port
 }
 
@@ -57,7 +57,7 @@ FROM_EMAIL = "491320274@qq.com"
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = ['suning.wandoujia.com']
+ALLOWED_HOSTS = ['*']
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.ikipedia.org/wiki/List_of_tz_zones_by_name
