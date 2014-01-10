@@ -23,4 +23,4 @@ class OpLogTable(tables.Table):
         fields = ('op',)
         sequence = ('date', 'user', 'op')
         page_field = 'p'
-        empty_text = u'暂无任何操作记录'
+        empty_text = u'暂无操作记录'
