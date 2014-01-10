@@ -38,7 +38,7 @@
                                 <a  data-id="{{ app.id }}" download="{{ app.name }}.apk" 
                                     class="btn install-link"
                                     data-package="{{ app.package }}" 
-                                    href="{{ MEDIA_URL }}{{ app.apk }}#name={{ app.name }}&icon=http://{{ request.META.HTTP_HOST }}{{ app.icon }}&content-type=application&md5={{ app.md5 }}" >安装</a>
+                                    href="{{ MEDIA_URL }}{{ app.apk }}?md5={{ app.md5 }}#name={{ app.name }}&icon=http://{{ request.META.HTTP_HOST }}{{ app.icon }}&content-type=application" >安装</a>
                             </span>    
                         </div>
                     </div>

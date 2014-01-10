@@ -572,4 +572,3 @@ def filter_org_statistics(request, form, offset, length, mode, level):
         'capacity': capacity,
         'brands': brands
     })
-
