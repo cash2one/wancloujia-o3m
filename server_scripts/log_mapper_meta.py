@@ -133,7 +133,7 @@ for line in sys.stdin:
         j = json.loads(line)
         appid = _mysql.escape_string(j["app"].strip())
         brand = _mysql.escape_string(j["brand"].strip().upper())
-        did = _mysql.escape_string(j["deviceId"].strip().upper())
+        did = _mysql.escape_string(j["deviceId"].strip().upper())[-8:]
         model = _mysql.escape_string(j["model"].strip().upper())
         pkg = _mysql.escape_string(j["package"].strip())
         user = _mysql.escape_string(str(j["user"]).strip())
@@ -145,8 +145,8 @@ for line in sys.stdin:
             print "INSERT INTO statistics_brandmodel(brand, model) VALUES('%s', '%s');" % \
               ( brand, model )
             brandmodel.add((brand, model,))
-        print "INSERT INTO interface_logmeta(date, uid, did, brand, model, appID, appPkg) VALUES('%d-%d-%d', '%s', '%s', '%s', '%s', %s, '%s');" % \
-              ( lastDay.year, lastDay.month, lastDay.day, map[user][0], did, brand, model, appid, pkg )
+        print "INSERT INTO interface_logmeta(date, uid, did, brand, model, appID, appPkg) VALUES('%s', '%s', '%s', '%s', '%s', %s, '%s');" % \
+              ( lastDay.isoformat(), map[user][0], did, brand, model, appid, pkg )
     except:
         pass
 #for line in sys.stdin:

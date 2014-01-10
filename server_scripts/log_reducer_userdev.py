@@ -112,22 +112,22 @@ lastDay = datetime.date.today() - datetime.timedelta(days=0)
 
 existed = set()
 existed2 = set()
-db.query("DELETE FROM interface_userdevicelogentity WHERE date ='%d-%d-%d';" % (lastDay.year, lastDay.month, lastDay.day))
+db.query("DELETE FROM interface_userdevicelogentity WHERE date ='%s';" % (lastDay.isoformat()))
 r = db.store_result()
 for line in sys.stdin:
 	#print line
 	try:
 		user, did, appid = line.strip().split(',')
 		if (user, did,) in existed:
-			print "UPDATE interface_userdevicelogentity SET popularizeAppCount = popularizeAppCount + %s , appCount = appCount + 1 WHERE date = '%d-%d-%d' AND uid =%s;" \
-				% (apps[appid][2], lastDay.year, lastDay.month, lastDay.day, map[user][0])
+			print "UPDATE interface_userdevicelogentity SET popularizeAppCount = popularizeAppCount + %s , appCount = appCount + 1 WHERE date = '%s' AND uid =%s;" \
+				% (apps[appid][2], lastDay.isoformat(), map[user][0])
 		else:
 			if user in existed2:
-				print "UPDATE interface_userdevicelogentity SET deviceCount = deviceCount + 1, popularizeAppCount = popularizeAppCount + %s , appCount = appCount + 1 WHERE date = '%d-%d-%d' AND uid =%s;" \
-					% (apps[appid][2], lastDay.year, lastDay.month, lastDay.day, map[user][0])
+				print "UPDATE interface_userdevicelogentity SET deviceCount = deviceCount + 1, popularizeAppCount = popularizeAppCount + %s , appCount = appCount + 1 WHERE date = '%s' AND uid =%s;" \
+					% (apps[appid][2], lastDay.isoformat(), map[user][0])
 			else:
-				print "INSERT INTO interface_userdevicelogentity(date, region, company, store, uid , deviceCount , popularizeAppCount, appCount, appPkg) VALUES('%d-%d-%d', %s , %s, %s, %s, %s, %s, %s, '%s');" \
-					% ( lastDay.year, lastDay.month, lastDay.day, map[user][1], map[user][2], map[user][3], map[user][0], '1', apps[appid][2] , '1', apps[appid][0])
+				print "INSERT INTO interface_userdevicelogentity(date, region, company, store, uid , deviceCount , popularizeAppCount, appCount, appPkg) VALUES('%s', %s , %s, %s, %s, %s, %s, %s, '%s');" \
+					% ( lastDay.isoformat(), map[user][1], map[user][2], map[user][3], map[user][0], '1', apps[appid][2] , '1', apps[appid][0])
 				existed2.add(user)
 			existed.add((user, did,))
 	except:

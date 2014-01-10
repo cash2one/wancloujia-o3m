@@ -156,6 +156,9 @@ def log_to_dict(log):
     
 def filter_flow_logs(user, form):
     logs = LogMeta.objects.all().order_by('-date')
+    from_date = form.cleaned_data["from_date"]
+    to_date = form.cleaned_data["to_date"]
+    logs = PeriodFilter(logs, from_date, to_date).filter()
     #logger.debug("all logs: %d" % len(logs))
 
     region_id = form.cleaned_data["region"]
@@ -176,9 +179,7 @@ def filter_flow_logs(user, form):
     logs = BrandFilter(logs, form.cleaned_data["brand"]).filter()
     logger.debug("logs filtered by brand: %d" % len(logs))
 
-    from_date = form.cleaned_data["from_date"]
-    to_date = form.cleaned_data["to_date"]
-    logs = PeriodFilter(logs, from_date, to_date).filter()
+    
     logger.debug("logs filtered by period: %d" % len(logs))
     return logs
 
@@ -216,6 +217,10 @@ def filter_installed_capacity_logs(user, form):
     company_id = form.cleaned_data["company"]
     store_id = form.cleaned_data["store"]
     emp_id = form.cleaned_data["emp"]
+    from_date = form.cleaned_data["from_date"]
+    to_date = form.cleaned_data["to_date"]
+    logs = InstalledAppLogEntity.objects.all()
+    logs = PeriodFilter(logs, from_date, to_date).filter()
     if emp_id:
         logs = InstalledAppLogEntity.objects.filter(uid=emp_id)
     elif store_id:
@@ -225,27 +230,26 @@ def filter_installed_capacity_logs(user, form):
     elif region_id:
         logs = InstalledAppLogEntity.objects.filter(region=region_id)
     else:
-        logs = InstalledAppLogEntity.objects.all()
+        pass#logs = InstalledAppLogEntity.objects.all()
+
     logger.debug("logs filtered by user info: %d" % len(logs))
 
     logs = AppFilter(logs, form.cleaned_data["app"]).filter()
     logger.debug("logs filtered by app: %d" % len(logs))
 
-    from_date = form.cleaned_data["from_date"]
-    to_date = form.cleaned_data["to_date"]
-    logs = PeriodFilter(logs, from_date, to_date).filter()
+    
     logger.debug("logs filtered by period: %d" % len(logs))
 
     popularize = form.cleaned_data['popularize']
     if popularize:
         logs = logs.filter(popularize=(popularize=='True'))
 
-    results = logs.values('appPkg', 'appID', 'appName', 'popularize' ,'installedTimes').annotate(count=Sum('installedTimes'))
+    results = logs.values('appID', 'appName', 'appPkg', 'uid', 'region', 'company', 'store').annotate(count=Sum('installedTimes'))
     return results
 
 
 def installed_capacity_to_dict(capacity):
-    logger.debug(capacity)
+    logger.debug(capacity) 
     dict = {}
     apps = App.objects.filter(package=capacity['appPkg'])
     app = apps[0] if len(apps) != 0 else None
@@ -253,8 +257,17 @@ def installed_capacity_to_dict(capacity):
         'id': capacity['appID'],
         'package': capacity['appPkg'],
         'name': capacity['appName'],
-        'popularize': capacity['popularize']
     }
+    emp = utils.get_model_by_pk(Employee.objects, capacity['uid'])
+    organizations = [None, None, None]
+    if emp:
+        dict["empid"] = emp.username
+        dict["emp"] = emp.realname
+        for i, item in enumerate(emp.organizations()):
+            organizations[i] = item.name
+    else:
+        dict["emp"] = None
+    dict["region"], dict["company"], dict["store"] = organizations
     dict["count"] = capacity['count']
     return dict;
     
@@ -314,7 +327,10 @@ def _filter_device_statistics(user, form):
     company_id = form.cleaned_data["company"]
     store_id = form.cleaned_data["store"]
     emp_id = form.cleaned_data["emp"]
-    logs = MgrInfoFilter(DeviceLogEntity.objects.all(), form.cleaned_data["region"],
+    from_date = form.cleaned_data["from_date"]
+    to_date = form.cleaned_data["to_date"]
+    logs = PeriodFilter(DeviceLogEntity.objects.all(), from_date, to_date).filter()
+    logs = MgrInfoFilter(logs, form.cleaned_data["region"],
                          form.cleaned_data["company"], form.cleaned_data["store"], 
                          form.cleaned_data["emp"]).filter()
     logger.debug("logs filtered by mgr info: %d" % len(logs))
@@ -330,9 +346,7 @@ def _filter_device_statistics(user, form):
         logs = logs.filter(model=model)
         
 
-    from_date = form.cleaned_data["from_date"]
-    to_date = form.cleaned_data["to_date"]
-    logs = PeriodFilter(logs, from_date, to_date).filter()
+    
     logger.debug("logs filtered by period: %d" % len(logs))
     return logs
 
@@ -431,29 +445,31 @@ def get_device_stat_detail(request, form, offset, length):
 
 
 def filter_org_logs(form, mode):
-    if mode == 'region':
-        logs = DeviceLogEntity.objects.all()
-    elif mode == 'company':
-        region = form.cleaned_data['region']
-        logs = DeviceLogEntity.objects.filter(region=region)
-    elif mode == 'store':
-        company = form.cleaned_data['company']
-        logs = DeviceLogEntity.objects.filter(company=company)
-    elif mode == 'emp':
-        store = form.cleaned_data['store']
-        logs = DeviceLogEntity.objects.filter(store=store)
-    else:
-        uid = form.cleaned_data['emp']
-        logs = DeviceLogEntity.objects.filter(uid=uid)
-
+    logs = DeviceLogEntity.objects.all()
     from_date = form.cleaned_data["from_date"]
     to_date = form.cleaned_data["to_date"]
     logs = PeriodFilter(logs, from_date, to_date).filter()
+    if mode == 'region':
+        pass#logs = DeviceLogEntity.objects.all()
+    elif mode == 'company':
+        region = form.cleaned_data['region']
+        logs = logs.filter(region=region)
+    elif mode == 'store':
+        company = form.cleaned_data['company']
+        logs = logs.filter(company=company)
+    elif mode == 'emp':
+        store = form.cleaned_data['store']
+        logs = logs.filter(store=store)
+    else:
+        uid = form.cleaned_data['emp']
+        logs = logs.filter(uid=uid)
+    #if mode == 'did':
+    #    results = logs.values('uid', 'did').annotate(total_popularize_count=Sum('popularizeAppCount'), total_app_count=Sum('appCount'))
     logger.debug("logs filtered by period: %d" % len(logs))
     return logs
 
 
-_LEVELS = ['region', 'company', 'store', 'emp']
+_LEVELS = ['region', 'company', 'store', 'emp','did'] 
 def available_levels(mode, level):
     offset = _LEVELS.index(mode)
     to = _LEVELS.index(level)
@@ -474,8 +490,11 @@ def titles_for_org_stat(mode, level):
             titles.append(u'门店名称')
         elif level == 'emp':
             titles.append(u'员工编码')
-            titles.append(u'门店编码')
-    titles.append(u'机器台数')
+            titles.append(u'员工姓名')
+    if level == u'did':
+        titles.append(u'串码')
+    else:
+        titles.append(u'机器台数')
     titles.append(u'推广数')
     titles.append(u'安装总数')
     return titles
@@ -484,6 +503,7 @@ def titles_for_org_stat(mode, level):
 def org_record_to_dict(record, mode, level):
     dict = {
         'total_device_count': record['total_device_count'],
+        'did': record['did'] if record.has_key('did') else None,
         'total_popularize_count': record['total_popularize_count'],
         'total_app_count': record['total_app_count']
     }
@@ -506,13 +526,14 @@ def org_record_to_dict(record, mode, level):
                 dict['store'] = { 'code': store.code, 'name': store.name } 
             else:
                 dict['store'] = empty_value
-        else:
+        elif level == 'emp':
             emp = utils.get_model_by_pk(Employee.objects, record['uid'])
             if emp:
                 dict['emp'] = {'username': emp.username, 'realname': emp.realname } 
             else:
                 dict['emp'] = {'username': None, 'realname': None}
-
+        else:
+            dict['did'] = record['did']
     return dict
 
 
@@ -542,7 +563,7 @@ def filter_org_statistics(request, form, offset, length, mode, level):
     items = []
     for record in records:
         items.append(org_record_to_dict(record, mode, level))
-    print [i['total_device_count'] for i in items]
+    #print [i['total_device_count'] for i in items]
     brands = sum([i['total_device_count'] for i in items])
     return simplejson.dumps({
         'ret_code': 0,
@@ -551,4 +572,3 @@ def filter_org_statistics(request, form, offset, length, mode, level):
         'capacity': capacity,
         'brands': brands
     })
-

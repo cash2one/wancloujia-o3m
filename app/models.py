@@ -43,6 +43,9 @@ class App(models.Model):
         dfs = interface.storage.hdfs_storage()
         return dfs.size(self.apk.file.path)
 
+    def __unicode__(self):
+        return self.name
+
     class Meta:
         permissions = (
             ('publish_app', 'Can publish app'),

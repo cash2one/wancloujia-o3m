@@ -1,5 +1,5 @@
 dbhost = 'dev-node1.limijiaoyin.com'
-dbport = 3306
+#dbport = 3306
 dbuser = 'root'
 dbpass = 'nameLR9969'
 dbname = 'suning'
@@ -121,25 +121,30 @@ else:
     lastDay = datetime.date.today()
 
 print "config hadoop"
-filename = "/data/suning/tmp/windows2x.log.%d-%d-%d" % (lastDay.year, lastDay.month, lastDay.day)
-dstfilename = "/logs/windows2x.log.%d-%d-%d" % (lastDay.year, lastDay.month, lastDay.day)
+filename = "/data/suning/tmp/windows2x.log.%s" % (lastDay.isoformat(),)
+dstfilename = "/logs/windows2x.log.%s" % (lastDay.isoformat(),)
 os.popen("rm -f %s" % filename)
 os.popen("/opt/hadoop/hadoop-2.2.0/bin/hadoop fs -getmerge  %s.* %s" % (dstfilename, filename))
 os.popen("/opt/hadoop/hadoop-2.2.0/bin/hadoop fs -put -f %s %s" % (filename, dstfilename))
 os.popen("rm -f %s" % filename)
 os.popen("/opt/hadoop/hadoop-2.2.0/bin/hadoop fs -rm -f %s.*" % dstfilename)
 
-
+print "begin clean db"
+sqlexe = 'mysql -u%s -p%s -h%s %s' % (dbuser, dbpass, dbhost, dbname)
+os.popen('echo "DELETE FROM interface_logmeta WHERE date=\'%s\'" | %s' % (lastDay.isoformat(), sqlexe))
+os.popen('echo "DELETE FROM interface_devicelogentity WHERE date=\'%s\' | %s"' % (lastDay.isoformat(), sqlexe))
+os.popen('echo "DELETE FROM interface_userdevicelogentity WHERE date=\'%s\'" | %s' % (lastDay.isoformat(), sqlexe))
+os.popen('echo "DELETE FROM interface_installedapplogentity WHERE date=\'%s\'" | %s' % (lastDay.isoformat(), sqlexe))
 print "begin hadoop"
 jobs = [
-		("log_mapper_meta.py", "log_reducer_meta.py", "/logs/meta%d-%d-%d" % (lastDay.year, lastDay.month, lastDay.day )),
-		("log_mapper_appstat.py", "log_reducer_appstat.py", "/logs/appstat%d-%d-%d" % (lastDay.year, lastDay.month, lastDay.day )),
-		("log_mapper_devicelog.py", "log_reducer_devicelog.py", "/logs/device%d-%d-%d" % (lastDay.year, lastDay.month, lastDay.day )),
-		("log_mapper_userdev.py", "log_reducer_userdev.py", "/logs/userdev%d-%d-%d" % (lastDay.year, lastDay.month, lastDay.day )),
+		("log_mapper_meta.py", "log_reducer_meta.py", "/logs/meta%s" % (lastDay.isoformat(), )),
+		("log_mapper_appstat.py", "log_reducer_appstat.py", "/logs/appstat%s" % (lastDay.isoformat(),)),
+		("log_mapper_devicelog.py", "log_reducer_devicelog.py", "/logs/device%s" % (lastDay.isoformat(), )),
+		("log_mapper_userdev.py", "log_reducer_userdev.py", "/logs/userdev%s" % (lastDay.isoformat(), )),
 		]
 
 
-input = "/logs/windows2x.log.%d-%d-%d" % (lastDay.year, lastDay.month, lastDay.day )
+input = "/logs/windows2x.log.%s" % (lastDay.isoformat(), )
 hadoop = hadooppath + "/bin/hadoop"
 hadoop_jar = hadooppath + "/share/hadoop/tools/lib/hadoop-streaming-2.2.0.jar"
 for map, red, output in jobs:

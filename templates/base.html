@@ -81,12 +81,12 @@
                 </a>
             </li>
             {% endif %}
-
+<!--
             <li {% if request.nav.active_tab == "feedback" %}class="active"{% endif %}><a href="/feedback/">
                 <span class="glyphicon glyphicon-phone-alt"></span>&nbsp;&nbsp;反馈管理
             </a></li>
-
-            {% if request.user|is_not_employee or perms.mgr %}
+-->
+            {% if request.user|is_not_employee or  perms.mgr %}
             <li {% if request.nav.active_tab == "system" %}class="active"{% endif %}>
                 <a class="accordin-toggle" data-toggle="collapse" data-parent="#accordin" href="#sub_system">
                     <span class="glyphicon glyphicon-wrench"></span>&nbsp;&nbsp;系统管理
@@ -110,10 +110,10 @@
                     </li>
                     {% endif %}
 
-                    {% if request.user|is_not_employee %}
-                    <!--
-                    <li><a href="">操作日志</a></li>
-                    -->
+                    {% if request.user|can_view_oplog %}
+                    <li {% if request.nav.active_tab == "system" and request.nav.sub_active_tab == "oplog" %}class="active"{% endif %}>
+                        <a href="/oplog/">操作日志</a>
+                    </li>
                     {% endif %}
                 </ul>
             </li>

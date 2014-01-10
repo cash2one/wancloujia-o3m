@@ -13,7 +13,6 @@ _ok_json = simplejson.dumps({'ret_code': 0})
 @check_login
 def handle_feedback(request, id):
     feedback.models.handle_feedback(id)
-    print "!!!!!!!!!!!!!!!!!!!!!!"
     return _ok_json
 
 
@@ -21,5 +20,4 @@ def handle_feedback(request, id):
 @check_login
 def delete_feedback(request, id):
     feedback.models.delete_feedback(id)
-    print "!!!!!!!!!!!!!!!!!!!!!!"
     return _ok_json

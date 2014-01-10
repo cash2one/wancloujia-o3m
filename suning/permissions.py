@@ -6,6 +6,7 @@ from django.contrib.contenttypes.models import ContentType
 from mgr.models import Organization, Staff
 from ad.models import AD
 from app.models import App, Subject
+from oplog.models import op_log
 from interface.models import LogMeta
 
 
@@ -24,6 +25,7 @@ def get_available_permissions():
     app_type = ContentType.objects.get_for_model(App)
     subject_type = ContentType.objects.get_for_model(Subject)
     log_meta_type = ContentType.objects.get_for_model(LogMeta)
+    oplog_type = ContentType.objects.get_for_model(op_log)
 
     _available_permissions = (
         (Permission.objects.get(content_type=organization_type, codename="add_organization").pk, u'添加组织'),
@@ -53,7 +55,8 @@ def get_available_permissions():
         (Permission.objects.get(content_type=subject_type, codename="drop_subject").pk, u'下线应用专题'),
         (Permission.objects.get(content_type=subject_type, codename="sort_subject").pk, u'调整应用专题顺序'),
 
-        (Permission.objects.get(content_type=log_meta_type, codename='view_organization_statistics').pk, u'查看所在组织统计数据')
+        (Permission.objects.get(content_type=log_meta_type, codename='view_organization_statistics').pk, u'查看所在组织统计数据'),
+        #(Permission.objects.get(content_type=oplog_type, codename='oplog').pk, u'查看操作日志')
     )
     return _available_permissions
 

@@ -28,11 +28,13 @@
                             <img src="{{ app.icon }} " alt="{{ app.name }}" class="icon" />
                         </div>
                         <div class="operate">
-                            <span class="name">
+                            <span class="name" title="{{ app.name }}">
                                 <span class="txt">{{ app.name }}</span>
                             </span>
                             <span class="meta">
-                                <span>{{ app.version }}&nbsp;&nbsp;{{ app.size }}</span>
+                                <span title="{{ app.version }}&nbsp;&nbsp;{{ app.size }}">
+									{{ app.version }}&nbsp;&nbsp;{{ app.size }}
+								</span>
                                 <a  data-id="{{ app.id }}" download="{{ app.name }}.apk" 
                                     class="btn install-link"
                                     data-package="{{ app.package }}" 

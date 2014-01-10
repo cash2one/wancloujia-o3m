@@ -195,6 +195,7 @@ INSTALLED_APPS = (
     #'haystack',
     #'djangosphinx'
     'framework',
+    'oplog',
     'ad',
     'mgr',
     'app',

@@ -30,23 +30,22 @@
             {{ f.name.label }}
         </label>
         <div class="col-xs-8">
-            <input type="text" class="form-control" readonly="readonly" 
-                    data-maxlength="20" maxlength ="20" name="name"/>
-        </div>
+            <input type="text" class="form-control" data-maxlength="20" maxlength ="20" name="name"/>
+        </div> <!-- readonly="readonly" -->
     </div>
     <div class="form-group">
         <label class="col-xs-3 control-label">
             {{ f.version.label }}
         </label>
         <div class="col-xs-8">
-            <input type="text" class="form-control" readonly="readonly" 
+            <input type="text" class="form-control" readonly="readonly"
                     data-maxlength="255" maxlength ="255" name="version"/>
         </div>
     </div>
     <div class="form-group">
         <label class="col-xs-3 control-label">应用大小</label>
         <div class="col-xs-8">
-            <input type="text" class="form-control" maxlength="20" 
+            <input type="text" class="form-control" maxlength="20"
                     data-maxlength="20" readonly="readonly" name="size"/>
         </div>
     </div>

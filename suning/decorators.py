@@ -8,6 +8,7 @@ from django.http import HttpResponse
 from django.contrib import auth
 from dajaxice.utils import deserialize_form
 
+from oplog.models import op_log, OPLOG_DICT
 
 logger = logging.getLogger(__name__)
 
@@ -63,3 +64,17 @@ def response_error(func):
         return simplejson.dumps({'ret_code': 1000, 'ret_msg': 'Easy. Just for test:)'})
     return wrapper
 
+
+def oplogtrack(type, username, model = None):
+    #import ipdb;ipdb.set_trace()
+    log = op_log()
+    log.username = username
+    if model:
+        if model.__unicode__:
+            log.content = u'%s"%s"' % (OPLOG_DICT[type], model.__unicode__(),)
+        elif model.__str__:
+            log.content = u'%s"%s"' % (OPLOG_DICT[type], model.__str__(),)
+    else:
+        log.content = u'%s' % (OPLOG_DICT[type],)
+    log.type = type
+    log.save()
