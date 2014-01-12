@@ -39,9 +39,8 @@ class LogMeta(models.Model):
     did = models.CharField(verbose_name=u'chuanhao', max_length=16, editable=False)
     brand = models.CharField(verbose_name=u'pinpai', max_length=BRAND_LENGTH_LIMIT, editable=False)
     model = models.CharField(verbose_name=u'jixing', max_length=16, editable=False)
-    appID = models.CharField(max_length=16, editable=False)
-    appPkg = models.CharField(max_length=App.PACKAGE_LENGTH_LIMIT, editable=False)
-
+    subject = models.IntegerField()
+    installed = models.BooleanField()
     objects = LogManager()
 
     class Meta:

@@ -3,15 +3,26 @@ dbhost = 'dev-node1.limijiaoyin.com'
 dbport = 3306
 dbuser = 'root'
 dbpass = 'nameLR9969'
-dbname = 'suning'
+dbname = 'tianyin'
 
 import _mysql
 import sys
 import HTMLParser
 import json
-
+import urllib
 db = _mysql.connect(host=dbhost, user=dbuser, passwd=dbpass, db=dbname)
 
+def read_subj():
+    acc = {}
+    db.query("SELECT id, name FROM app_subject;")
+    r = db.store_result()
+    n = r.num_rows()
+    for i in range(0,n):
+        row = r.fetch_row()
+        id = row[0][0]
+        name = row[0][1]
+        acc[id] = urllib.unquote(name)
+    return acc
 
 def read_region():
     acc = set()
@@ -113,7 +124,7 @@ def read_brand_model():
     n = r.num_rows()
     for i in range(0, n):
         row = r.fetch_row()
-        key = (row[0][1], row[0][2],)
+        key = (row[0][1], row[0][2], row[0][3])
         acc.add(key)
     return acc
 
@@ -125,6 +136,8 @@ stores = read_store()
 apps = read_app()
 map = map_staff(staffs, regions, companys, stores)
 brandmodel = read_brand_model()
+subj = read_subj()
+print subj
 import datetime
 
 lastDay = datetime.date.today() - datetime.timedelta(days=0)
@@ -137,16 +150,16 @@ for line in sys.stdin:
         model = _mysql.escape_string(j["model"].strip().upper())
         pkg = _mysql.escape_string(j["package"].strip())
         user = _mysql.escape_string(str(j["user"]).strip())
-        if not brand or not model:
+        if not brand or not model or not did:
             continue
-        if (brand, model,) in brandmodel:
+        if (did, brand, model,) in brandmodel:
             pass
         else:
-            print "INSERT INTO statistics_brandmodel(brand, model) VALUES('%s', '%s');" % \
-              ( brand, model )
-            brandmodel.add((brand, model,))
-        print "INSERT INTO interface_logmeta(date, uid, did, brand, model, appID, appPkg) VALUES('%d-%d-%d', '%s', '%s', '%s', '%s', %s, '%s');" % \
-              ( lastDay.year, lastDay.month, lastDay.day, map[user][0], did, brand, model, appid, pkg )
+            print "INSERT INTO statistics_brandmodel(did, brand, model) VALUES('%s', '%s', '%s');" % \
+              (did, brand, model )
+            brandmodel.add((did, brand, model,))
+        print "INSERT INTO interface_logmeta(date, uid, did, brand, model, appID, appPkg, username, is_installed) VALUES('%d-%d-%d', '%s', '%s', '%s', '%s', %s, '%s');" % \
+              ( lastDay.year, lastDay.month, lastDay.day, map[user][0], did, brand, model, appid, pkg, staffs[int(user)][1],True )
     except:
         pass
 #for line in sys.stdin:
