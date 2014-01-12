@@ -11,7 +11,7 @@ from dajaxice.utils import deserialize_form
 from interface.models import LogMeta, InstalledAppLogEntity, DeviceLogEntity
 from interface.models import UserDeviceLogEntity
 from app.models import App, Subject
-from mgr.models import Employee, Organization, cast_staff, Region, Company, Store
+from mgr.models import Staff, Employee, Organization, cast_staff, Region, Company, Store
 from statistics.forms import LogMetaFilterForm, InstalledCapacityFilterForm
 from statistics.forms import DeviceStatForm, OrganizationStatForm
 from suning import utils
@@ -158,30 +158,25 @@ class SubjectFilter:
 
 def log_to_dict(log):
     dict = {
-        'brand': log.brand,
+		'date': str(log.date),
         'model': log.model,
         'device': log.did,
-        'date': str(log.date)
+        'client_version': log.client_version,
+        'installed': log.installed
     }
 
-    apps = App.objects.filter(package=log.appPkg)
-    app = apps[0] if len(apps) != 0 else None
-    dict["app"] = {
-        'id': app.pk if app else log.appID, 
-        'package': app.package if app else log.appPkg,
-        'name': app.name if app else None,
-        'popularize': app.popularize if app else None
+    subjects = Subject.objects.filter(pk=log.subject)
+    subject = subjects[0] if len(subjects) != 0 else None
+    dict["subject"] = {
+        'id': subject.pk if subject else None, 
+        'name': subject.name if subject else None,
     }
 
-    emp = utils.get_model_by_pk(Employee.objects, log.uid)
-    organizations = [None, None, None]
-    if emp:
-        dict["emp"] = emp.username
-        for i, item in enumerate(emp.organizations()):
-            organizations[i] = item.name
+    user = utils.get_model_by_pk(Staff.objects, log.uid)
+    if user:
+        dict["user"] = user.username
     else:
-        dict["emp"] = None
-    dict["region"], dict["company"], dict["store"] = organizations
+        dict["user"] = None
 
     return dict;
 

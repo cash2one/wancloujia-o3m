@@ -318,8 +318,7 @@ def flow_excel(request):
     sheet = book.add_sheet(u'流水统计')
     default_style = xlwt.Style.default_style
     #date_style = xlwt.easyxf(num_format_str='yyyy-mm-dd')
-    titles = [u'大区', u'公司', u'门店', u'员工', u'品牌', u'机型', u'串号', 
-               u'应用序号', u'应用名称', u'应用包名', u'是否推广', u'日期']
+    titles = [u'日期', u'机型', u'IMEI', u'应用专题', u'账号', u'客户端版本', u'是否加工成功']
     for i, title in enumerate(titles):
         sheet.write(0, i, title, style=default_style)
 
@@ -330,25 +329,20 @@ def flow_excel(request):
         logger.debug(log)
         dict = log_to_dict(log) 
 
-        if dict['app']['popularize'] is None:
-            popularize = h.unescape(EMPTY_VALUE)
+        if dict['installed'] is None:
+            installed = h.unescape(EMPTY_VALUE)
         else:
-            popularize = u'是' if dict['app']['popularize'] else u'否'
-        app = dict['app']
+            installed = u'是' if dict['installed'] else u'否'
+        subject = dict['subject']
 
         rowdata = [
-            dict['region'] or h.unescape(EMPTY_VALUE),
-            dict['company'] or h.unescape(EMPTY_VALUE),
-            dict['store'] or h.unescape(EMPTY_VALUE),
-            dict['emp'] or h.unescape(EMPTY_VALUE),
-            dict['brand'] or h.unescape(EMPTY_VALUE),
+            dict['date'] or h.unescape(EMPTY_VALUE),
             dict['model'] or h.unescape(EMPTY_VALUE),
             dict['device'] or h.unescape(EMPTY_VALUE),
-            int(app['id']),
-            app['name'] or h.unescape(EMPTY_VALUE),
-            app['package'],
-            popularize,
-            dict['date'] 
+            subject['name'] or h.unescape(EMPTY_VALUE),
+            dict['user'] or h.unescape(EMPTY_VALUE),
+            dict['client_version'] or h.unescape(EMPTY_VALUE),
+            installed,
         ]
         for col, val in enumerate(rowdata):
             #style = date_style if isinstance(val, datetime.date) else default_style

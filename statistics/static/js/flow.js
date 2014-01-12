@@ -75,8 +75,9 @@ $(function() {
                         item.model || '&mdash;',
                         item.device || '&mdash;',
                         item.subject,
-                        item.clientVersion || '&mdash;',
-                        item.installed || '&mdash;',
+						item.user,
+                        item.client_version || '&mdash;',
+                        installed || '&mdash;',
                     ]);
                 });
                 console.log(aaData);
