@@ -20,8 +20,8 @@ from suning import permissions
 from suning.settings import EMPTY_VALUE
 from suning.utils import render_json, first_valid, get_model_by_pk
 from suning.decorators import active_tab
-from mgr.models import cast_staff, Region, Company, Store, Organization, Employee
-from app.models import App
+from mgr.models import cast_staff, Region, Company, Store, Organization, Employee, Staff
+from app.models import App, Subject
 from interface.models import LogMeta, InstalledAppLogEntity, DeviceLogEntity
 from forms import LogMetaFilterForm, InstalledCapacityFilterForm
 from forms import OrganizationStatForm, DeviceStatForm
@@ -127,21 +127,21 @@ def query_employee(user, org):
     else: 
         return Employee.objects.none()
 
-def emps_to_dict_arr(emps):
+def users_to_dict_arr(emps):
     return map(lambda e: {'id': e.pk, 'text': e.username}, emps)
 
 
 @require_GET
 def employee(request):
     if not request.user.is_authenticated():
-        return render_json({'results': emps_to_dict_arr(Employee.objects.none())})
+        return render_json({'results': users_to_dict_arr(Employee.objects.none())})
 
     user = cast_staff(request.user)
     if not user.is_superuser and not user.is_staff and \
         not user.has_perm("interface.view_organization_statistics"):
         logger.debug("user has no permission to view organization's statistics")
         emps = Employee.objects.filter(pk=user.pk)
-        return render_json({'results': emps_to_dict_arr(emps)})
+        return render_json({'results': users_to_dict_arr(emps)})
 
     sid = request.GET.get('store', None)
     cid = request.GET.get('company', None)
@@ -167,6 +167,36 @@ def employee(request):
     results = map(lambda e: {'id': e.pk, 'text': e.username}, emps)
     return render_json({'results': results, 'more': total > p * LENGTH})
 
+@require_GET
+def users(request):
+    if not request.user.is_authenticated():
+        return render_json({'results': users_to_dict_arr(Staff.objects.none())})
+
+    LENGTH = 10
+    q = request.GET.get("q", "")
+    p = int(request.GET.get("p", 1))
+    users = Staff.objects.filter(username__contains=q)
+    total = len(users)
+    users = users[(p-1) * LENGTH: p * LENGTH]
+    results = map(lambda e: {'id': e.pk, 'text': e.username}, users)
+    return render_json({'results': results, 'more': total > p * LENGTH})
+
+@require_GET
+def subjects(request):
+    if not request.user.is_authenticated():
+        return render_json({'more': False, 'results': []})
+
+    q = request.GET.get('q', "")
+    p = request.GET.get('p', "")
+    page = int(p) if p else 0
+
+    SUBJECTS_PER_PAGE = 10
+    subjects = Subject.objects.filter(name__contains=q)
+    total = len(subjects)
+    subjects = subjects[(page-1)*SUBJECTS_PER_PAGE:page*SUBJECTS_PER_PAGE]
+    results = map(lambda e: {'id': e.pk, 'text': e.name}, subjects)
+
+    return render_json({'more': total > page * SUBJECTS_PER_PAGE, 'results': results})
 
 @require_GET
 def apps(request):
@@ -185,6 +215,23 @@ def apps(request):
 
     return render_json({'more': total > page * APPS_PER_PAGE, 'results': results})
 
+@require_GET
+def devices(request):
+    LENGTH = 10
+    b = request.GET.get('b', '')
+    m = request.GET.get('m', '')
+    q = request.GET.get('q', '')
+    p = int(request.GET.get('p', '1'))
+    
+    logs = BrandModel.objects.all()
+    logs = logs.filter(brand=b) if b else logs
+    logs = logs.filter(model=m) if m else logs
+    logs = logs.filter(did__startswith=q)
+    devices = logs.values_list('did', flat=True).distinct()
+    return render_json({
+        'more': len(devices) > p * LENGTH,
+        'devices': devices[(p-1) * LENGTH : p * LENGTH]
+    })
 
 @require_GET
 def models(request):

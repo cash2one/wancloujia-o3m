@@ -9,28 +9,47 @@
 <link rel="stylesheet" href="{{ STATIC_URL }}css/form_filter.css"/>
 <link rel="stylesheet" href="{{ STATIC_URL }}css/statistics.css"/>
 <link rel="stylesheet" href="{{ STATIC_URL }}css/datatables.css"/>
+<link rel="stylesheet" href="{{ STATIC_URL }}css/flow.css"/>
 {% endblock %}
 
 {% block main %}
-<div class="main">
+<div class="main flow">
     <div class="panel panel-default">
         <div class="panel-heading">筛选条件</div>
         <div class="panel-body" style="padding: 0px"> 
             {% with select_empty_option='---------' %}
             <form class="form-filter">
                 <div class="filters-wrap">
-                    {% include "mgr_filter.html" %}
                     <div class="filter-group">
+						<div class="filter">
+							<label for="filter_user">{{ filter.user.label }}:</label>
+							<input type="hidden" id="filter_user" name="user"/>
+						</div>
+					</div>
+					<div class="filter-group">
                         <div class="filter">
-                            <label for="filter_app">{{ filter.app.label }}：</label>
-                            <input type="hidden" id="filter_app" name="app"/>
+                            <label for="filter_subject">{{ filter.subject.label }}：</label>
+                            <input type="hidden" id="filter_subject" name="subject"/>
                         </div>
+						<div class="filter" style="width:400px;">
+							<label for="filter_installed">{{ filter.installed.label }}：</label>
+							<input type="radio" id="filter_installed_none" name="installed" value="" checked="checked"/>
+							<label style="width:50px;" for="filter_installed_none">不限</label>
+							<input type="radio" id="filter_installed_true" name="installed" value="True"/>
+							<label style="width:50px;" for="filter_installed_true">是</label>
+							<input type="radio" id="filter_installed_false" name="installed" value="False"/>
+							<label style="width:50px;" for="filter_installed_false">否</label>
+						</div>
                     </div>
                     <div class="filter-group">
                         <div class="filter">
-                            <label for="filter_brand">{{ filter.brand.label }}：</label>
-                            <input type='hidden' id="filter_brand" name="brand"/>
+                            <label for="filter_model">{{ filter.model.label }}：</label>
+                            <input type="hidden" id="filter_model" name="model"/>
                         </div>
+						<div class="filter">
+							<label for="filter_device">{{ filter.device.label }}：</label>
+							<input type="hidden" id="filter_device" name="device"/>
+						</div>
                     </div>
                     <div class="filter-group last">
                         {% include "period.html" %}
@@ -47,29 +66,14 @@
     <div class="panel panel-default">
         <div class="panel-heading">
             共<span class='total'>0</span>次安装
-            ，共<span class='brands'>0</span>台手机
+            ，共<span class='devices'>0</span>台手机
             {% if not request.session.wandoujia %}
             <button class='btn btn-default btn-xs pull-right' id="export-data">导出数据</button>
             {% endif %}
         </div>
         <div class="panel-body"> 
             <table class="table table-hover table-bordered">
-                <thead>
-                    <!--
-                    <tr>
-                        <th>大区</th>
-                        <th>公司</th>
-                        <th>门店</th>
-                        <th>员工</th>
-                        <th>品牌</th>
-                        <th>机型</th>
-                        <th>串号</th>
-                        <th>应用名称</th>
-                        <th>是否推广</th>
-                        <th>日期</th>
-                    </tr>
-                    -->
-                </thead>
+                <thead></thead>
                 <tbody></tbody>
             </table>
         </div>

@@ -4,7 +4,7 @@ import os
 
 from pyhdfs import hdfs
 
-DEBUG = False
+DEBUG = True
 #DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 

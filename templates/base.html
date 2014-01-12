@@ -113,7 +113,6 @@
                 </ul>
             </li>
             {% endif %}
-            <!--
             <li {% if request.nav.active_tab == "statistics" %}
                 class="active"
                 {% endif %}>
@@ -127,7 +126,8 @@
                         {% endif %}>
                         <a href="/statistics/flow">流水统计</a>
                     </li>
-                    <li {% if request.nav.active_tab == "statistics" and request.nav.sub_active_tab == "capacity" %}
+                    <!--
+					<li {% if request.nav.active_tab == "statistics" and request.nav.sub_active_tab == "capacity" %}
                         class="active"
                         {% endif %}>
                         <a href="/statistics/capacity">安装统计</a>
@@ -144,9 +144,9 @@
                         {% endif %}>
                         <a href="/statistics/organization">组织统计</a>
                     </li>
+					-->
                 </ul>
             </li>
-            -->
         </ul>
     </div>
 </div>
