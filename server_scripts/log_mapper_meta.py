@@ -19,7 +19,7 @@ def read_subj():
     n = r.num_rows()
     for i in range(0,n):
         row = r.fetch_row()
-        id = row[0][0]
+        id = int(row[0][0])
         name = row[0][1]
         acc[id] = urllib.unquote(name)
     return acc
@@ -119,12 +119,14 @@ def map_staff(staffs, regions, companys, stores):
 
 def read_brand_model():
     acc = set()
-    db.query("SELECT id, brand, model FROM statistics_brandmodel;")
+    db.query("SELECT did, brand, model FROM statistics_brandmodel;")
     r = db.store_result()
     n = r.num_rows()
     for i in range(0, n):
         row = r.fetch_row()
-        key = (row[0][1], row[0][2], row[0][3])
+        #print row
+        #print "!!!!!!!!!!", row
+        key = (row[0][0], row[0][1], row[0][2])
         acc.add(key)
     return acc
 
@@ -136,20 +138,22 @@ stores = read_store()
 apps = read_app()
 map = map_staff(staffs, regions, companys, stores)
 brandmodel = read_brand_model()
-subj = read_subj()
-print subj
+subjects = read_subj()
+#print subjects
 import datetime
-
+#print map
 lastDay = datetime.date.today() - datetime.timedelta(days=0)
 for line in sys.stdin:
     try:
         j = json.loads(line)
-        appid = _mysql.escape_string(j["app"].strip())
+        #appid = _mysql.escape_string(j["app"].strip())
         brand = _mysql.escape_string(j["brand"].strip().upper())
         did = _mysql.escape_string(j["deviceId"].strip().upper())
         model = _mysql.escape_string(j["model"].strip().upper())
-        pkg = _mysql.escape_string(j["package"].strip())
+        #pkg = _mysql.escape_string(j["package"].strip())
         user = _mysql.escape_string(str(j["user"]).strip())
+        subj = _mysql.escape_string(str(j["subj"]).strip())
+        #print "subj:", subj
         if not brand or not model or not did:
             continue
         if (did, brand, model,) in brandmodel:
@@ -158,8 +162,8 @@ for line in sys.stdin:
             print "INSERT INTO statistics_brandmodel(did, brand, model) VALUES('%s', '%s', '%s');" % \
               (did, brand, model )
             brandmodel.add((did, brand, model,))
-        print "INSERT INTO interface_logmeta(date, uid, did, brand, model, appID, appPkg, username, is_installed) VALUES('%d-%d-%d', '%s', '%s', '%s', '%s', %s, '%s');" % \
-              ( lastDay.year, lastDay.month, lastDay.day, map[user][0], did, brand, model, appid, pkg, staffs[int(user)][1],True )
+        print "INSERT INTO interface_logmeta(date, uid, did, brand, model, subject, installed, client_version) VALUES('%s', '%s', '%s', '%s', '%s', %s, %s, '%s');" % \
+              ( lastDay.isoformat(), map[user][0], did, brand, model, subj, str(True), '1.0.0.0')
     except:
         pass
 #for line in sys.stdin:
