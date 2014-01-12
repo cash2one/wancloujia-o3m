@@ -148,7 +148,7 @@ for line in sys.stdin:
         j = json.loads(line)
         #appid = _mysql.escape_string(j["app"].strip())
         brand = _mysql.escape_string(j["brand"].strip().upper())
-        did = _mysql.escape_string(j["deviceId"].strip().upper())
+        did = _mysql.escape_string(j["deviceId"].strip().upper())[-8:]
         model = _mysql.escape_string(j["model"].strip().upper())
         #pkg = _mysql.escape_string(j["package"].strip())
         user = _mysql.escape_string(str(j["user"]).strip())

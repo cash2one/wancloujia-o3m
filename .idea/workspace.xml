@@ -3,7 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="c3dfefef-aaad-4104-b895-f49c5694acd3" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server_scripts/log_mapper_meta.py" afterPath="$PROJECT_DIR$/server_scripts/log_mapper_meta.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/interface/models.py" afterPath="$PROJECT_DIR$/interface/models.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="suning.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -76,7 +76,7 @@
       <file leaf-file-name="log_mapper_meta.py" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/server_scripts/log_mapper_meta.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="166" column="4" selection-start="4777" selection-end="4777" vertical-scroll-proportion="0.6899841" vertical-offset="1996" max-vertical-offset="2625">
+            <state line="150" column="70" selection-start="3907" selection-end="3907" vertical-scroll-proportion="0.30842608" vertical-offset="1996" max-vertical-offset="2625">
               <folding />
             </state>
           </provider>
@@ -864,7 +864,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/server_scripts/log_mapper_meta.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="166" column="4" selection-start="4777" selection-end="4777" vertical-scroll-proportion="0.6899841" vertical-offset="1996" max-vertical-offset="2625">
+        <state line="150" column="70" selection-start="3907" selection-end="3907" vertical-scroll-proportion="0.30842608" vertical-offset="1996" max-vertical-offset="2625">
           <folding />
         </state>
       </provider>
