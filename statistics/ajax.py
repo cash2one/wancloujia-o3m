@@ -10,7 +10,7 @@ from dajaxice.utils import deserialize_form
 
 from interface.models import LogMeta, InstalledAppLogEntity, DeviceLogEntity
 from interface.models import UserDeviceLogEntity
-from app.models import App
+from app.models import App, Subject
 from mgr.models import Employee, Organization, cast_staff, Region, Company, Store
 from statistics.forms import LogMetaFilterForm, InstalledCapacityFilterForm
 from statistics.forms import DeviceStatForm, OrganizationStatForm
@@ -149,20 +149,12 @@ class AppFilter:
         return self.logs.filter(appPkg=app.package)
 
 class SubjectFilter:
-    def __init__(self, logs, subject):
-        self.subject = subject
+    def __init__(self, logs, subject_id):
+        self.subject_id = subject_id
         self.logs = logs
 
     def filter(self):
-        if not self.subject:
-            return self.logs
-
-        subjects = Subject.objects.filter(pk=self.subject)
-        if len(subjects) == 0:
-            return self.logs.none()
-
-        subject = subjects[0]
-        return self.logs.filter(subject=subject)
+        return self.logs if not self.subject_id else self.logs.filter(subject=self.subject_id)
 
 def log_to_dict(log):
     dict = {
