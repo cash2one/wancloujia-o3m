@@ -6,7 +6,6 @@ from functools import wraps
 from hashlib import md5
 
 from django.http import HttpResponse
-from django.utils import simplejson
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render, redirect
 from django.views.decorators.http import require_GET, require_POST
@@ -14,23 +13,22 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import auth
 
 from rest_framework import status
-from rest_framework.renderers import JSONRenderer
+from rest_framework.renderers import JSONRenderer, UnicodeJSONRenderer
 from rest_framework.parsers import JSONParser
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, parser_classes, renderer_classes
 
 from serializers import AppSerializer, SubjectSerializer
 from suning import settings
-from interface.models import LogEntity
-from interface.serializer import LogSerializer
+from interface.models import LogMeta
 from interface.storage import hdfs_storage
-from framework.forms import LoginForm
 from mgr.models import Staff
 from app.models import Subject, App, AppGroup
 from app.tables import bitsize
 from ad.models import AD
 
 import zlib
+import urllib
 
 logger = logging.getLogger('windows2x.post')
 @parser_classes(JSONParser,)
@@ -38,6 +36,43 @@ logger = logging.getLogger('windows2x.post')
 def create_feedface(request):
     return HttpResponse(status=200)
 
+def find_username(uid, cache):
+    if cache.has_key(uid):
+        return cache[uid]
+    else:
+        try:
+            result = Staff.objects.get(pk=uid)
+            cache[uid] = result.username
+            return result.username
+        except:
+            return u'未知用户'
+
+def find_subject(sid, cache):
+    if cache.has_key(sid):
+        return cache[sid]
+    else:
+        try:
+            result = Subject.objects.get(pk=sid)
+            cache[sid] = result.name
+            return cache[sid]
+        except:
+            return u'未知专题'
+
+@api_view(['GET', 'POST'])
+@renderer_classes((UnicodeJSONRenderer,),)
+def export(request):
+    users = {}
+    subjs = {}
+    dt = datetime.date.today().isoformat()
+    if request.method == "GET":
+        dt = request.GET.get('upload_dt',datetime.date.today().isoformat())
+    elif request.method == "POST":
+        dt = request.POST.get('upload_dt',datetime.date.today().isoformat())
+    dt = datetime.datetime.strptime(dt, '%Y-%m-%d')
+    result =[{"model": i.model, "imei": i.did, "batch_no": 0, "install_dt":i.date, "info":find_subject(i.subject, subjs),
+              "result":i.installed,"account":find_username(i.uid, users),"version":i.client_version}
+             for i in LogMeta.objects.filter(date=dt)]
+    return Response(result)
 
 @api_view(['GET', 'POST'])
 def get_hdfs_file(request, addr):
@@ -66,34 +101,6 @@ def get_hdfs_file(request, addr):
         result['Content-Type'] = 'application/octet-stream'
         return result
 
-'''
-@csrf_exempt
-def snippet_detail(request, pk):
-    """
-    Retrieve, update or delete a code snippet.
-    """
-    try:
-        log = LogEntity.objects.get(pk=pk)
-    except LogEntity.DoesNotExist:
-        return HttpResponse(status=404)
-
-    if request.method == 'GET':
-        serializer = LogSerializer(log)
-        return JSONResponse(serializer.data)
-
-    elif request.method == 'PUT':
-        data = JSONParser().parse(request)
-        serializer = LogSerializer(log, data=data)
-        if serializer.is_valid():
-            serializer.save()
-            return JSONResponse(serializer.data)
-        else:
-            return JSONResponse(serializer.errors, status=400)
-
-    elif request.method == 'DELETE':
-        log.delete()
-        return HttpResponse(status=204)
-        '''
 
 @csrf_exempt
 @api_view(['GET', 'POST'])
@@ -134,41 +141,6 @@ def welcome(request):
     else:
         return render(request, "login.html", {"wandoujia": "true"}) 
 
-'''
-@require_POST
-def login(request):
-    username = request.POST["username"]
-    password = request.POST["password"]
-    form = LoginForm({'username': username, 'password': password})
-    if not form.is_valid():
-        logger.debug("form is invalid")    
-        return HttpResponse(simplejson.dumps({
-            'ret_code': 1000, 
-            'ret_msg': u'用户名或密码不正确！'
-        }), mimetype='application/json')
-
-    data = form.cleaned_data
-    logger.debug("username: %s; password: %s" % (data['username'], data['password']))
-    user = auth.authenticate(username=data['username'], password=data['password'])
-    if user is None:
-        logger.debug("user is not authenticated")
-        return HttpResponse(simplejson.dumps({
-            'ret_code': 1000, 
-            'ret_msg': u'用户名或密码不正确！'
-        }), mimetype='application/json')
-
-    if not user.is_active:
-        logger.debug("user is not active")
-        return HttpResponse(simplejson.dumps({
-            'ret_code': 1000, 
-            'ret_msg': u'账号被锁定，登录失败！'
-        }), mimetype='application/json')
-    logger.debug("user is authenticated")
-
-    response = HttpResponse(simplejson.dumps({'ret_code': 0}), mimetype='application/json')
-    set_cookie(response, "username", username)
-    return response
-'''
 
 @require_GET
 @login_required(login_url='/interface/welcome')
