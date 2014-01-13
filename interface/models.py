@@ -42,7 +42,6 @@ class LogMeta(models.Model):
     subject = models.IntegerField(verbose_name=u'zhuti', editable=False)
     client_version = models.CharField(max_length=20)
     installed = models.BooleanField(editable=False)
-
     objects = LogManager()
 
     class Meta:

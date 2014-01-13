@@ -3,7 +3,7 @@ dbhost = 'dev-node1.limijiaoyin.com'
 dbport = 3306
 dbuser = 'root'
 dbpass = 'nameLR9969'
-dbname = 'suning'
+dbname = 'tianyin'
 
 import _mysql
 import sys
