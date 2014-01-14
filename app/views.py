@@ -17,9 +17,9 @@ from django import forms
 from django_tables2.config import RequestConfig
 
 from suning import settings
-from app.models import App, UploadApk, Subject
-from app.forms import AppForm, SubjectForm
-from app.tables import AppTable, SubjectTable
+from app.models import App, UploadApk, Subject, SubjectMap
+from app.forms import AppForm, SubjectForm, SubjectMapModelForm, SubjectMapMemSizeForm
+from app.tables import AppTable, SubjectTable, SubjectMapTable
 from suning.decorators import active_tab
 from interface.storage import hdfs_storage
 import apk
@@ -163,6 +163,29 @@ def subject(request):
         'form': SubjectForm()
     })
 
+def can_view_subjectmap(user):
+    return user.is_superuser or \
+            user.is_staff or \
+            user.has_perm('app.add_subjectmap') or \
+            user.has_perm('app.change_subjectmap') or \
+            user.has_perm('app.delete_subjectmap')
+
+@require_GET
+@login_required
+@user_passes_test(can_view_subjectmap, login_url=settings.PERMISSION_DENIED_URL)
+@active_tab("subject_map")
+def subject_map(request):
+    query_set = SubjectMap.objects.order_by("-create_date")
+    query = request.GET.get("q", None)
+    if query:
+        query_set = query_set.filter(Q(subject__name__contains=query) | Q(model__contains=query) | Q(creator__username__contains=query))
+    
+    table = SubjectMapTable(query_set)
+    if query:
+        table.empty_text = settings.NO_SEARCH_RESULTS
+    RequestConfig(request, paginate={"per_page": settings.PAGINATION_PAGE_SIZE}).configure(table)
+    
+    return render(request, "subject_map.html", {"query": query, "table": table, "model_form": SubjectMapModelForm(), "mem_size_form": SubjectMapMemSizeForm()})
 
 @require_GET
 @login_required(login_url=settings.LOGIN_JSON_URL)

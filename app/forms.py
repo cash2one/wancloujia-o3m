@@ -5,9 +5,11 @@ import logging
 from django import forms
 from parsley.decorators import parsleyfy
 from ajax_upload.widgets import AjaxClearableFileInput
+from framework.widgets import Select2WidgetCN
+from django_select2 import *
 
 from models import *
-
+from statistics.models import BrandModel
 
 @parsleyfy
 class AppForm(forms.ModelForm):
@@ -52,3 +54,26 @@ class SubjectForm(forms.ModelForm):
         exclude = ('name', )
         widgets = {'cover': AjaxClearableFileInput}
 
+class ModelChoices(AutoModelSelect2Field):
+    queryset = BrandModel.objects
+    search_fields = ['model__icontains']
+
+class SubjectChoices(AutoModelSelect2Field):
+    queryset = Subject.objects
+    search_fields = ['name__icontains', ]
+
+@parsleyfy
+class SubjectMapModelForm(forms.ModelForm):
+    model = ModelChoices(required=True, label=u'机型', widget=Select2WidgetCN(), to_field_name='model')
+    subject = SubjectChoices(required=True, label=u'应用专题', widget=Select2WidgetCN())
+    
+    class Meta:
+        model = SubjectMap
+
+@parsleyfy
+class SubjectMapMemSizeForm(forms.ModelForm):
+    mem_size = Select2ChoiceField(choices=SubjectMap.MEM_SIZE_CHOICES, label=u'存储空间', widget=Select2WidgetCN())
+    subject2 = SubjectChoices(required=True, label=u'应用专题', widget=Select2WidgetCN())
+
+    class Meta:
+        model = SubjectMap

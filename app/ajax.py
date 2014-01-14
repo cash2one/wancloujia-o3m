@@ -12,6 +12,7 @@ from suning.decorators import request_delay, oplogtrack
 from forms import *
 from suning.decorators import *
 from app import models
+from statistics.models import BrandModel
 
 logger = logging.getLogger(__name__)
 
@@ -161,6 +162,92 @@ def sort_subjects(request, pks):
     __sort_subj(request.user.username, pks)
     return _ok_json
 
+@dajaxice_register(method='POST')
+@check_login
+@preprocess_form
+def add_edit_subjectmap_model(request, form):
+    pk = form["id"]
+    type = form["type"]
+    model = form["model"]
+    subject_id = form["subject"] 
+    subject = Subject.objects.get(pk=subject_id)    
+
+    if not model or not subject:
+        logger("%s: param is invalid", __name__)
+        return _invalid_data_json
+
+    if pk == "":
+        subjectmap = SubjectMap(type=type, model=model, subject=subject)
+        if models.SubjectMap.objects.filter(model=model, subject=subject).exists():
+            return simplejson.dumps({
+                'ret_code': 1000, 
+                'field': 'model', 
+                'error': u'该机型和应用专题已经适配' 
+            })
+        models.add_subjectmap(subjectmap, request.user)
+        __add_subjectmap(subjectmap, request.user.username)
+    else:
+        subjectmap = SubjectMap.objects.get(pk=int(pk))
+        subjectmap.type = type
+        subjectmap.model = model
+        subjectmap.subject = subject
+        if models.SubjectMap.objects.exclude(pk=subject.pk).filter(model=model, subject=subject).exists():
+            return simplejson.dumps({
+                'ret_code': 1000, 
+                'field': 'model', 
+                'error': u'该机型和应用专题已经适配'
+            })
+        models.edit_subjectmap(subjectmap, request.user)
+        __edit_subjectmap(subjectmap, request.user.username)
+
+    return _ok_json
+
+@dajaxice_register(method='POST')
+@check_login
+def delete_subjectmap(request, id):
+    model = models.SubjectMap.objects.get(pk=id)
+    __remove_subjectmap(model, request.user.username)
+    return _ok_json
+
+@dajaxice_register(method='POST')
+@check_login
+@preprocess_form
+def add_edit_subjectmap_memsize(request, form):
+    pk = form["id"]
+    type = form["type"]
+    mem_size = form["mem_size"]
+    subject_id = form["subject2"] 
+    subject = Subject.objects.get(pk=subject_id)    
+
+    if not mem_size or not subject:
+        logger("%s: param is invalid", __name__)
+        return _invalid_data_json
+
+    if pk == "":
+        subjectmap = SubjectMap(type=type, mem_size=int(mem_size), subject=subject)
+        if models.SubjectMap.objects.filter(mem_size=int(mem_size), subject=subject).exists():
+            return simplejson.dumps({
+                'ret_code': 1000, 
+                'field': 'model', 
+                'error': u'该存储空间和应用专题已经适配' 
+            })
+        models.add_subjectmap(subjectmap, request.user)
+        __add_subjectmap(subjectmap, request.user.username)
+    else:
+        subjectmap = SubjectMap.objects.get(pk=int(pk))
+        subjectmap.type = type
+        subjectmap.mem_size = int(mem_size)
+        subjectmap.subject = subject
+        if models.SubjectMap.objects.exclude(pk=subject.pk).filter(mem_size=int(mem_size), subject=subject).exists():
+            return simplejson.dumps({
+                'ret_code': 1000, 
+                'field': 'model', 
+                'error': u'该存储空间和应用专题已经适配'
+            })
+        models.edit_subjectmap(subjectmap, request.user)
+        __edit_subjectmap(subjectmap, request.user.username)
+
+    return _ok_json
 
 @dajaxice_register(method='POST')
 #@request_delay(3)
@@ -218,3 +305,13 @@ def __pub_subj(model, username):
 def __drop_subj(model, username):
     models.drop_subject(model.pk)
     oplogtrack(13, username)
+
+def __add_subjectmap(model, username):
+    oplogtrack(35, username, model)
+
+def __edit_subjectmap(model, username):
+    oplogtrack(36, username, model)
+
+def __remove_subjectmap(model, username):
+    models.delete_subjectmap(model.pk)
+    oplogtrack(37, username, model)

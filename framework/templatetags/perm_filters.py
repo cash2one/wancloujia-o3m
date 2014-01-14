@@ -120,7 +120,6 @@ def get_permissions(user):
     permissions = user.user_permissions.all()
     return ', '.join([get_permission_name(p) for p in permissions])
 
-
 @register.filter
 def can_view_app(user):
     return app.views.can_view_app(user)
@@ -129,4 +128,7 @@ def can_view_app(user):
 @register.filter
 def can_view_subject(user):    
     return app.views.can_view_subject(user)
-    
+
+@register.filter
+def can_view_subjectmap(user):
+    return app.views.can_view_subjectmap(user)

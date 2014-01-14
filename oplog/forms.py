@@ -4,12 +4,7 @@ from oplog.models import OPLOG_TYPE_CHOICE
 from mgr.models import Staff
 from datetime import datetime
 from django_select2 import *
-
-class Select2WidgetCN(Select2Widget):
-	def init_options(self):
-		super(Select2WidgetCN, self).init_options()
-		self.options['formatNoMatches'] = util.JSFunction('select2_no_matches')
-		self.options['formatSearching'] = util.JSFunction('select2_searching')
+from framework.widgets import Select2WidgetCN
 
 class OpLogForm(forms.Form):
 	username_list = [(-1, '--------')]

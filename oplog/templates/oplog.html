@@ -50,13 +50,5 @@
 <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.dataTables.min.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap.datatables.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/datef.js"></script>
-<script type="text/javascript">
-	var select2_no_matches = function() {
-		return '没有搜索结果';
-	};
-
-	var select2_searching = function() {
-		return '搜索中...';
-	};
-</script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/django_select2_cn.js"></script>
 {% endblock %}

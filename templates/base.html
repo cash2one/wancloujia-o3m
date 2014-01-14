@@ -80,6 +80,11 @@
                     <span class="glyphicon glyphicon-tags"></span>&nbsp;&nbsp;应用专题管理
                 </a>
             </li>
+			<li {% if request.nav.active_tab == "subject_map" %}class="active"{% endif %}>
+				<a href="/app/subject/map/">
+					<span class="glyphicon glyphicon-filter"></span>&nbsp;&nbsp;应用专题适配
+				</a>
+			</li>
             {% endif %}
             {% if request.user|is_not_employee or perms.mgr %}
             <li {% if request.nav.active_tab == "system" %}class="active"{% endif %}>

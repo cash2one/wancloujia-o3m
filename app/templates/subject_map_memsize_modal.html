@@ -1,0 +1,24 @@
+{% extends "modal.html" %}
+
+{% block title %}新增存储空间适配{% endblock %}
+
+{% block body %}
+<form role="form" class="form-horizontal">
+    <input type="hidden" name="id">
+	<input type="hidden" name="type" value=2>
+    <div class="form-group">
+        <label class="col-xs-4 control-label"> 
+            <span class="required">*</span>{{ f.mem_size.label }} 
+        </label>
+        <div class="col-xs-6" style="padding-top:4px;"> {{ f.mem_size }} </div>
+    </div>
+    <div class="form-group">
+        <label class="col-xs-4 control-label">
+            <span class="required">*</span>{{ f.subject2.label }}
+        </label>
+        <div class="col-xs-6" style="padding-top:4px;">
+            {{ f.subject2 }}
+        </div>
+    </div>
+</form>
+{% endblock %}
