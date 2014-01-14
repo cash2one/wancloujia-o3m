@@ -119,14 +119,23 @@ def map_staff(staffs, regions, companys, stores):
 
 def read_brand_model():
     acc = set()
-    db.query("SELECT did, brand, model FROM statistics_brandmodel;")
+    db.query("SELECT brand, model FROM statistics_brandmodel;")
     r = db.store_result()
     n = r.num_rows()
     for i in range(0, n):
         row = r.fetch_row()
-        #print row
-        #print "!!!!!!!!!!", row
-        key = (row[0][0], row[0][1], row[0][2])
+        key = (row[0][0], row[0][1])
+        acc.add(key)
+    return acc
+
+def read_did():
+    acc = set()
+    db.query("SELECT did FROM statistics_did;")
+    r = db.store_result()
+    n = r.num_rows()
+    for i in range(0, n):
+        row = r.fetch_row()
+        key = (row[0][0])
         acc.add(key)
     return acc
 
@@ -138,6 +147,7 @@ stores = read_store()
 apps = read_app()
 map = map_staff(staffs, regions, companys, stores)
 brandmodel = read_brand_model()
+dids = read_did()
 subjects = read_subj()
 #print subjects
 import datetime
@@ -156,12 +166,18 @@ for line in sys.stdin:
         #print "subj:", subj
         if not brand or not model or not did:
             continue
-        if (did, brand, model,) in brandmodel:
+        if (brand, model,) in brandmodel:
             pass
         else:
-            print "INSERT INTO statistics_brandmodel(did, brand, model) VALUES('%s', '%s', '%s');" % \
-              (did, brand, model )
-            brandmodel.add((did, brand, model,))
+            print "INSERT INTO statistics_brandmodel(brand, model) VALUES('%s', '%s');" % \
+              (brand, model )
+            brandmodel.add((brand, model,))
+        if did in dids:
+            pass
+        else:
+            print "INSERT INTO statistics_did(did) VALUES('%s');" % \
+              (did, )
+            dids.add(did)
         print "INSERT INTO interface_logmeta(date, uid, did, brand, model, subject, installed, client_version) VALUES('%s', '%s', '%s', '%s', '%s', %s, %s, '%s');" % \
               ( lastDay.isoformat(), map[user][0], did, brand, model, subj, str(True), '1.0.0.0')
     except:
