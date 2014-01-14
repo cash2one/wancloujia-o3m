@@ -20,6 +20,7 @@ from rest_framework.decorators import api_view, parser_classes, renderer_classes
 
 from serializers import AppSerializer, SubjectSerializer
 from suning import settings
+from suning import utils
 from interface.models import LogMeta
 from interface.storage import hdfs_storage
 from mgr.models import Staff
@@ -158,11 +159,22 @@ def logout(request):
 
 
 @require_GET
-@login_required(login_url='/interface/welcome')
 def subjects(request):
+    return render(request, "wandoujia/subjects.html")
+
+
+@require_GET
+def getSubjects(request):
+    if not request.user.is_authenticated():
+        return utils.render_json({"ret_code": 0, "subjects": []})
+
     subjects = Subject.objects.filter(online=True).order_by('position')
+
+    model = request.GET.get("model")
+    size = request.GET.get("size")
+    # TODO filter by model and size
+
     now = datetime.datetime.now()
-    ads = AD.objects.filter(visible=True).filter(from_date__lt=now).filter(to_date__gt=now).order_by('position')
     results = []
     for item in subjects:
         grps = AppGroup.objects.filter(subject=item).filter(app__online=True)
@@ -173,10 +185,10 @@ def subjects(request):
                 "cover": item.cover,
                 "desc": item.desc,
                 "count": grps.count(),
-                "size": bitsize(get_subject_total_size(item)),
+                "size": bitsize(get_subject_total_size(item))
             })        
     
-    return render(request, "wandoujia/subjects.html", {"subjects": results, "ads": ads})
+    return utils.render_json({"ret_code": 0, "subjects": results})
 
 
 def get_subject_total_size(subject):
