@@ -51,6 +51,8 @@ CACHES = {
     }
 }
 
+SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
+
 EMAIL_HOST="smtp.qq.com"
 EMAIL_HOST_USER="491320274"
 EMAIL_HOST_PASSWORD="bachisback1"
