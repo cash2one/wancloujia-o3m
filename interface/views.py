@@ -31,6 +31,8 @@ from app.tables import bitsize
 from ad.models import AD
 
 import zlib
+from django.core.cache import cache
+
 
 logger = logging.getLogger('windows2x.post')
 @parser_classes(JSONParser,)
@@ -132,7 +134,13 @@ def welcome(request):
         request.session['wandoujia'] = True
         return redirect("/interface/subjects")
     else:
-        return render(request, "login.html", {"wandoujia": "true"}) 
+        c = cache.get("interface.welcome", None)
+        if c:
+            return c
+        else:
+            c = render(request, "login.html", {"wandoujia": "true"})
+            cache.set("interface.welcome", c , 30)
+            return c
 
 '''
 @require_POST

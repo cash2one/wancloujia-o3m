@@ -7,6 +7,8 @@
     <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}wandoujia/css/style.css"/>
     <link rel="stylesheet" href="{{ STATIC_URL }}wandoujia/css/subjects_fix.css"/>
 </head>
+{% load cache %}
+{% cache 30 content %}
 <body data-page="special-list" class="special-list">
         <div class="special-block clearfix nav">
             {% include "wandoujia/user_area.html" %}
@@ -146,3 +148,4 @@
 
 </body>
 </html>
+{% endcache %}
