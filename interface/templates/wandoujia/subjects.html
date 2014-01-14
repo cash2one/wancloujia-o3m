@@ -49,6 +49,8 @@
         </div>
         {% endif %}
         -->
+{% load cache %}
+{% cache 30 content %}
         {% if ads|length == 0 and subjects|length == 0 %}
         <div id="empty" class="abs">
             暂无应用专题
@@ -146,3 +148,4 @@
 
 </body>
 </html>
+{% endcache %}
