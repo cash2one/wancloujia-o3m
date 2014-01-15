@@ -207,7 +207,6 @@ def getSubjects(request):
                 "size": bitsize(get_subject_total_size(item))
             })        
 
-    
     return utils.render_json({"ret_code": 0, "subjects": results})
 
 
