@@ -59,11 +59,18 @@
 
         function refreshSubjects() {
             var connected = Narya.Device.get("isConnected");
+            console.log("connected?", connected);
+
             var model = "", size = "";
             if (connected) {
-                model = Narya.Device.build.get("model");
+                var build = Narya.Device.get("build");
+                if(build) {
+                    model = build.get("model") || "";
+                }
                 // TODO size = ?
             }
+            console.log("model", model, "size", size);
+
             $.get("/interface/getSubjects", {
                 model: model,
                 size: size
