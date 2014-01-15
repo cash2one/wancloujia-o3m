@@ -20,6 +20,11 @@
         <div id="empty" style="display: none">
             暂无应用专题
         </div>
+        
+        <div id="loading" style="display: none">
+            加载应用专题
+        </div>
+
 
     <script type="text/template" id="subject_template">
         <div class="special-item" data-id="<%- subject.id %>">
@@ -56,6 +61,7 @@
 
         });
         var $empty = $("#empty");
+        var $loading = $("#loading");
 
         function refreshSubjects() {
             var connected = Narya.Device.get("isConnected");
@@ -71,10 +77,15 @@
             }
             console.log("model", model, "size", size);
 
+            $loading.show();
+            $subjects.empty();
             $.get("/interface/getSubjects", {
                 model: model,
                 size: size
             }, "json").done(function(data) {
+                //setTimeout(function() {
+
+                $loading.hide();
                 if (data.ret_code != 0) {
                     return console.error(data);
                 }
@@ -85,7 +96,6 @@
                     return;
                 } 
                
-                $subjects.empty();
                 _.each(data.subjects, function(subject) {
                     var html = subject_template({
                         subject: subject
@@ -94,7 +104,10 @@
                 });
                 $subjects_wrap.show();
                 $empty.hide();
+
+                //}, 3000);
             }).fail(function() {
+                $loading.show();
                 return console.error("network error");
             });
         }

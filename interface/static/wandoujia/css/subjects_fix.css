@@ -331,6 +331,20 @@ body {
   font-family: "微软雅黑";
 }
 
+#loading {
+  width: 100px;
+  background: url(../images/empty_icon.png) center top no-repeat;
+  padding-top: 100px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 30px;
+  text-align: center;
+  line-height: 20px;
+  color: #777;
+  font-size: 14px;
+  font-family: "微软雅黑";
+}
+
 #empty.abs {
   position: absolute;
   margin-left: -50px;
