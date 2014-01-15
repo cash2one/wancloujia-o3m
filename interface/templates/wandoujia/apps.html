@@ -61,6 +61,8 @@
     <script type="text/javascript" src="{{ STATIC_URL }}wandoujia/js/log.js"></script>
     <script type="text/javascript"> 
 
+    var subject_id = {{ subject.pk }}; 
+
     function bitsize(size) {
         var result = "";
         if (size < 1024 * 1024) {
@@ -152,7 +154,8 @@
             var log = {
                 event: "install", 
                 user: username, 
-                app: appid, 
+                subj: subject_id,
+                //app: appid, 
                 package: package, 
                 brand: get_brand(), 
                 model: get_model()
