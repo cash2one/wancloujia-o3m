@@ -1,4 +1,5 @@
 *.py[cod]
+*.swp
 data_backup.json
 wandoujia.zip
 suning.zip

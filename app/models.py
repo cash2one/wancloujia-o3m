@@ -248,6 +248,38 @@ class SubjectMap(models.Model):
         t = u'机型适配' if self.type == self.TYPE_MODEL else u'存储空间适配'
         c = self.model if self.model else dict(self.MEM_SIZE_CHOICES)[self.mem_size]
         return u'%s（%s）' % (t, c)
+        
+
+    def match(self, model, bits):
+        if self.type == SubjectMap.TYPE_MODEL:
+            return self.model == model or model == None
+        else:
+            return bits == None or self.mem_size == SubjectMap.getMemSize(bits)
+
+
+    @classmethod
+    def getMemSize(cls, bits):
+        if bits < 64 * 1000 * 1000:
+            result = SubjectMap.MEM_SIZE_0M_64M
+        elif bits < 128 * 1000 * 1000:
+            result = SubjectMap.MEM_SIZE_64M_128M
+        elif bits < 512 * 1000 * 1000:
+            result = SubjectMap.MEM_SIZE_128M_512M
+        elif bits < 1000 * 1000 * 1000:
+            result = SubjectMap.MEM_SIZE_512M_1G
+        elif bits < 2000 * 1000 * 1000:
+            result = SubjectMap.MEM_SIZE_1G_2G
+        elif bits < 4000 * 1000 * 1000:
+            result = SubjectMap.MEM_SIZE_2G_4G
+        elif bits < 8000 * 1000 * 1000:
+            result = SubjectMap.MEM_SIZE_4G_8G
+        elif bits < 16 * 1000 * 1000 * 1000:
+            result = SubjectMap.MEM_SIZE_8G_16G
+        else:
+            result = SubjectMap.MEM_SIZE_16G_
+        logger.debug("mem_size: %d" % result)
+        return result
+    
 
 @transaction.commit_manually
 def add_subjectmap(subjectmap, user):

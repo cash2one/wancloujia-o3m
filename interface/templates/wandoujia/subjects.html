@@ -11,121 +11,93 @@
         <div class="special-block clearfix nav">
             {% include "wandoujia/user_area.html" %}
         </div>
-        <!--
-        {% if ads|length != 0 %}
-        <div class="special-block clearfix ad-banner">
-            <div id="carousel-example-generic" class="carousel slide">
-                <div class="carousel-inner">
-                    {% for ad in ads %}
-                    <div data-desc="{{ ad.desc }}"
-                        {% if forloop.counter0 == 0 %}
-                            class="item active" 
-                         {% else %}
-                            class="item"
-                         {% endif %}>
-                        {% if ad.subject.pk %}
-                        <a href="/interface/subjects/{{ ad.subject.pk }}">
-                        {% endif %}
-                            <img src="{{ MEDIA_URL }}{{ ad.cover }}" href="/interface/subjects/{{ ad.subject.pk }}" >
-                            </img>
-                        {% if ad.subject.pk %}
-                        </a>
-                        {% endif %}
-                        <div class="carousel-caption">{{ ad.title }}</div>
-                    </div>
-                    {% endfor %}
-                </div>
-                <div class="control-bar">
-                    <div class="desc"></div>
-                    <div class="slide-btns">
-                        <a href="#carousel-example-generic" class="prev" data-slide="prev"> 
-                        </a>
-                        <a href="#carousel-example-generic" class="next" data-slide="next"> 
-                        </a>
-                    </div>
-                    <div class="progress"></div>
-                </div>
-            </div> 
-        </div>
-        {% endif %}
-        -->
-{% load cache %}
-{% cache 30 content %}
-        {% if ads|length == 0 and subjects|length == 0 %}
-        <div id="empty" class="abs">
-            暂无应用专题
-        </div>
-        
-        {% else %}
-        <div class="special-block clearfix">
-            {% if ads|length != 0 %}
-            <h2 class="special-title">应用专题</h2>
-            {% endif %}
-            {% if subjects|length != 0 %}
+
+        <div id="subjects_wrap" class="special-block clearfix">
             <div class="special-content clearfix">
-                {% for subject in subjects %}
-                <div class="special-item" data-id="{{ subject.id }}">
-                    <div class="special-wrap" title="{{ subject.name }}">
-                        <img width="205" height="80" src="{{ subject.cover }}" alt="{{ subject.name }}"/>
-                    </div>
-                    <div class="name" title="{{ subject.name }}">
-                        {{ subject.name }}
-                    </div>
-                    <div class="meta">
-                        <span class="first">{{ subject.count }}款应用</span>
-                        <span>共{{ subject.size }}</span>
-                    </div>
-                </div>
-                {% endfor %}
             </div>
-            {% endif %}
         </div>    
-        {% if subjects|length == 0 %}
-        <div id="empty">
+
+        <div id="empty" style="display: none">
             暂无应用专题
         </div>
-        {% endif %}
-        {% endif %}
+
+    <script type="text/template" id="subject_template">
+        <div class="special-item" data-id="<%- subject.id %>">
+            <div class="special-wrap" title="<%- subject.name %>">
+                <img width="205" height="80" src="<%= subject.cover %>" 
+                     alt="<%- subject.name %>"/>
+            </div>
+            <div class="name" title="<%- subject.name %>">
+                <%= subject.name %>
+            </div>
+            <div class="meta">
+                <span class="first"><%- subject.count %>款应用</span>
+                <span>共<%- subject.size %></span>
+            </div>
+        </div>
+    </script>
 
     <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/require.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}wandoujia/js/Narya.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
-    <script>
-    $(function() {
 
-        $(".special-item").click(function() {
+    <script type="text/javascript">
+    require(["Narya"], function() {
+    $(function() {
+        var subject_template = _.template($("#subject_template").html());
+        var $subjects_wrap = $("#subjects_wrap");
+        var $subjects = $subjects_wrap.find(".special-content");
+        $subjects.on('click', '.special-item', function() {
             var subject_id = $(this).data("id");
             if(!subject_id) return;
 
             window.location = "/interface/subjects/" + subject_id;
+
         });
-    });
-    $(function() {
-        var $carousel = $(".carousel").carousel();
-        var $progress =$carousel.find(".progress");
-        var $desc = $carousel.find(".desc");
-        var length = $carousel.find(".item").length;
-        if(length == 0) {
-            return;
+        var $empty = $("#empty");
+
+        function refreshSubjects() {
+            var connected = Narya.Device.get("isConnected");
+            var model = "", size = "";
+            if (connected) {
+                model = Narya.Device.build.get("model");
+                // TODO size = ?
+            }
+            $.get("/interface/getSubjects", {
+                model: model,
+                size: size
+            }, "json").done(function(data) {
+                if (data.ret_code != 0) {
+                    return console.error(data);
+                }
+
+                if(data.subjects.length === 0) {
+                    $subjects_wrap.hide();
+                    $empty.show();
+                    return;
+                } 
+               
+                $subjects.empty();
+                _.each(data.subjects, function(subject) {
+                    var html = subject_template({
+                        subject: subject
+                    }).trim();
+                    $(html).appendTo($subjects);
+                });
+                $subjects_wrap.show();
+                $empty.hide();
+            }).fail(function() {
+                return console.error("network error");
+            });
         }
 
-        var ad = $carousel.find(".item:eq(0)").data();
-        $progress.html("1/" + length);
-        $desc.html(ad.desc);
-        $carousel.on("slid.bs.carousel", function() {
-            var $item = $carousel.find(".item.active");
-            ad = $item.data();
-            var item = $item[0];
-            var index = 0;
-            $item.parent().children().each(function(i) {
-                if(item == this) {
-                    index = i;
-                }
-            });
-            $progress.html((index + 1) + "/" + length);
-            $desc.html(ad.desc);
-        });
+        Narya.Device.on('change:isConnected', refreshSubjects);
+        refreshSubjects();
+    });
     });
     </script>
+
 	<script type="text/javascript">
     var _usersnapconfig = {
         apiKey: '44454a5d-a6be-48dd-baf0-be92350732c0',
@@ -148,4 +120,3 @@
 
 </body>
 </html>
-{% endcache %}
