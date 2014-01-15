@@ -17,13 +17,9 @@
             </div>
         </div>    
 
-        <div id="empty" style="display: none">
-            暂无应用专题
-        </div>
+        <div id="empty" style="display: none">暂无应用专题</div>
         
-        <div id="loading" style="display: none">
-            加载应用专题
-        </div>
+        <div id="loading" style="display: none">加载应用专题</div>
 
 
     <script type="text/template" id="subject_template">
@@ -87,11 +83,14 @@
 
                 $loading.hide();
                 if (data.ret_code != 0) {
-                    return console.error(data);
+                    $empty.html("加载失败，请刷新重试！");
+                    $empty.show();
+                    return;
                 }
 
                 if(data.subjects.length === 0) {
                     $subjects_wrap.hide();
+                    $empty.html("暂无应用专题");
                     $empty.show();
                     return;
                 } 
@@ -103,12 +102,12 @@
                     $(html).appendTo($subjects);
                 });
                 $subjects_wrap.show();
-                $empty.hide();
 
-                //}, 3000);
+                //}, 8000);
             }).fail(function() {
-                $loading.show();
-                return console.error("network error");
+                $loading.hide();
+                $empty.html("加载失败，请刷新重试！");
+                $empty.show();
             });
         }
 
