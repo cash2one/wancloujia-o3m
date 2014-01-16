@@ -1,20 +1,43 @@
+# config begin
+#数据库的配置
 dbhost = 'dev-node1.limijiaoyin.com'
-#dbport = 3306
 dbuser = 'root'
 dbpass = 'nameLR9969'
 dbname = 'suning'
+
+#设置hadoop的位置
 hadooppath = '/opt/hadoop/hadoop-2.2.0'
+#设置脚本的目录，末尾带斜杠
 jobpath = '/home/songwei/logCount/'
 
+#设置web hdfs的位置
 hdfshost = 'dev-node1.limijiaoyin.com'
 hdfsuser = 'songwei'
 hdfsport = 50070
 
+#是否删除hdfs上各个机器保留的日志片段
 remove_logs = False
+#是否处理昨天(而不是今天)的日志
 last_day = False
-print "import scripts"
+if last_day:
+    lastDay = datetime.date.today() - datetime.timedelta(days=1)
+else:
+    lastDay = datetime.date.today()
+
+#用于临时进行日志合并的目录
+tmpdir = "/data/suning/tmp"
+
+#这里记录了hadoop需要执行的脚本以及结果存放的位置
+jobs = [
+		("log_mapper_meta.py", "log_reducer_meta.py", "/logs/meta.%s" % (lastDay.isoformat(), )),
+		("log_mapper_appstat.py", "log_reducer_appstat.py", "/logs/appstat.%s" % (lastDay.isoformat(),)),
+		("log_mapper_devicelog.py", "log_reducer_devicelog.py", "/logs/device.%s" % (lastDay.isoformat(), )),
+		("log_mapper_userdev.py", "log_reducer_userdev.py", "/logs/userdev.%s" % (lastDay.isoformat(), )),
+		]
 #config over
-#os.popen("source /etc/profile")
+#########################################
+
+print "import scripts"
 import _mysql
 import json
 import datetime
@@ -112,22 +135,20 @@ files = sorted(files)
 for i in files:
 	try:
 		print i
-		#hdfs.remove(i, True)
+		hdfs.remove(i, True)
 	except:
 		pass
-if last_day:
-    lastDay = datetime.date.today() - datetime.timedelta(days=1)
-else:
-    lastDay = datetime.date.today()
 
 print "config hadoop"
-filename = "/data/suning/tmp/windows2x.log.%s" % (lastDay.isoformat(),)
+filename = tmpdir + "/windows2x.log.%s" % (lastDay.isoformat(),)
 dstfilename = "/logs/windows2x.log.%s" % (lastDay.isoformat(),)
+hadoop = hadooppath + "/bin/hadoop"
+
 os.popen("rm -f %s" % filename)
-os.popen("/opt/hadoop/hadoop-2.2.0/bin/hadoop fs -getmerge  %s.* %s" % (dstfilename, filename))
-os.popen("/opt/hadoop/hadoop-2.2.0/bin/hadoop fs -put -f %s %s" % (filename, dstfilename))
+os.popen(hadoop + " fs -getmerge  %s.* %s" % (dstfilename, filename))
+os.popen(hadoop + " fs -put -f %s %s" % (filename, dstfilename))
 os.popen("rm -f %s" % filename)
-os.popen("/opt/hadoop/hadoop-2.2.0/bin/hadoop fs -rm -f %s.*" % dstfilename)
+os.popen(hadoop + " fs -rm -f %s.*" % dstfilename)
 
 print "begin clean db"
 sqlexe = 'mysql -u%s -p%s -h%s %s' % (dbuser, dbpass, dbhost, dbname)
@@ -135,23 +156,15 @@ os.popen('echo "DELETE FROM interface_logmeta WHERE date=\'%s\'" | %s' % (lastDa
 os.popen('echo "DELETE FROM interface_devicelogentity WHERE date=\'%s\' | %s"' % (lastDay.isoformat(), sqlexe))
 os.popen('echo "DELETE FROM interface_userdevicelogentity WHERE date=\'%s\'" | %s' % (lastDay.isoformat(), sqlexe))
 os.popen('echo "DELETE FROM interface_installedapplogentity WHERE date=\'%s\'" | %s' % (lastDay.isoformat(), sqlexe))
+
 print "begin hadoop"
-jobs = [
-		("log_mapper_meta.py", "log_reducer_meta.py", "/logs/meta%s" % (lastDay.isoformat(), )),
-		("log_mapper_appstat.py", "log_reducer_appstat.py", "/logs/appstat%s" % (lastDay.isoformat(),)),
-		("log_mapper_devicelog.py", "log_reducer_devicelog.py", "/logs/device%s" % (lastDay.isoformat(), )),
-		("log_mapper_userdev.py", "log_reducer_userdev.py", "/logs/userdev%s" % (lastDay.isoformat(), )),
-		]
-
-
-input = "/logs/windows2x.log.%s" % (lastDay.isoformat(), )
-hadoop = hadooppath + "/bin/hadoop"
+input = dstfilename
 hadoop_jar = hadooppath + "/share/hadoop/tools/lib/hadoop-streaming-2.2.0.jar"
 for map, red, output in jobs:
 	cmd = "%s jar %s -mapper %s -reducer %s -input %s -output %s"  % \
 		( hadoop, hadoop_jar, jobpath + map, jobpath + red, input, output)
 	os.popen(cmd)
-	cmd = "%s fs -cat %s | mysql -u%s -p%s -h%s %s" % ( hadoop, output+ "/part*" , dbuser, dbpass, dbhost, dbname)
+	cmd = "%s fs -cat %s | %s" % ( hadoop, output+ "/part*" , sqlexe)
 	os.popen(cmd)
 for map, red, output in jobs:
 	cmd = "%s fs -rm -r -f %s" % (hadoop, output)

@@ -93,8 +93,8 @@ companys = read_company()
 stores = read_store()
 map = map_staff(staffs, regions, companys, stores)
 
-import datetime
-lastDay = datetime.date.today() - datetime.timedelta(days=0)
+#import datetime
+#lastDay = datetime.date.today() - datetime.timedelta(days=0)
 
 existed = set()
 
