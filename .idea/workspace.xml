@@ -22,98 +22,7 @@
     <favorites_list name="suningx" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file leaf-file-name="log_mapper_userdev.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/server_scripts/log_mapper_userdev.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="96" column="1" selection-start="2101" selection-end="2101" vertical-scroll-proportion="-9.44" vertical-offset="1159" max-vertical-offset="1785">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="log_reducer_appstat.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/server_scripts/log_reducer_appstat.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="107" column="17" selection-start="2397" selection-end="2397" vertical-scroll-proportion="-8.84" vertical-offset="1339" max-vertical-offset="1965">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="log_reducer_devicelog.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/server_scripts/log_reducer_devicelog.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="127" column="36" selection-start="3413" selection-end="3413" vertical-scroll-proportion="-18.44" vertical-offset="1399" max-vertical-offset="2025">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="log_reducer_meta.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/server_scripts/log_reducer_meta.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-0.0" vertical-offset="0" max-vertical-offset="315">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="log_reducer_userdev.py" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/server_scripts/log_reducer_userdev.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="130" column="20" selection-start="3587" selection-end="3587" vertical-scroll-proportion="0.76038337" vertical-offset="1429" max-vertical-offset="2055">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="log_mapper_meta.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/server_scripts/log_mapper_meta.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="23" column="14" selection-start="497" selection-end="497" vertical-scroll-proportion="58.36" vertical-offset="1759" max-vertical-offset="2385">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="slave_do.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/server_scripts/slave_do.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="85" column="0" selection-start="2355" selection-end="2355" vertical-scroll-proportion="-14.16" vertical-offset="876" max-vertical-offset="1515">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="master_do.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/server_scripts/master_do.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="151" column="0" selection-start="3901" selection-end="3901" vertical-scroll-proportion="-13.2" vertical-offset="1860" max-vertical-offset="2640">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="log_mapper_appstat.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/server_scripts/log_mapper_appstat.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="113" column="11" selection-start="2742" selection-end="2742" vertical-scroll-proportion="-9.411765" vertical-offset="1170" max-vertical-offset="1770">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="log_mapper_devicelog.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/server_scripts/log_mapper_devicelog.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="101" column="8" selection-start="2211" selection-end="2211" vertical-scroll-proportion="-5.5882354" vertical-offset="1185" max-vertical-offset="1785">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <leaf />
   </component>
   <component name="FindManager">
     <FindUsagesManager>
@@ -467,18 +376,18 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="22" width="1440" height="810" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.40443215" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.40443215" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25833333" sideWeight="0.66713095" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32871014" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32871014" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -540,27 +449,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/server_scripts/slave_do.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="85" column="0" selection-start="2355" selection-end="2355" vertical-scroll-proportion="-14.16" vertical-offset="876" max-vertical-offset="1515">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/server_scripts/master_do.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="151" column="0" selection-start="3901" selection-end="3901" vertical-scroll-proportion="-13.2" vertical-offset="1860" max-vertical-offset="2640">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/server_scripts/log_mapper_appstat.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="113" column="11" selection-start="2742" selection-end="2742" vertical-scroll-proportion="-9.411765" vertical-offset="1170" max-vertical-offset="1770">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/server_scripts/log_mapper_devicelog.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="101" column="8" selection-start="2211" selection-end="2211" vertical-scroll-proportion="-5.5882354" vertical-offset="1185" max-vertical-offset="1785">
@@ -568,44 +456,65 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/server_scripts/log_mapper_appstat.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="31" column="27" selection-start="657" selection-end="657" vertical-scroll-proportion="0.7" vertical-offset="0" max-vertical-offset="1770">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server_scripts/master_do.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="151" column="0" selection-start="3901" selection-end="3901" vertical-scroll-proportion="0.5164319" vertical-offset="1860" max-vertical-offset="2640">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server_scripts/slave_do.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="85" column="0" selection-start="2355" selection-end="2355" vertical-scroll-proportion="0.5539906" vertical-offset="876" max-vertical-offset="1515">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/server_scripts/log_mapper_meta.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="23" column="14" selection-start="497" selection-end="497" vertical-scroll-proportion="58.36" vertical-offset="1759" max-vertical-offset="2385">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/server_scripts/log_mapper_userdev.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="96" column="1" selection-start="2101" selection-end="2101" vertical-scroll-proportion="-9.44" vertical-offset="1159" max-vertical-offset="1785">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/server_scripts/log_reducer_appstat.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="107" column="17" selection-start="2397" selection-end="2397" vertical-scroll-proportion="-8.84" vertical-offset="1339" max-vertical-offset="1965">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/server_scripts/log_reducer_devicelog.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="127" column="36" selection-start="3413" selection-end="3413" vertical-scroll-proportion="-18.44" vertical-offset="1399" max-vertical-offset="2025">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/server_scripts/log_reducer_meta.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="664">
+        <state line="23" column="14" selection-start="497" selection-end="497" vertical-scroll-proportion="-2.3306708" vertical-offset="1759" max-vertical-offset="2385">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/server_scripts/log_reducer_userdev.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="130" column="20" selection-start="3587" selection-end="3587" vertical-scroll-proportion="0.76038337" vertical-offset="1429" max-vertical-offset="2055">
+        <state line="64" column="16" selection-start="1390" selection-end="1390" vertical-scroll-proportion="0.44888178" vertical-offset="634" max-vertical-offset="2055">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server_scripts/log_reducer_meta.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="6" column="0" selection-start="129" selection-end="129" vertical-scroll-proportion="0.13595167" vertical-offset="0" max-vertical-offset="662">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server_scripts/log_reducer_devicelog.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="127" column="36" selection-start="3413" selection-end="3413" vertical-scroll-proportion="0.7457627" vertical-offset="1376" max-vertical-offset="2025">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server_scripts/log_reducer_appstat.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="107" column="17" selection-start="2397" selection-end="2397" vertical-scroll-proportion="0.37596303" vertical-offset="1316" max-vertical-offset="1965">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server_scripts/log_mapper_userdev.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="96" column="1" selection-start="2101" selection-end="2101" vertical-scroll-proportion="0.3990755" vertical-offset="1136" max-vertical-offset="1785">
           <folding />
         </state>
       </provider>
