@@ -163,6 +163,7 @@ for line in sys.stdin:
         #pkg = _mysql.escape_string(j["package"].strip())
         user = _mysql.escape_string(str(j["user"]).strip())
         subj = _mysql.escape_string(str(j["subj"]).strip())
+        succ = _mysql.escape_string(str(j["success"]).strip())
         #print "subj:", subj
         if not brand or not model or not did:
             continue
@@ -179,11 +180,6 @@ for line in sys.stdin:
               (did, )
             dids.add(did)
         print "INSERT INTO interface_logmeta(date, uid, did, brand, model, subject, installed, client_version) VALUES('%s', '%s', '%s', '%s', '%s', %s, %s, '%s');" % \
-              ( lastDay.isoformat(), map[user][0], did, brand, model, subj, str(True), '1.0.0.0')
+              ( lastDay.isoformat(), map[user][0], did, brand, model, subj, succ, '1.0.0.0')
     except:
         pass
-#for line in sys.stdin:
-#    line = line.strip()
-#    line.split(',')
-#    print "INSERT INTO interface_logmeta(date, uid, did, brand, model, appID, appPkg) VALUES('%s', %d, %d, '%s', '%s', %d, '%s');" % \
-#        ( '2013-1-2', 12, 34, 'brand', 'model', 56, 'pkg' )

@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c3dfefef-aaad-4104-b895-f49c5694acd3" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/suning/settings.py" afterPath="$PROJECT_DIR$/suning/settings.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server_scripts/log_mapper_meta.py" afterPath="$PROJECT_DIR$/server_scripts/log_mapper_meta.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="suning.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -25,22 +26,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="models.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/statistics/models.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="12" column="35" selection-start="347" selection-end="347" vertical-scroll-proportion="-7.2" vertical-offset="0" max-vertical-offset="270">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="views.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/statistics/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="353" column="55" selection-start="11691" selection-end="11691" vertical-scroll-proportion="-211.8" vertical-offset="0" max-vertical-offset="7665">
-              <folding>
-                <element signature="e#15#29#0" expanded="true" />
-              </folding>
+            <state line="353" column="55" selection-start="11691" selection-end="11691" vertical-scroll-proportion="0.0" vertical-offset="5295" max-vertical-offset="7665">
+              <folding />
             </state>
           </provider>
         </entry>
@@ -48,7 +38,7 @@
       <file leaf-file-name="urls.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/interface/urls.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="11" column="19" selection-start="288" selection-end="296" vertical-scroll-proportion="-6.6" vertical-offset="0" max-vertical-offset="330">
+            <state line="11" column="19" selection-start="288" selection-end="296" vertical-scroll-proportion="0.0" vertical-offset="165" max-vertical-offset="330">
               <folding />
             </state>
           </provider>
@@ -57,18 +47,16 @@
       <file leaf-file-name="views.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/interface/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="67" column="42" selection-start="1938" selection-end="1938" vertical-scroll-proportion="-7.405063" vertical-offset="420" max-vertical-offset="3600">
-              <folding>
-                <element signature="e#16#30#0" expanded="true" />
-              </folding>
+            <state line="67" column="42" selection-start="1938" selection-end="1938" vertical-scroll-proportion="0.0" vertical-offset="420" max-vertical-offset="3600">
+              <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="settings.py" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="settings.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/suning/settings.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="54" column="0" selection-start="1437" selection-end="1437" vertical-scroll-proportion="0.94311374" vertical-offset="135" max-vertical-offset="4695">
+            <state line="91" column="30" selection-start="2692" selection-end="2692" vertical-scroll-proportion="0.0" vertical-offset="1365" max-vertical-offset="4740">
               <folding />
             </state>
           </provider>
@@ -77,7 +65,7 @@
       <file leaf-file-name="subjects.html" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/interface/templates/wandoujia/subjects.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="150" column="14" selection-start="5437" selection-end="5452" vertical-scroll-proportion="-23.5" vertical-offset="1686" max-vertical-offset="2355">
+            <state line="150" column="14" selection-start="5437" selection-end="5452" vertical-scroll-proportion="0.0" vertical-offset="1686" max-vertical-offset="2355">
               <folding />
             </state>
           </provider>
@@ -86,7 +74,7 @@
       <file leaf-file-name="apps.html" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/interface/templates/wandoujia/apps.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="186" column="23" selection-start="6939" selection-end="6939" vertical-scroll-proportion="-16.0" vertical-offset="2406" max-vertical-offset="3075">
+            <state line="186" column="23" selection-start="6939" selection-end="6939" vertical-scroll-proportion="0.0" vertical-offset="2406" max-vertical-offset="3075">
               <folding />
             </state>
           </provider>
@@ -95,7 +83,7 @@
       <file leaf-file-name="__init__.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file:///Library/Python/2.7/site-packages/django/shortcuts/__init__.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="52" column="20" selection-start="2070" selection-end="2070" vertical-scroll-proportion="0.0" vertical-offset="99" max-vertical-offset="2385">
+            <state line="52" column="20" selection-start="2070" selection-end="2070" vertical-scroll-proportion="0.0" vertical-offset="780" max-vertical-offset="2505">
               <folding />
             </state>
           </provider>
@@ -104,16 +92,25 @@
       <file leaf-file-name="response.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file:///Library/Python/2.7/site-packages/django/http/response.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="35" column="28" selection-start="998" selection-end="998" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="7830">
+            <state line="35" column="28" selection-start="998" selection-end="998" vertical-scroll-proportion="0.0" vertical-offset="525" max-vertical-offset="7905">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="log_mapper_meta.py" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="log_mapper_meta.py" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/server_scripts/log_mapper_meta.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="183" column="4" selection-start="5135" selection-end="5135" vertical-scroll-proportion="-19.52" vertical-offset="2197" max-vertical-offset="2865">
+            <state line="164" column="59" selection-start="4344" selection-end="4344" vertical-scroll-proportion="0.73111784" vertical-offset="1916" max-vertical-offset="2880">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="slave_do.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/server_scripts/slave_do.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="59" column="9" selection-start="1686" selection-end="1686" vertical-scroll-proportion="0.0" vertical-offset="885" max-vertical-offset="1110">
               <folding />
             </state>
           </provider>
@@ -148,19 +145,19 @@
         <option value="$PROJECT_DIR$/interface/models.py" />
         <option value="$PROJECT_DIR$/interface/urls.py" />
         <option value="$PROJECT_DIR$/statistics/models.py" />
-        <option value="$PROJECT_DIR$/server_scripts/log_mapper_meta.py" />
         <option value="$PROJECT_DIR$/interface/views.py" />
         <option value="$PROJECT_DIR$/interface/templates/wandoujia/subjects.html" />
         <option value="$PROJECT_DIR$/interface/templates/wandoujia/apps.html" />
         <option value="$PROJECT_DIR$/suning/settings.py" />
+        <option value="$PROJECT_DIR$/server_scripts/log_mapper_meta.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-182" />
-    <option name="y" value="-888" />
+    <option name="x" value="1440" />
+    <option name="y" value="202" />
     <option name="width" value="1920" />
-    <option name="height" value="816" />
+    <option name="height" value="810" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -546,12 +543,12 @@
   <component name="PropertiesComponent">
     <property name="GoToFile.includeJavaFiles" value="false" />
     <property name="options.splitter.main.proportions" value="0.3" />
-    <property name="recentsLimit" value="5" />
     <property name="options.lastSelected" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+    <property name="recentsLimit" value="5" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../tianyinmerge" />
     <property name="FullScreen" value="false" />
-    <property name="options.searchVisible" value="true" />
     <property name="options.splitter.details.proportions" value="0.2" />
+    <property name="options.searchVisible" value="true" />
   </component>
   <component name="PyConsoleOptionsProvider">
     <option name="myPythonConsoleState">
@@ -761,14 +758,14 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-182" y="-888" width="1920" height="816" extended-state="6" />
+    <frame x="1440" y="202" width="1920" height="810" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.28730822" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.13177083" sideWeight="0.6731302" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.13177083" sideWeight="0.6731302" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39915523" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.17569445" sideWeight="0.2867036" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
@@ -797,9 +794,9 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.159375" sideWeight="0.78476423" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
     </layout-to-restore>
   </component>
   <component name="VcsContentAnnotationSettings">
@@ -816,65 +813,74 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file:///Library/Python/2.7/site-packages/rest_framework/response.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="20" column="37" selection-start="711" selection-end="723" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1365">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/server_scripts/master_do.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="105" column="32" selection-start="2570" selection-end="2587" vertical-scroll-proportion="-24.4" vertical-offset="890" max-vertical-offset="2370">
-          <folding />
-        </state>
+        <state line="105" column="32" selection-start="2570" selection-end="2587" vertical-scroll-proportion="-24.4" vertical-offset="890" max-vertical-offset="2370" />
       </provider>
     </entry>
     <entry file="file:///Library/Python/2.7/site-packages/rest_framework/renderers.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="124" column="0" selection-start="4389" selection-end="4389" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="8805">
-          <folding />
-        </state>
+        <state line="124" column="0" selection-start="4389" selection-end="4389" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="8805" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="57" column="8" selection-start="1754" selection-end="1758" vertical-scroll-proportion="-10.8" vertical-offset="510" max-vertical-offset="3060">
-          <folding />
-        </state>
+        <state line="57" column="8" selection-start="1754" selection-end="1758" vertical-scroll-proportion="-10.8" vertical-offset="510" max-vertical-offset="3060" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/interface/models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="42" column="37" selection-start="1387" selection-end="1387" vertical-scroll-proportion="-19.64" vertical-offset="79" max-vertical-offset="1890">
-          <folding />
-        </state>
+        <state line="42" column="37" selection-start="1387" selection-end="1387" vertical-scroll-proportion="-19.64" vertical-offset="79" max-vertical-offset="1890" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/server_scripts/log_reducer_meta.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="19" column="0" selection-start="507" selection-end="507" vertical-scroll-proportion="-9.0" vertical-offset="0" max-vertical-offset="315">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/server_scripts/log_mapper_meta.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="183" column="4" selection-start="5135" selection-end="5135" vertical-scroll-proportion="-19.52" vertical-offset="2197" max-vertical-offset="2865">
-          <folding />
-        </state>
+        <state line="19" column="0" selection-start="507" selection-end="507" vertical-scroll-proportion="-9.0" vertical-offset="0" max-vertical-offset="315" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/statistics/models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="35" selection-start="347" selection-end="347" vertical-scroll-proportion="-7.2" vertical-offset="0" max-vertical-offset="270">
+        <state line="12" column="35" selection-start="347" selection-end="347" vertical-scroll-proportion="0.0" vertical-offset="180" max-vertical-offset="270" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/statistics/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="353" column="55" selection-start="11691" selection-end="11691" vertical-scroll-proportion="0.0" vertical-offset="5295" max-vertical-offset="7665">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/interface/urls.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="19" selection-start="288" selection-end="296" vertical-scroll-proportion="-6.6" vertical-offset="0" max-vertical-offset="330">
+        <state line="11" column="19" selection-start="288" selection-end="296" vertical-scroll-proportion="0.0" vertical-offset="165" max-vertical-offset="330">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/interface/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="67" column="42" selection-start="1938" selection-end="1938" vertical-scroll-proportion="0.0" vertical-offset="420" max-vertical-offset="3600">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/suning/settings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="91" column="30" selection-start="2692" selection-end="2692" vertical-scroll-proportion="0.0" vertical-offset="1365" max-vertical-offset="4740">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/interface/templates/wandoujia/subjects.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="150" column="14" selection-start="5437" selection-end="5452" vertical-scroll-proportion="0.0" vertical-offset="1686" max-vertical-offset="2355">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/interface/templates/wandoujia/apps.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="186" column="23" selection-start="6939" selection-end="6939" vertical-scroll-proportion="0.0" vertical-offset="2406" max-vertical-offset="3075">
           <folding />
         </state>
       </provider>
@@ -893,41 +899,16 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/statistics/views.py">
+    <entry file="file://$PROJECT_DIR$/server_scripts/slave_do.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="353" column="55" selection-start="11691" selection-end="11691" vertical-scroll-proportion="-211.8" vertical-offset="0" max-vertical-offset="7665">
-          <folding>
-            <element signature="e#15#29#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/interface/templates/wandoujia/subjects.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="150" column="14" selection-start="5437" selection-end="5452" vertical-scroll-proportion="-23.5" vertical-offset="1686" max-vertical-offset="2355">
+        <state line="59" column="9" selection-start="1686" selection-end="1686" vertical-scroll-proportion="0.0" vertical-offset="885" max-vertical-offset="1110">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/interface/templates/wandoujia/apps.html">
+    <entry file="file://$PROJECT_DIR$/server_scripts/log_mapper_meta.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="186" column="23" selection-start="6939" selection-end="6939" vertical-scroll-proportion="-16.0" vertical-offset="2406" max-vertical-offset="3075">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/interface/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="67" column="42" selection-start="1938" selection-end="1938" vertical-scroll-proportion="-7.405063" vertical-offset="420" max-vertical-offset="3600">
-          <folding>
-            <element signature="e#16#30#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/suning/settings.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="54" column="0" selection-start="1437" selection-end="1437" vertical-scroll-proportion="0.94311374" vertical-offset="135" max-vertical-offset="4695">
+        <state line="164" column="59" selection-start="4344" selection-end="4344" vertical-scroll-proportion="0.73111784" vertical-offset="1916" max-vertical-offset="2880">
           <folding />
         </state>
       </provider>
