@@ -7,6 +7,7 @@
 {% block css %}
 {{ block.super }}
 <link rel="stylesheet" href="{{ STATIC_URL }}ajax_upload/css/ajax-upload-widget.css" />
+<link rel="stylesheet" href="{{ STATIC_URL }}css/form_filter.css"/>
 <style>
 td.name {
     width: 200px;
@@ -37,6 +38,40 @@ td.name {
 			</ul>
 		</div>
     </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">筛选条件</div>
+        <div class="panel-body" style="padding: 0px"> 
+            <form class="form-filter">
+                <div class="filters-wrap">
+                    <div class="filter-group">
+                        <div class="filter">
+                            <label for="filter_mem_size">
+                                {{ filter.mem_size.label }}：
+                            </label>
+                            {{ filter.mem_size }}
+                        </div>
+						<div class="filter">
+							<label for="filter_model">
+                                {{ filter.model.label }}：
+                            </label>
+                            {{ filter.model }}
+						</div>
+                        <div class="filter">
+							<label for="filter_updator">
+                                {{ filter.updator.label }}：
+                            </label>
+                            {{ filter.updator }}
+						</div>
+                    </div>
+                </div>
+                <div class="submit">
+                    <input type='submit'  class="btn btn-primary" value='筛选'</>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <div class="panel panel-default">
         <div class="panel-heading">
             应用专题适配列表

@@ -168,3 +168,54 @@ $(function() {
         modal.show($(this.parentNode).data());
     });
 });
+
+$(function() {
+    var $form = $(".form-filter");
+    var form = $form[0];
+    var EMPTY_SELECTION = {'id': '', 'text': '---------'};
+
+    $(form.mem_size).select2();
+
+    $(form.model).select2($.extend({}, select2_tip_options, {
+        query: function(query) {
+            $.get("/app/models", {
+                query: query.term
+            }).done(function(data) {
+                query.callback(data);
+            }).error(function() {
+                result = {results: [EMPTY_SELECTION], more: false};
+                query.callback(result);
+            });
+        },
+        initSelection: function(el, callback) {
+            callback({id: $(el).val(), text: $(el).val()});
+        }
+    }));
+
+    $(form.updator).select2($.extend({}, select2_tip_options, {
+        query: function(query) {
+            $.get("/app/updators", {
+                query: query.term
+            }).done(function(data) {
+                query.callback(data);
+            }).error(function() {
+                result = {results: [EMPTY_SELECTION], more: false};
+                query.callback(result);
+            });
+        },
+        initSelection: function(el, callback) {
+            var $el = $(el);
+            var id = $el.val();
+            if(id) {
+                $.get("/app/updators", {
+                    id: id
+                }).done(function(data) {
+                    callback(data);
+                }).error(function() {
+                    callback({results: [EMPTY_SELECTION], more: false});
+                });
+            }
+        }
+    }));
+});
+

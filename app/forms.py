@@ -77,3 +77,23 @@ class SubjectMapMemSizeForm(forms.ModelForm):
 
     class Meta:
         model = SubjectMap
+
+
+_mem_size_choices = list(SubjectMap.MEM_SIZE_CHOICES)
+_mem_size_choices.insert(0, ('', '---------'))
+
+class SubjectMapFilterForm(forms.Form):
+    mem_size = forms.ChoiceField(label=u'存储空间', required=False, 
+                                 choices=_mem_size_choices, 
+                                 widget=forms.Select(attrs={
+                                    'id': 'filter_mem_size'
+                                 }))
+    updator = forms.IntegerField(label=u'操作人', required=False, 
+                                 widget=forms.HiddenInput(attrs={
+                                     'id': 'filter_updator'
+                                 }))
+    model = forms.CharField(label=u'机型', required=False,
+                            widget=forms.TextInput(attrs={
+                                'id': 'filter_model',
+                            }))
+

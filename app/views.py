@@ -4,6 +4,7 @@ import logging
 from itertools import chain
 
 from django.shortcuts import render, redirect
+from django.contrib.auth.models import User
 from django.core.files.images import ImageFile
 from django.core.files.storage import default_storage        
 from django.utils import simplejson
@@ -17,11 +18,14 @@ from django import forms
 from django_tables2.config import RequestConfig
 
 from suning import settings
+from suning import utils
 from app.models import App, UploadApk, Subject, SubjectMap
 from app.forms import AppForm, SubjectForm, SubjectMapModelForm, SubjectMapMemSizeForm
+from app.forms import SubjectMapFilterForm
 from app.tables import AppTable, SubjectTable, SubjectMapTable
 from suning.decorators import active_tab
 from interface.storage import hdfs_storage
+from statistics.models import BrandModel
 import apk
 import os
 
@@ -170,6 +174,42 @@ def can_view_subjectmap(user):
             user.has_perm('app.change_subjectmap') or \
             user.has_perm('app.delete_subjectmap')
 
+
+@require_GET
+def query_models(request):
+    query = request.GET.get("query")
+    items = BrandModel.objects.all()
+    if query != None and query != "":
+        items = items.filter(model__contains=query)
+
+    results = map(lambda item: {'text': item.get('model'), 'id': item.get('model')}, 
+                  items.values("model").distinct())
+    results.insert(0, {'id': "", 'text': '-----------'})
+    return utils.render_json({"results": results, "more": False})
+
+
+@require_GET
+def query_updators(request):
+    id = request.GET.get("id", None)
+    if id != None and id != "":
+        users = User.objects.filter(pk=id)
+        if len(users) == 0:
+            result = {'id': "", 'text': '-----------'}
+        else:
+            user = users[0]
+            result = {'id': user.pk, 'text': user.username} 
+        return utils.render_json(result)
+
+    query = request.GET.get("query")
+    users = User.objects.all()
+    if query != None and query != "":
+        users = users.filter(username__contains=query)
+
+    results = map(lambda user: {'id': user.pk, 'text': user.username}, users)
+    results.insert(0, {'id': "", 'text': '-----------'})
+    return utils.render_json({"results": results, "more": False})
+
+
 @require_GET
 @login_required
 @user_passes_test(can_view_subjectmap, login_url=settings.PERMISSION_DENIED_URL)
@@ -178,14 +218,41 @@ def subject_map(request):
     query_set = SubjectMap.objects.order_by("-create_date")
     query = request.GET.get("q", None)
     if query:
-        query_set = query_set.filter(Q(subject__name__contains=query) | Q(model__contains=query) | Q(creator__username__contains=query))
+        query_set = query_set.filter(Q(subject__name__contains=query) | 
+                                     Q(model__contains=query) | 
+                                     Q(creator__username__contains=query))
     
+    filter = SubjectMapFilterForm(request.GET)
+    if filter.is_valid():
+        mem_size = filter.cleaned_data["mem_size"]
+        if  mem_size != None and mem_size != "":
+            query_set = query_set.filter(mem_size=mem_size)
+        logger.debug(query_set)
+
+        model = filter.cleaned_data["model"]
+        if model != None and model != "":
+            query_set = query_set.filter(model=model)
+        logger.debug(query_set)
+
+        updator = filter.cleaned_data["updator"]
+        if updator != None:
+            query_set = query_set.filter(updator__pk=updator)
+        logger.debug(query_set)
+
     table = SubjectMapTable(query_set)
     if query:
         table.empty_text = settings.NO_SEARCH_RESULTS
+
     RequestConfig(request, paginate={"per_page": settings.PAGINATION_PAGE_SIZE}).configure(table)
-    
-    return render(request, "subject_map.html", {"query": query, "table": table, "model_form": SubjectMapModelForm(), "mem_size_form": SubjectMapMemSizeForm()})
+        
+    return render(request, "subject_map.html", {
+        "query": query, 
+        "table": table, 
+        "model_form": SubjectMapModelForm(), 
+        "mem_size_form": SubjectMapMemSizeForm(), 
+        "filter": filter
+    })
+
 
 @require_GET
 @login_required(login_url=settings.LOGIN_JSON_URL)

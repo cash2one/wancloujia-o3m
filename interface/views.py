@@ -208,6 +208,8 @@ def getSubjects(request):
             })        
 
     return utils.render_json({"ret_code": 0, "subjects": results})
+    #return utils.render_json({"ret_code": 1})
+    #return utils.render_json({"ret_code": 0, "subjects": []})
 
 
 def get_subject_total_size(subject):

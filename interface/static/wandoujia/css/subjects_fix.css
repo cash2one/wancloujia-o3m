@@ -318,7 +318,7 @@ body {
 }
 
 #empty {
-  width: 100px;
+  width: 200px;
   background: url(../images/empty_icon.png) center top no-repeat;
   padding-top: 100px;
   margin-left: auto;
@@ -333,8 +333,8 @@ body {
 
 #loading {
   width: 100px;
-  background: url(../images/empty_icon.png) center top no-repeat;
-  padding-top: 100px;
+  background: url(../images/loading.gif) center top no-repeat;
+  padding-top: 90px;
   margin-left: auto;
   margin-right: auto;
   margin-top: 30px;
