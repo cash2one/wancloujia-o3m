@@ -8,19 +8,15 @@
     <link rel="stylesheet" href="{{ STATIC_URL }}wandoujia/css/subjects_fix.css"/>
 </head>
 <body data-page="special-list" class="special-list">
-        <div class="special-block clearfix nav">
-            {% include "wandoujia/user_area.html" %}
+    <div class="special-block clearfix nav">
+        {% include "wandoujia/user_area.html" %}
+    </div>
+    <div id="subjects_wrap" class="special-block clearfix">
+        <div class="special-content clearfix">
         </div>
-
-        <div id="subjects_wrap" class="special-block clearfix">
-            <div class="special-content clearfix">
-            </div>
-        </div>    
-
-        <div id="empty" style="display: none">暂无应用专题</div>
-        
-        <div id="loading" style="display: none">加载应用专题</div>
-
+    </div>    
+    <div id="empty" style="display: none">暂无应用专题</div>
+    <div id="loading" style="display: none">加载应用专题</div>
 
     <script type="text/template" id="subject_template">
         <div class="special-item" data-id="<%- subject.id %>">
