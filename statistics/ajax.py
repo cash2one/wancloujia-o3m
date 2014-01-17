@@ -197,9 +197,9 @@ def get_flow_logs(request, form, offset, length):
         return _invalid_data_json
 
     logs = filter_flow_logs(user, filter_form)
-    total = len(logs)
-    logs = logs[offset: offset + length]
+    total = logs.count()
     brands = len(set([i.did for i in logs if i.did]))
+    logs = logs[offset: offset + length]
     dict_list = []
     for log in logs:
         dict_list.append(log_to_dict(log))
@@ -285,7 +285,7 @@ def get_installed_capacity(request, form, offset, length):
         return _invalid_data_json
 
     results = filter_installed_capacity_logs(user, filter_form)
-    total = len(results)
+    total = results.count()
     brands = sum([i['count'] for i in results])
     results = results[offset: offset + length]
     dict_list = []
@@ -425,11 +425,11 @@ def get_device_stat_detail(request, form, offset, length):
         return _invalid_data_json
 
     results = stat_device(user, filter_form, True)
-    total = len(results)
-    capacity = count_device(user, filter_form)
-    results = results[offset: offset + length]
+    total = results.count()
     lst = [i['did'] for i in results if i['did']]
     brands = len(set(lst))
+    capacity = count_device(user, filter_form)
+    results = results[offset: offset + length]
     logger.debug(results)
     dict_list = []
     for result in results:
@@ -558,13 +558,13 @@ def filter_org_statistics(request, form, offset, length, mode, level):
     records = logs.values(*keys).annotate(total_device_count=Count('did', distinct=True),
                                        total_popularize_count=Sum('popularizeAppCount'),
                                        total_app_count=Sum('appCount'))
-    total = len(records)
+    total = records.count()
+    brands = sum([i['total_device_count'] for i in records])
     records = records[offset: offset + length]
     items = []
     for record in records:
         items.append(org_record_to_dict(record, mode, level))
     #print [i['total_device_count'] for i in items]
-    brands = sum([i['total_device_count'] for i in items])
     return simplejson.dumps({
         'ret_code': 0,
         'logs': items,
