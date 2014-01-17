@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+
+{% load render_table from django_tables2 %}
+{% load django_select2_tags %}
+{% load perm_filters %}
+
+{% block css %}
+{{ block.super }}
+<link rel="stylesheet" href="{{ STATIC_URL }}ajax_upload/css/ajax-upload-widget.css" />
+<link rel="stylesheet" href="{{ STATIC_URL }}css/form_filter.css"/>
+<style>
+td.name {
+    width: 200px;
+}
+#add-edit-subjectmap-model .select2-container,
+#add-edit-subjectmap-memsize .select2-container {
+	width: 100%;
+}
+</style>
+{% endblock %}
+
+{% block main %}
+<div class="main">
+    <div class="toolbar">
+	    <div class="btn-group">
+			<a type="button"
+				{% if request.user|is_employee and not perm.app.add_subjectmap %}
+				disabled='disabled'
+				{% endif %}
+				class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+				<span class="glyphicon glyphicon-plus"></span>
+				新增应用专题适配
+				<span class="caret"></span>
+			</a>
+			<ul class="dropdown-menu" role="menu">
+				<li><a data-toggle="modal" href="#add-edit-subjectmap-model">新增机型适配</a></li>
+				<li><a data-toggle="modal" href="#add-edit-subjectmap-memsize">新增存储空间适配</a></li>
+			</ul>
+		</div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">筛选条件</div>
+        <div class="panel-body" style="padding: 0px"> 
+            <form class="form-filter">
+                <div class="filters-wrap">
+                    <div class="filter-group">
+                        <div class="filter">
+                            <label for="filter_mem_size">
+                                {{ filter.mem_size.label }}：
+                            </label>
+                            {{ filter.mem_size }}
+                        </div>
+						<div class="filter">
+							<label for="filter_model">
+                                {{ filter.model.label }}：
+                            </label>
+                            {{ filter.model }}
+						</div>
+                        <div class="filter">
+							<label for="filter_updator">
+                                {{ filter.updator.label }}：
+                            </label>
+                            {{ filter.updator }}
+						</div>
+                    </div>
+                </div>
+                <div class="submit">
+                    <input type='submit'  class="btn btn-primary" value='筛选'</>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            应用专题适配列表
+            {% include "search_form.html" with query=query %} 
+        </div>
+        <div class="panel-body"> 
+            {% render_table table "table_template.html" %}
+        </div>
+    </div>
+</div>
+
+{% include "subject_map_model_modal.html" with modal_id="add-edit-subjectmap-model" f=model_form %}
+{% include "subject_map_memsize_modal.html" with modal_id="add-edit-subjectmap-memsize" f=mem_size_form %}
+{% include "delete_modal.html" with modal_id="delete-subjectmap" model_name="应用专题" %}
+{% include "prompt.html" with modal_id="prompt" %} 
+{% endblock %}
+
+{% block js %}
+{{ block.super }}
+<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.tablednd.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/jquery-ui-1.10.3.custom.min.js"></script>
+<script type="text/javascript" 
+        src="{{ STATIC_URL }}ajax_upload/js/jquery.iframe-transport.js"></script>
+<script type="text/javascript" 
+        src="{{ STATIC_URL }}ajax_upload/js/ajax-upload-widget.js"></script>
+<script type="text/javascript" 
+        src="{{ STATIC_URL }}js/modals.js"></script>
+<script type="text/javascript" 
+        src="{{ STATIC_URL }}js/django_select2_cn.js"></script>
+<script type="text/javascript" 
+        src="{{ STATIC_URL }}js/subject_map.js"></script>
+{% endblock %}

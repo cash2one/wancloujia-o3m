@@ -91,8 +91,5 @@ if debug:
     pass
 	#file = "/data/suning/logs/windows2x.log"
 else:
-	lastDay = datetime.date.today() - datetime.timedelta(days=1)
-	#file = "/data/suning/logs/windows2x.log.%s" % (lastDay.isoformat(),)
+    lastDay = datetime.date.today() - datetime.timedelta(days=1)
     os.popen('rm ' + file)
-
-

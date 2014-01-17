@@ -80,12 +80,12 @@
                     <span class="glyphicon glyphicon-tags"></span>&nbsp;&nbsp;应用专题管理
                 </a>
             </li>
+			<li {% if request.nav.active_tab == "subject_map" %}class="active"{% endif %}>
+				<a href="/app/subject/map/">
+					<span class="glyphicon glyphicon-filter"></span>&nbsp;&nbsp;应用专题适配
+				</a>
+			</li>
             {% endif %}
-            <!--
-            <li {% if request.nav.active_tab == "feedback" %}class="active"{% endif %}><a href="/feedback/">
-                <span class="glyphicon glyphicon-phone-alt"></span>&nbsp;&nbsp;反馈管理
-            </a></li>
-            -->
             {% if request.user|is_not_employee or perms.mgr %}
             <li {% if request.nav.active_tab == "system" %}class="active"{% endif %}>
                 <a class="accordin-toggle" data-toggle="collapse" data-parent="#accordin" href="#sub_system">
@@ -110,15 +110,14 @@
                     </li>
                     {% endif %}
 
-                    {% if request.user|is_not_employee %}
-                    <!--
-                    <li><a href="">操作日志</a></li>
-                    -->
+                    {% if request.user|can_view_oplog %}
+                    <li {% if request.nav.active_tab == "system" and request.nav.sub_active_tab == "oplog" %}class="active"{% endif %}>
+                        <a href="/oplog/">操作日志</a>
+                    </li>
                     {% endif %}
                 </ul>
             </li>
             {% endif %}
-            <!--
             <li {% if request.nav.active_tab == "statistics" %}
                 class="active"
                 {% endif %}>
@@ -132,7 +131,8 @@
                         {% endif %}>
                         <a href="/statistics/flow">流水统计</a>
                     </li>
-                    <li {% if request.nav.active_tab == "statistics" and request.nav.sub_active_tab == "capacity" %}
+                    <!--
+					<li {% if request.nav.active_tab == "statistics" and request.nav.sub_active_tab == "capacity" %}
                         class="active"
                         {% endif %}>
                         <a href="/statistics/capacity">安装统计</a>
@@ -149,9 +149,9 @@
                         {% endif %}>
                         <a href="/statistics/organization">组织统计</a>
                     </li>
+					-->
                 </ul>
             </li>
-            -->
         </ul>
     </div>
 </div>

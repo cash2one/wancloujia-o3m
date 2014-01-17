@@ -46,6 +46,33 @@
 
     var EMPTY_SELECTION = {'id': '', 'text': '---------'};
 
+    function querySubjects(query, page, callback) {
+        $.get('subjects', { q: query, p: page }, function(data) {
+            callback(null, data);
+        }, "json").error(function() {
+            callback("error");
+        });
+    }
+
+    function SubjectFilter(selector) {
+        this.$el = $(selector);
+        this.$el.select2($.extend({}, select2_tip_options, {
+            query: function(query) {
+                var page = query.page;
+                querySubjects(query.term, page, function(err, data) {
+                    var result;
+                    if(err) {
+                        result = {results: [EMPTY_SELECTION], more: false};
+                    } else {
+                        if(page == 1) data.results.unshift(EMPTY_SELECTION);
+                        result = data;
+                    }
+                    query.callback(result);
+                });
+            }
+        }));
+    }
+
     function queryApps(query, page, callback) {
         $.get('apps', { q: query, p: page }, function(data) {
             callback(null, data);
@@ -109,6 +136,66 @@
                                 "data-content=" + popover_temp + 
                                 "data-trigger='hover'>" + 
                                 "<%- name %></span>");
+	
+	function query_devices(query, page, callback) {
+		$.get('devices', { q: query, p: page }, function(data) {
+			callback(null, data);
+		}, "json").error(function() {
+			callback('error');
+		});
+	}
+
+	function DeviceFilter(filter) {
+		this.$filter = $(filter);
+		this.$filter.select2($.extend({}, select2_tip_options, {
+			query: function(query) {
+				var page = query.page;
+				query_devices(query.term, query.page, function(err, data) {
+					var result;
+					if(err) {
+						result = {results: [EMPTY_SELECTION], more: false};
+					} else {
+						var devices = _.map(data.devices, function(device) {
+							return {'id': device, 'text': device};
+						});
+						if(page == 1) devices.unshift(EMPTY_SELECTION);
+						result = {results: devices, more: data.more};
+					}
+					query.callback(result);
+				});
+			}
+		}));
+	}
+
+	function query_models(query, page, callback) {
+		$.get('models', { q: query, p: page }, function(data) {
+			callback(null, data);
+		}, "json").error(function() {
+			callback('error');
+		});
+	}
+
+	function ModelFilter(filter) {
+		this.$filter = $(filter);
+		this.$filter.select2($.extend({}, select2_tip_options, {
+			query: function(query) {
+				var page = query.page;
+				query_models(query.term, query.page, function(err, data) {
+					var result;
+					if(err) {
+						result = {results: [EMPTY_SELECTION], more: false};
+					} else {
+						var models = _.map(data.models, function(model) {
+							return {'id': model, 'text': model};
+						});
+						if(page == 1) models.unshift(EMPTY_SELECTION);
+						result = {results: models, more: data.more};
+					}
+					query.callback(result);
+				});
+			}
+		}));
+	}
 
     function query_brands(query, page, callback) {
         $.get('brands', { q: query, p: page }, function(data) {
@@ -145,6 +232,41 @@
         initial_text: '---------',
         first_optval: ''
     };
+
+    function query_users(params, callback) {
+        $.get('users', params, function(data) {
+            callback(null, data);
+        }, "json").error(function() {
+            callback('error');
+        });
+    }
+
+	function UserFilter(filter) {
+        var $user = $(filter);
+        this.$user = $user;
+        if (!$user.data('readonly')) {
+            var select2_options = $.extend({}, select2_tip_options, {
+                query: function(query) {
+                    query_users({
+                        p: query.page,
+                        q: query.term
+                    }, function(err, data) {
+                        var result;
+                        if(err) {
+                            result = {'results': [EMPTY_SELECTION], 'more': false};
+                        } else {
+                            data.results.unshift(EMPTY_SELECTION);
+                            result = data;
+                        }
+                        query.callback(result);
+                    });
+                }
+            });
+            $user.select2(select2_options);
+        } else {
+            $user.select2(select2_tip_options);
+        }
+	}
 
     function query_employee(params, callback) {
         $.get('employee', params, function(data) {
@@ -240,7 +362,11 @@
         table_options: table_options,
         MgrFilter: MgrFilter,
         BrandFilter: BrandFilter,
-        AppFilter: AppFilter, 
-        PeriodFilter: PeriodFilter
+        AppFilter: AppFilter,
+		SubjectFilter: SubjectFilter,
+        PeriodFilter: PeriodFilter,
+		UserFilter: UserFilter,
+		ModelFilter: ModelFilter,
+		DeviceFilter: DeviceFilter
     };
 })(window);

@@ -28,15 +28,17 @@
                             <img src="{{ app.icon }} " alt="{{ app.name }}" class="icon" />
                         </div>
                         <div class="operate">
-                            <span class="name">
+                            <span class="name" title="{{ app.name }}">
                                 <span class="txt">{{ app.name }}</span>
                             </span>
                             <span class="meta">
-                                <span>{{ app.version }}&nbsp;&nbsp;{{ app.size }}</span>
+                                <span title="{{ app.version }}&nbsp;&nbsp;{{ app.size }}">
+									{{ app.version }}&nbsp;&nbsp;{{ app.size }}
+								</span>
                                 <a  data-id="{{ app.id }}" download="{{ app.name }}.apk" 
                                     class="btn install-link"
                                     data-package="{{ app.package }}" 
-                                    href="{{ MEDIA_URL }}{{ app.apk }}#name={{ app.name }}&icon=http://{{ request.META.HTTP_HOST }}{{ app.icon }}&content-type=application&md5={{ app.md5 }}" >安装</a>
+                                    href="{{ MEDIA_URL }}{{ app.apk }}?md5={{ app.md5 }}#name={{ app.name }}&icon=http://{{ request.META.HTTP_HOST }}{{ app.icon }}&content-type=application" >安装</a>
                             </span>    
                         </div>
                     </div>
@@ -58,6 +60,8 @@
     <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}wandoujia/js/log.js"></script>
     <script type="text/javascript"> 
+
+    var subject_id = {{ subject.pk }}; 
 
     function bitsize(size) {
         var result = "";
@@ -150,7 +154,8 @@
             var log = {
                 event: "install", 
                 user: username, 
-                app: appid, 
+                subj: subject_id,
+                //app: appid, 
                 package: package, 
                 brand: get_brand(), 
                 model: get_model()

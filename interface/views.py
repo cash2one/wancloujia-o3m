@@ -1,11 +1,13 @@
 # coding: utf-8
 import logging
 import datetime
+import time
 import re
 from functools import wraps
 from hashlib import md5
 
 from django.http import HttpResponse
+from django.db.models import Q
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render, redirect
 from django.views.decorators.http import require_GET, require_POST
@@ -20,10 +22,11 @@ from rest_framework.decorators import api_view, parser_classes, renderer_classes
 
 from serializers import AppSerializer, SubjectSerializer
 from suning import settings
+from suning import utils
 from interface.models import LogMeta
 from interface.storage import hdfs_storage
 from mgr.models import Staff
-from app.models import Subject, App, AppGroup
+from app.models import Subject, App, AppGroup, SubjectMap
 from app.tables import bitsize
 from ad.models import AD
 
@@ -158,11 +161,39 @@ def logout(request):
 
 
 @require_GET
-@login_required(login_url='/interface/welcome')
 def subjects(request):
-    subjects = Subject.objects.filter(online=True).order_by('position')
-    now = datetime.datetime.now()
-    ads = AD.objects.filter(visible=True).filter(from_date__lt=now).filter(to_date__gt=now).order_by('position')
+    return render(request, "wandoujia/subjects.html")
+
+
+def create_filter(model, bits):
+    def _filter(subject):
+        rules = SubjectMap.objects.filter(subject=subject)
+
+        if len(rules) == 0:
+            return True
+
+        for rule in rules:
+            if rule.match(model, bits):
+                return True
+        return False
+
+    return _filter
+
+
+@require_GET
+def getSubjects(request):
+    if not request.user.is_authenticated():
+        return utils.render_json({"ret_code": 0, "subjects": []})
+
+    model = request.GET.get("model") or None
+    size = request.GET.get("size")
+    bits = int(size) if size else None
+
+    subjects = Subject.objects.all().order_by("position")
+    if model != None and bits != None:
+        rules_filter = create_filter(model, bits)
+        subjects = filter(rules_filter, subjects)
+    
     results = []
     for item in subjects:
         grps = AppGroup.objects.filter(subject=item).filter(app__online=True)
@@ -173,10 +204,12 @@ def subjects(request):
                 "cover": item.cover,
                 "desc": item.desc,
                 "count": grps.count(),
-                "size": bitsize(get_subject_total_size(item)),
+                "size": bitsize(get_subject_total_size(item))
             })        
-    
-    return render(request, "wandoujia/subjects.html", {"subjects": results, "ads": ads})
+
+    return utils.render_json({"ret_code": 0, "subjects": results})
+    #return utils.render_json({"ret_code": 1})
+    #return utils.render_json({"ret_code": 0, "subjects": []})
 
 
 def get_subject_total_size(subject):

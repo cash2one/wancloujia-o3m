@@ -39,9 +39,9 @@ class LogMeta(models.Model):
     did = models.CharField(verbose_name=u'chuanhao', max_length=16, editable=False)
     brand = models.CharField(verbose_name=u'pinpai', max_length=BRAND_LENGTH_LIMIT, editable=False)
     model = models.CharField(verbose_name=u'jixing', max_length=16, editable=False)
-    subject = models.IntegerField()
-    installed = models.BooleanField()
+    subject = models.IntegerField(verbose_name=u'zhuti', editable=False)
     client_version = models.CharField(max_length=20)
+    installed = models.BooleanField(editable=False)
     objects = LogManager()
 
     class Meta:

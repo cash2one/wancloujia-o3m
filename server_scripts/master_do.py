@@ -1,6 +1,7 @@
 # config begin
 #数据库的配置
 dbhost = 'dev-node1.limijiaoyin.com'
+#dbport = 3306
 dbuser = 'root'
 dbpass = 'nameLR9969'
 dbname = 'suning'
@@ -143,7 +144,6 @@ print "config hadoop"
 filename = tmpdir + "/windows2x.log.%s" % (lastDay.isoformat(),)
 dstfilename = "/logs/windows2x.log.%s" % (lastDay.isoformat(),)
 hadoop = hadooppath + "/bin/hadoop"
-
 os.popen("rm -f %s" % filename)
 os.popen(hadoop + " fs -getmerge  %s.* %s" % (dstfilename, filename))
 os.popen(hadoop + " fs -put -f %s %s" % (filename, dstfilename))
@@ -156,7 +156,6 @@ os.popen('echo "DELETE FROM interface_logmeta WHERE date=\'%s\'" | %s' % (lastDa
 os.popen('echo "DELETE FROM interface_devicelogentity WHERE date=\'%s\' | %s"' % (lastDay.isoformat(), sqlexe))
 os.popen('echo "DELETE FROM interface_userdevicelogentity WHERE date=\'%s\'" | %s' % (lastDay.isoformat(), sqlexe))
 os.popen('echo "DELETE FROM interface_installedapplogentity WHERE date=\'%s\'" | %s' % (lastDay.isoformat(), sqlexe))
-
 print "begin hadoop"
 input = dstfilename
 hadoop_jar = hadooppath + "/share/hadoop/tools/lib/hadoop-streaming-2.2.0.jar"

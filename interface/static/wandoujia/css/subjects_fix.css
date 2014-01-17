@@ -318,9 +318,23 @@ body {
 }
 
 #empty {
-  width: 100px;
+  width: 200px;
   background: url(../images/empty_icon.png) center top no-repeat;
   padding-top: 100px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 30px;
+  text-align: center;
+  line-height: 20px;
+  color: #777;
+  font-size: 14px;
+  font-family: "微软雅黑";
+}
+
+#loading {
+  width: 100px;
+  background: url(../images/loading.gif) center top no-repeat;
+  padding-top: 90px;
   margin-left: auto;
   margin-right: auto;
   margin-top: 30px;

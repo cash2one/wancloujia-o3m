@@ -1,9 +1,12 @@
 *.py[cod]
+*.swp
+*.swo
 data_backup.json
 wandoujia.zip
 suning.zip
+[^o]*log
 dump.rdb
-.log
+.idea/
 .cache
 
 # wandoujia extension

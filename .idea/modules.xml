@@ -3,6 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/suning.iml" filepath="$PROJECT_DIR$/.idea/suning.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/suning.iml" filepath="$PROJECT_DIR$/.idea/suning.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/suningx.iml" filepath="$PROJECT_DIR$/.idea/suningx.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/tianyinmerge.iml" filepath="$PROJECT_DIR$/.idea/tianyinmerge.iml" />
     </modules>
   </component>
 </project>

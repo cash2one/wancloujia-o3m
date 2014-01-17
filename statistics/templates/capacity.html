@@ -54,7 +54,7 @@
     <div class="panel panel-default">
         <div class="panel-heading">
             共<span class='total'>0</span>种应用
-            ，安装总数<span class='brands'>0</span>
+            ，共<span class='brands'>0</span>次安装
             {% if not request.session.wandoujia %}
             <button class='btn btn-default btn-xs pull-right' id="export-data">导出数据</button>
             {% endif %}
@@ -63,9 +63,13 @@
             <table class="table table-hover table-bordered">
                 <thead>
                     <tr>
-                        <th>应用名称</th>
-                        <th>是否推广</th>
-                        <th>安装总数</th>
+                        <th>应用</th>
+                        <th>大区</th>
+                        <th>分公司</th>
+                        <th>门店</th>
+                        <th>员工</th>
+                        <th>姓名</th>
+                        <th>下载次数</th>
                     </tr>
                 </thead>
                 <tbody></tbody>

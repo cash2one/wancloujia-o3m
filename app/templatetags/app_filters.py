@@ -13,3 +13,7 @@ register = template.Library()
 def get_apps(subject):
     appgrps = AppGroup.objects.filter(subject=subject).all().order_by('position')
     return ",".join(["%d,%s" % (item.app.pk, item.app.name) for item in appgrps])
+
+@register.filter
+def get_subjectmap_name(subjectmap):
+    return subjectmap.__unicode__()

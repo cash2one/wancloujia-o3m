@@ -17,5 +17,8 @@ urlpatterns = patterns('statistics.views',
     url(r'^employee$', 'employee'),
     url(r'^apps$', 'apps'),
     url(r'^brands$', 'brands'),
-    url(r'^models$', 'models')
+    url(r'^models$', 'models'),
+    url(r'^devices$', 'devices'),
+    url(r'^subjects$', 'subjects'),
+    url(r'^users$', 'users')
 )

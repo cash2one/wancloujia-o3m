@@ -24,7 +24,7 @@ $(function() {
 
     var $table = $(".table").dataTable($.extend({}, statistics.table_options, {
         aoColumns: [{
-            sTitle: '应用名称',
+            sTitle: '应用',
             mRender: function(data) {
                 if(data.name) {
                     return app_temp(data);
@@ -32,7 +32,23 @@ $(function() {
                     return '&mdash;'
                 }
             }
-        }, {
+        },
+        {
+            sTitle:'大区'
+        },
+        {
+            sTitle:'分公司'
+        },
+        {
+            sTitle:'门店'
+        },
+        {
+            sTitle:'员工'
+        },
+        {
+            sTitle:'姓名'
+        },
+        /* {
             sTitle: '是否推广',
             mRender: function(data) {
                 if(data === null) {
@@ -41,8 +57,8 @@ $(function() {
                     return data ? '是' : '否';
                 }
             }
-        }, {
-            sTitle: '安装总数'
+        },*/ {
+            sTitle: '下载次数'
         }],
         fnDrawCallback: function() {
             $table.find(".app-name").popover();
@@ -54,7 +70,11 @@ $(function() {
                 _.each(data.logs, function(item) {
                     aaData.push([
                         item.app,
-                        item.app.popularize,
+                        item.region || '&mdash;',
+                        item.company || '&mdash;',
+                        item.store || '&mdash;',
+                        item.empid || '&mdash;',
+                        item.emp || '&mdash;',
                         item.count
                     ]);
                 });

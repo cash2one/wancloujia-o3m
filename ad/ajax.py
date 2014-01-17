@@ -19,7 +19,8 @@ _ok_json = simplejson.dumps({'ret_code': 0})
 @dajaxice_register(method='POST')
 @check_login
 def delete_ad(request, id):
-    __delete(id)
+    model = models.AD.objects.get(pk=id)
+    __remove(model, request.user.username, id)
     return _ok_json
 
 
@@ -37,38 +38,38 @@ def add_edit_ad(request, form, visible):
     ad = f.save(commit=False)
     ad.visible = visible
     if form["id"] == "":
-        __add(ad)
-        '''
         if models.AD.objects.filter(title=ad.title).exists():
             return simplejson.dumps({'ret_code': 1000, 'field': 'title', 'error': u'广告标题已存在'})
-        models.add_ad(ad)
-        '''
+        __add(ad, request.user.username)
+        return _ok_json
     else:
         ad.pk = form["id"]
-        __edit(ad)
-    return _ok_json
+        if models.AD.objects.exclude(pk=ad.pk).filter(title=ad.title).exists():
+            return simplejson.dumps({'ret_code': 1000, 'field': 'title', 'error': u'广告标题已存在'})
+        __edit(ad, request.user.username)
+        return _ok_json
 
 
 @dajaxice_register(method='POST')
 @check_login
 def sort_ad(request, pks):
-    __sort(pks)
+    __sort(pks, request.user.username)
     return _ok_json
 
-
-def __add(model):
-    if models.AD.objects.filter(title=model.title).exists():
-        return simplejson.dumps({'ret_code': 1000, 'field': 'title', 'error': u'广告标题已存在'})
+def __add(model, username=u'未知'):
     models.add_ad(model)
+    oplogtrack(0, username, model)
 
-def __edit(model):
-    if models.AD.objects.exclude(pk=model.pk).filter(title=model.title).exists():
-        return simplejson.dumps({'ret_code': 1000, 'field': 'title', 'error': u'广告标题已存在'})
+def __edit(model, username=u'未知'):
     models.edit_ad(model)
+    oplogtrack(1, username, model)
 
-def __delete(id):
+def __remove(model=None, username=u'未知', id=-1):
     models.delete_ad(id)
+    oplogtrack(2, username, model)
 
-def __sort(pks):
+def __sort(pks, username=u'未知'):
     ad_pks = [int(pk) for pk in pks.split(",")]
     models.sort_ad(ad_pks)
+    oplogtrack(3, username)
+

@@ -20,8 +20,8 @@ from suning import permissions
 from suning.settings import EMPTY_VALUE
 from suning.utils import render_json, first_valid, get_model_by_pk
 from suning.decorators import active_tab
-from mgr.models import cast_staff, Region, Company, Store, Organization, Employee
-from app.models import App
+from mgr.models import cast_staff, Region, Company, Store, Organization, Employee, Staff
+from app.models import App, Subject
 from interface.models import LogMeta, InstalledAppLogEntity, DeviceLogEntity
 from forms import LogMetaFilterForm, InstalledCapacityFilterForm
 from forms import OrganizationStatForm, DeviceStatForm
@@ -127,21 +127,21 @@ def query_employee(user, org):
     else: 
         return Employee.objects.none()
 
-def emps_to_dict_arr(emps):
+def users_to_dict_arr(emps):
     return map(lambda e: {'id': e.pk, 'text': e.username}, emps)
 
 
 @require_GET
 def employee(request):
     if not request.user.is_authenticated():
-        return render_json({'results': emps_to_dict_arr(Employee.objects.none())})
+        return render_json({'results': users_to_dict_arr(Employee.objects.none())})
 
     user = cast_staff(request.user)
     if not user.is_superuser and not user.is_staff and \
         not user.has_perm("interface.view_organization_statistics"):
         logger.debug("user has no permission to view organization's statistics")
         emps = Employee.objects.filter(pk=user.pk)
-        return render_json({'results': emps_to_dict_arr(emps)})
+        return render_json({'results': users_to_dict_arr(emps)})
 
     sid = request.GET.get('store', None)
     cid = request.GET.get('company', None)
@@ -167,6 +167,36 @@ def employee(request):
     results = map(lambda e: {'id': e.pk, 'text': e.username}, emps)
     return render_json({'results': results, 'more': total > p * LENGTH})
 
+@require_GET
+def users(request):
+    if not request.user.is_authenticated():
+        return render_json({'results': users_to_dict_arr(Staff.objects.none())})
+
+    LENGTH = 10
+    q = request.GET.get("q", "")
+    p = int(request.GET.get("p", 1))
+    users = Staff.objects.filter(username__contains=q)
+    total = len(users)
+    users = users[(p-1) * LENGTH: p * LENGTH]
+    results = map(lambda e: {'id': e.pk, 'text': e.username}, users)
+    return render_json({'results': results, 'more': total > p * LENGTH})
+
+@require_GET
+def subjects(request):
+    if not request.user.is_authenticated():
+        return render_json({'more': False, 'results': []})
+
+    q = request.GET.get('q', "")
+    p = request.GET.get('p', "")
+    page = int(p) if p else 0
+
+    SUBJECTS_PER_PAGE = 10
+    subjects = Subject.objects.filter(name__contains=q)
+    total = len(subjects)
+    subjects = subjects[(page-1)*SUBJECTS_PER_PAGE:page*SUBJECTS_PER_PAGE]
+    results = map(lambda e: {'id': e.pk, 'text': e.name}, subjects)
+
+    return render_json({'more': total > page * SUBJECTS_PER_PAGE, 'results': results})
 
 @require_GET
 def apps(request):
@@ -185,6 +215,23 @@ def apps(request):
 
     return render_json({'more': total > page * APPS_PER_PAGE, 'results': results})
 
+@require_GET
+def devices(request):
+    LENGTH = 10
+    b = request.GET.get('b', '')
+    m = request.GET.get('m', '')
+    q = request.GET.get('q', '')
+    p = int(request.GET.get('p', '1'))
+    
+    logs = BrandModel.objects.all()
+    logs = logs.filter(brand=b) if b else logs
+    logs = logs.filter(model=m) if m else logs
+    logs = logs.filter(did__startswith=q)
+    devices = logs.values_list('did', flat=True).distinct()
+    return render_json({
+        'more': len(devices) > p * LENGTH,
+        'devices': devices[(p-1) * LENGTH : p * LENGTH]
+    })
 
 @require_GET
 def models(request):
@@ -271,8 +318,7 @@ def flow_excel(request):
     sheet = book.add_sheet(u'流水统计')
     default_style = xlwt.Style.default_style
     #date_style = xlwt.easyxf(num_format_str='yyyy-mm-dd')
-    titles = [u'大区', u'公司', u'门店', u'员工', u'品牌', u'机型', u'串号', 
-               u'应用序号', u'应用名称', u'应用包名', u'是否推广', u'日期']
+    titles = [u'日期', u'机型', u'IMEI', u'应用专题', u'账号', u'客户端版本', u'是否加工成功']
     for i, title in enumerate(titles):
         sheet.write(0, i, title, style=default_style)
 
@@ -283,25 +329,20 @@ def flow_excel(request):
         logger.debug(log)
         dict = log_to_dict(log) 
 
-        if dict['app']['popularize'] is None:
-            popularize = h.unescape(EMPTY_VALUE)
+        if dict['installed'] is None:
+            installed = h.unescape(EMPTY_VALUE)
         else:
-            popularize = u'是' if dict['app']['popularize'] else u'否'
-        app = dict['app']
+            installed = u'是' if dict['installed'] else u'否'
+        subject = dict['subject']
 
         rowdata = [
-            dict['region'] or h.unescape(EMPTY_VALUE),
-            dict['company'] or h.unescape(EMPTY_VALUE),
-            dict['store'] or h.unescape(EMPTY_VALUE),
-            dict['emp'] or h.unescape(EMPTY_VALUE),
-            dict['brand'] or h.unescape(EMPTY_VALUE),
+            dict['date'] or h.unescape(EMPTY_VALUE),
             dict['model'] or h.unescape(EMPTY_VALUE),
             dict['device'] or h.unescape(EMPTY_VALUE),
-            int(app['id']),
-            app['name'] or h.unescape(EMPTY_VALUE),
-            app['package'],
-            popularize,
-            dict['date'] 
+            subject['name'] or h.unescape(EMPTY_VALUE),
+            dict['user'] or h.unescape(EMPTY_VALUE),
+            dict['client_version'] or h.unescape(EMPTY_VALUE),
+            installed,
         ]
         for col, val in enumerate(rowdata):
             #style = date_style if isinstance(val, datetime.date) else default_style
@@ -337,7 +378,7 @@ def capacity_excel(request):
     sheet = book.add_sheet(u'安装统计')
     default_style = xlwt.Style.default_style
     #date_style = xlwt.easyxf(num_format_str='yyyy-mm-dd')
-    titles = [u'应用序号', u'应用名称', u'应用包名', u'是否推广', u'安装总量']
+    titles = [u'应用', u'大区', u'分公司', u'门店', u'员工', u'姓名', u'下载次数']
     for i, title in enumerate(titles):
         sheet.write(0, i, title, style=default_style)
 
@@ -348,11 +389,17 @@ def capacity_excel(request):
         logger.debug(log)
         dict = installed_capacity_to_dict(log) 
         rowdata = [
-            dict['app']['id'],
+            #dict['app']['id'],
+            #dict['app']['name'],
+            #dict['app']['package'],
+            #u'是' if dict['app']['popularize'] else u'否',
             dict['app']['name'],
-            dict['app']['package'],
-            u'是' if dict['app']['popularize'] else u'否',
-            dict['count']
+            dict['region'] or h.unescape(EMPTY_VALUE),
+            dict['company'] or h.unescape(EMPTY_VALUE),
+            dict['store'] or h.unescape(EMPTY_VALUE),
+            dict['empid'],
+            dict['emp'],
+            dict['count'],
         ]
         for col, val in enumerate(rowdata):
             #style = date_style if isinstance(val, datetime.date) else default_style
@@ -486,10 +533,13 @@ def organization_excel(request, mode, level):
             elif l == 'store' or l == 'company':
                 array.append(dict[l]['code'] or h.unescape(EMPTY_VALUE))
                 array.append(dict[l]['name'] or h.unescape(EMPTY_VALUE))
+            elif l == 'did' and dict['did']:
+                array.append(dict['did'])
             else:
-                array.append(dict['emp']['username'] or h.unescape(EMPTY_VALUE));
-                array.append(dict['emp']['realname'] or h.unescape(EMPTY_VALUE));
-        array.append(dict['total_device_count']) 
+                array.append(dict['emp']['username'] or h.unescape(EMPTY_VALUE))
+                array.append(dict['emp']['realname'] or h.unescape(EMPTY_VALUE))
+        if level != 'did':
+            array.append(dict['total_device_count']) 
         array.append(dict['total_popularize_count']) 
         array.append(dict['total_app_count']) 
         return array

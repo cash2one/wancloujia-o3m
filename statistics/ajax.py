@@ -10,8 +10,8 @@ from dajaxice.utils import deserialize_form
 
 from interface.models import LogMeta, InstalledAppLogEntity, DeviceLogEntity
 from interface.models import UserDeviceLogEntity
-from app.models import App
-from mgr.models import Employee, Organization, cast_staff, Region, Company, Store
+from app.models import App, Subject
+from mgr.models import Staff, Employee, Organization, cast_staff, Region, Company, Store
 from statistics.forms import LogMetaFilterForm, InstalledCapacityFilterForm
 from statistics.forms import DeviceStatForm, OrganizationStatForm
 from suning import utils
@@ -23,6 +23,13 @@ _invalid_data_msg = u'数据出错，请检查'
 _invalid_data_json = simplejson.dumps({'ret_code': 1000, 'ret_msg': _invalid_data_msg})
 _ok_json = simplejson.dumps({'ret_code': 0})
 
+class UserFilter:
+    def __init__(self, logs, user_id):
+        self.logs = logs
+        self.user_id = user_id
+
+    def filter(self):
+        return self.logs if not self.user_id else self.logs.filter(uid=self.user_id)
 
 class AdminFilter:
     def __init__(self, logs, region_id, company_id, store_id, emp_id):
@@ -97,6 +104,23 @@ class PeriodFilter:
 
         return logs
 
+class DeviceFilter:
+    def __init__(self, logs, device):
+        self.logs = logs
+        self.device = device
+    
+    def filter(self):
+        logs = self.logs
+        return logs if not self.device else logs.filter(did=self.device)
+
+class ModelFilter:
+    def __init__(self, logs, model):
+        self.logs = logs
+        self.model = model
+    
+    def filter(self):
+        logs = self.logs
+        return logs if not self.model else logs.filter(model=self.model)
 
 class BrandFilter:
     def __init__(self, logs, brand):
@@ -124,64 +148,64 @@ class AppFilter:
         app = apps[0]
         return self.logs.filter(appPkg=app.package)
 
+class SubjectFilter:
+    def __init__(self, logs, subject_id):
+        self.subject_id = subject_id
+        self.logs = logs
+
+    def filter(self):
+        return self.logs if not self.subject_id else self.logs.filter(subject=self.subject_id)
+
 def log_to_dict(log):
     dict = {
-        'brand': log.brand,
+		'date': str(log.date),
         'model': log.model,
         'device': log.did,
-        'date': str(log.date)
+        'client_version': log.client_version,
+        'installed': log.installed
     }
 
-    apps = App.objects.filter(package=log.appPkg)
-    app = apps[0] if len(apps) != 0 else None
-    dict["app"] = {
-        'id': app.pk if app else log.appID, 
-        'package': app.package if app else log.appPkg,
-        'name': app.name if app else None,
-        'popularize': app.popularize if app else None
+    subjects = Subject.objects.filter(pk=log.subject)
+    subject = subjects[0] if len(subjects) != 0 else None
+    dict["subject"] = {
+        'id': subject.pk if subject else None, 
+        'name': subject.name if subject else None,
     }
 
-    emp = utils.get_model_by_pk(Employee.objects, log.uid)
-    organizations = [None, None, None]
-    if emp:
-        dict["emp"] = emp.username
-        for i, item in enumerate(emp.organizations()):
-            organizations[i] = item.name
+    user = utils.get_model_by_pk(Staff.objects, log.uid)
+    if user:
+        dict["user"] = user.username
     else:
-        dict["emp"] = None
-    dict["region"], dict["company"], dict["store"] = organizations
+        dict["user"] = None
 
     return dict;
 
     
 def filter_flow_logs(user, form):
     logs = LogMeta.objects.all().order_by('-date')
-    #logger.debug("all logs: %d" % len(logs))
-
-    region_id = form.cleaned_data["region"]
-    company_id = form.cleaned_data["company"]
-    store_id = form.cleaned_data["store"]
-    emp_id = form.cleaned_data["emp"]
-    if user.is_staff or user.is_superuser:
-        logs = AdminFilter(logs, region_id, company_id, store_id, emp_id).filter()
-    elif user.has_perm("interface.view_organization_statistics"):
-        logs = UserPermittedFilter(user, logs, region_id, company_id, store_id, emp_id).filter()
-    else:
-        logs = UserUnpermittedFilter(logs, user.pk).filter()
-    logger.debug("logs filtered by user info: %d" % len(logs))
-
-    logs = AppFilter(logs, form.cleaned_data["app"]).filter()
-    logger.debug("logs filtered by app: %d" % len(logs))
-
-    logs = BrandFilter(logs, form.cleaned_data["brand"]).filter()
-    logger.debug("logs filtered by brand: %d" % len(logs))
-
     from_date = form.cleaned_data["from_date"]
     to_date = form.cleaned_data["to_date"]
-    logs = PeriodFilter(logs, from_date, to_date).filter()
+    logs = PeriodFilter(logs, from_date, to_date).filter() 
     logger.debug("logs filtered by period: %d" % len(logs))
-    return logs
 
+    user_id = form.cleaned_data["user"]
+    logs = UserFilter(logs, user_id).filter()
+    logger.debug("logs filtered by user info: %d" % len(logs))
+
+    logs = SubjectFilter(logs, form.cleaned_data["subject"]).filter()
+    logger.debug("logs filtered by subject: %d" % len(logs))
+
+    logs = ModelFilter(logs, form.cleaned_data["model"]).filter()
+    logger.debug("logs filtered by model: %d" % len(logs))
+
+    logs = DeviceFilter(logs, form.cleaned_data["device"]).filter()
+    logger.debug("logs filtered by device: %d" % len(logs))
+
+    installed = form.cleaned_data["installed"]
+    if installed:
+        logs = logs.filter(installed=(installed=='True'))
+
+    return logs
 
 @dajaxice_register(method='POST')
 @check_login
@@ -198,7 +222,7 @@ def get_flow_logs(request, form, offset, length):
     logs = filter_flow_logs(user, filter_form)
     total = len(logs)
     logs = logs[offset: offset + length]
-    brands = len(set([i.did for i in logs if i.did]))
+    devices = len(set([i.did for i in logs if i.did]))
     dict_list = []
     for log in logs:
         dict_list.append(log_to_dict(log))
@@ -207,15 +231,18 @@ def get_flow_logs(request, form, offset, length):
         'ret_code': 0,
         'logs': dict_list,
         'total': total,
-        'brands': brands
+        'devices': devices
     })           
-
 
 def filter_installed_capacity_logs(user, form):
     region_id = form.cleaned_data["region"]
     company_id = form.cleaned_data["company"]
     store_id = form.cleaned_data["store"]
     emp_id = form.cleaned_data["emp"]
+    from_date = form.cleaned_data["from_date"]
+    to_date = form.cleaned_data["to_date"]
+    logs = InstalledAppLogEntity.objects.all()
+    logs = PeriodFilter(logs, from_date, to_date).filter()
     if emp_id:
         logs = InstalledAppLogEntity.objects.filter(uid=emp_id)
     elif store_id:
@@ -225,27 +252,26 @@ def filter_installed_capacity_logs(user, form):
     elif region_id:
         logs = InstalledAppLogEntity.objects.filter(region=region_id)
     else:
-        logs = InstalledAppLogEntity.objects.all()
+        pass#logs = InstalledAppLogEntity.objects.all()
+
     logger.debug("logs filtered by user info: %d" % len(logs))
 
     logs = AppFilter(logs, form.cleaned_data["app"]).filter()
     logger.debug("logs filtered by app: %d" % len(logs))
 
-    from_date = form.cleaned_data["from_date"]
-    to_date = form.cleaned_data["to_date"]
-    logs = PeriodFilter(logs, from_date, to_date).filter()
+    
     logger.debug("logs filtered by period: %d" % len(logs))
 
     popularize = form.cleaned_data['popularize']
     if popularize:
         logs = logs.filter(popularize=(popularize=='True'))
 
-    results = logs.values('appPkg', 'appID', 'appName', 'popularize' ,'installedTimes').annotate(count=Sum('installedTimes'))
+    results = logs.values('appID', 'appName', 'appPkg', 'uid', 'region', 'company', 'store').annotate(count=Sum('installedTimes'))
     return results
 
 
 def installed_capacity_to_dict(capacity):
-    logger.debug(capacity)
+    logger.debug(capacity) 
     dict = {}
     apps = App.objects.filter(package=capacity['appPkg'])
     app = apps[0] if len(apps) != 0 else None
@@ -253,8 +279,17 @@ def installed_capacity_to_dict(capacity):
         'id': capacity['appID'],
         'package': capacity['appPkg'],
         'name': capacity['appName'],
-        'popularize': capacity['popularize']
     }
+    emp = utils.get_model_by_pk(Employee.objects, capacity['uid'])
+    organizations = [None, None, None]
+    if emp:
+        dict["empid"] = emp.username
+        dict["emp"] = emp.realname
+        for i, item in enumerate(emp.organizations()):
+            organizations[i] = item.name
+    else:
+        dict["emp"] = None
+    dict["region"], dict["company"], dict["store"] = organizations
     dict["count"] = capacity['count']
     return dict;
     
@@ -273,7 +308,7 @@ def get_installed_capacity(request, form, offset, length):
 
     results = filter_installed_capacity_logs(user, filter_form)
     total = len(results)
-    brands = sum([i['count'] for i in results])
+    devices = sum([i['count'] for i in results])
     results = results[offset: offset + length]
     dict_list = []
     for result in results:
@@ -283,7 +318,7 @@ def get_installed_capacity(request, form, offset, length):
         'ret_code': 0,
         'logs': dict_list,
         'total': total,
-        'brands': brands
+        'devices': devices
     })
 
 
@@ -314,7 +349,10 @@ def _filter_device_statistics(user, form):
     company_id = form.cleaned_data["company"]
     store_id = form.cleaned_data["store"]
     emp_id = form.cleaned_data["emp"]
-    logs = MgrInfoFilter(DeviceLogEntity.objects.all(), form.cleaned_data["region"],
+    from_date = form.cleaned_data["from_date"]
+    to_date = form.cleaned_data["to_date"]
+    logs = PeriodFilter(DeviceLogEntity.objects.all(), from_date, to_date).filter()
+    logs = MgrInfoFilter(logs, form.cleaned_data["region"],
                          form.cleaned_data["company"], form.cleaned_data["store"], 
                          form.cleaned_data["emp"]).filter()
     logger.debug("logs filtered by mgr info: %d" % len(logs))
@@ -330,9 +368,7 @@ def _filter_device_statistics(user, form):
         logs = logs.filter(model=model)
         
 
-    from_date = form.cleaned_data["from_date"]
-    to_date = form.cleaned_data["to_date"]
-    logs = PeriodFilter(logs, from_date, to_date).filter()
+    
     logger.debug("logs filtered by period: %d" % len(logs))
     return logs
 
@@ -370,7 +406,7 @@ def get_device_stat(request, form, offset, length):
     results = stat_device(user, filter_form)
     total = len(results)
     lst = [i['total_device_count'] for i in results if i['total_device_count']]
-    brands = sum(lst)
+    devices = sum(lst)
     capacity = count_device(user, filter_form)
     results = results[offset: offset + length]
     dict_list = []
@@ -381,7 +417,7 @@ def get_device_stat(request, form, offset, length):
         'logs': dict_list,
         'total': total,
         'capacity': capacity,
-        'brands': brands
+        'devices': devices
     })
 
 
@@ -415,7 +451,7 @@ def get_device_stat_detail(request, form, offset, length):
     capacity = count_device(user, filter_form)
     results = results[offset: offset + length]
     lst = [i['did'] for i in results if i['did']]
-    brands = len(set(lst))
+    devices = len(set(lst))
     logger.debug(results)
     dict_list = []
     for result in results:
@@ -426,34 +462,36 @@ def get_device_stat_detail(request, form, offset, length):
         'logs': dict_list,
         'total': total,
         'capacity': capacity,
-        'brands': brands
+        'devices': devices
     })
 
 
 def filter_org_logs(form, mode):
-    if mode == 'region':
-        logs = DeviceLogEntity.objects.all()
-    elif mode == 'company':
-        region = form.cleaned_data['region']
-        logs = DeviceLogEntity.objects.filter(region=region)
-    elif mode == 'store':
-        company = form.cleaned_data['company']
-        logs = DeviceLogEntity.objects.filter(company=company)
-    elif mode == 'emp':
-        store = form.cleaned_data['store']
-        logs = DeviceLogEntity.objects.filter(store=store)
-    else:
-        uid = form.cleaned_data['emp']
-        logs = DeviceLogEntity.objects.filter(uid=uid)
-
+    logs = DeviceLogEntity.objects.all()
     from_date = form.cleaned_data["from_date"]
     to_date = form.cleaned_data["to_date"]
     logs = PeriodFilter(logs, from_date, to_date).filter()
+    if mode == 'region':
+        pass#logs = DeviceLogEntity.objects.all()
+    elif mode == 'company':
+        region = form.cleaned_data['region']
+        logs = logs.filter(region=region)
+    elif mode == 'store':
+        company = form.cleaned_data['company']
+        logs = logs.filter(company=company)
+    elif mode == 'emp':
+        store = form.cleaned_data['store']
+        logs = logs.filter(store=store)
+    else:
+        uid = form.cleaned_data['emp']
+        logs = logs.filter(uid=uid)
+    #if mode == 'did':
+    #    results = logs.values('uid', 'did').annotate(total_popularize_count=Sum('popularizeAppCount'), total_app_count=Sum('appCount'))
     logger.debug("logs filtered by period: %d" % len(logs))
     return logs
 
 
-_LEVELS = ['region', 'company', 'store', 'emp']
+_LEVELS = ['region', 'company', 'store', 'emp','did'] 
 def available_levels(mode, level):
     offset = _LEVELS.index(mode)
     to = _LEVELS.index(level)
@@ -474,8 +512,11 @@ def titles_for_org_stat(mode, level):
             titles.append(u'门店名称')
         elif level == 'emp':
             titles.append(u'员工编码')
-            titles.append(u'门店编码')
-    titles.append(u'机器台数')
+            titles.append(u'员工姓名')
+    if level == u'did':
+        titles.append(u'串码')
+    else:
+        titles.append(u'机器台数')
     titles.append(u'推广数')
     titles.append(u'安装总数')
     return titles
@@ -484,6 +525,7 @@ def titles_for_org_stat(mode, level):
 def org_record_to_dict(record, mode, level):
     dict = {
         'total_device_count': record['total_device_count'],
+        'did': record['did'] if record.has_key('did') else None,
         'total_popularize_count': record['total_popularize_count'],
         'total_app_count': record['total_app_count']
     }
@@ -506,13 +548,14 @@ def org_record_to_dict(record, mode, level):
                 dict['store'] = { 'code': store.code, 'name': store.name } 
             else:
                 dict['store'] = empty_value
-        else:
+        elif level == 'emp':
             emp = utils.get_model_by_pk(Employee.objects, record['uid'])
             if emp:
                 dict['emp'] = {'username': emp.username, 'realname': emp.realname } 
             else:
                 dict['emp'] = {'username': None, 'realname': None}
-
+        else:
+            dict['did'] = record['did']
     return dict
 
 
@@ -542,13 +585,12 @@ def filter_org_statistics(request, form, offset, length, mode, level):
     items = []
     for record in records:
         items.append(org_record_to_dict(record, mode, level))
-    print items[0]
-    brands = sum([i['total_device_count'] for i in items])
+    #print [i['total_device_count'] for i in items]
+    devices = sum([i['total_device_count'] for i in items])
     return simplejson.dumps({
         'ret_code': 0,
         'logs': items,
         'total': total,
         'capacity': capacity,
-        'brands': brands
+        'devices': devices
     })
-

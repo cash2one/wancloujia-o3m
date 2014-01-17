@@ -3,7 +3,7 @@ import logging
 
 import django_tables2 as tables
 
-from models import App, Subject, AppGroup
+from models import App, Subject, AppGroup, SubjectMap
 from mgr.models import cast_staff
 
 
@@ -75,3 +75,24 @@ class SubjectTable(tables.Table):
         orderable = False
         attrs = {'class': 'table table-hover table-bordered'}
         empty_text = u'暂无应用专题'
+
+class SubjectMapTable(tables.Table):
+    ops_2 = tables.TemplateColumn(verbose_name=u'操作', template_name="subject_map_ops.html")
+    create_date = tables.TemplateColumn(verbose_name=u'创建时间',
+                                        template_code='{{ record.create_date|date:"Y-m-d H:i"}}')
+    update_date = tables.TemplateColumn(verbose_name=u'上次修改时间',
+                                        template_code='{{ record.update_date|date:"Y-m-d H:i"}}')
+    def render_creator(self, record):
+        creator = cast_staff(record.creator)
+        return creator.realname if creator.realname else creator.username
+
+    def render_updator(self, record):
+        user = cast_staff(record.updator if record.updator else record.creator)
+        return user.realname if user.realname else user.username
+
+    class Meta:
+        model = SubjectMap
+        fields = ('type', 'model', 'mem_size', 'subject', 'creator', 'create_date', 'updator', 'update_date')
+        orderable = False
+        attrs = {'class': 'table table-hover table-bordered'}
+        empty_text = u'暂无应用专题适配'

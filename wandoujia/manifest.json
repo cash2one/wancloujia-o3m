@@ -1,6 +1,6 @@
 {
     "name": "一键安装",
-    "version": "1.0.0.0",
+    "version": "1.1.0.0",
     "description": "一键安装",
     "content_scripts": [{
         "matches":["http://*.wandoujia.com/*", "http://*.wandou.in/*"],
@@ -15,7 +15,7 @@
     },
     "app": {
         "launch": {
-            "web_url": "http://tianyin.wandoujia.com/interface/welcome"
+            "web_url": "http://tianyin.wandou.in/interface/welcome"
         },
         "navigation": []
     },

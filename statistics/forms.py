@@ -6,13 +6,14 @@ from app.models import App
 
 
 class LogMetaFilterForm(forms.Form):
-    region = forms.DecimalField(label=u'大区', required=False, min_value=1)
-    company = forms.DecimalField(label=u'公司', required=False, min_value=1)
-    store = forms.DecimalField(label=u'门店', required=False, min_value=1)
-    emp = forms.DecimalField(label=u'员工', required=False, min_value=1)
+    user = forms.DecimalField(label=u'账号', required=False, min_value=1)
 
-    app = forms.CharField(label=u'应用名称', max_length=App.PACKAGE_LENGTH_LIMIT, required=False)
-    brand =forms.CharField(label=u'品牌', max_length=LogMeta.BRAND_LENGTH_LIMIT, required=False)
+    subject = forms.CharField(label=u'应用专题', max_length=255, required=False)
+    installed = forms.CharField(label=u'是否加工成功', max_length=10, required=False)
+	
+    model = forms.CharField(label=u'机型', max_length=255, required=False)
+    device = forms.CharField(label=u'IMEI', max_length=255, required=False)
+	
     from_date = forms.DateField(label=u'开始时间', required=False)
     to_date = forms.DateField(label=u'结束时间', required=False)
 
