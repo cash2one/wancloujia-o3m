@@ -16,7 +16,7 @@ from statistics.forms import LogMetaFilterForm, InstalledCapacityFilterForm
 from statistics.forms import DeviceStatForm, OrganizationStatForm
 from suning import utils
 from suning.decorators import *
-
+import re
 
 logger = logging.getLogger(__name__)
 _invalid_data_msg = u'数据出错，请检查'
@@ -162,8 +162,9 @@ def log_to_dict(log):
         'model': log.model,
         'device': log.did,
         'client_version': log.client_version,
-        'installed': log.installed
+        'installed': log.installed,
     }
+    pici = ''
 
     subjects = Subject.objects.filter(pk=log.subject)
     subject = subjects[0] if len(subjects) != 0 else None
@@ -171,13 +172,17 @@ def log_to_dict(log):
         'id': subject.pk if subject else None, 
         'name': subject.name if subject else None,
     }
-
+    try:
+        m = re.match(r'^[^\#]*\#[^\#]*\#(?P<pici>.*)', dict['subject']['name']).groupdict()
+        pici = m['pici']
+    except:
+        pass
     user = utils.get_model_by_pk(Staff.objects, log.uid)
     if user:
         dict["user"] = user.username
     else:
         dict["user"] = None
-
+    dict['pici'] = pici
     return dict;
 
     
@@ -220,9 +225,9 @@ def get_flow_logs(request, form, offset, length):
         return _invalid_data_json
 
     logs = filter_flow_logs(user, filter_form)
-    total = len(logs)
-    logs = logs[offset: offset + length]
+    total = logs.count()
     devices = len(set([i.did for i in logs if i.did]))
+    logs = logs[offset: offset + length]
     dict_list = []
     for log in logs:
         dict_list.append(log_to_dict(log))
@@ -527,7 +532,8 @@ def org_record_to_dict(record, mode, level):
         'total_device_count': record['total_device_count'],
         'did': record['did'] if record.has_key('did') else None,
         'total_popularize_count': record['total_popularize_count'],
-        'total_app_count': record['total_app_count']
+        'total_app_count': record['total_app_count'],
+        'pici':'1276553gg4',
     }
 
     empty_value = {'code': '', 'name': ''}
@@ -580,13 +586,14 @@ def filter_org_statistics(request, form, offset, length, mode, level):
     records = logs.values(*keys).annotate(total_device_count=Count('did', distinct=True),
                                        total_popularize_count=Sum('popularizeAppCount'),
                                        total_app_count=Sum('appCount'))
-    total = len(records)
+    total = records.count()
+    devices = sum([i['total_device_count'] for i in records])
     records = records[offset: offset + length]
     items = []
     for record in records:
         items.append(org_record_to_dict(record, mode, level))
     #print [i['total_device_count'] for i in items]
-    devices = sum([i['total_device_count'] for i in items])
+
     return simplejson.dumps({
         'ret_code': 0,
         'logs': items,

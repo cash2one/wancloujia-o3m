@@ -1,5 +1,5 @@
 # coding: utf-8
-import logging
+
 import time
 from datetime import datetime
 
@@ -13,7 +13,7 @@ from forms import *
 from suning.decorators import *
 from app import models
 from statistics.models import BrandModel
-
+import logging
 logger = logging.getLogger(__name__)
 
 _invalid_data_msg = u'数据出错，请检查'
@@ -99,7 +99,7 @@ def add_edit_subject(request, form):
     desc = form["desc"] 
     apps = form["apps"]
 
-    if not name or not cover or not apps:
+    if not name or not apps:
         logger("%s: param is invalid", __name__)
         return _invalid_data_json
 

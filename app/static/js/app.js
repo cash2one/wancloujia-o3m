@@ -272,10 +272,12 @@ $(function() {
         $category.html("");
         var options = categories.getOptionsByParentPk(this.value);
         var template = _.template("<option value='<%- pk %>'><%- name %></option>");
+        /*
         $(template({
             pk: "",
             name: "-----"
         })).appendTo($category);
+        */
         _.each(options, function(option) {
             $(template(option)).appendTo($category);
         });

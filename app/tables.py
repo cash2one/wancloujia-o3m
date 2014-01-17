@@ -37,15 +37,12 @@ class AppTable(tables.Table):
         grps = AppGroup.objects.filter(app=record)
         return ", ".join([item.subject.name for item in grps]) if len(grps) > 0 else u'—'
 
-    def render_popularize(self, record):
-        return u'推广' if record.popularize else u'不推广'
-
     def render_online(self, record):
         return u'已上线' if record.online else u'已下线'
 
     class Meta:
         model = App
-        fields = ('name', 'version', 'category', 'popularize', 'online', 'create_date')
+        fields = ('name', 'version', 'category', 'online', 'create_date')
         orderable = False
         attrs = {'class': 'table table-hover table-bordered'}
         empty_text = u'暂无应用'
