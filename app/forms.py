@@ -15,7 +15,7 @@ from statistics.models import BrandModel
 class AppForm(forms.ModelForm):
     package = forms.CharField(widget=forms.HiddenInput)
     app_icon = forms.CharField(label=u'应用图标', widget=AjaxClearableFileInput, required=False)
-
+    desc = forms.CharField(label=u'专题描述', max_length=50,required=False)
     class Meta:
         model = App
         fields = ('version', 'name', 'apk', 'category', 'online', 'popularize', 'desc', 'version_code')
@@ -48,6 +48,7 @@ class SubjectForm(forms.ModelForm):
                                 'rows': 4, 
                                 'class': 'form-control'
                             }))
+    #cover = forms.CharField(label=u'图片', max_length=100, required=False, initial='')
 
     class Meta:
         model = Subject

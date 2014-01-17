@@ -116,6 +116,8 @@ def add_subject(subject, apps, user):
         subject.create_date = datetime.now()
         subject.updator = user
         subject.update_date = datetime.now()
+        if not subject.cover or len(subject.cover) == 0:
+            subject.cover = "/static/img/normalsubj.png"
         subject.save()
         _set_included_apps(subject, apps) 
         _publish_subject(subject.pk)

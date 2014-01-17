@@ -47,6 +47,8 @@ $(function() {
                 }
             },
         }, {
+            sTitle: '批次号'
+        }, {
             sTitle: '账号'
         }, {
             sTitle: '客户端版本'
@@ -75,6 +77,7 @@ $(function() {
                         item.model || '&mdash;',
                         item.device || '&mdash;',
                         item.subject,
+                        item.pici || '&mdash;',
 						item.user,
                         item.client_version || '&mdash;',
                         installed || '&mdash;',
