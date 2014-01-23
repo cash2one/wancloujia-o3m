@@ -2,6 +2,7 @@
 import math
 import logging
 from itertools import chain
+from hashlib import md5
 
 from django.shortcuts import render, redirect
 from django.core.files.images import ImageFile
@@ -66,6 +67,13 @@ class UploadForm(forms.ModelForm):
         fields = ('file',)
 
 
+def _file_md5(path):
+    with open(path, 'rb') as f:
+        m = md5()
+        m.update(f.read())
+        return m.hexdigest()
+
+
 @require_POST
 @login_required(login_url=settings.LOGIN_JSON_URL)
 def upload(request):
@@ -77,6 +85,11 @@ def upload(request):
         return Http404
 
     uploaded_file = form.save()
+    logger.debug("save file");
+    uploaded_file.md5 = _file_md5('/data/nfs_mirror' + uploaded_file.file.path)
+    logger.debug("md5");
+    uploaded_file.save();
+    logger.debug("save md5");
 
     try:
         apk_info = apk.inspect(uploaded_file.file.path)

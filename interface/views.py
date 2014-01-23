@@ -3,7 +3,6 @@ import logging
 import datetime
 import re
 from functools import wraps
-from hashlib import md5
 
 from django.http import HttpResponse
 from django.utils import simplejson
@@ -218,18 +217,11 @@ def echo(request):
     return Response(request.DATA)
 
 
-def _file_md5(path):
-    with open(path, 'rb') as f:
-        m = md5()
-        m.update(f.read())
-        return m.hexdigest()
-
-
 def _get_app(grp):
     app = grp.app
     return {
         "id": app.pk,
-        "md5": _file_md5('/data/nfs_mirror' + app.apk.file.path),
+        "md5": app.apk.md5,
         "package": app.package,
         "name":  app.name,
         "icon": app.app_icon,
