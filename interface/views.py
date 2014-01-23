@@ -24,7 +24,7 @@ from serializers import AppSerializer, SubjectSerializer
 from suning import settings
 from suning import utils
 from interface.models import LogMeta
-from interface.storage import hdfs_storage
+# from interface.storage import hdfs_storage
 from mgr.models import Staff
 from app.models import Subject, App, AppGroup, SubjectMap
 from app.tables import bitsize
@@ -79,32 +79,32 @@ def export(request):
              for i in LogMeta.objects.filter(date=dt)]
     return Response(result)
 
-@api_view(['GET', 'POST'])
-def get_hdfs_file(request, addr):
-    if '..' in addr or '~' in addr:
-        return HttpResponse(status=status.HTTP_404_NOT_FOUND)
-    addr = settings.MEDIA_ROOT + addr
-    offset = 0
-    if 'Range' in request.META:
-        reResult = re.match(r'^bytes=(?P<offset>\d+)', request.META['Range'])
-        if 'offset' in reResult.groupdict() and reResult['offset']:
-            offset = int(reResult.groupdict(['offset']))
-        else:
-            return HttpResponse(status=status.HTTP_404_NOT_FOUND)
-    dfs = hdfs_storage()
-    blks = dfs.enum_file(addr, offset)
-    if 'Range' in request.META:
-        result = HttpResponse(blks, status=206)
-        result['Content-Range'] = 'bytes %ld-%ld/%ld' % (blks.offset, blks.size - 1 if blks.size - 1 >= 0 else 0,
-                                                         blks.size)
-        result['Content-Length'] = str(blks.remain)
-        result['Content-Type'] = 'application/octet-stream'
-        return result
-    else:
-        result = HttpResponse(blks)
-        result['Content-Length'] = str(blks.remain)
-        result['Content-Type'] = 'application/octet-stream'
-        return result
+# @api_view(['GET', 'POST'])
+# def get_hdfs_file(request, addr):
+#     if '..' in addr or '~' in addr:
+#         return HttpResponse(status=status.HTTP_404_NOT_FOUND)
+#     addr = settings.MEDIA_ROOT + addr
+#     offset = 0
+#     if 'Range' in request.META:
+#         reResult = re.match(r'^bytes=(?P<offset>\d+)', request.META['Range'])
+#         if 'offset' in reResult.groupdict() and reResult['offset']:
+#             offset = int(reResult.groupdict(['offset']))
+#         else:
+#             return HttpResponse(status=status.HTTP_404_NOT_FOUND)
+#     dfs = hdfs_storage()
+#     blks = dfs.enum_file(addr, offset)
+#     if 'Range' in request.META:
+#         result = HttpResponse(blks, status=206)
+#         result['Content-Range'] = 'bytes %ld-%ld/%ld' % (blks.offset, blks.size - 1 if blks.size - 1 >= 0 else 0,
+#                                                          blks.size)
+#         result['Content-Length'] = str(blks.remain)
+#         result['Content-Type'] = 'application/octet-stream'
+#         return result
+#     else:
+#         result = HttpResponse(blks)
+#         result['Content-Length'] = str(blks.remain)
+#         result['Content-Type'] = 'application/octet-stream'
+#         return result
 
 
 @csrf_exempt
