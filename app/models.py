@@ -39,9 +39,10 @@ class App(models.Model):
         return self.online
 
     def size(self):
-        import interface.storage
-        dfs = interface.storage.hdfs_storage()
-        return dfs.size(self.apk.file.path)
+        #import interface.storage
+        #dfs = interface.storage.hdfs_storage()
+        #return dfs.size(self.apk.file.path)
+        return os.path.getsize(self.apk.file.path)
 
     def __unicode__(self):
         return self.name

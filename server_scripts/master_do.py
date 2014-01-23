@@ -12,9 +12,9 @@ hadooppath = '/opt/hadoop/hadoop-2.2.0'
 jobpath = '/home/songwei/logCount/'
 
 #设置web hdfs的位置
-hdfshost = 'dev-node1.limijiaoyin.com'
-hdfsuser = 'songwei'
-hdfsport = 50070
+# hdfshost = 'dev-node1.limijiaoyin.com'
+# hdfsuser = 'songwei'
+# hdfsport = 50070
 
 #是否删除hdfs上各个机器保留的日志片段
 remove_logs = False
@@ -44,23 +44,23 @@ import json
 import datetime
 import os
 import HTMLParser
-from pyhdfs import hdfs
+# from pyhdfs import hdfs
 print "end load modules"
-hdfs.setConfig(hostname=hdfshost, port=str(hdfsport), username=hdfsuser)
+# hdfs.setConfig(hostname=hdfshost, port=str(hdfsport), username=hdfsuser)
 db = _mysql.connect(host=dbhost, user=dbuser, passwd=dbpass, db=dbname)
 #scan hadoop fld
-def scanHdfsFiles(pwd='/data', acc=[]):
-    result = hdfs.listDirectory(pwd)
-    dirs = []
-    files = []
-    for i in result:
-        if i.fileType == 'DIRECTORY':
-            dirs.append(i.path)
-        else:
-            files.append(i.path)
-    acc += files
-    for i in dirs:
-        scanHdfsFiles(i, acc)
+# def scanHdfsFiles(pwd='/data', acc=[]):
+#     result = hdfs.listDirectory(pwd)
+#     dirs = []
+#     files = []
+#     for i in result:
+#         if i.fileType == 'DIRECTORY':
+#             dirs.append(i.path)
+#         else:
+#             files.append(i.path)
+#     acc += files
+#     for i in dirs:
+#         scanHdfsFiles(i, acc)
 
 
 #apks/
@@ -113,7 +113,7 @@ def scan_ref_subject_icon_files():
     return acc
 print "begin cleanup"
 files = []
-scanHdfsFiles(acc=files)
+# scanHdfsFiles(acc=files)
 tmp = {}
 for i in files:
     tmp[i.encode('utf8')] = True
@@ -136,7 +136,7 @@ files = sorted(files)
 for i in files:
 	try:
 		print i
-		hdfs.remove(i, True)
+		# hdfs.remove(i, True)
 	except:
 		pass
 

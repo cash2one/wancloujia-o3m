@@ -27,7 +27,7 @@ from forms import LogMetaFilterForm, InstalledCapacityFilterForm
 from forms import OrganizationStatForm, DeviceStatForm
 from ajax import filter_flow_logs, log_to_dict, device_record_to_dict
 from ajax import filter_installed_capacity_logs, installed_capacity_to_dict
-from statistics.models import BrandModel
+from statistics.models import BrandModel, DID
 from ajax import stat_device, filter_org_logs, org_record_to_dict, available_levels
 from ajax import titles_for_org_stat
 
@@ -223,10 +223,10 @@ def devices(request):
     q = request.GET.get('q', '')
     p = int(request.GET.get('p', '1'))
     
-    logs = BrandModel.objects.all()
-    logs = logs.filter(brand=b) if b else logs
-    logs = logs.filter(model=m) if m else logs
-    logs = logs.filter(did__startswith=q)
+    logs = DID.objects.all()
+    #logs = logs.filter(brand=b) if b else logs
+    #logs = logs.filter(model=m) if m else logs
+    #logs = logs.filter(did__startswith=q)
     devices = logs.values_list('did', flat=True).distinct()
     return render_json({
         'more': len(devices) > p * LENGTH,
@@ -318,7 +318,7 @@ def flow_excel(request):
     sheet = book.add_sheet(u'流水统计')
     default_style = xlwt.Style.default_style
     #date_style = xlwt.easyxf(num_format_str='yyyy-mm-dd')
-    titles = [u'日期', u'机型', u'IMEI', u'应用专题', u'账号', u'客户端版本', u'是否加工成功']
+    titles = [u'日期', u'机型', u'IMEI', u'应用专题', u'批次号', u'账号', u'客户端版本', u'是否加工成功']
     for i, title in enumerate(titles):
         sheet.write(0, i, title, style=default_style)
 
@@ -340,6 +340,7 @@ def flow_excel(request):
             dict['model'] or h.unescape(EMPTY_VALUE),
             dict['device'] or h.unescape(EMPTY_VALUE),
             subject['name'] or h.unescape(EMPTY_VALUE),
+            dict['pici'] or h.unescape(EMPTY_VALUE),
             dict['user'] or h.unescape(EMPTY_VALUE),
             dict['client_version'] or h.unescape(EMPTY_VALUE),
             installed,

@@ -24,7 +24,7 @@ from app.forms import AppForm, SubjectForm, SubjectMapModelForm, SubjectMapMemSi
 from app.forms import SubjectMapFilterForm
 from app.tables import AppTable, SubjectTable, SubjectMapTable
 from suning.decorators import active_tab
-from interface.storage import hdfs_storage
+#from interface.storage import hdfs_storage
 from statistics.models import BrandModel
 import apk
 import os
@@ -84,8 +84,8 @@ def upload(request):
 
     try:
         apk_info = apk.inspect(uploaded_file.file.path)
-        dfs = hdfs_storage()
-        dfs.create(uploaded_file.file.path, uploaded_file.file.path)
+        #dfs = hdfs_storage()
+        #dfs.create(uploaded_file.file.path, uploaded_file.file.path)
     except Exception as e:
         logger.exception(e)
         return HttpResponse(simplejson.dumps({
@@ -99,7 +99,7 @@ def upload(request):
         sub_path = default_storage.save(path, ImageFile(f))
         key_path = settings.MEDIA_ROOT + "/" + sub_path
         holder['icon_url'] = settings.MEDIA_URL + sub_path
-        dfs.create(key_path, key_path)
+        #dfs.create(key_path, key_path)
     apk.read_icon(uploaded_file.file.path, copy_icon)
     app_dict = {
         'ret_code': 0,

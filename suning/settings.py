@@ -2,7 +2,7 @@
 # Django settings for suning project.
 import os
 
-from pyhdfs import hdfs
+# from pyhdfs import hdfs
 
 DEBUG = True
 #DEBUG = True
@@ -19,8 +19,8 @@ MANAGERS = ADMINS
 DATABASE_ENGINE = 'mysql'
 DATABASE_HOST = 'localhost'
 DATABASE_PORT = '3306'
-DATABASE_USER = 'root'
-DATABASE_PASSWORD = 'nameLR9969'
+DATABASE_USER = 'suningwdj'
+DATABASE_PASSWORD = 'suningwdj'
 DATABASE_NAME = 'tianyin'
 
 DATABASES = {
@@ -35,13 +35,13 @@ DATABASES = {
     }
 }
 
-HDFS_CONFIG = {
-    'username': 'songwei', #HDFS linux owner username
-    'hostname': 'localhost', #HDFS web host name
-    'port': '50070' #HDFS web port
-}
-
-hdfs.setConfig(**HDFS_CONFIG)
+# HDFS_CONFIG = {
+#     'username': 'songwei', #HDFS linux owner username
+#     'hostname': 'localhost', #HDFS web host name
+#     'port': '50070' #HDFS web port
+# }
+#
+# hdfs.setConfig(**HDFS_CONFIG)
 
 CACHES = {
     'default': {
@@ -299,12 +299,12 @@ LOGGING = {
 }
 
 
-if not DEBUG:
-    import django.core.files.storage
-    import interface.storage
-    storage = interface.storage.hdfs_storage()
-    django.core.files.storage.default_storage.listdir = storage.listdir
-    django.core.files.storage.default_storage.exist = storage.exist
-    django.core.files.storage.default_storage.delete = storage.delete
+# if not DEBUG:
+#     import django.core.files.storage
+#     import interface.storage
+#     storage = interface.storage.hdfs_storage()
+#     django.core.files.storage.default_storage.listdir = storage.listdir
+#     django.core.files.storage.default_storage.exist = storage.exist
+#     django.core.files.storage.default_storage.delete = storage.delete
     #DEFAULT_FILE_STORAGE = 'interface.storage.hdfs_storage'
 
