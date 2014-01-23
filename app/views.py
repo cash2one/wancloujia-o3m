@@ -3,10 +3,6 @@ import math
 import logging
 from itertools import chain
 from hashlib import md5
-<<<<<<< HEAD
-
-=======
->>>>>>> 69063faa5c052d2161b64b0e48c42069c43442ab
 from django.shortcuts import render, redirect
 from django.core.files.images import ImageFile
 from django.core.files.storage import default_storage        
@@ -93,17 +89,11 @@ def upload(request):
         return Http404
     uploaded_file = form.save()
     logger.debug("save file");
-    uploaded_file.md5 = _file_md5('/data/nfs_mirror' + uploaded_file.file.path)
+    uploaded_file.md5 = _file_md5(uploaded_file.file.path)
     logger.debug("md5");
     uploaded_file.save();
     logger.debug("save md5");
-    uploaded_file = form.save()
-    logger.debug("save file");
-    uploaded_file.md5 = _file_md5('/data/nfs_mirror' + uploaded_file.file.path)
-    logger.debug("md5");
-    uploaded_file.save();
-    logger.debug("save md5");
-
+    
     try:
         apk_info = apk.inspect(uploaded_file.file.path)
         #dfs = hdfs_storage()
