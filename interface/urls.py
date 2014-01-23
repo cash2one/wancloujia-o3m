@@ -10,6 +10,6 @@ urlpatterns = patterns('interface.views',
 
     url(r'^subjects/(?P<id>\d+)$', "apps"),
     url(r'^subjects', 'subjects'),
-    url(r'^(?P<addr>/\S+)', 'get_hdfs_file'),
+    #url(r'^(?P<addr>/\S+)', 'get_hdfs_file'),
     url(r'^feedback', 'feedback')
 )

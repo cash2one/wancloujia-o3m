@@ -1,9 +1,9 @@
 #!/usr/bin/env python
-dbhost = 'dev-node1.limijiaoyin.com'
+dbhost = '10.19.221.11'
 dbport = 3306
-dbuser = 'root'
-dbpass = 'nameLR9969'
-dbname = 'suning'
+dbuser = 'suningwdj'
+dbpass = 'suningwdj'
+dbname = 'suningwdj'
 
 import _mysql
 import sys

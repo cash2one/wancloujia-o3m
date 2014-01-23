@@ -11,7 +11,12 @@ logger = logging.getLogger(__name__)
 
 class UploadApk(models.Model):
     file = models.FileField(upload_to='apks/%Y/%m/%d')
+<<<<<<< HEAD
     md5 = models.CharField(max_length=255, editable=False)
+=======
+    md5 = models.CharField(max_length=32, null=True)
+
+>>>>>>> 69063faa5c052d2161b64b0e48c42069c43442ab
 
 
 class Category(models.Model):
@@ -35,14 +40,14 @@ class App(models.Model):
     create_date = models.DateTimeField(verbose_name=u'创建时间', auto_now_add=True)
     online = models.BooleanField(verbose_name=u'是否上线')
     desc = models.CharField(verbose_name=u'应用描述', max_length=50, null=True)
-
     def available(self):
         return self.online
 
     def size(self):
-        import interface.storage
-        dfs = interface.storage.hdfs_storage()
-        return dfs.size(self.apk.file.path)
+        return os.path.getsize(self.apk.file.path)
+        #import interface.storage
+        #dfs = interface.storage.hdfs_storage()
+        #return dfs.size(self.apk.file.path)
 
     def __unicode__(self):
         return self.name

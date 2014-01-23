@@ -6,11 +6,9 @@ django-parsley
 django-crontab
 django-auth-remember
 python-memcached
-pil
 djangorestframework
 redis
 jinja2
 django-filter
-pysqlite
 xlwt
 django-mysqlpool

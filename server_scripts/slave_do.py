@@ -1,3 +1,4 @@
+#coding: utf-8
 # config begin
 #debug = True表示把现在(今天)的日志进行收集,False表示拿昨天的日志进行收集
 #另外的 debug =False会在处理动作的最后删除本机原始的日志
@@ -5,9 +6,13 @@ debug = True  # True->windows2x.log, false->windows2x.log.<lastday>
 #server_id是一个用来标识上传到hdfs的本机已处理好的日志的id,免得跟其他节点上传的日志名字重复
 server_id = "1"
 #logdir是log产生的目录位置
-logdir = "/data/suning/logs"
+logdir = "/opt/suning/logs"
 #tmpdir是用来指定在本机过滤日志的地方(目录)
-tmpdir = "/data/suning/logs"
+tmpdir = "/opt/suning/logs"
+remove_old_log = False
+#fix
+#最终放置此节点log的地方
+targetdir = "/data/logs"
 # config over
 ###################################################
 ###################################################
@@ -73,26 +78,22 @@ fp.close()
 fp2.close()
 
 ###################################
-# 本机结果上传到hdfs
+# 本机结果上传到hdfs  # fix nfs
 ###################################
 if debug == True:
     lastDay = datetime.date.today()
 else:
     lastDay = datetime.date.today() - datetime.timedelta(days=1)
 file_dst_hdfs = "windows2x.log.%s" % (lastDay.isoformat(),)
-app_cmd = '/opt/hadoop/hadoop-2.2.0/bin/hadoop fs -put -f %s /logs/ %s.%s && rm %s' % \
-    (file_tmp, file_dst_hdfs, server_id, file_tmp,)
+
+# app_cmd = '/opt/hadoop/hadoop-2.2.0/bin/hadoop fs -put -f %s /logs/ %s.%s && rm %s' % \
+app_cmd = r'cp %s %s\%s.%s && rm %s' % \
+    (file_tmp, targetdir, file_dst_hdfs, server_id, file_tmp,)
 os.popen(app_cmd)
 
 ###################################
 # 删除本机原有的日志文件
 ###################################
-if debug:
-    pass
-	#file = "/data/suning/logs/windows2x.log"
-else:
-	lastDay = datetime.date.today() - datetime.timedelta(days=1)
-	#file = "/data/suning/logs/windows2x.log.%s" % (lastDay.isoformat(),)
+if remove_old_log:
     os.popen('rm ' + file)
-
 
