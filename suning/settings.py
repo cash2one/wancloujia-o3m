@@ -4,11 +4,6 @@ import os
 #import mongoengine
 #from pyhdfs import hdfs
 
-<<<<<<< HEAD
-from pyhdfs import hdfs
-
-=======
->>>>>>> 69063faa5c052d2161b64b0e48c42069c43442ab
 #DEBUG = False
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
