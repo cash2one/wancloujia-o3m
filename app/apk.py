@@ -58,6 +58,7 @@ class ApkInfo():
         return self.targetSdkVersion
 
 
+
 def _parsePkgInfo(apk_info, text):
     matches = _version_pattern.findall(text)
     if len(matches) == 0:

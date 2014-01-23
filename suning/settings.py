@@ -1,11 +1,11 @@
 #coding: utf-8
 # Django settings for suning project.
 import os
+#import mongoengine
+#from pyhdfs import hdfs
 
-from pyhdfs import hdfs
-
-DEBUG = False
-#DEBUG = True
+#DEBUG = False
+DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
@@ -17,11 +17,11 @@ EMPTY_VALUE = '&mdash;'
 MANAGERS = ADMINS
 
 DATABASE_ENGINE = 'mysql'
-DATABASE_HOST = 'localhost'
+DATABASE_HOST = '10.19.221.11'
 DATABASE_PORT = '3306'
-DATABASE_USER = 'root'
-DATABASE_PASSWORD = 'nameLR9969'
-DATABASE_NAME = 'suning'
+DATABASE_USER = 'suningwdj'
+DATABASE_PASSWORD = 'suningwdj'
+DATABASE_NAME = 'suningwdj'
 
 DATABASES = {
     'default': {
@@ -32,16 +32,29 @@ DATABASES = {
         'PASSWORD': DATABASE_PASSWORD,
         'HOST': DATABASE_HOST,                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
         'PORT': DATABASE_PORT,                      # Set to empty string for default.
-    }
+    },
+    # 'gridfs': {
+    #     'ENGINE': 'django_mongodb_engine',
+    #     'NAME': 'fs',
+    #     'USER': '',
+    #     'PASSWORD': '',
+    #     'HOST': 'localhost',
+    #     'PORT': 27017,
+    #     'SUPPORTS_TRANSACTIONS': False,
+    # },
 }
 
-HDFS_CONFIG = {
-    'username': 'songwei', #HDFS linux owner username
-    'hostname': 'dev-node1.limijiaoyin.com', #HDFS web host name
-    'port': '50070' #HDFS web port
-}
 
-hdfs.setConfig(**HDFS_CONFIG)
+# DEFAULT_FILE_STORAGE = 'django_mongodb_engine.storage.GridFSStorage'
+# GRIDFS_DATABASE = 'gridfs'
+#mongoengine.connect('gridfs')
+#HDFS_CONFIG = {
+#    'username': 'songwei', #HDFS linux owner username
+#    'hostname': 'dev-node1.limijiaoyin.com', #HDFS web host name
+#    'port': '50070' #HDFS web port
+#}
+
+#hdfs.setConfig(**HDFS_CONFIG)
 
 CACHES = {
     'default': {
@@ -212,6 +225,7 @@ INSTALLED_APPS = (
     'django_crontab',
     'parsley',
     'auth_remember',
+    # 'django_mongodb_engine',
 )
 
 AUTH_REMEMBER_COOKIE_NAME = 'remember_token'
@@ -298,13 +312,17 @@ LOGGING = {
     }
 }
 
-
-if not DEBUG:
-    import django.core.files.storage
-    import interface.storage
-    storage = interface.storage.hdfs_storage()
-    django.core.files.storage.default_storage.listdir = storage.listdir
-    django.core.files.storage.default_storage.exist = storage.exist
-    django.core.files.storage.default_storage.delete = storage.delete
+# import django
+# from django_mongodb_engine.storage import GridFSStorage
+# if True:
+#     django.core.files.storage.default_storage = GridFSStorage(database='gridfs', location='/')
+if False:
+    pass
+    #import django.core.files.storage
+    #import interface.storage
+    #storage = interface.storage.hdfs_storage()
+    #django.core.files.storage.default_storage.listdir = storage.listdir
+    #django.core.files.storage.default_storage.exist = storage.exist
+    #django.core.files.storage.default_storage.delete = storage.delete
     #DEFAULT_FILE_STORAGE = 'interface.storage.hdfs_storage'
 

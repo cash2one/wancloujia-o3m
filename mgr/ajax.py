@@ -246,13 +246,13 @@ def add_edit_store(request, form):
 def delete_organization(request, id):
     model = Organization.objects.get(pk=id)
     model = model.cast()
-    model.delete()
     if type(model) == Region:
         __remove_region(model, request.user.username)
     elif type(model) == Company:
         __remove_company(model, request.user.username)
     elif type(model) == Store:
         __remove_store(model, request.user.username)
+    model.delete()
     return _ok_json
 
 

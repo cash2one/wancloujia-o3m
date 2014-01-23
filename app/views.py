@@ -2,7 +2,7 @@
 import math
 import logging
 from itertools import chain
-
+from hashlib import md5
 from django.shortcuts import render, redirect
 from django.core.files.images import ImageFile
 from django.core.files.storage import default_storage        
@@ -21,7 +21,12 @@ from app.models import App, UploadApk, Subject
 from app.forms import AppForm, SubjectForm
 from app.tables import AppTable, SubjectTable
 from suning.decorators import active_tab
-from interface.storage import hdfs_storage
+#from interface.storage import hdfs_storage
+def _file_md5(path):
+     with open(path, 'rb') as f:
+         m = md5()
+         m.update(f.read())
+         return m.hexdigest()
 import apk
 import os
 
@@ -75,13 +80,18 @@ def upload(request):
         logger.warn("%s: form is invalid" % __name__)
         logger.warn(form.errors)
         return Http404
-
+    uploaded_file = form.save()
+    logger.debug("save file");
+    uploaded_file.md5 = _file_md5('/data/nfs_mirror' + uploaded_file.file.path)
+    logger.debug("md5");
+    uploaded_file.save();
+    logger.debug("save md5");
     uploaded_file = form.save()
 
     try:
         apk_info = apk.inspect(uploaded_file.file.path)
-        dfs = hdfs_storage()
-        dfs.create(uploaded_file.file.path, uploaded_file.file.path)
+        #dfs = hdfs_storage()
+        #dfs.create(uploaded_file.file.path, uploaded_file.file.path)
     except Exception as e:
         logger.exception(e)
         return HttpResponse(simplejson.dumps({
@@ -95,7 +105,7 @@ def upload(request):
         sub_path = default_storage.save(path, ImageFile(f))
         key_path = settings.MEDIA_ROOT + "/" + sub_path
         holder['icon_url'] = settings.MEDIA_URL + sub_path
-        dfs.create(key_path, key_path)
+        #dfs.create(key_path, key_path)
     apk.read_icon(uploaded_file.file.path, copy_icon)
     app_dict = {
         'ret_code': 0,
