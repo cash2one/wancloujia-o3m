@@ -9,7 +9,15 @@
         <label class="col-lg-3 control-label">
             <span class="required">*</span>{{ f.username.label }}
         </label>
-        <div class="col-lg-8"> {{ f.username }} </div>
+        <div class="col-lg-8"> 
+            <input id="id_username" maxlength="30" name="username" 
+                    parsley-maxlength="30" 
+                    parsley-required="true" 
+                    parsley-required-message="这个字段是必填项。" 
+                    parsley-regexp="^[a-zA-Z0-9.\-_]{5,30}$" 
+                    parsley-regexp-message="格式不正确，限制为5-30个英文、数字和.-_字符"
+                    type="text">
+         </div>
     </div>
     <div class="form-group">
         <label class="col-lg-3 control-label">
