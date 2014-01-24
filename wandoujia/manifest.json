@@ -19,5 +19,5 @@
         },
         "navigation": []
     },
-    "privacy_permissions": ["device", "social"]
+    "privacy_permissions": ["device", "social", "jobs"]
 }

@@ -17,11 +17,11 @@ EMPTY_VALUE = '&mdash;'
 MANAGERS = ADMINS
 
 DATABASE_ENGINE = 'mysql'
-DATABASE_HOST = '10.19.221.11'
+DATABASE_HOST = 'localhost'
 DATABASE_PORT = '3306'
-DATABASE_USER = 'suningwdj'
-DATABASE_PASSWORD = 'suningwdj'
-DATABASE_NAME = 'suningwdj'
+DATABASE_USER = 'root'
+DATABASE_PASSWORD = 'nameLR9969'
+DATABASE_NAME = 'suning'
 
 DATABASES = {
     'default': {

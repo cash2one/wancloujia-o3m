@@ -36,6 +36,7 @@
 									{{ app.version }}&nbsp;&nbsp;{{ app.size }}
 								</span>
                                 <a  data-id="{{ app.id }}" download="{{ app.name }}.apk" 
+                                    data-icon="http://{{ request.META.HTTP_HOST }}{{ app.icon }}"
                                     class="btn install-link"
                                     data-package="{{ app.package }}" 
                                     href="{{ MEDIA_URL }}{{ app.apk }}?md5={{ app.md5 }}#name={{ app.name }}&icon=http://{{ request.META.HTTP_HOST }}{{ app.icon }}&content-type=application" >安装</a>
@@ -70,6 +71,8 @@
         }
         return result;
     }
+
+    requirejs(["Narya", "IO/IO"], function(narya, IO) {
 
     $(function() {
         var $appList = $(".app-list");
@@ -161,6 +164,59 @@
             Log(log);
         });
 
+        function _type(type) {
+            return type == 1 || type == 3 ? "install" : "unkown";
+        }
+
+        function _state(state) {
+            var result = "unkown";
+            switch(state) {
+                case 4:
+                    result = "success";
+                    break;
+                case 5:
+                case 6:
+                    result = "failed";
+                    break;
+            }
+
+            return result;
+        }
+
+        IO.onmessage({
+            "data.channel": "jobs.stop"
+        }, function(result) {
+            var data = result.status[0];
+            console.log(data.state, _state(data.state));
+            console.log(data.type, _type(data.type));
+
+            if (_type(data.type) === 'unkown' ||
+                _state(data.state) !== 'success') {
+                return;
+            }
+
+            $appList.find("a.install-link").each(function() {
+                var $this = $(this);
+                if ($this.data("icon") !== data.icon) {
+                    return;
+                }
+
+                var username = $(".user-area > .username").html();
+                var appid = $this.data("id");
+                var package = $this.data("package");
+                var log = {
+                    event: "install.success", 
+                    user: username, 
+                    app: appid, 
+                    package: package, 
+                    brand: get_brand(), 
+                    model: get_model()
+                };
+                console.log(log);
+                Log(log);
+            });
+        });
+
         $install.click(function() {
             var linkEls = $appList.find(".app.selected a.install-link").toArray();
             _.each(linkEls, function(el) {
@@ -176,6 +232,7 @@
             });
             */
         });
+    });
     });
     </script>
         <!--
