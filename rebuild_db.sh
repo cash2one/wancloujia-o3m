@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DBNAME=suning
+DBNAME=suningwdj
 
 sql=$(cat <<-EOF
 drop database $DBNAME;
@@ -9,7 +9,7 @@ EOF
 )
 
 echo "clear database" && 
-echo $sql | mysql --user=root --password=nameLR9969 &&
+echo $sql | mysql --user=suningwdj --password=suningwdj -h10.19.221.11 &&
 
 echo "synchroize db" &&
 ./manage.py syncdb --noinput --traceback &&

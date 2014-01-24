@@ -36,7 +36,8 @@ else:
 	file = logdir + "/windows2x.log.%s" % (lastDay.isoformat(),)
 
 headerRE = re.compile(r"^\[windows2x\](?P<header>.*)")
-contentRE = re.compile(r"(?P<type>[a-zA-Z0-9_\.]+)\s(?P<content>\S+)\t\d+")
+#contentRE = re.compile(r"(?P<type>[a-zA-Z0-9_\.]+)\t(?P<content>\S+)\t\d+")
+contentRE = re.compile(r"^install\s(?P<content>[^\t]+)\s\d+")
 
 #os.popen("dos2unix " + file)
 
@@ -52,11 +53,9 @@ def remap_log_content(content):
 		resultdict = result.groupdict()
 	else:
 		resultdict = None
-	if resultdict and "type" in resultdict and "content" in resultdict:
-		if resultdict['type'] != "install":
-			return
+	if resultdict and "content" in resultdict:
 		j =json.loads(resultdict['content'])
-		j["log_type"] = resultdict['type']
+		j["log_type"] = 'install'
 		encodedjson = json.dumps(j)
 		fp2.write(encodedjson + "\n")
 
@@ -70,6 +69,8 @@ for i in fp.readlines():
         if resultdict and "header" in resultdict:
             pass #new log header
         else:
+            if i.index('install') == 0:
+                pass
             remap_log_content(i)
     except:
         pass
@@ -87,7 +88,7 @@ else:
 file_dst_hdfs = "windows2x.log.%s" % (lastDay.isoformat(),)
 
 # app_cmd = '/opt/hadoop/hadoop-2.2.0/bin/hadoop fs -put -f %s /logs/ %s.%s && rm %s' % \
-app_cmd = r'cp %s %s\%s.%s && rm %s' % \
+app_cmd = r'cp %s %s/%s.%s && rm %s' % \
     (file_tmp, targetdir, file_dst_hdfs, server_id, file_tmp,)
 os.popen(app_cmd)
 
