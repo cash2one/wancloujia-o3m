@@ -11,8 +11,8 @@ body {
 	margin-top: 0;
 }
 
-@media screen {
-	.select2-drop {
-		z-index: 999 !important;
-	}
+@media screen{
+.select2-drop{
+z-index:10028 !important;
+}
 }
