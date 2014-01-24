@@ -1,7 +1,7 @@
 all: runserver
 
 TEST_APPS=mgr statistics
-PORT=13010
+PORT=11111
 
 runserver:
 	nohup ./manage.py runserver $(PORT) &
