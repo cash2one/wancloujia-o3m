@@ -82,7 +82,7 @@ def upload(request):
         return Http404
     uploaded_file = form.save()
     logger.debug("save file");
-    uploaded_file.md5 = _file_md5('/data/nfs_mirror' + uploaded_file.file.path)
+    uploaded_file.md5 = _file_md5(uploaded_file.file.path)
     logger.debug("md5");
     uploaded_file.save();
     logger.debug("save md5");

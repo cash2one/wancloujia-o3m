@@ -4,6 +4,8 @@ dbport = 3306
 dbuser = 'suningwdj'
 dbpass = 'suningwdj'
 dbname = 'suningwdj'
+debug = True
+
 
 import _mysql
 import sys
@@ -108,7 +110,7 @@ map = map_staff(staffs, regions, companys, stores)
 apps = read_app()
 #print map
 import datetime
-lastDay = datetime.date.today() - datetime.timedelta(days=0)
+lastDay = datetime.date.today() - datetime.timedelta(days=0 if debug else 1)
 
 existed = set()
 db.query("DELETE FROM interface_installedapplogentity WHERE date ='%s';" % (lastDay.isoformat()))
