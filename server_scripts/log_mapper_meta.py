@@ -4,7 +4,7 @@ dbport = 3306
 dbuser = 'suningwdj'
 dbpass = 'suningwdj'
 dbname = 'suningwdj'
-
+debug = True  #true->today false->last day 
 import _mysql
 import sys
 import HTMLParser
@@ -127,7 +127,7 @@ map = map_staff(staffs, regions, companys, stores)
 brandmodel = read_brand_model()
 import datetime
 
-lastDay = datetime.date.today() - datetime.timedelta(days=0)
+lastDay = datetime.date.today() - datetime.timedelta(days=0 if debug else 1)
 for line in sys.stdin:
     try:
         j = json.loads(line)
