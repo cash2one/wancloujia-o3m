@@ -55,6 +55,19 @@
         var $empty = $("#empty");
         var $loading = $("#loading");
 
+        var count = 0;
+
+        function sequence(callback, current) {
+            return function() {
+                console.log("current", current, "count", count);
+                if (count != current) {
+                    return;
+                }
+
+                callback.apply(null, arguments);
+            }
+        }
+
         function refreshSubjects() {
             var connected = Narya.Device.get("isConnected");
             console.log("connected?", connected);
@@ -69,28 +82,36 @@
             }
             console.log("model", model, "size", size);
 
-            $loading.show();
-            $subjects.empty();
-            $.get("/interface/getSubjects", {
-                model: model,
-                size: size
-            }, "json").done(function(data) {
-                //setTimeout(function() {
+            function getSubjects(model, size, callback) {
+                $.get("/interface/getSubjects", {
+                    model: model,
+                    size: size
+                }, "json").done(function(data) {
+                    if (data.ret_code != 0) {
+                        return callback("error");
+                    }
 
+                    callback(null, data);
+                }).fail(function() {
+                    callback("error");
+                });
+            };
+
+            $loading.show();
+            $subjects_wrap.hide();
+            count++;
+            getSubjects(model, size, sequence(function(err, data) {
                 $loading.hide();
-                if (data.ret_code != 0) {
-                    $empty.html("加载失败，请刷新重试！");
-                    $empty.show();
-                    return;
+
+                if (err) {
+                    return $empty.html("加载失败，请刷新重试！").show();
                 }
 
                 if(data.subjects.length === 0) {
-                    $subjects_wrap.hide();
-                    $empty.html("暂无应用专题");
-                    $empty.show();
-                    return;
-                } 
-               
+                    return $empty.html("暂无应用专题").show();
+                }
+
+                $subjects.empty();
                 _.each(data.subjects, function(subject) {
                     var html = subject_template({
                         subject: subject
@@ -98,16 +119,13 @@
                     $(html).appendTo($subjects);
                 });
                 $subjects_wrap.show();
-
-                //}, 8000);
-            }).fail(function() {
-                $loading.hide();
-                $empty.html("加载失败，请刷新重试！");
-                $empty.show();
-            });
+            }, count));
         }
 
-        Narya.Device.on('change:isConnected', refreshSubjects);
+        Narya.Device.on('change:isConnected', function() {
+            console.log("connection changed");
+            refreshSubjects();
+        });
         refreshSubjects();
     });
     });
