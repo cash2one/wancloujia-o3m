@@ -2,6 +2,7 @@ all: run
 
 TEST_APPS=mgr statistics
 PORT=11112
+#PORT=13010
 DEBUG_PORT=11111
 
 run:
