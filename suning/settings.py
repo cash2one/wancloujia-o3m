@@ -5,7 +5,7 @@ import os
 # from pyhdfs import hdfs
 
 DEBUG = True
-#DEBUG = True
+#DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
