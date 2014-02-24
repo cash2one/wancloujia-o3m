@@ -162,6 +162,8 @@ def logout(request):
 
 @require_GET
 def subjects(request):
+    logger = logging.getLogger('default')
+    logger.debug("!!!media root: " + settings.MEDIA_ROOT)
     return render(request, "wandoujia/subjects.html")
 
 
