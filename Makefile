@@ -21,10 +21,10 @@ rebuild_db:
 	./rebuild_db.sh
 
 collectstatic:
-	./manage.py collectstatic
+	./manage.py collectstatic --noinput
 
 restart_nginx:
-	/sbin/service nginx restart
+	sudo /sbin/service nginx restart
 
 deploy_static: collectstatic restart_nginx
 

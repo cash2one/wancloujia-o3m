@@ -89,9 +89,7 @@
 
     apps.countFinished = function() {
         return _.reduce(this.list, function(count, app) {
-            if (app.status === SUCCESS) {
-                return ++count;
-            }
+            return app.status === SUCCESS ? ++count : count;
         }, 0);
     };
 
@@ -158,12 +156,13 @@ function _log(event) {
 }
 
 function _ready(callback) {
-    require(["Narya", "IO/IO"], function(Narya, IO) {
+    require(["Narya", "IO/IO"], function(__, IO) {
         $(function() {
             callback(Narya, IO);
         });
     });
 }
+
 
 _ready(function(Narya, IO) {
     username = $(".user-area > .username").html();
@@ -171,7 +170,24 @@ _ready(function(Narya, IO) {
     apps.load();
     show_tip();
 
-    var status = "init";
+    var installer = {
+        INIT: "init",
+        PROCESSING: "processing",
+        FAILED: "failed",
+        SUCCESS: "success"
+    };
+
+    installer.status = installer.INIT;
+    installer.onProcess = function(func) {
+        var that = this;
+        return function(result) {
+            if(that.status !== that.PROCESSING) {
+                return console.log("install is not processing, ignore it!");
+            }
+            
+            func && func(result);
+        };
+    };
 
     var $install = $("#install");
     var appStatuses = null;
@@ -185,22 +201,9 @@ _ready(function(Narya, IO) {
             el.click();
         });
 
-        status = "pending";
+        installer.status = installer.PROCESSING;
         apps.startAll();
     });
-
-    var eventMap = {};
-
-    function _map_event(callback) {
-        return function(result) {
-            if (eventMap["" + result.last_update]) {
-                return;
-            }
-
-            eventMap["" + result.last_update] = 1;
-            callback(result);
-        }
-    }
 
     function onTaskStatusChanged() {
         if (apps.isPending()) {
@@ -220,26 +223,22 @@ _ready(function(Narya, IO) {
         }
     }
 
-    function on_pending(func) {
-        return function() {
-            if (status !== "processing") {
-                return;
-            }
-
-            func && func.apply(null, arguments);
-        }
-    }
+    IO.onmessage({
+        "data.channel": "apps.installed"
+    }, function(result) {
+        console.log("apps installed", result);
+    });
 
     IO.onmessage({
         "data.channel": "apps.install.success"
-    }, on_pending(function(result) {
+    }, installer.onProcess(function(result) {
         apps.success(result.package_name);
         onTaskStatusChanged();
     }));
 
     IO.onmessage({
         "data.channel": "apps.install.failed"
-    }, on_pending(function(result) {
+    }, installer.onProcess(function(result) {
         apps.fail(result.package_name);
         onTaskStatusChanged();
     }));
