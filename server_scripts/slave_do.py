@@ -1,3 +1,5 @@
+#coding: utf-8
+print "begin script"
 # config begin
 #debug = True表示把现在(今天)的日志进行收集,False表示拿昨天的日志进行收集
 #另外的 debug =False会在处理动作的最后删除本机原始的日志
@@ -5,53 +7,68 @@ debug = True  # True->windows2x.log, false->windows2x.log.<lastday>
 #server_id是一个用来标识上传到hdfs的本机已处理好的日志的id,免得跟其他节点上传的日志名字重复
 server_id = "1"
 #logdir是log产生的目录位置
-logdir = "/data/suning/logs"
+logdir = "/data/tianyin/logs"
 #tmpdir是用来指定在本机过滤日志的地方(目录)
-tmpdir = "/data/suning/logs"
+tmpdir = "/data/tianyin/logs"
+remove_old_log = False
+#最终放置此节点log的地方
+targetdir = "/data/logs"
 # config over
 ###################################################
 ###################################################
 file = logdir + "/windows2x.log"
 file_tmp = tmpdir + "/windows2x.tmp.log"
 
+print "begin re"
 import re
+print "begin json"
 import json
+print "begin os"
 import os
+print "begin datetime"
 import datetime
 
+print "立即截断当前日志"
+###################################
+# 立即截断当前日志
+###################################
+os.popen('curl -d "" http://localhost:13000/muce/signal')
 
+
+print "打开日志和临时文件"
 ###################################
 # 打开日志和临时文件
 ###################################
 if debug:
     pass
-	#file = "/data/suning/logs/windows2x.log"
 else:
 	lastDay = datetime.date.today() - datetime.timedelta(days=1)
 	file = logdir + "/windows2x.log.%s" % (lastDay.isoformat(),)
 
 headerRE = re.compile(r"^\[windows2x\](?P<header>.*)")
-contentRE = re.compile(r"(?P<type>[a-zA-Z0-9_\.]+)\s(?P<content>\S+)\t\d+")
-
-#os.popen("dos2unix " + file)
-
+contentRE = re.compile(r"^tianyin\.install\.success\s(?P<content>[^\t]+)\s\d+")
+contentRE2 = re.compile(r"^tianyin\.install\s(?P<content>[^\t]+)\s\d+")
 fp = open(file)
 fp2 = open(file_tmp, "w")
 
+
+print "正则匹配出我们需要处理的日志项到临时文件里面去"
 ###################################
 # 正则匹配出我们需要处理的日志项到临时文件里面去
 ###################################
 def remap_log_content(content):
 	result = re.match(contentRE, content)
+    is_success = False
 	if result:
 		resultdict = result.groupdict()
+        is_success = True
+    elif result = re.match(contentRE2, content):
+        resultdict = result.groupdict()
 	else:
 		resultdict = None
-	if resultdict and "type" in resultdict and "content" in resultdict:
-		if resultdict['type'] != "install":
-			return
+	if resultdict and "content" in resultdict:
 		j =json.loads(resultdict['content'])
-		j["log_type"] = resultdict['type']
+		j["log_type"] = 'success' if is_success else 'install'
 		encodedjson = json.dumps(j)
 		fp2.write(encodedjson + "\n")
 
@@ -65,6 +82,8 @@ for i in fp.readlines():
         if resultdict and "header" in resultdict:
             pass #new log header
         else:
+            if i.index('install') == 0:
+                pass
             remap_log_content(i)
     except:
         pass
@@ -72,24 +91,24 @@ for i in fp.readlines():
 fp.close()
 fp2.close()
 
+print "本机结果上传到hdfs"
 ###################################
-# 本机结果上传到hdfs
+# 本机结果上传到hdfs  # fix nfs
 ###################################
 if debug == True:
     lastDay = datetime.date.today()
 else:
     lastDay = datetime.date.today() - datetime.timedelta(days=1)
 file_dst_hdfs = "windows2x.log.%s" % (lastDay.isoformat(),)
-app_cmd = '/opt/hadoop/hadoop-2.2.0/bin/hadoop fs -put -f %s /logs/ %s.%s && rm %s' % \
-    (file_tmp, file_dst_hdfs, server_id, file_tmp,)
-os.popen(app_cmd)
 
+app_cmd = r'cp %s %s/%s.%s' % \
+    (file_tmp, targetdir, file_dst_hdfs, server_id,)
+os.popen(app_cmd)
+os.remove(file_tmp)
+print "删除本机原有的日志文件"
 ###################################
 # 删除本机原有的日志文件
 ###################################
-if debug:
-    pass
-	#file = "/data/suning/logs/windows2x.log"
-else:
-    lastDay = datetime.date.today() - datetime.timedelta(days=1)
-    os.popen('rm ' + file)
+if remove_old_log:
+    os.remove(file)
+
