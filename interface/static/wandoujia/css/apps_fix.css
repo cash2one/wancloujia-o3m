@@ -53,24 +53,12 @@ body .banner-wrap {
     box-shadow: 0px 1px 2px rgba(0, 0, 0, .1);
 }
 
-.app-block .app.selected {
-    background: url(../images/selected.png) top right no-repeat #fff;
-}
-
-.app:hover {
-    background: url(../images/hover.png) top right no-repeat #fff;
-}
-
 .app-block .app-inner {
     width: 225px;
     box-sizing: border-box;
     border: 2px solid transparent;
     padding: 8px;
     background: transparent;
-}
-
-.app-block .app-inner:hover {
-    border-color: #355ba5;
 }
 
 @media screen and (max-width: 960px) {
@@ -80,10 +68,6 @@ body .banner-wrap {
     }
 }
 
-
-.app:hover {
-    cursor: pointer;
-}
 
 .app .name:hover {
     color: #333;
