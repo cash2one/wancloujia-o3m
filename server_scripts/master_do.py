@@ -132,7 +132,7 @@ for i in files:
 print "config hadoop"
 filename = targetdir + "/windows2x.log.%s" % (lastDay.isoformat(),)
 print "begin clean db"
-sqlexe = '/usr/bin/mysql -u%s -p%s -h%s %s' % (dbuser, dbpass, dbhost, dbname)
+sqlexe = '/usr/bin/mysql -u%s -p%s -h%s --default-character-set=utf8 %s' % (dbuser, dbpass, dbhost, dbname)
 os.popen('echo "DELETE FROM interface_logmeta WHERE date=\'%s\';" | %s' % (lastDay.isoformat(), sqlexe))
 os.popen('echo "DELETE FROM interface_devicelogentity WHERE date=\'%s\';" | %s' % (lastDay.isoformat(), sqlexe))
 os.popen('echo "DELETE FROM interface_userdevicelogentity WHERE date=\'%s\';" | %s' % (lastDay.isoformat(), sqlexe))
