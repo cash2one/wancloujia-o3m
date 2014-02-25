@@ -195,6 +195,7 @@ _ready(function(Narya, IO) {
 
         this.$resultSection = this.$el.find(".result-section");
         this.$result = this.$el.find(".result");
+        this.$failedApps = this.$el.find(".failed-apps");
         this.$closeBtn = this.$el.find("#close-btn");
         this.$closeBtn.click(function() {
             self.hide();
@@ -220,6 +221,7 @@ _ready(function(Narya, IO) {
             this.resetProgress();
             this.$progressSection.hide();
             this.$result.html("安装失败").addClass("fail");
+            this.$failedApps.html(count + "款应用安装失败");
             this.$resultSection.show();
         };
 
@@ -286,6 +288,7 @@ _ready(function(Narya, IO) {
         apps.startAll();
         statusBar.show();
         statusBar.showProgress(apps.count());
+        $install.attr("disabled", "disabled");
 
         _log("tianyin.subject.install");
     });
@@ -298,6 +301,7 @@ _ready(function(Narya, IO) {
             return;
         }
 
+        $install.removeAttr("disabled");
         if (apps.isAllInstalled()) {
             installer.status = installer.SUCCESS;
             _log("tianyin.subject.install.success");
@@ -306,7 +310,7 @@ _ready(function(Narya, IO) {
         } else {
             installer.status = installer.FAILED;
             console.log("only", apps.countFinished(), "installed");
-            statusBar.showFailMsg();
+            statusBar.showFailMsg(apps.count() - apps.countFinished());
         }
     }
 

@@ -30,6 +30,7 @@
             </div>
             <div class="result-section" style="display: none">
                 <p class='result'></p>
+                <p class='failed-apps' style="color: #888"></p>
                 <button id="close-btn">
                 </button>
             </div>
@@ -42,7 +43,6 @@
                 data-name="{{ app.name }}"
                 data-pn="com.uc.browser" 
                 id="app{{ app.id }}">
-                <div class="app-inner">
                     <div class="info">
                         <div class="icon-area">
                             <img src="{{ app.icon }} " alt="{{ app.name }}" class="icon" />
@@ -66,7 +66,6 @@
                     <div class="pos-comment">
                         <div class="cmt-split"><i></i></div>
                         <div class="cmt-content">{{ app.desc }}</div>
-                    </div>
                     </div>
                 </li>
                 {% endfor %}
