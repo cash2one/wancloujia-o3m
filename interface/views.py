@@ -234,7 +234,7 @@ def _get_app(grp):
     app = grp.app
     return {
         "id": app.pk,
-        "md5": _file_md5('/data/nfs_mirror' + app.apk.file.path),
+        "md5": app.apk.md5,
         "package": app.package,
         "name":  app.name,
         "icon": app.app_icon,
