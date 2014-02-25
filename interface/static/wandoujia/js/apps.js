@@ -62,6 +62,10 @@
         });
     };
 
+    apps.count = function() {
+        return this.list.length;
+    };
+
     apps.find = function(package) {
         var list = this.list;
         for (var i = 0; i < list.length; i++) {
@@ -94,7 +98,7 @@
     };
 
     apps.isAllInstalled = function() {
-        return this.countFinshed() == this.list.length;
+        return this.countFinished() == this.list.length;
     };
 
     apps.isPending = function(cb) {
@@ -163,8 +167,86 @@ function _ready(callback) {
     });
 }
 
-
 _ready(function(Narya, IO) {
+    function StatusBar(el) {
+        var self = this;
+
+        this.el = el;
+        this.$el = $(el);
+        this.show = function() {
+            this.$el.fadeIn();
+        };
+
+        this.hide = function() {
+            this.$el.fadeOut();
+        };
+
+        this.$progressSection = this.$el.find(".progress-section");
+        this.$progressBar = this.$el.find(".progressbar");
+        this.$amount = this.$el.find(".amount");
+        this.$cancelBtn = this.$el.find("#cancel-btn");
+        this.$cancelBtn.click(function() {
+            var handler = self.cancelHandler;
+            handler && handler.call(null);
+        });
+        this.onCancel = function(handler) {
+            this.cancelHandler = handler;
+        };
+
+        this.$resultSection = this.$el.find(".result-section");
+        this.$result = this.$el.find(".result");
+        this.$closeBtn = this.$el.find("#close-btn");
+        this.$closeBtn.click(function() {
+            self.hide();
+        });
+
+        this.showProgress = function(total) {
+            self.reset();
+            this.total = total;
+        };
+
+        this.updateProgress = function(count) {
+            this.$amount.html(count);
+            var percent = (count * 1.0) / this.total * 100;
+            this.$progressBar.find(".progressbar-block").css("width", percent + "%");
+        };
+
+        this.resetProgress = function() {
+            this.$amount.html("0");
+            this.$progressBar.find(".progressbar-block").css("width", "0%");
+        };
+
+        this.showFailMsg = function(count) {
+            this.resetProgress();
+            this.$progressSection.hide();
+            this.$result.html("安装失败").addClass("fail");
+            this.$resultSection.show();
+        };
+
+        this.showSuccessMsg = function(count) {
+            this.resetProgress();
+            this.$progressSection.hide();
+            this.$result.html("安装成功").addClass("success");
+            this.$resultSection.show();
+        };
+
+        this.resetResult = function() {
+            this.$result.empty().removeClass("fail").removeClass("success");
+        };
+
+        this.reset = function() {
+            this.resetProgress();
+            this.$progressSection.show();
+            this.resetResult();
+            this.$resultSection.hide();
+        };
+    }
+
+    var statusBar = new StatusBar($("#statusbar")[0]);
+    statusBar.onCancel(function() {
+        // TODO cancel left tsaks
+    });
+
     username = $(".user-area > .username").html();
     $appList = $(".app-list");
     apps.load();
@@ -179,23 +261,22 @@ _ready(function(Narya, IO) {
 
     installer.status = installer.INIT;
     installer.onProcess = function(func) {
-        var that = this;
+        var self = this;
         return function(result) {
-            if(that.status !== that.PROCESSING) {
+            if (self.status !== self.PROCESSING) {
                 return console.log("install is not processing, ignore it!");
             }
-            
+
             func && func(result);
         };
     };
 
     var $install = $("#install");
-    var appStatuses = null;
     $install.click(function() {
-        _.each(apps, function(app) {
-            app.status = "pending";
-        });
-        _log("tianyin.subject.install");
+        if (installer.status === self.PROCESSING) {
+            return console.log("installer is processing now, ignore it!");
+        }
+
         var linkEls = $appList.find(".app a.install-link").toArray();
         _.each(linkEls, function(el) {
             el.click();
@@ -203,23 +284,29 @@ _ready(function(Narya, IO) {
 
         installer.status = installer.PROCESSING;
         apps.startAll();
+        statusBar.show();
+        statusBar.showProgress(apps.count());
+
+        _log("tianyin.subject.install");
     });
 
     function onTaskStatusChanged() {
         if (apps.isPending()) {
-            // TODO notify finished apps
-            console.log(apps.countFinished(), "apps installed");
+            var finishedApps = apps.countFinished();
+            statusBar.updateProgress(finishedApps);
+            console.log(finishedApps, "apps installed");
             return;
         }
 
-        status = apps.isAllInstalled() ? "success" : "failed";
-        if (status === success) {
+        if (apps.isAllInstalled()) {
+            installer.status = installer.SUCCESS;
             _log("tianyin.subject.install.success");
             console.log("all installed!");
-            // TODO  notify user 
+            statusBar.showSuccessMsg();
         } else {
-            console.log("not all installed");
-            // TODO notify user
+            installer.status = installer.FAILED;
+            console.log("only", apps.countFinished(), "installed");
+            statusBar.showFailMsg();
         }
     }
 

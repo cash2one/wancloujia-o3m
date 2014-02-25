@@ -246,14 +246,14 @@ def _get_app(grp):
     app = grp.app
     return {
         "id": app.pk,
-        "md5": _file_md5(app.apk.file.path),
+        "md5": app.apk.md5,
         "package": app.package,
         "name":  app.name,
         "icon": app.app_icon,
         "desc": app.desc,
         "version": app.version,
-        "size": bitsize(app.size()),
-        "bits": app.size(),
+        "size": bitsize(app.apk.size),
+        "bits": app.apk.size,
         "apk": app.apk.file
     }
 

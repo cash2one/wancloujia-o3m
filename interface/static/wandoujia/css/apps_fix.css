@@ -155,7 +155,7 @@ body .banner-wrap {
     background-image: linear-gradient(#7dc023, #62ad1d);
     border-radius: 12px;
     height: 100%;
-    width: 50%;
+    width: 0%;
 }
 
 .statusbar > .progress-section > .progress-info {

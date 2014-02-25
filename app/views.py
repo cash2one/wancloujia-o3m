@@ -2,7 +2,7 @@
 import math
 import logging
 from itertools import chain
-
+from hashlib import md5
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.core.files.images import ImageFile
@@ -30,6 +30,11 @@ import apk
 import os
 
 logger = logging.getLogger(__name__)
+def _file_md5(path):
+     with open(path, 'rb') as f:
+         m = md5()
+         m.update(f.read())
+         return m.hexdigest()
 
 def can_view_app(user):
     return user.is_superuser or \
@@ -79,7 +84,13 @@ def upload(request):
         logger.warn("%s: form is invalid" % __name__)
         logger.warn(form.errors)
         return Http404
-
+    uploaded_file = form.save()
+    logger.debug("save file")
+    uploaded_file.md5 = _file_md5(uploaded_file.file.path)
+    logger.debug("md5")
+    uploaded_file.save()
+    logger.debug("save md5")
+    uploaded_file.size = os.path.getsize(uploaded_file.file.path)
     uploaded_file = form.save()
 
     try:
