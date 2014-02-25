@@ -29,9 +29,6 @@ tmpdir = "/data/tianyin/tmp"
 #这里记录了hadoop需要执行的脚本以及结果存放的位置
 jobs = [
 		("log_mapper_meta.py", "log_reducer_meta.py", ),
-		("log_mapper_appstat.py", "log_reducer_appstat.py", ),
-		("log_mapper_devicelog.py", "log_reducer_devicelog.py", ),
-		("log_mapper_userdev.py", "log_reducer_userdev.py", ),
 		]
 #config over
 #########################################
@@ -123,11 +120,11 @@ for i in refed:
     if i in files:
         del files[i]
 for i in files:
-	try:
+    try:
         if auto_remove_files:
             os.remove(i)
-	except:
-		pass
+    except:
+            pass
 #raise NameError()
 print "config hadoop"
 filename = targetdir + "/windows2x.log.%s" % (lastDay.isoformat(),)
@@ -139,11 +136,10 @@ os.popen('echo "DELETE FROM interface_userdevicelogentity WHERE date=\'%s\';" | 
 os.popen('echo "DELETE FROM interface_installedapplogentity WHERE date=\'%s\';" | %s' % (lastDay.isoformat(), sqlexe))
 
 print "begin hadoop"
-for map, red, output in jobs:
+for map, red in jobs:
     cmd = "cat %s.* | /usr/local/bin/python2.7 %s%s | /usr/local/bin/python2.7 %s%s | %s" % \
           (filename, jobpath, map, jobpath, red, sqlexe  )
     os.popen(cmd)
 if remove_logs:
-	cmd = "rm -f %s.*" % (filename,)
-	os.popen(cmd)
+    os.remove(filename)
 print "hadoop over"
