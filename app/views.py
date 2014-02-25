@@ -90,6 +90,7 @@ def upload(request):
     logger.debug("md5")
     uploaded_file.save()
     logger.debug("save md5")
+    uploaded_file.size = os.path.getsize(uploaded_file.file.path)
     uploaded_file = form.save()
 
     try:

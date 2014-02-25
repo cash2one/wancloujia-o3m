@@ -240,8 +240,8 @@ def _get_app(grp):
         "icon": app.app_icon,
         "desc": app.desc,
         "version": app.version,
-        "size": bitsize(app.size()),
-        "bits": app.size(),
+        "size": bitsize(app.apk.size),
+        "bits": app.apk.size,
         "apk": app.apk.file
     }
 

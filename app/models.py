@@ -12,6 +12,7 @@ logger = logging.getLogger(__name__)
 class UploadApk(models.Model):
     file = models.FileField(upload_to='apks/%Y/%m/%d')
     md5 = models.CharField(max_length=32, null=True)
+    size = models.IntegerField()
 
 
 class Category(models.Model):
