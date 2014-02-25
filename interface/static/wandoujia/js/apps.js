@@ -199,6 +199,26 @@ _ready(function(Narya, IO) {
         });
     };
 
+    tasks.clear = function() {
+        tasks.all(function(err, tasks) {
+            if (err) {
+                return;
+            }
+
+            var jobs = _.map(tasks, function(task) {
+                return task.id;
+            }).join(",");
+            IO.requestAsync({
+                url: 'wdj://jobs/clear.json',
+                data: {
+                    job: jobs,
+                    clear: 0
+                },
+                success: function(resp) {}
+            });
+        });
+    };
+
     tasks.cancel = function(apps, cb) {
         var names = _.map(apps, function(app) {
             return app.name;
@@ -303,6 +323,7 @@ _ready(function(Narya, IO) {
 
         this.resetResult = function() {
             this.$result.empty().removeClass("fail").removeClass("success");
+            this.$failedApps.empty();
         };
 
         this.reset = function() {
@@ -316,6 +337,7 @@ _ready(function(Narya, IO) {
     var statusBar = new StatusBar($("#statusbar")[0]);
 
     username = $(".user-area > .username").html();
+
     $appList = $(".app-list");
     apps.load();
     show_tip();
@@ -340,6 +362,27 @@ _ready(function(Narya, IO) {
             func && func(result);
         };
     };
+
+    window.onbeforeunload = function() {
+        if (installer.status === installer.PROCESSING ||
+            installer.status === installer.CANCELLING) {
+            return "确认要离开该专题吗？";
+        }
+    };
+
+    window.onunload = function() {
+        if (installer.status === installer.PROCESSING ||
+            installer.status === installer.CANCELLING) {
+            tasks.clear();
+        }
+    };
+
+    $(".user-area a").click(function(e) {
+        if (installer.status === installer.PROCESSING ||
+            installer.status === installer.CANCELLING) {
+            e.preventDefault();
+        }
+    });
 
     statusBar.onCancel(installer.onProcess(function() {
         installer.status = installer.CANCELLING;
