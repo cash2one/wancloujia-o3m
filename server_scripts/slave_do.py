@@ -57,20 +57,21 @@ print "正则匹配出我们需要处理的日志项到临时文件里面去"
 # 正则匹配出我们需要处理的日志项到临时文件里面去
 ###################################
 def remap_log_content(content):
-	result = re.match(contentRE, content)
+    result = re.match(contentRE, content)
+    result2 = re.match(contentRE2, content)
     is_success = False
-	if result:
-		resultdict = result.groupdict()
+    if result:
+    	resultdict = result.groupdict()
         is_success = True
-    elif result = re.match(contentRE2, content):
-        resultdict = result.groupdict()
-	else:
-		resultdict = None
-	if resultdict and "content" in resultdict:
-		j =json.loads(resultdict['content'])
-		j["log_type"] = 'success' if is_success else 'install'
-		encodedjson = json.dumps(j)
-		fp2.write(encodedjson + "\n")
+    elif result2:
+        resultdict = result2.groupdict()
+    else:
+    	resultdict = None
+    if resultdict and "content" in resultdict:
+    	j =json.loads(resultdict['content'])
+    	j["log_type"] = 'success' if is_success else 'install'
+    	encodedjson = json.dumps(j)
+    	fp2.write(encodedjson + "\n")
 
 for i in fp.readlines():
     try:
