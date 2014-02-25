@@ -62,6 +62,10 @@
         });
     };
 
+    apps.all = function() {
+        return this.list;
+    };
+
     apps.count = function() {
         return this.list.length;
     };
@@ -113,6 +117,14 @@
         return false;
     };
 
+    apps.getProcessingApps = function() {
+        var tasks = _.filter(this.list, function(item) {
+            return item.status === PENDING;
+        });
+        console.log("processing tasks:", tasks);
+        return tasks;
+    };
+
     apps.startAll = function() {
         _.each(this.list, function(app) {
             app.status = PENDING;
@@ -121,6 +133,8 @@
 
     window.apps = apps;
 })(window);
+
+(function() {})(window);
 
 var $appList = null;
 var $tip = null;
@@ -168,6 +182,61 @@ function _ready(callback) {
 }
 
 _ready(function(Narya, IO) {
+
+    var tasks = {};
+    tasks.ERR = "error";
+
+    tasks.all = function(cb) {
+        IO.requestAsync({
+            url: "wdj://jobs/show.json",
+            success: function(resp) {
+                if (resp.state_code !== 200) {
+                    return cb(tasks.ERR);
+                }
+
+                return cb(null, resp.body.status);
+            }
+        });
+    };
+
+    tasks.cancel = function(apps, cb) {
+        var names = _.map(apps, function(app) {
+            return app.name;
+        });
+
+        tasks.all(function(err, tasks) {
+            if (err) {
+                return cb(err);
+            }
+
+            console.log(tasks);
+            var tasks = _.filter(tasks, function(item) {
+                return names.indexOf(item.title) !== -1;
+            });
+
+            if (!tasks.length) {
+                return cb(null);
+            }
+
+            var jobs = _.map(tasks, function(task) {
+                return task.id;
+            }).join(",");
+            IO.requestAsync({
+                url: 'wdj://jobs/clear.json',
+                data: {
+                    job: jobs,
+                    clear: 0
+                },
+                success: function(resp) {
+                    if (resp.state_code !== 200) {
+                        console.log("fail to cancel tasks");
+                    }
+                    cb(resp.state_code !== 200 ? tasks.ERR : null);
+                }
+            });
+        });
+    };
+
     function StatusBar(el) {
         var self = this;
 
@@ -245,9 +314,6 @@ _ready(function(Narya, IO) {
     }
 
     var statusBar = new StatusBar($("#statusbar")[0]);
-    statusBar.onCancel(function() {
-        // TODO cancel left tsaks
-    });
 
     username = $(".user-area > .username").html();
     $appList = $(".app-list");
@@ -257,6 +323,8 @@ _ready(function(Narya, IO) {
     var installer = {
         INIT: "init",
         PROCESSING: "processing",
+        CANCELLING: "cancelling",
+        CANCELLED: "cancelled",
         FAILED: "failed",
         SUCCESS: "success"
     };
@@ -273,10 +341,31 @@ _ready(function(Narya, IO) {
         };
     };
 
+    statusBar.onCancel(installer.onProcess(function() {
+        installer.status = installer.CANCELLING;
+        statusBar.$cancelBtn.attr("disabled", "disabled");
+        tasks.cancel(apps.getProcessingApps(), function(err) {
+            installer.status = installer.CANCELLED;
+            statusBar.$cancelBtn.removeAttr("disabled");
+
+            if (err) {
+                console.error("fail to cancel all tasks", err);
+            }
+
+            installer.status = installer.FAILED;
+            console.log("Installation has been cancelled.");
+            console.log("only", apps.countFinished(), "installed");
+
+            statusBar.hide();
+            $install.removeAttr("disabled");
+        });
+    }));
+
     var $install = $("#install");
     $install.click(function() {
-        if (installer.status === self.PROCESSING) {
-            return console.log("installer is processing now, ignore it!");
+        if (installer.status === self.PROCESSING ||
+            installer.status === self.CANCELLING) {
+            return console.log("installer is processing or cancelling tasks now, ignore it!");
         }
 
         var linkEls = $appList.find(".app a.install-link").toArray();
@@ -290,7 +379,7 @@ _ready(function(Narya, IO) {
         statusBar.showProgress(apps.count());
         $install.attr("disabled", "disabled");
 
-        _log("tianyin.subject.install");
+        _log("tianyin.install");
     });
 
     function onTaskStatusChanged() {
@@ -304,7 +393,7 @@ _ready(function(Narya, IO) {
         $install.removeAttr("disabled");
         if (apps.isAllInstalled()) {
             installer.status = installer.SUCCESS;
-            _log("tianyin.subject.install.success");
+            _log("tianyin.install.success");
             console.log("all installed!");
             statusBar.showSuccessMsg();
         } else {
@@ -313,12 +402,6 @@ _ready(function(Narya, IO) {
             statusBar.showFailMsg(apps.count() - apps.countFinished());
         }
     }
-
-    IO.onmessage({
-        "data.channel": "apps.installed"
-    }, function(result) {
-        console.log("apps installed", result);
-    });
 
     IO.onmessage({
         "data.channel": "apps.install.success"
@@ -333,62 +416,64 @@ _ready(function(Narya, IO) {
         apps.fail(result.package_name);
         onTaskStatusChanged();
     }));
-});
 
-/*
-    var tasks = {};
-    tasks.ERR = "error";
-
-    tasks.all = function(cb) {
-        IO.requestAsync({
-            url: "wdj://jobs/show.json",
-            success: function(resp) {
-                if (resp.state_code !== 200) {
-                    return cb(tasks.ERR);
-                }
-
-                return cb(null, resp.body);
-            }
+    function __jobs(jobs) {
+        var TYPES = [
+            'install', 'download', 'local_install',
+            'push', 'parsing_video_url', 'merge_video',
+            'unzip', 'restore_app_data', 'push_phone'
+        ];
+        var STATES = [
+            'added', 'waiting', 'pause', 'processing',
+            'success', 'fail', ' stopped'
+        ];
+        _.each(jobs, function(job) {
+            job.type = TYPES[job.type - 1];
+            job.state = STATES[job.state - 1];
         });
-    };
+    }
 
-    tasks.data = function(app, cb) {
-        tasks.all(function(err, data) {
-            if (err) {
-                return cb(err);
-            }
-
-            var item = null;
-            for (var i = 0; i < data.status.length; i++) {
-                if (data.status[i].title === app.name) {
-                    item = data.status[i];
-                    break;
-                }
-            }
-
-            return cb(null, item);
+    _.each(["add", "start", "changed", "status_changed", "stop"], function(event) {
+        var channel = "jobs." + event;
+        IO.onmessage({
+            "data.channel": channel
+        }, function(result) {
+            __jobs(result.status);
+            console.log(channel);
+            console.log(result);
         });
-    };
+    });
 
-    tasks.cancel = function(app, cb) {
-        tasks.data(app, function(err, data) {
+    IO.onmessage({
+        "data.channel": "jobs.stop"
+    }, function(result) {
+        tasks.all(function(err, tasks) {
             if (err) {
-                return cb(err);
+                return console.error("fail to get tasks");
             }
 
-            if (!data) {
-                cb(null);
-            }
-
-            IO.requestAsync({
-                url: "wdj://cancel.json",
-                success: function(resp) {
-                    cb(resp.state_code === 200 ? null, tasks.error);
+            __jobs(tasks);
+            _.each(tasks, function(task) {
+                var processingApps = apps.getProcessingApps();
+                for (var i = 0; i < processingApps.length; i++) {
+                    var app = processingApps[i];
+                    if (app.name === task.title) {
+                        task.app = app;
+                    }
                 }
-            }, {
-                // TODO
-                id: data.id
             });
+
+            var failedTasks = _.filter(tasks, function(task) {
+                return task.app &&
+                    task.type === "install" &&
+                    task.state === "success" &&
+                    task.message === "DEVICE_NOT_FOUND";
+            });
+
+            _.each(failedTasks, function(task) {
+                task.app.status = apps.FAILED;
+            });
+            onTaskStatusChanged();
         });
-    };
-    */
+    });
+});
