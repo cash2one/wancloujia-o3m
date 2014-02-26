@@ -1,7 +1,9 @@
 *.py[cod]
 *.swp
 *.swo
+config.py
 data_backup.json
+node_modules
 wandoujia.zip
 suning.zip
 [^o]*log

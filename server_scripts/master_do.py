@@ -141,6 +141,5 @@ for map, red in jobs:
           (filename, jobpath, map, jobpath, red, sqlexe  )
     os.popen(cmd)
 if remove_logs:
-	cmd = "rm -f %s.*" % (filename,)
-	os.popen(cmd)
+    os.remove(filename)
 print "hadoop over"

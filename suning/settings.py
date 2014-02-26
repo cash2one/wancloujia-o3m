@@ -1,11 +1,16 @@
 #coding: utf-8
 # Django settings for suning project.
 import os
-
 # from pyhdfs import hdfs
 
+try: 
+    #load custom configuration
+    import config
+except:
+    config = {}
+
 DEBUG = True
-#DEBUG = True
+#DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
@@ -59,7 +64,7 @@ FROM_EMAIL = "491320274@qq.com"
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ["tianyin.wandou.in"]
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.ikipedia.org/wiki/List_of_tz_zones_by_name
@@ -90,8 +95,7 @@ USE_TZ = True
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.normpath(__file__)))
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/var/www/example.com/media/"
-MEDIA_ROOT = '/data/media'
-#MEDIA_ROOT = '/home/yangchen/media'
+MEDIA_ROOT = getattr(config, 'MEDIA_ROOT', '/data/media')
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.

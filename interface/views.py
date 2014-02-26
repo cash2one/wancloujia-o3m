@@ -29,7 +29,7 @@ from mgr.models import Staff
 from app.models import Subject, App, AppGroup, SubjectMap
 from app.tables import bitsize
 from ad.models import AD
-
+import re
 import zlib
 from django.core.cache import cache
 
@@ -63,6 +63,15 @@ def find_subject(sid, cache):
         except:
             return u'未知专题'
 
+def get_pici(subj_name):
+    pici = ''
+    try:
+        m = re.match(r'^[^\#]*\#[^\#]*\#(?P<pici>.*)', subj_name).groupdict()
+        pici = m['pici']
+    except:
+        pass
+    return pici
+
 @api_view(['GET', 'POST'])
 @renderer_classes((UnicodeJSONRenderer,),)
 def export(request):
@@ -74,7 +83,7 @@ def export(request):
     elif request.method == "POST":
         dt = request.POST.get('upload_dt',datetime.date.today().isoformat())
     dt = datetime.datetime.strptime(dt, '%Y-%m-%d')
-    result =[{"model": i.model, "imei": i.did, "batch_no": 0, "install_dt":i.date, "info":find_subject(i.subject, subjs),
+    result =[{"model": i.model, "imei": i.did, "batch_no": get_pici(find_subject(i.subject, subjs)), "install_dt":i.date, "info":find_subject(i.subject, subjs),
               "result":i.installed,"account":find_username(i.uid, users),"version":i.client_version}
              for i in LogMeta.objects.filter(date=dt)]
     return Response(result)
@@ -162,6 +171,8 @@ def logout(request):
 
 @require_GET
 def subjects(request):
+    logger = logging.getLogger('default')
+    logger.debug("!!!media root: " + settings.MEDIA_ROOT)
     return render(request, "wandoujia/subjects.html")
 
 
@@ -182,12 +193,22 @@ def create_filter(model, bits):
 
 @require_GET
 def getSubjects(request):
+    #return HttpResponse(status=status.HTTP_404_NOT_FOUND)
+
+    logger = logging.getLogger('default')
+    logger.debug("get Subjects")
+
     if not request.user.is_authenticated():
+        logger.debug("user no authenticated")
         return utils.render_json({"ret_code": 0, "subjects": []})
 
     model = request.GET.get("model") or None
     size = request.GET.get("size")
     bits = int(size) if size else None
+
+    logger.debug("model: " + str(model))
+    logger.debug("size: " + str(size))
+    logger.debug("bits: " + str(bits))
 
     subjects = Subject.objects.all().order_by("position")
     if model != None and bits != None:
