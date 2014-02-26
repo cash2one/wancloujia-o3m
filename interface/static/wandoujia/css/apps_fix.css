@@ -139,6 +139,7 @@ body .banner-wrap {
 .statusbar > .progress-section > .progressbar {
     width: 300px;
     border: 1px solid #bbb;
+    background: #fff;
     border-radius: 8px;
     height: 6px;
     padding: 1px;
