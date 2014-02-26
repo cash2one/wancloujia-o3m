@@ -60,7 +60,7 @@ require(["Narya"], function() {
             getDeviceInfo(function(device) {
                 console.log("deivce", device);
 
-                function getSubjects(device.model, device.size, callback) {
+                function getSubjects(model, size, callback) {
                     $.get("/interface/getSubjects", {
                         model: model,
                         size: size
@@ -78,7 +78,7 @@ require(["Narya"], function() {
                 $loading.show();
                 $subjects_wrap.hide();
                 count++;
-                getSubjects(model, size, sequence(function(err, data) {
+                getSubjects(device.model, device.size, sequence(function(err, data) {
                     $loading.hide();
 
                     if (err) {
