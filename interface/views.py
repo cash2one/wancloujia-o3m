@@ -13,6 +13,7 @@ from django.shortcuts import render, redirect
 from django.views.decorators.http import require_GET, require_POST
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import auth
+from django.conf import settings as django_settings
 
 from rest_framework import status
 from rest_framework.renderers import JSONRenderer, UnicodeJSONRenderer
@@ -21,6 +22,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view, parser_classes, renderer_classes
 
 from serializers import AppSerializer, SubjectSerializer
+#TODO 使用正确的获取settings的方式
 from suning import settings
 from suning import utils
 from interface.models import LogMeta
@@ -173,7 +175,7 @@ def logout(request):
 def subjects(request):
     logger = logging.getLogger('default')
     logger.debug("!!!media root: " + settings.MEDIA_ROOT)
-    return render(request, "wandoujia/subjects.html")
+    return render(request, "wandoujia/subjects.html", {'development': django_settings.DEBUG})
 
 
 def create_filter(model, bits):
@@ -282,7 +284,8 @@ def apps(request, id):
     apps = map(_get_app, appgrps)
     return render(request, "wandoujia/apps.html", {
         "subject": subject, 
-        "apps": apps
+        "apps": apps,
+        'development': django_settings.DEBUG
     })
 
 
