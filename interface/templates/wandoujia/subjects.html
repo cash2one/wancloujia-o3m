@@ -38,80 +38,7 @@
     <script type="text/javascript" src="{{ STATIC_URL }}js/require.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}wandoujia/js/Narya.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
-
-    <script type="text/javascript">
-    require(["Narya"], function() {
-    $(function() {
-        var subject_template = _.template($("#subject_template").html());
-        var $subjects_wrap = $("#subjects_wrap");
-        var $subjects = $subjects_wrap.find(".special-content");
-        $subjects.on('click', '.special-item', function() {
-            var subject_id = $(this).data("id");
-            if(!subject_id) return;
-
-            window.location = "/interface/subjects/" + subject_id;
-
-        });
-        var $empty = $("#empty");
-        var $loading = $("#loading");
-
-        function refreshSubjects() {
-            var connected = Narya.Device.get("isConnected");
-            console.log("connected?", connected);
-
-            var model = "", size = "";
-            if (connected) {
-                var build = Narya.Device.get("build");
-                if(build) {
-                    model = build.get("model") || "";
-                }
-                // TODO size = ?
-            }
-            console.log("model", model, "size", size);
-
-            $loading.show();
-            $subjects.empty();
-            $.get("/interface/getSubjects", {
-                model: model,
-                size: size
-            }, "json").done(function(data) {
-                //setTimeout(function() {
-
-                $loading.hide();
-                if (data.ret_code != 0) {
-                    $empty.html("加载失败，请刷新重试！");
-                    $empty.show();
-                    return;
-                }
-
-                if(data.subjects.length === 0) {
-                    $subjects_wrap.hide();
-                    $empty.html("暂无应用专题");
-                    $empty.show();
-                    return;
-                } 
-               
-                _.each(data.subjects, function(subject) {
-                    var html = subject_template({
-                        subject: subject
-                    }).trim();
-                    $(html).appendTo($subjects);
-                });
-                $subjects_wrap.show();
-
-                //}, 8000);
-            }).fail(function() {
-                $loading.hide();
-                $empty.html("加载失败，请刷新重试！");
-                $empty.show();
-            });
-        }
-
-        Narya.Device.on('change:isConnected', refreshSubjects);
-        refreshSubjects();
-    });
-    });
-    </script>
+    <script type="text/javascript" src="{{ STATIC_URL }}wandoujia/js/subjects.js"></script>
 
 	<script type="text/javascript">
     var _usersnapconfig = {
@@ -132,6 +59,5 @@
         x.appendChild(s);
     })();
     </script>
-
 </body>
 </html>

@@ -171,6 +171,8 @@ def logout(request):
 
 @require_GET
 def subjects(request):
+    logger = logging.getLogger('default')
+    logger.debug("!!!media root: " + settings.MEDIA_ROOT)
     return render(request, "wandoujia/subjects.html")
 
 
@@ -191,12 +193,22 @@ def create_filter(model, bits):
 
 @require_GET
 def getSubjects(request):
+    #return HttpResponse(status=status.HTTP_404_NOT_FOUND)
+
+    logger = logging.getLogger('default')
+    logger.debug("get Subjects")
+
     if not request.user.is_authenticated():
+        logger.debug("user no authenticated")
         return utils.render_json({"ret_code": 0, "subjects": []})
 
     model = request.GET.get("model") or None
     size = request.GET.get("size")
     bits = int(size) if size else None
+
+    logger.debug("model: " + str(model))
+    logger.debug("size: " + str(size))
+    logger.debug("bits: " + str(bits))
 
     subjects = Subject.objects.all().order_by("position")
     if model != None and bits != None:

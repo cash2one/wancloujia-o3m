@@ -3413,10 +3413,12 @@ define("backbone", ["underscore"], (function (global) {
 (function (window, undefined) {
     define('Device/Device',[
         'IO/IO',
-        'utils/QueryString'
+        'utils/QueryString',
+        'underscore'
     ], function (
         IO,
-        QueryString
+        QueryString,
+        _
     ) {
         var alert = window.alert;
 
@@ -3434,7 +3436,15 @@ define("backbone", ["underscore"], (function (global) {
                 isRoot : false,
                 deviceName : '',
                 screen : new Backbone.Model(),
-                build : new Backbone.Model()
+                build : new Backbone.Model(),
+                deviceCapacity : 0,
+                deviceFreeCapacity : 0,
+                internalSDCapacity : 0,
+                internalSDFreeCapacity : 0,
+                internalSDPath : '',
+                externalSDCapacity : 0,
+                externalSDFreeCapacity : 0,
+                externalSDPath : ''
             },
             initialize : function () {
                 this.on('change:isConnected', function (Device, isConnected) {
@@ -3483,6 +3493,8 @@ define("backbone", ["underscore"], (function (global) {
                 IO.onmessage({
                     'data.channel' : 'device.state_changed'
                 }, this.changeHandler, this);
+
+                this.getCapacityAsync();
             },
             changeHandler : function (data) {
                 this.set({
@@ -3498,6 +3510,58 @@ define("backbone", ["underscore"], (function (global) {
                     isRoot : data.is_root,
                     deviceName : data.device_name
                 });
+            },
+            getCapacityAsync : function () {
+                var deferred = $.Deferred();
+
+                IO.requestAsync({
+                    url : 'wdj://device/storage.json',
+                    success : function (resp) {
+                        if (resp.state_code === 200) {
+                            var data = {
+                                deviceCapacity : 0,
+                                deviceFreeCapacity : 0,
+                                internalSDCapacity : 0,
+                                internalSDFreeCapacity : 0,
+                                internalSDPath : '',
+                                externalSDCapacity : 0,
+                                externalSDFreeCapacity : 0,
+                                externalSDPath : ''
+                            };
+
+                            _.each(resp.body.storage_infos, function (info) {
+                                if (info.is_emulated === true &&
+                                        parseInt(info.total_size, 10) === data.deviceCapacity) {
+                                    return;
+                                }
+
+                                switch (info.type) {
+                                case 0:
+                                    data.deviceCapacity = parseInt(info.total_size, 10);
+                                    data.deviceFreeCapacity = parseInt(info.available_size, 10);
+                                    break;
+                                case 1:
+                                    data.internalSDCapacity = parseInt(info.total_size, 10);
+                                    data.internalSDFreeCapacity = parseInt(info.available_size, 10);
+                                    data.internalSDPath = info.path || '';
+                                    break;
+                                case 2:
+                                    data.externalSDCapacity = parseInt(info.total_size, 10);
+                                    data.externalSDFreeCapacity = parseInt(info.available_size, 10);
+                                    data.externalSDPath = info.path || '';
+                                    break;
+                                }
+                            }, this);
+
+                            this.set(data);
+                            deferred.resolve(resp);
+                        } else {
+                            deferred.reject(resp);
+                        }
+                    }.bind(this)
+                });
+
+                return deferred.promise();
             }
         });
 
