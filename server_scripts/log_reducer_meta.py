@@ -1,15 +1,20 @@
 #!/usr/bin/env python
+#coding: utf-8
 dbhost = 'dev-node1.limijiaoyin.com'
 dbport = 3306
 dbuser = 'root'
 dbpass = 'nameLR9969'
 dbname = 'tianyin'
 
+import sys  
+reload(sys)  
+sys.setdefaultencoding('utf-8')
 import _mysql
 import sys
 import HTMLParser
 import json
 import urllib
+
 db = _mysql.connect(host=dbhost, user=dbuser, passwd=dbpass, db=dbname)
 db.query("SET NAMES utf8")
 db.query("SET CHARACTER_SET_CLIENT=utf8")
@@ -192,6 +197,8 @@ installes = dict()
 lastDay = datetime.date.today() - datetime.timedelta(days=0)
 for line in sys.stdin:
     try:
+        if len(line.strip()) == 0:
+            continue
         j = json.loads(line)
         #appid = _mysql.escape_string(j["app"].strip())
         brand = _mysql.escape_string(j["brand"].strip().upper())
@@ -200,12 +207,13 @@ for line in sys.stdin:
         #pkg = _mysql.escape_string(j["package"].strip())
         user = _mysql.escape_string(str(j["user"]).strip())
         subj = _mysql.escape_string(str(j["subj"]).strip())
+        client = _mysql.escape_string(str(j["client"]).strip())
         #succ = _mysql.escape_string(str(j["success"]).strip())
         log_type = _mysql.escape_string(str(j["log_type"]).strip())
         #print "subj:", subj
-        logitem = LogItem(user, did, brand, model, subj, None)
+        logitem = (user,did,brand,model,subj,client,)
         if log_type == 'success':
-            successes.append(LogItem(user, did, brand, model, subj, None))
+            successes.append(logitem)
         else:
             installes[logitem] = installes.get(logitem,0) + 1
         if not brand or not model or not did:
@@ -231,10 +239,10 @@ for i in successes:
     if installes.has_key(i):
         installes[i] = 0 if installes[i] < 2 else installes[i] - 1
     print "INSERT INTO interface_logmeta(date, uid, did, brand, model, subject, installed, client_version) VALUES('%s', '%s', '%s', '%s', '%s', %s, %s, '%s');" % \
-              ( lastDay.isoformat(), map[i.user][0], i.did, i.brand, i.model, i.subj, '1', '1.0.0.0')
+              ( lastDay.isoformat(), map[i[0]][0], i[1], i[2], i[3], i[4], '1', i[5])
 
 
 for i in installes.keys():
     for j in range(installes[i]):
         print "INSERT INTO interface_logmeta(date, uid, did, brand, model, subject, installed, client_version) VALUES('%s', '%s', '%s', '%s', '%s', %s, %s, '%s');" % \
-              ( lastDay.isoformat(), map[i.user][0], i.did, i.brand, i.model, i.subj, '0', '1.0.0.0')
+              ( lastDay.isoformat(), map[i[0]][0], i[1], i[2], i[3], i[4], '0', i[5])
