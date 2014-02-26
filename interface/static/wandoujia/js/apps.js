@@ -152,6 +152,21 @@ function show_tip() {
 }
 
 function _log(event) {
+    function get_version() {
+        var originalVersion = navigator.userAgent.split(' ')[navigator.userAgent.split(' ').length - 1];
+        var version;
+        var arr = originalVersion.split('.');
+        _.each(arr, function(v, index) {
+            if (index === 0) {
+                version = v + '.';
+            } else {
+                version += v;
+            }
+        });
+
+        return parseFloat(version);
+    }
+
     function get_brand() {
         var build = Narya.Device.get("build");
         return build ? (build.get("brand") || "") : "";
@@ -167,6 +182,7 @@ function _log(event) {
         user: username,
         subj: subject_id,
         brand: get_brand(),
+        client: get_version(),
         model: get_model()
     };
     console.log(log);
@@ -182,6 +198,7 @@ function _ready(callback) {
 }
 
 _ready(function(Narya, IO) {
+
 
     var tasks = {};
     tasks.ERR = "error";
