@@ -83,6 +83,8 @@
     <script type="text/javascript" src="{{ STATIC_URL }}wandoujia/js/Narya.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}wandoujia/js/apps.js"></script>
     
+    
+    {% if development %}
 	<script type="text/javascript">
     var _usersnapconfig = {
         apiKey: '44454a5d-a6be-48dd-baf0-be92350732c0',
@@ -102,6 +104,7 @@
         x.appendChild(s);
     })();
     </script>
+    {% endif %}
 
 </body>
 </html>

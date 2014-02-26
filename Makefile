@@ -2,13 +2,9 @@ all: run
 
 TEST_APPS:=mgr statistics
 PORT:=13010
-DEBUG_PORT:=11111
 
 run:
 	nohup ./manage.py runserver $(PORT) &
-
-debug:
-	nohup ./manage.py runserver $(DEBUG_PORT) & 
 
 test:
 	./manage.py test $(TEST_APPS) --settings=suning.settings_test

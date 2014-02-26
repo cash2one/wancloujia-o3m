@@ -9,8 +9,8 @@ try:
 except:
     config = {}
 
-DEBUG = True
-#DEBUG = False
+DEBUG = getattr(config, 'DEBUG', True)
+
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
@@ -64,7 +64,7 @@ FROM_EMAIL = "491320274@qq.com"
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = ["tianyin.wandou.in"]
+ALLOWED_HOSTS = getattr(config, 'ALLOWED_HOSTS', ["tianyin.wandou.in"])
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.ikipedia.org/wiki/List_of_tz_zones_by_name
@@ -152,7 +152,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.media",
     "django.core.context_processors.request",
     "django.core.context_processors.static",
-    "django.contrib.messages.context_processors.messages")
+    "django.contrib.messages.context_processors.messages"
+)
 
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
