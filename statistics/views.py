@@ -356,8 +356,8 @@ def capacity_excel(request):
             dict['region'] or h.unescape(EMPTY_VALUE),
             dict['company'] or h.unescape(EMPTY_VALUE),
             dict['store'] or h.unescape(EMPTY_VALUE),
-            dict['empid'],
-            dict['emp'],
+            dict['empid'] or h.unescape(EMPTY_VALUE),
+            dict['emp'] or h.unescape(EMPTY_VALUE),
             dict['count'],
         ]
         for col, val in enumerate(rowdata):

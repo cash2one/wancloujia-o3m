@@ -266,6 +266,7 @@ def installed_capacity_to_dict(capacity):
         for i, item in enumerate(emp.organizations()):
             organizations[i] = item.name
     else:
+        dict["empid"] = None
         dict["emp"] = None
     dict["region"], dict["company"], dict["store"] = organizations
     dict["count"] = capacity['count']
