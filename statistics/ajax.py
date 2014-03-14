@@ -193,9 +193,14 @@ def filter_flow_logs(user, form):
     logs = PeriodFilter(logs, from_date, to_date).filter() 
     logger.debug("logs filtered by period: %d" % len(logs))
 
-    user_id = form.cleaned_data["user"]
-    logs = UserFilter(logs, user_id).filter()
-    logger.debug("logs filtered by user info: %d" % len(logs))
+    if user.is_superuser or user.is_staff or user.has_perm('interface.view_all_data'):
+        user_id = form.cleaned_data["user"]
+        logs = UserFilter(logs, user_id).filter()
+        logger.debug("logs filtered by user info: %d" % len(logs))
+    else:
+        user_id = user.pk
+        logs = UserFilter(logs, user_id).filter()
+        logger.debug("logs filtered by user info: %d" % len(logs))
 
     logs = SubjectFilter(logs, form.cleaned_data["subject"]).filter()
     logger.debug("logs filtered by subject: %d" % len(logs))

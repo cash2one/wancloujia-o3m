@@ -111,14 +111,14 @@
                         <a href="/mgr/user/">用户管理</a>
                     </li>
                     {% endif %}
-
-                    {% if request.user|can_view_oplog %}
-                    <li {% if request.nav.active_tab == "system" and request.nav.sub_active_tab == "oplog" %}class="active"{% endif %}>
-                        <a href="/oplog/">操作日志</a>
-                    </li>
-                    {% endif %}
                 </ul>
             </li>
+            {% endif %}
+            {% if request.user %}
+                <li {% if request.nav.active_tab == "oplog" %}class="active"{% endif %}>
+                    <a href="/oplog/">
+                    <span class="glyphicon glyphicon-ok"></span>&nbsp;&nbsp;操作日志</a>
+                </li>
             {% endif %}
             <li {% if request.nav.active_tab == "statistics" %}
                 class="active"

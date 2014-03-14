@@ -18,7 +18,7 @@ from mgr.models import Staff
 from suning.utils import render_json
 
 from mgr.models import Staff
-from oplog.forms import OpLogForm
+from oplog.forms import get_form
 import datetime
 from framework.templatetags.perm_filters import can_view_oplog
 from django.core.context_processors import csrf
@@ -27,10 +27,10 @@ logger = logging.getLogger(__name__)
 
 
 @login_required
-@user_passes_test(can_view_oplog, login_url=settings.PERMISSION_DENIED_URL)
-@active_tab("system", "oplog")
+#@user_passes_test(login_url=settings.PERMISSION_DENIED_URL)
+@active_tab("oplog")
 def get_oplog(request):
-    form = OpLogForm(request.POST)
+    form = get_form(request)
     logs = op_log.objects.all().order_by('-pk')
     from_date = datetime.date.today() + datetime.timedelta(days=-6)
     to_date = datetime.date.today()
@@ -39,11 +39,23 @@ def get_oplog(request):
         to_date = form.cleaned_data['to_date'] + datetime.timedelta(days=1)
         if from_date <= to_date:
             logs = logs.filter(date__gte=from_date, date__lt=to_date)
-        if int(form.cleaned_data['username']) != -1:
-            logs = logs.filter(username=Staff.objects.get(pk=int(form.cleaned_data['username'])).username)
+        if request.user.is_superuser or request.user.is_staff or request.user.has_perm('interface.view_all_data'):
+            if int(form.cleaned_data['username']) != -1:
+                logs = logs.filter(username=Staff.objects.get(pk=int(form.cleaned_data['username'])).username)
+        else:
+            logs = logs.filter(username=Staff.objects.get(pk=request.user.pk).username)
         if int(form.cleaned_data['type']) != -1:
             logs = logs.filter(type=int(form.cleaned_data['type']))
         to_date = to_date + datetime.timedelta(days=-1)
+    else:
+        from_date = datetime.date.today() + datetime.timedelta(days=-6)
+        to_date = datetime.date.today() + datetime.timedelta(days=1)
+        logs = logs.filter(date__gte=from_date, date__lt=to_date)
+        if request.user.is_superuser or request.user.is_staff or request.user.has_perm('interface.view_all_data'):
+            pass
+        else:
+            logs = logs.filter(username=Staff.objects.get(pk=request.user.pk).username)
+
     table = OpLogTable(logs)
     count = logs.count()
     RequestConfig(request, paginate={"per_page": 50}).configure(table)

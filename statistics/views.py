@@ -171,15 +171,17 @@ def employee(request):
 def users(request):
     if not request.user.is_authenticated():
         return render_json({'results': users_to_dict_arr(Staff.objects.none())})
-
-    LENGTH = 10
-    q = request.GET.get("q", "")
-    p = int(request.GET.get("p", 1))
-    users = Staff.objects.filter(username__contains=q)
-    total = len(users)
-    users = users[(p-1) * LENGTH: p * LENGTH]
-    results = map(lambda e: {'id': e.pk, 'text': e.username}, users)
-    return render_json({'results': results, 'more': total > p * LENGTH})
+    if request.user.is_superuser or request.user.is_staff or request.user.has_perm('interface.view_all_data'):
+        LENGTH = 10
+        q = request.GET.get("q", "")
+        p = int(request.GET.get("p", 1))
+        users = Staff.objects.filter(username__contains=q)
+        total = len(users)
+        users = users[(p-1) * LENGTH: p * LENGTH]
+        results = map(lambda e: {'id': e.pk, 'text': e.username}, users)
+        return render_json({'results': results, 'more': total > p * LENGTH})
+    else:
+        return render_json({'results': [], 'more': False})
 
 @require_GET
 def subjects(request):
