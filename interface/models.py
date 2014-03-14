@@ -10,7 +10,9 @@ class LogEntity(models.Model):
     create = models.DateTimeField()
 
     class Meta:
-        ordering = ('create',)
+        permissions=(
+            ('view_all_data', "Can view alldata"),
+        )
 
 
 class LogQuerySet(QuerySet):
