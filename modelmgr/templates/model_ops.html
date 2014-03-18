@@ -3,8 +3,8 @@
 
 <div class="btn-group btn-group-sm" 
     data-id="{{ record.id }}"
-    data-title="{{ record.name }}"
-    data-subject="{{ record.ua }}">
+    data-name="{{ record.name }}"
+    data-ua="{{ record.ua }}">
 
     <button type="button"  
             {% if request.user|is_employee and not perms.modelmgr.change_model %}

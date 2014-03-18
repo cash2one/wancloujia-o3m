@@ -6,7 +6,7 @@ $(function() {
     var modal = new FormModal($("#add-edit-model")[0], {
         title: text_generator("新增机型", "编辑机型"),
         msg: text_generator("新增机型成功", "机型息修改成功"),
-        process: Dajaxice.mgr.add_edit_model,
+        process: Dajaxice.modelmgr.add_edit_model,
         clear: function(form) {
             form.id.value = "";
             form.name.value = "";
@@ -28,7 +28,7 @@ $(function() {
     var modal = new ActionModal($("#delete-model")[0], {
         tip: _.template("确认要删除&nbsp;<strong><%- name %></strong>&nbsp;吗？"),
         msg: '删除成功',
-        process: Dajaxice.mgr.delete_group
+        process: Dajaxice.modelmgr.delete_model
     });
 
     $("table").on('click', '.delete', function() {
