@@ -223,7 +223,7 @@ class SubjectMap(models.Model):
         (TYPE_MEM_SIZE, u'存储空间适配')
     )
     type = models.IntegerField(verbose_name=u'适配类型', choices=TYPE_CHOICES)
-    model = models.ForeignKey(Model, verbose_name=u'机型')
+    model = models.ForeignKey(Model, verbose_name=u'机型', null=True)
 
     MEM_SIZE_0M_64M = 1
     MEM_SIZE_64M_128M = 2

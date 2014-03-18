@@ -87,7 +87,7 @@
             {% if request.user|can_view_subject %}
             <li {% if request.nav.active_tab == "subject" %}class="active"{% endif %}>
                 <a href="/app/subject">
-                    <span class="glyphicon glyphicon-filter"></span>&nbsp;&nbsp;应用专题管理
+                    <span class="glyphicon glyphicon-tags"></span>&nbsp;&nbsp;应用专题管理
                 </a>
             </li>
 			<li {% if request.nav.active_tab == "subject_map" %}class="active"{% endif %}>
