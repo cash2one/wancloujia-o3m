@@ -9,6 +9,7 @@ from django.views.decorators.http import require_GET
 from django_tables2.config import RequestConfig
 from models import Model
 from tables import ModelTable
+from forms import ModelForm
 
 from suning import settings
 from suning.decorators import active_tab
@@ -34,9 +35,11 @@ def models(request):
     if query:
         query_set = query_set.filter(Q(name__contains=query) | Q(ua__contains=query))
 
+    form = ModelForm()
     table = ModelTable(query_set)
     RequestConfig(request, paginate={"per_page": 10}).configure(table);
     return render(request, "model.html", {
         "query": query,
+        "form": form,
         "table": table
     })

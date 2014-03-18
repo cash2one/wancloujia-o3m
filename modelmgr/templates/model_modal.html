@@ -1,0 +1,23 @@
+{% extends "modal.html" %}
+
+{% block title %}新增机型{% endblock %}
+
+{% block body %}
+<form role="form" class="form-horizontal">
+    <input type="hidden" name="id">
+    <div class="form-group">
+        <label class="col-xs-3 control-label"> 
+            <span class="required">*</span>{{ f.name.label }} 
+        </label>
+        <div class="col-xs-8"> {{ f.name }} </div>
+    </div>
+    <div class="form-group">
+        <label class="col-xs-3 control-label">
+            <span class="required">*</span>{{ f.ua.label }}
+        </label>
+        <div class="col-xs-8">
+            {{ f.ua }}
+        </div>
+    </div>
+</form>
+{% endblock %}

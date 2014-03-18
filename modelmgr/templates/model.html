@@ -6,7 +6,7 @@
 {% block main %}
 <div class="main">
     <div class="toolbar">
-        <a id="add_ad" class="btn btn-primary" href="#add-edit-model"
+        <a data-toggle="modal" class="btn btn-primary" href="#add-edit-model"
             {% if request.user|is_employee and not perms.modelmgr.add_model %}
             disabled='disabled'
             {% endif %}>
@@ -23,4 +23,14 @@
         </div>
     </div>
 </div>
+
+{% include "model_modal.html" with modal_id="add-edit-model" f=form %}
+{% include "delete_modal.html" with modal_id="delete-model" model_name="机型" %} 
+
+{% endblock %}
+
+{% block js %}
+{{ block.super }}
+<script type="text/javascript" src="{{ STATIC_URL }}js/modals.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/model.js"></script>
 {% endblock %}
