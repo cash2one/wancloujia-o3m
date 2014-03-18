@@ -29,7 +29,7 @@ def can_view_models(user):
 @user_passes_test(can_view_models, login_url=settings.PERMISSION_DENIED_URL)
 @active_tab("modelmgr")
 def models(request):
-    query_set = Model.objects.all();
+    query_set = Model.objects.all().order_by("-pk")
     query = request.GET.get("q", None)
 
     if query:
