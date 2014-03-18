@@ -6,6 +6,7 @@ from django.contrib.contenttypes.models import ContentType
 from mgr.models import Organization, Staff
 from ad.models import AD
 from app.models import App, Subject
+from modelmgr.models import Model
 from oplog.models import op_log
 from interface.models import LogMeta, LogEntity
 
@@ -24,6 +25,7 @@ def get_available_permissions():
     ad_type = ContentType.objects.get_for_model(AD)
     app_type = ContentType.objects.get_for_model(App)
     subject_type = ContentType.objects.get_for_model(Subject)
+    model_type = ContentType.objects.get_for_model(Model)
     log_meta_type = ContentType.objects.get_for_model(LogMeta)
     log_entity_type = ContentType.objects.get_for_model(LogEntity)
     oplog_type = ContentType.objects.get_for_model(op_log)
@@ -55,6 +57,10 @@ def get_available_permissions():
         (Permission.objects.get(content_type=subject_type, codename="publish_subject").pk, u'上线应用专题'),
         (Permission.objects.get(content_type=subject_type, codename="drop_subject").pk, u'下线应用专题'),
         (Permission.objects.get(content_type=subject_type, codename="sort_subject").pk, u'调整应用专题顺序'),
+
+        (Permission.objects.get(content_type=model_type, codename="add_model").pk, u'添加机型'),
+        (Permission.objects.get(content_type=model_type, codename="change_model").pk, u'编辑机型'),
+        (Permission.objects.get(content_type=model_type, codename="delete_model").pk, u'删除机型'),
 
         (Permission.objects.get(content_type=log_meta_type, codename='view_organization_statistics').pk, u'查看所在组织统计数据'),
         (Permission.objects.get(content_type=log_entity_type, codename='view_all_data').pk, u'查看所有数据'),

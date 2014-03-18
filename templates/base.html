@@ -76,12 +76,15 @@
             </li>
             {% endif %}
 
-            {% if request.user|can_view_subject %}
-            <li {% if request.nav.active_tab == "subject" %}class="active"{% endif %}>
-                <a href="/app/subject/">
-                    <span class="glyphicon glyphicon-tags"></span>&nbsp;&nbsp;应用专题管理
+            {% if request.user|can_view_app %}
+            <li {% if request.nav.active_tab == "modelmgr" %}class="active"{% endif %}>
+                <a href="/model/">
+                    <span class="glyphicon glyphicon-leaf"></span>&nbsp;&nbsp;机型管理
                 </a>
             </li>
+            {% endif %}
+
+            {% if request.user|can_view_subject %}
 			<li {% if request.nav.active_tab == "subject_map" %}class="active"{% endif %}>
 				<a href="/app/subject/map/">
 					<span class="glyphicon glyphicon-filter"></span>&nbsp;&nbsp;应用专题适配

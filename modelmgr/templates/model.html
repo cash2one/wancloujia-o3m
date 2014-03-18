@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% load render_table from django_tables2 %}
+{% load perm_filters %}
+
+{% block main %}
+<div class="main">
+    <div class="toolbar">
+        <a id="add_ad" class="btn btn-primary" href="#add-edit-model"
+            {% if request.user|is_employee and not perms.modelmgr.add_model %}
+            disabled='disabled'
+            {% endif %}>
+            <span class="glyphicon glyphicon-plus"></span> 新增机型
+        </a>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            机型列表
+            {% include "search_form.html" with query=query %}
+        </div>
+        <div class="panel-body"> 
+            {% render_table table "multiple_table_template.html" %}
+        </div>
+    </div>
+</div>
+{% endblock %}
