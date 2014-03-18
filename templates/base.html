@@ -76,7 +76,7 @@
             </li>
             {% endif %}
 
-            {% if request.user|can_view_app %}
+            {% if request.user|can_view_models %}
             <li {% if request.nav.active_tab == "modelmgr" %}class="active"{% endif %}>
                 <a href="/model/">
                     <span class="glyphicon glyphicon-leaf"></span>&nbsp;&nbsp;机型管理

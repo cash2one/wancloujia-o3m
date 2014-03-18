@@ -21,7 +21,7 @@ def can_view_models(user):
     if user.is_superuser or user.is_staff:
         return True
 
-    return user.has_model_perms('modelmgr');
+    return user.has_module_perms('modelmgr');
 
 
 @require_GET
