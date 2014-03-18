@@ -230,7 +230,6 @@ def subject_map(request):
     query = request.GET.get("q", None)
     if query:
         query_set = query_set.filter(Q(subject__name__contains=query) | 
-                                     Q(model__contains=query) | 
                                      Q(creator__username__contains=query))
     
     filter = SubjectMapFilterForm(request.GET)
@@ -242,7 +241,7 @@ def subject_map(request):
 
         model = filter.cleaned_data["model"]
         if model != None and model != "":
-            query_set = query_set.filter(model=model)
+            query_set = query_set.filter(model__pk=model)
         logger.debug(query_set)
 
         updator = filter.cleaned_data["updator"]

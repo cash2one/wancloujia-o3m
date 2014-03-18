@@ -6,8 +6,8 @@ $(function() {
     var $modelForm = $("form", $modelModal);
     var modelForm = $modelForm[0];
     var $saveBtn = $(".save", $modelModal);
-	var $model = $('#id_model', $modelModal);
-	var $subject = $('#id_subject', $modelModal);
+    var $model = $('#id_model', $modelModal);
+    var $subject = $('#id_subject', $modelModal);
 
     function lock_check(func) {
         return function() {
@@ -19,22 +19,22 @@ $(function() {
     $modelModal.on('hide.bs.modal', function() {
         modelForm.id.value = "";
         modelForm.type.value = "";
-		
-		$model.val("").trigger('change');
-		$subject.val("").trigger('change');
+
+        $model.val("").trigger('change');
+        $subject.val("").trigger('change');
 
         $modelForm.parsley('destroy');
     });
 
-	$(".subjectmap-type-1").on("click", ".edit", function() {
-		var subjectmap = $(this.parentNode).data();
-		modelForm.id.value = subjectmap.id;
-		modelForm.type.value = subjectmap.type;
+    $(".subjectmap-type-1").on("click", ".edit", function() {
+        var subjectmap = $(this.parentNode).data();
+        modelForm.id.value = subjectmap.id;
+        modelForm.type.value = subjectmap.type;
         $model.val(subjectmap.model).trigger('change');
-		$subject.val(subjectmap.subject).trigger('change');
+        $subject.val(subjectmap.subject).trigger('change');
 
-		$modelModal.modal('show');
-	});
+        $modelModal.modal('show');
+    });
 
     $modelModal.on('show.bs.modal', function() {
         $modelForm.parsley(parsley.bs_options);
@@ -84,8 +84,8 @@ $(function() {
     var $memForm = $("form", $memModal);
     var memForm = $memForm[0];
     var $saveBtn = $(".save", $memModal);
-	var $memsize = $('#id_mem_size', $memModal);
-	var $subject = $('#id_subject2', $memModal);
+    var $memsize = $('#id_mem_size', $memModal);
+    var $subject = $('#id_subject2', $memModal);
 
     function lock_check(func) {
         return function() {
@@ -97,22 +97,22 @@ $(function() {
     $memModal.on('hide.bs.modal', function() {
         memForm.id.value = "";
         memForm.type.value = "";
-		
-		$memsize.val("").trigger('change');
-		$subject.val("").trigger('change');
+
+        $memsize.val("").trigger('change');
+        $subject.val("").trigger('change');
 
         $memForm.parsley('destroy');
     });
-	
-	$(".subjectmap-type-2").on("click", ".edit", function() {
-		var subjectmap = $(this.parentNode).data();
-		memForm.id.value = subjectmap.id;
-		memForm.type.value = subjectmap.type;
-        $memsize.val(subjectmap.memsize).trigger('change');
-		$subject.val(subjectmap.subject).trigger('change');
 
-		$memModal.modal('show');
-	});
+    $(".subjectmap-type-2").on("click", ".edit", function() {
+        var subjectmap = $(this.parentNode).data();
+        memForm.id.value = subjectmap.id;
+        memForm.type.value = subjectmap.type;
+        $memsize.val(subjectmap.memsize).trigger('change');
+        $subject.val(subjectmap.subject).trigger('change');
+
+        $memModal.modal('show');
+    });
 
     $memModal.on('show.bs.modal', function() {
         $memForm.parsley(parsley.bs_options);
@@ -172,23 +172,53 @@ $(function() {
 $(function() {
     var $form = $(".form-filter");
     var form = $form[0];
-    var EMPTY_SELECTION = {'id': '', 'text': '---------'};
+    var EMPTY_SELECTION = {
+        'id': '',
+        'text': '---------'
+    };
 
     $(form.mem_size).select2();
 
     $(form.model).select2($.extend({}, select2_tip_options, {
         query: function(query) {
-            $.get("/app/models", {
-                query: query.term
+            $.get("/model/query", {
+                q: query.term
             }).done(function(data) {
                 query.callback(data);
             }).error(function() {
-                result = {results: [EMPTY_SELECTION], more: false};
+                result = {
+                    results: [EMPTY_SELECTION],
+                    more: false
+                };
                 query.callback(result);
             });
         },
         initSelection: function(el, callback) {
-            callback({id: $(el).val(), text: $(el).val()});
+            function get_model(id) {
+                return $.get("/model/" + id).then(function(data) {
+                    if (data.ret_code !== 0) {
+                        throw new Error("Server Error");
+                    }
+
+                    return {
+                        text: data.name,
+                        id: data.id
+                    };
+                });
+            }
+
+            var id = $(el).val();
+            if (!id) {
+                return setTimeout(function() {
+                    callback(EMPTY_SELECTION);
+                }, 0);
+            }
+
+            get_model(id).then(function(model) {
+                callback(model);
+            }, function() {
+                callback(EMPTY_SELECTION);
+            });
         }
     }));
 
@@ -199,23 +229,27 @@ $(function() {
             }).done(function(data) {
                 query.callback(data);
             }).error(function() {
-                result = {results: [EMPTY_SELECTION], more: false};
+                result = {
+                    results: [EMPTY_SELECTION],
+                    more: false
+                };
                 query.callback(result);
             });
         },
         initSelection: function(el, callback) {
             var $el = $(el);
             var id = $el.val();
-            if(id) {
+            if (id) {
                 $.get("/app/updators", {
                     id: id
                 }).done(function(data) {
                     callback(data);
                 }).error(function() {
-                    callback({results: [EMPTY_SELECTION], more: false});
+                    callback(EMPTY_SELECTION);
                 });
+            } else {
+                callback(EMPTY_SELECTION);
             }
         }
     }));
 });
-

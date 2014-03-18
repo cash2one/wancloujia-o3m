@@ -6,6 +6,8 @@ from datetime import datetime
 from django.db import models, transaction, connection
 from django.contrib.auth.models import User
 
+from modelmgr.models import Model
+
 logger = logging.getLogger(__name__)
 
 
@@ -221,7 +223,8 @@ class SubjectMap(models.Model):
         (TYPE_MEM_SIZE, u'存储空间适配')
     )
     type = models.IntegerField(verbose_name=u'适配类型', choices=TYPE_CHOICES)
-    model = models.CharField(verbose_name=u'机型', max_length=255, blank=True, null=True)
+    model = models.ForeignKey(Model, verbose_name=u'机型')
+
     MEM_SIZE_0M_64M = 1
     MEM_SIZE_64M_128M = 2
     MEM_SIZE_128M_512M = 3
@@ -242,6 +245,7 @@ class SubjectMap(models.Model):
         (MEM_SIZE_8G_16G, u'8G - 16G'),
         (MEM_SIZE_16G_, u'16G以上')
     )
+
     mem_size = models.IntegerField(verbose_name=u'存储空间', choices=MEM_SIZE_CHOICES, blank=True, null=True)
     subject = models.ForeignKey(Subject, verbose_name=u'应用专题')
     creator = models.ForeignKey(User, verbose_name=u'创建者', related_name='subjectmap_creator')

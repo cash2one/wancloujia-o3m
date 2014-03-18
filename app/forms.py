@@ -9,6 +9,7 @@ from framework.widgets import Select2WidgetCN
 from django_select2 import *
 
 from models import *
+from modelmgr.models import Model
 from statistics.models import BrandModel
 
 @parsleyfy
@@ -56,8 +57,8 @@ class SubjectForm(forms.ModelForm):
         widgets = {'cover': AjaxClearableFileInput}
 
 class ModelChoices(AutoModelSelect2Field):
-    queryset = BrandModel.objects
-    search_fields = ['model__icontains']
+    queryset = Model.objects
+    search_fields = ['name__icontains', 'ua_contains']
 
 class SubjectChoices(AutoModelSelect2Field):
     queryset = Subject.objects
@@ -65,7 +66,7 @@ class SubjectChoices(AutoModelSelect2Field):
 
 @parsleyfy
 class SubjectMapModelForm(forms.ModelForm):
-    model = ModelChoices(required=True, label=u'机型', widget=Select2WidgetCN(), to_field_name='model')
+    model = ModelChoices(required=True, label=u'机型', widget=Select2WidgetCN())
     subject = SubjectChoices(required=True, label=u'应用专题', widget=Select2WidgetCN())
     
     class Meta:
@@ -93,7 +94,7 @@ class SubjectMapFilterForm(forms.Form):
                                  widget=forms.HiddenInput(attrs={
                                      'id': 'filter_updator'
                                  }))
-    model = forms.CharField(label=u'机型', required=False,
+    model = forms.IntegerField(label=u'机型', required=False,
                             widget=forms.TextInput(attrs={
                                 'id': 'filter_model',
                             }))

@@ -11,7 +11,9 @@ from dajaxice.decorators import dajaxice_register
 from suning.decorators import request_delay, oplogtrack
 from forms import *
 from suning.decorators import *
+from suning.utils import get_model_by_pk
 from app import models
+from modelmgr.models import Model
 from statistics.models import BrandModel
 import logging
 logger = logging.getLogger(__name__)
@@ -170,33 +172,35 @@ def add_edit_subjectmap_model(request, form):
     type = form["type"]
     model = form["model"]
     subject_id = form["subject"] 
-    subject = Subject.objects.get(pk=subject_id)    
+    subject = get_model_by_pk(Subject.objects, int(subject_id))
 
     if not model or not subject:
         logger("%s: param is invalid", __name__)
         return _invalid_data_json
 
     if pk == "":
-        subjectmap = SubjectMap(type=type, model=model, subject=subject)
-        if models.SubjectMap.objects.filter(model=model, subject=subject).exists():
+        if models.SubjectMap.objects.filter(model__pk=model).exists():
             return simplejson.dumps({
                 'ret_code': 1000, 
                 'field': 'model', 
-                'error': u'该机型和应用专题已经适配' 
+                'error': u'机型已适配' 
             })
+        subjectmap = SubjectMap(type=1, subject=subject, 
+                        model=get_model_by_pk(Model.objects, int(model)))
         models.add_subjectmap(subjectmap, request.user)
         __add_subjectmap(subjectmap, request.user.username)
     else:
         subjectmap = SubjectMap.objects.get(pk=int(pk))
-        subjectmap.type = type
-        subjectmap.model = model
-        subjectmap.subject = subject
-        if models.SubjectMap.objects.exclude(pk=subject.pk).filter(model=model, subject=subject).exists():
+        if models.SubjectMap.objects.exclude(pk=subjectmap.pk).filter(model__pk=model).exists():
             return simplejson.dumps({
                 'ret_code': 1000, 
                 'field': 'model', 
-                'error': u'该机型和应用专题已经适配'
+                'error': u'机型已适配'
             })
+
+        subjectmap.type = 1
+        subjectmap.model = get_model_by_pk(Model.objects, int(model))
+        subjectmap.subject = subject
         models.edit_subjectmap(subjectmap, request.user)
         __edit_subjectmap(subjectmap, request.user.username)
 
@@ -217,33 +221,35 @@ def add_edit_subjectmap_memsize(request, form):
     type = form["type"]
     mem_size = form["mem_size"]
     subject_id = form["subject2"] 
-    subject = Subject.objects.get(pk=subject_id)    
+    subject = get_model_by_pk(Subject.objects, subject_id)
 
     if not mem_size or not subject:
         logger("%s: param is invalid", __name__)
         return _invalid_data_json
 
     if pk == "":
-        subjectmap = SubjectMap(type=type, mem_size=int(mem_size), subject=subject)
-        if models.SubjectMap.objects.filter(mem_size=int(mem_size), subject=subject).exists():
+        if models.SubjectMap.objects.filter(mem_size=int(mem_size)).exists():
             return simplejson.dumps({
                 'ret_code': 1000, 
                 'field': 'model', 
-                'error': u'该存储空间和应用专题已经适配' 
+                'error': u'该存储空间已适配' 
             })
+        subjectmap = SubjectMap(type=type, mem_size=int(mem_size), subject=subject)
         models.add_subjectmap(subjectmap, request.user)
         __add_subjectmap(subjectmap, request.user.username)
     else:
         subjectmap = SubjectMap.objects.get(pk=int(pk))
-        subjectmap.type = type
-        subjectmap.mem_size = int(mem_size)
-        subjectmap.subject = subject
-        if models.SubjectMap.objects.exclude(pk=subject.pk).filter(mem_size=int(mem_size), subject=subject).exists():
+        
+        if models.SubjectMap.objects.exclude(pk=subject.pk).filter(mem_size=int(mem_size)).exists():
             return simplejson.dumps({
                 'ret_code': 1000, 
                 'field': 'model', 
-                'error': u'该存储空间和应用专题已经适配'
+                'error': u'该存储空间已适配'
             })
+
+        subjectmap.type = type
+        subjectmap.mem_size = int(mem_size)
+        subjectmap.subject = subject
         models.edit_subjectmap(subjectmap, request.user)
         __edit_subjectmap(subjectmap, request.user.username)
 
