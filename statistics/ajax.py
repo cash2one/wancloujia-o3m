@@ -16,6 +16,7 @@ from statistics.forms import LogMetaFilterForm, InstalledCapacityFilterForm
 from statistics.forms import DeviceStatForm, OrganizationStatForm
 from suning import utils
 from suning.decorators import *
+from models import query_model_name
 import re
 
 logger = logging.getLogger(__name__)
@@ -159,7 +160,7 @@ class SubjectFilter:
 def log_to_dict(log):
     dict = {
 		'date': str(log.date),
-        'model': log.model,
+        'model': query_model_name(log.model),
         'device': log.did,
         'client_version': log.client_version,
         'installed': log.installed,

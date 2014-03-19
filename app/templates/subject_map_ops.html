@@ -5,7 +5,7 @@
 <div class="btn-group btn-group-sm subjectmap-type-{{ record.type }}" 
     data-id="{{ record.id }}"
     data-type="{{ record.type }}"
-	data-model="{{ record.model }}"
+	data-model="{{ record.model.pk }}"
     data-memsize="{{ record.mem_size }}"
     data-subject="{{ record.subject.id }}"
 	data-name="{{ record|get_subjectmap_name }}">
@@ -18,7 +18,7 @@
         <span class="glyphicon glyphicon-edit"></span>
     </button>
 
-    <button type="button"  
+    <button type="button"
             {% if request.user|is_employee and not perms.app.delete_subjectmap %}
             disabled='disabled'
             {% endif %}

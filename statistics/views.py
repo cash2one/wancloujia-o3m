@@ -22,12 +22,13 @@ from suning.utils import render_json, first_valid, get_model_by_pk
 from suning.decorators import active_tab
 from mgr.models import cast_staff, Region, Company, Store, Organization, Employee, Staff
 from app.models import App, Subject
+from modelmgr.models import Model
 from interface.models import LogMeta, InstalledAppLogEntity, DeviceLogEntity
 from forms import LogMetaFilterForm, InstalledCapacityFilterForm
 from forms import OrganizationStatForm, DeviceStatForm
 from ajax import filter_flow_logs, log_to_dict, device_record_to_dict
 from ajax import filter_installed_capacity_logs, installed_capacity_to_dict
-from statistics.models import BrandModel, DID
+from statistics.models import BrandModel, DID, query_model_name
 from ajax import stat_device, filter_org_logs, org_record_to_dict, available_levels
 from ajax import titles_for_org_stat
 
@@ -235,6 +236,7 @@ def devices(request):
         'devices': devices[(p-1) * LENGTH : p * LENGTH]
     })
 
+
 @require_GET
 def models(request):
     LENGTH = 10
@@ -246,6 +248,7 @@ def models(request):
     logs = logs.filter(brand=b) if b else logs
     logs = logs.filter(model__contains=q)
     models = logs.values_list('model', flat=True).distinct()
+    models = map(lambda m: {'id': m, 'text': query_model_name(m)}, models)
     return render_json({
         'more': len(models) > p * LENGTH,
         'models': models[(p-1) * LENGTH : p * LENGTH]

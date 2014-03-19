@@ -204,6 +204,7 @@ INSTALLED_APPS = (
     'framework',
     'oplog',
     'ad',
+    'modelmgr',
     'mgr',
     'app',
     'rest_framework',

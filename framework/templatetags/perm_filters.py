@@ -7,6 +7,7 @@ from django.contrib.contenttypes.models import ContentType
 
 import mgr.views
 import app.views
+import modelmgr.views
 from mgr.models import Employee, Store, cast_staff
 from suning.permissions import *
 
@@ -132,3 +133,7 @@ def can_view_subject(user):
 @register.filter
 def can_view_subjectmap(user):
     return app.views.can_view_subjectmap(user)
+
+@register.filter
+def can_view_models(user):
+    return modelmgr.views.can_view_models(user)

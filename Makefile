@@ -3,6 +3,9 @@ all: run
 TEST_APPS:=mgr statistics
 PORT:=13010
 
+debug:
+	nohup ./manage.py runserver 0.0.0.0:$(PORT) &
+
 run:
 	nohup ./manage.py runserver $(PORT) &
 

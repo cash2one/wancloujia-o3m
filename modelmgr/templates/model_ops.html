@@ -1,0 +1,24 @@
+{% load organization_filters %}
+{% load perm_filters %}
+
+<div class="btn-group btn-group-sm" 
+    data-id="{{ record.id }}"
+    data-name="{{ record.name }}"
+    data-ua="{{ record.ua }}">
+
+    <button type="button"  
+            {% if request.user|is_employee and not perms.modelmgr.change_model %}
+            disabled='disabled'
+            {% endif %}
+            class="btn btn-default edit" title="编辑">
+        <span class="glyphicon glyphicon-edit"></span>
+    </button>
+
+    <button type="button"  
+            {% if request.user|is_employee and not perms.modelmgr.delete_model %}
+            disabled='disabled'
+            {% endif %}
+            class="btn btn-danger delete" title="删除">
+        <span class="glyphicon glyphicon-trash"></span>
+    </button>
+</div>
