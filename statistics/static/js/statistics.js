@@ -5,14 +5,14 @@
         var year = parseInt(result[1], 10);
         var month = parseInt(result[2], 10);
         var date = parseInt(result[3], 10);
-        return new Date(year, month-1, date, 0);
+        return new Date(year, month - 1, date, 0);
     }
 
     function table_map(data, names) {
         var result = {};
         _.each(data, function(item) {
-            if(~_.indexOf(names, item.name)) {
-                result[item.name] = item.value; 
+            if (~_.indexOf(names, item.name)) {
+                result[item.name] = item.value;
             }
         });
 
@@ -44,10 +44,16 @@
         }
     };
 
-    var EMPTY_SELECTION = {'id': '', 'text': '---------'};
+    var EMPTY_SELECTION = {
+        'id': '',
+        'text': '---------'
+    };
 
     function querySubjects(query, page, callback) {
-        $.get('subjects', { q: query, p: page }, function(data) {
+        $.get('subjects', {
+            q: query,
+            p: page
+        }, function(data) {
             callback(null, data);
         }, "json").error(function() {
             callback("error");
@@ -61,10 +67,13 @@
                 var page = query.page;
                 querySubjects(query.term, page, function(err, data) {
                     var result;
-                    if(err) {
-                        result = {results: [EMPTY_SELECTION], more: false};
+                    if (err) {
+                        result = {
+                            results: [EMPTY_SELECTION],
+                            more: false
+                        };
                     } else {
-                        if(page == 1) data.results.unshift(EMPTY_SELECTION);
+                        if (page == 1) data.results.unshift(EMPTY_SELECTION);
                         result = data;
                     }
                     query.callback(result);
@@ -74,7 +83,10 @@
     }
 
     function queryApps(query, page, callback) {
-        $.get('apps', { q: query, p: page }, function(data) {
+        $.get('apps', {
+            q: query,
+            p: page
+        }, function(data) {
             callback(null, data);
         }, "json").error(function() {
             callback("error");
@@ -88,10 +100,13 @@
                 var page = query.page;
                 queryApps(query.term, page, function(err, data) {
                     var result;
-                    if(err) {
-                        result = {results: [EMPTY_SELECTION], more: false};
+                    if (err) {
+                        result = {
+                            results: [EMPTY_SELECTION],
+                            more: false
+                        };
                     } else {
-                        if(page == 1) data.results.unshift(EMPTY_SELECTION);
+                        if (page == 1) data.results.unshift(EMPTY_SELECTION);
                         result = data;
                     }
                     query.callback(result);
@@ -106,14 +121,14 @@
         this.$to = $(to);
         this.$from.change(function() {
             var from_date = parseDate(that.$from.val());
-            if(!from_date) return;
+            if (!from_date) return;
 
             that.$to.datetimepicker('setStartDate', from_date);
 
             if (!that.$to.val()) return;
 
             var to_date = parseDate(that.$to.val());
-            if(to_date.getTime() < from_date.getTime()) {
+            if (to_date.getTime() < from_date.getTime()) {
                 that.$to.datetimepicker('setDate', from_date);
             }
         });
@@ -132,73 +147,96 @@
 
     var popover_temp = "'包名:&nbsp;<%- package %><br>序号:&nbsp;<%- id %>'";
     var app_temp = _.template("<span class='app-name' " +
-                                "data-html='true' data-placement='right' " +
-                                "data-content=" + popover_temp + 
-                                "data-trigger='hover'>" + 
-                                "<%- name %></span>");
-	
-	function query_devices(query, page, callback) {
-		$.get('devices', { q: query, p: page }, function(data) {
-			callback(null, data);
-		}, "json").error(function() {
-			callback('error');
-		});
-	}
+        "data-html='true' data-placement='right' " +
+        "data-content=" + popover_temp +
+        "data-trigger='hover'>" +
+        "<%- name %></span>");
 
-	function DeviceFilter(filter) {
-		this.$filter = $(filter);
-		this.$filter.select2($.extend({}, select2_tip_options, {
-			query: function(query) {
-				var page = query.page;
-				query_devices(query.term, query.page, function(err, data) {
-					var result;
-					if(err) {
-						result = {results: [EMPTY_SELECTION], more: false};
-					} else {
-						var devices = _.map(data.devices, function(device) {
-							return {'id': device, 'text': device};
-						});
-						if(page == 1) devices.unshift(EMPTY_SELECTION);
-						result = {results: devices, more: data.more};
-					}
-					query.callback(result);
-				});
-			}
-		}));
-	}
+    function query_devices(query, page, callback) {
+        $.get('devices', {
+            q: query,
+            p: page
+        }, function(data) {
+            callback(null, data);
+        }, "json").error(function() {
+            callback('error');
+        });
+    }
 
-	function query_models(query, page, callback) {
-		$.get('models', { q: query, p: page }, function(data) {
-			callback(null, data);
-		}, "json").error(function() {
-			callback('error');
-		});
-	}
+    function DeviceFilter(filter) {
+        this.$filter = $(filter);
+        this.$filter.select2($.extend({}, select2_tip_options, {
+            query: function(query) {
+                var page = query.page;
+                query_devices(query.term, query.page, function(err, data) {
+                    var result;
+                    if (err) {
+                        result = {
+                            results: [EMPTY_SELECTION],
+                            more: false
+                        };
+                    } else {
+                        var devices = _.map(data.devices, function(device) {
+                            return {
+                                'id': device,
+                                'text': device
+                            };
+                        });
+                        if (page == 1) devices.unshift(EMPTY_SELECTION);
+                        result = {
+                            results: devices,
+                            more: data.more
+                        };
+                    }
+                    query.callback(result);
+                });
+            }
+        }));
+    }
 
-	function ModelFilter(filter) {
-		this.$filter = $(filter);
-		this.$filter.select2($.extend({}, select2_tip_options, {
-			query: function(query) {
-				var page = query.page;
-				query_models(query.term, query.page, function(err, data) {
-					var result;
-					if(err) {
-						result = {results: [EMPTY_SELECTION], more: false};
-					} else {
-						var models = _.map(data.models, function(model) {
-							return {'id': model, 'text': model};
-						});
-						if(page == 1) models.unshift(EMPTY_SELECTION);
-						result = {results: models, more: data.more};
-					}
-					query.callback(result);
-				});
-			}
-		}));
-	}
+    function query_models(query, page, callback) {
+        $.get('models', {
+            q: query,
+            p: page
+        }, function(data) {
+            callback(null, data);
+        }, "json").error(function() {
+            callback('error');
+        });
+    }
+
+    function ModelFilter(filter) {
+        this.$filter = $(filter);
+        this.$filter.select2($.extend({}, select2_tip_options, {
+            query: function(query) {
+                var page = query.page;
+                query_models(query.term, query.page, function(err, data) {
+                    var result;
+                    if (err) {
+                        result = {
+                            results: [EMPTY_SELECTION],
+                            more: false
+                        };
+                    } else {
+                        if (page == 1) {
+                            data.models.unshift(EMPTY_SELECTION);
+                        }
+                        result = {
+                            results: data.models,
+                            more: data.more
+                        };
+                    }
+                    query.callback(result);
+                });
+            }
+        }));
+    }
 
     function query_brands(query, page, callback) {
-        $.get('brands', { q: query, p: page }, function(data) {
+        $.get('brands', {
+            q: query,
+            p: page
+        }, function(data) {
             callback(null, data);
         }, "json").error(function() {
             callback('error');
@@ -212,14 +250,23 @@
                 var page = query.page;
                 query_brands(query.term, query.page, function(err, data) {
                     var result;
-                    if(err) {
-                        result = {results: [EMPTY_SELECTION], more: false};
+                    if (err) {
+                        result = {
+                            results: [EMPTY_SELECTION],
+                            more: false
+                        };
                     } else {
                         var brands = _.map(data.brands, function(brand) {
-                            return {'id': brand, 'text': brand};
+                            return {
+                                'id': brand,
+                                'text': brand
+                            };
                         });
-                        if(page == 1) brands.unshift(EMPTY_SELECTION);
-                        result = {results: brands, more: data.more};
+                        if (page == 1) brands.unshift(EMPTY_SELECTION);
+                        result = {
+                            results: brands,
+                            more: data.more
+                        };
                     }
                     query.callback(result);
                 });
@@ -241,7 +288,7 @@
         });
     }
 
-	function UserFilter(filter) {
+    function UserFilter(filter) {
         var $user = $(filter);
         this.$user = $user;
         if (!$user.data('readonly')) {
@@ -252,8 +299,11 @@
                         q: query.term
                     }, function(err, data) {
                         var result;
-                        if(err) {
-                            result = {'results': [EMPTY_SELECTION], 'more': false};
+                        if (err) {
+                            result = {
+                                'results': [EMPTY_SELECTION],
+                                'more': false
+                            };
                         } else {
                             data.results.unshift(EMPTY_SELECTION);
                             result = data;
@@ -266,7 +316,7 @@
         } else {
             $user.select2(select2_tip_options);
         }
-	}
+    }
 
     function query_employee(params, callback) {
         $.get('employee', params, function(data) {
@@ -279,7 +329,7 @@
     function MgrFilter(group) {
         var that = this;
         this.$group = $(group);
-        
+
         var $region = this.$group.find("#filter_region");
         $region.select2(select2_tip_options);
         $region.data('readonly') || $region.jCombo('regions', COMBO_OPTIONS);
@@ -288,10 +338,12 @@
         var $company = this.$group.find("#filter_company");
         this.$company = $company;
         $company.select2(select2_tip_options);
-        if(!$company.data('readonly')) {
+        if (!$company.data('readonly')) {
             if (!$region.data('readonly')) {
-                $company.jCombo("companies?r=", 
-                    $.extend({parent: $region}, COMBO_OPTIONS));
+                $company.jCombo("companies?r=",
+                    $.extend({
+                        parent: $region
+                    }, COMBO_OPTIONS));
             } else {
                 $company.jCombo("companies?r=" + $region.val(), COMBO_OPTIONS);
             }
@@ -300,9 +352,11 @@
         var $store = $("#filter_store");
         this.$store = $store;
         $store.select2(select2_tip_options);
-        if(!$store.data('readonly')) {
-            if(!$company.data("readonly")) {
-                $store.jCombo("stores?c=", $.extend({parent: $company}, COMBO_OPTIONS));
+        if (!$store.data('readonly')) {
+            if (!$company.data("readonly")) {
+                $store.jCombo("stores?c=", $.extend({
+                    parent: $company
+                }, COMBO_OPTIONS));
             } else {
                 $store.jCombo("stores?c=" + $company.val(), COMBO_OPTIONS);
             }
@@ -318,8 +372,11 @@
                         q: query.term
                     }), function(err, data) {
                         var result;
-                        if(err) {
-                            result = {'results': [EMPTY_SELECTION], 'more': false};
+                        if (err) {
+                            result = {
+                                'results': [EMPTY_SELECTION],
+                                'more': false
+                            };
                         } else {
                             data.results.unshift(EMPTY_SELECTION);
                             result = data;
@@ -332,7 +389,7 @@
         } else {
             $employee.select2(select2_tip_options);
         }
-    
+
         $region.change($.proxy(this._ensure_emp, this));
         $company.change($.proxy(this._ensure_emp, this));
         $store.change($.proxy(this._ensure_emp, this));
@@ -363,10 +420,10 @@
         MgrFilter: MgrFilter,
         BrandFilter: BrandFilter,
         AppFilter: AppFilter,
-		SubjectFilter: SubjectFilter,
+        SubjectFilter: SubjectFilter,
         PeriodFilter: PeriodFilter,
-		UserFilter: UserFilter,
-		ModelFilter: ModelFilter,
-		DeviceFilter: DeviceFilter
+        UserFilter: UserFilter,
+        ModelFilter: ModelFilter,
+        DeviceFilter: DeviceFilter
     };
 })(window);
