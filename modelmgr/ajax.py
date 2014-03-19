@@ -19,7 +19,9 @@ _ok_json = simplejson.dumps({'ret_code': 0})
 @dajaxice_register(method='POST')
 @check_login
 def delete_model(request, id):
+    model = Model.objects.get(pk=id)
     Model.objects.filter(pk=id).delete();
+    oplogtrack(40, request.user.username, model)
     return _ok_json
 
 
@@ -44,6 +46,7 @@ def add_edit_model(request, form):
         if models.Model.objects.filter(ua=model.ua).exists():
             return simplejson.dumps({'ret_code': 1000, 'field': 'ua', 'error': u'机型代码已存在'})
         model.save()
+        oplogtrack(38, request.user.username, model)
         return _ok_json
     else:
         model.pk = form["id"]
@@ -52,4 +55,5 @@ def add_edit_model(request, form):
         if models.Model.objects.exclude(pk=model.pk).filter(ua=model.ua).exists():
             return simplejson.dumps({'ret_code': 1000, 'field': 'ua', 'error': u'机型代码已存在'})
         model.save()
+        oplogtrack(39, request.user.username, model)
         return _ok_json
