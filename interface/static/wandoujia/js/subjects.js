@@ -30,10 +30,6 @@ require(["Narya"], function() {
             var size = parseInt(Narya.Device.get("internalSDFreeCapacity")) +
                 parseInt(Narya.Device.get("externalSDFreeCapacity"));
 
-            function alter(value, default) {
-                return value || default;
-            }
-
             var build = Narya.Device.get("build");
             var model = build ? (build.get("model") || "") : "";
 
@@ -44,6 +40,22 @@ require(["Narya"], function() {
         }
 
         function refreshSubjects() {
+
+            function getSubjects(model, size, callback) {
+                $.get("/interface/getSubjects", {
+                    model: model,
+                    size: size
+                }, "json").done(function(data) {
+                    if (data.ret_code != 0) {
+                        return callback("error");
+                    }
+
+                    callback(null, data);
+                }).fail(function() {
+                    callback("error");
+                });
+            };
+
             var device = getDeviceInfo();
             $loading.show();
             $subjects_wrap.hide();
@@ -71,17 +83,17 @@ require(["Narya"], function() {
         }
 
         Narya.Device.on('change:build', function() {
-            console.log("info changed");
+            console.log("build changed");
             refreshSubjects();
         });
 
         Narya.Device.on('change:internalSDFreeCapacity', function() {
-            console.log("info changed");
+            console.log("internal sd changed");
             refreshSubjects();
         });
 
         Narya.Device.on('change:externalSDFreeCapacity', function() {
-            console.log("info changed");
+            console.log("external sd changed");
             refreshSubjects();
         });
 
