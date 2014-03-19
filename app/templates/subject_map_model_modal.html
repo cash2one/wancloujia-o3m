@@ -8,9 +8,12 @@
 	<input type="hidden" name="type" value="1">
     <div class="form-group">
         <label class="col-xs-4 control-label"> 
-            <span class="required">*</span>{{ f.model.label }} 
+            <span class="required">*</span>{{ f.model.label }}
+            <small>(<a href="/model">添加机型</a>)</small>
         </label>
-        <div class="col-xs-6" style="padding-top:4px;"> {{ f.model }} </div>
+        <div class="col-xs-6" style="padding-top:4px;"> 
+            {{ f.model }} 
+        </div>
     </div>
     <div class="form-group">
         <label class="col-xs-4 control-label">

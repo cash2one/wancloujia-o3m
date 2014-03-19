@@ -47,7 +47,6 @@ OPLOG_TYPE_CHOICE = (
     (40, u'删除机型')
 )
 
-# Create your models here.
 class op_log(models.Model):
     date = models.DateTimeField(auto_now=True)
     username = models.CharField(max_length=32)
