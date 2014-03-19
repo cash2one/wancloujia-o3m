@@ -1,6 +1,12 @@
 var error_check = suning.decorators.error_check;
 var login_check = suning.decorators.login_check;
 
+function _reload(millies) {
+    setTimeout(function() {
+        window.location = "/app/subject/map";
+    }, millies);
+}
+
 $(function() {
     var $modelModal = $("#add-edit-subjectmap-model");
     var $modelForm = $("form", $modelModal);
@@ -66,7 +72,7 @@ $(function() {
             var msg = !modelForm.id.value ? '新增机型适配成功' : '机型适配修改成功';
             toast('success', msg);
             $modelModal.modal("hide");
-            suning.reload(2000);
+            _reload(2000);
         }))));
         var onError = lock_check(suning.toastNetworkError);
 
@@ -142,7 +148,7 @@ $(function() {
             var msg = !memForm.id.value ? '新增存储空间适配成功' : '存储空间适配修改成功';
             toast('success', msg);
             $memModal.modal("hide");
-            suning.reload(2000);
+            _reload(2000);
         }))));
         var onError = lock_check(suning.toastNetworkError);
 

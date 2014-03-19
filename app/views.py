@@ -229,7 +229,8 @@ def subject_map(request):
     query_set = SubjectMap.objects.order_by("-create_date")
     query = request.GET.get("q", None)
     if query:
-        query_set = query_set.filter(Q(subject__name__contains=query) | 
+        query_set = query_set.filter(Q(model__name__contains=query) | 
+                                     Q(subject__name__contains=query) | 
                                      Q(creator__username__contains=query))
     
     filter = SubjectMapFilterForm(request.GET)
