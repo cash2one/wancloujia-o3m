@@ -35,7 +35,7 @@ require(["Narya"], function() {
             }
 
             var build = Narya.Device.get("build");
-            var model = build ? (build.get("model") || "unkown") : "unkown";
+            var model = build ? (build.get("model") || "") : "";
 
             return {
                 model: model,
