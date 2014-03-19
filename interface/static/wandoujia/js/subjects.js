@@ -35,7 +35,8 @@ require(["Narya"], function() {
                 }
 
                 Narya.Device.getCapacityAsync().then(function(resp) {
-                    var size = Narya.Device.get("deviceFreeCapacity");
+                    var size = parseInt(Narya.Device.get("internalSDFreeCapacity")) + 
+                                parseInt(Narya.Device.get("externalSDFreeCapacity"));
                     cb({
                         model: model,
                         size: size
