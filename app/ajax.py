@@ -231,8 +231,8 @@ def add_edit_subjectmap_memsize(request, form):
         if models.SubjectMap.objects.filter(mem_size=int(mem_size)).exists():
             return simplejson.dumps({
                 'ret_code': 1000, 
-                'field': 'model', 
-                'error': u'该存储空间已适配' 
+                'field': 'mem_size', 
+                'error': u'存储空间已适配' 
             })
         subjectmap = SubjectMap(type=type, mem_size=int(mem_size), subject=subject)
         models.add_subjectmap(subjectmap, request.user)
@@ -240,11 +240,11 @@ def add_edit_subjectmap_memsize(request, form):
     else:
         subjectmap = SubjectMap.objects.get(pk=int(pk))
         
-        if models.SubjectMap.objects.exclude(pk=subject.pk).filter(mem_size=int(mem_size)).exists():
+        if models.SubjectMap.objects.exclude(pk=subjectmap.pk).filter(mem_size=int(mem_size)).exists():
             return simplejson.dumps({
                 'ret_code': 1000, 
-                'field': 'model', 
-                'error': u'该存储空间已适配'
+                'field': 'mem_size', 
+                'error': u'存储空间已适配'
             })
 
         subjectmap.type = type

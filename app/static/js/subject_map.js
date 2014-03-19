@@ -96,8 +96,6 @@ $(function() {
 
     $memModal.on('hide.bs.modal', function() {
         memForm.id.value = "";
-        memForm.type.value = "";
-
         $memsize.val("").trigger('change');
         $subject.val("").trigger('change');
 
