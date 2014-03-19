@@ -212,10 +212,21 @@ def getSubjects(request):
     logger.debug("size: " + str(size))
     logger.debug("bits: " + str(bits))
 
-    subjects = Subject.objects.all().order_by("position")
-    if model != None and bits != None:
-        rules_filter = create_filter(model, bits)
-        subjects = filter(rules_filter, subjects)
+    subjects = None
+    if model != None:
+        maps = SubjectMap.objects.filter(model__ua=model)
+        logger.debug("subject maps count: " + str(len(maps)))
+        if len(maps) != 0:
+            subjects = [maps[0].subject]
+
+    if subjects is None and bits != None:
+        maps = SubjectMap.objects.filter(mem_size=SubjectMap.getMemSize(bits))
+        logger.debug("subject maps count: " + str(len(maps)))
+        if len(maps) != 0:
+            subjects = [maps[0].subject]
+
+    if subjects is None:
+        subjects = Subject.objects.all().order_by("position")
     
     results = []
     for item in subjects:
