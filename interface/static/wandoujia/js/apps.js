@@ -169,12 +169,12 @@ function _log(event) {
 
     function get_brand() {
         var build = Narya.Device.get("build");
-        return build ? (build.get("brand") || "unkown") : "unkown";
+        return build ? (build.get("brand") || "") : "";
     }
 
     function get_model() {
         var build = Narya.Device.get("build");
-        return build ? (build.get("model") || "unkown") : "unkown";
+        return build ? (build.get("model") || "") : "";
     }
 
     var log = {
