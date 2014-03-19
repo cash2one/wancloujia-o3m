@@ -57,7 +57,7 @@ class SubjectForm(forms.ModelForm):
         widgets = {'cover': AjaxClearableFileInput}
 
 class ModelChoices(AutoModelSelect2Field):
-    queryset = Model.objects
+    queryset = Model.objects.order_by('-pk')
     search_fields = ['name__icontains', 'ua_contains']
 
 class SubjectChoices(AutoModelSelect2Field):
