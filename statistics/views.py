@@ -22,6 +22,7 @@ from suning.utils import render_json, first_valid, get_model_by_pk
 from suning.decorators import active_tab
 from mgr.models import cast_staff, Region, Company, Store, Organization, Employee, Staff
 from app.models import App, Subject
+from modelmgr.models import Model
 from interface.models import LogMeta, InstalledAppLogEntity, DeviceLogEntity
 from forms import LogMetaFilterForm, InstalledCapacityFilterForm
 from forms import OrganizationStatForm, DeviceStatForm
@@ -235,6 +236,12 @@ def devices(request):
         'devices': devices[(p-1) * LENGTH : p * LENGTH]
     })
 
+
+def _query_model_name(ua):
+    models = Model.objects.filter(ua=ua)
+    return ua if len(models) == 0 else models[0].name
+
+
 @require_GET
 def models(request):
     LENGTH = 10
@@ -246,6 +253,7 @@ def models(request):
     logs = logs.filter(brand=b) if b else logs
     logs = logs.filter(model__contains=q)
     models = logs.values_list('model', flat=True).distinct()
+    models = map(lambda m: {'id': m, 'text': _query_model_name(m)}, models)
     return render_json({
         'more': len(models) > p * LENGTH,
         'models': models[(p-1) * LENGTH : p * LENGTH]
