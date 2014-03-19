@@ -27,86 +27,64 @@ require(["Narya"], function() {
         }
 
         function getDeviceInfo(cb) {
-            if (Narya.Device.get("isConnected")) {
-                var model = "";
-                var build = Narya.Device.get("build");
-                if (build) {
-                    model = build.get("model") || "";
-                }
+            var size = parseInt(Narya.Device.get("internalSDFreeCapacity")) +
+                parseInt(Narya.Device.get("externalSDFreeCapacity"));
 
-                Narya.Device.getCapacityAsync().then(function(resp) {
-                    var size = parseInt(Narya.Device.get("internalSDFreeCapacity")) + 
-                                parseInt(Narya.Device.get("externalSDFreeCapacity"));
-                    cb({
-                        model: model,
-                        size: size
-                    });
-                }, function(resp) {
-                    cb({
-                        model: model,
-                        size: ""
-                    });
-                });
-            } else {
-                setTimeout(function() {
-                    cb({
-                        model: "",
-                        size: ""
-                    });
-                }, 0);
+            function alter(value, default) {
+                return value || default;
             }
+
+            var build = Narya.Device.get("build");
+            var model = build ? (build.get("model") || "unkown") : "unkown";
+
+            return {
+                model: model,
+                size: size
+            };
         }
 
         function refreshSubjects() {
-            getDeviceInfo(function(device) {
-                console.log("deivce", device);
+            var device = getDeviceInfo();
+            $loading.show();
+            $subjects_wrap.hide();
+            count++;
+            getSubjects(device.model, device.size, sequence(function(err, data) {
+                $loading.hide();
 
-                function getSubjects(model, size, callback) {
-                    $.get("/interface/getSubjects", {
-                        model: model,
-                        size: size
-                    }, "json").done(function(data) {
-                        if (data.ret_code != 0) {
-                            return callback("error");
-                        }
+                if (err) {
+                    return $empty.html("加载失败，请刷新重试！").show();
+                }
 
-                        callback(null, data);
-                    }).fail(function() {
-                        callback("error");
-                    });
-                };
+                if (data.subjects.length === 0) {
+                    return $empty.html("暂无应用专题").show();
+                }
 
-                $loading.show();
-                $subjects_wrap.hide();
-                count++;
-                getSubjects(device.model, device.size, sequence(function(err, data) {
-                    $loading.hide();
-
-                    if (err) {
-                        return $empty.html("加载失败，请刷新重试！").show();
-                    }
-
-                    if (data.subjects.length === 0) {
-                        return $empty.html("暂无应用专题").show();
-                    }
-
-                    $subjects.empty();
-                    _.each(data.subjects, function(subject) {
-                        var html = subject_template({
-                            subject: subject
-                        }).trim();
-                        $(html).appendTo($subjects);
-                    });
-                    $subjects_wrap.show();
-                }, count));
-
-            });
+                $subjects.empty();
+                _.each(data.subjects, function(subject) {
+                    var html = subject_template({
+                        subject: subject
+                    }).trim();
+                    $(html).appendTo($subjects);
+                });
+                $subjects_wrap.show();
+            }, count));
         }
 
-        Narya.Device.on('change:isConnected', function() {
-            console.log("connection changed");
+        Narya.Device.on('change:build', function() {
+            console.log("info changed");
             refreshSubjects();
         });
+
+        Narya.Device.on('change:internalSDFreeCapacity', function() {
+            console.log("info changed");
+            refreshSubjects();
+        });
+
+        Narya.Device.on('change:externalSDFreeCapacity', function() {
+            console.log("info changed");
+            refreshSubjects();
+        });
+
         refreshSubjects();
     });
 });
