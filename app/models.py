@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 
 
 class UploadApk(models.Model):
-    file = models.FileField(upload_to='apks/%Y/%m/%d')
+    file = models.FileField(upload_to='apks/%Y/%m/%d', max_length=1024)
     md5 = models.CharField(max_length=32, null=True)
 
 
@@ -61,7 +61,7 @@ _MAX_SUBJECTS = 1024 * 1024
 
 class Subject(models.Model):
     name = models.CharField(verbose_name=u'名称', max_length=20, unique=True)
-    cover = models.CharField(verbose_name=u'图片', max_length=100)
+    cover = models.CharField(verbose_name=u'图片', max_length=1024)
     desc = models.CharField(verbose_name=u'描述', max_length=200, null=True, default="")
     online = models.BooleanField(verbose_name=u'状态', default=False)
 
