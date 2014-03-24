@@ -3449,6 +3449,8 @@ define("backbone", ["underscore"], (function (global) {
             initialize : function () {
                 this.on('change:isConnected', function (Device, isConnected) {
                     if (isConnected) {
+                        this.getCapacityAsync();
+
                         IO.requestAsync('wdj://device/screen.json').done(function (resp) {
                             if (resp.state_code === 200) {
                                 this.get('screen').set({
