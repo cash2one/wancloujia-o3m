@@ -193,7 +193,7 @@ import collections
 
 successes = collections.deque()
 installes = dict()
-#print map
+#print staffs
 lastDay = datetime.date.today() - datetime.timedelta(days=0)
 for line in sys.stdin:
     try:
@@ -236,13 +236,21 @@ for line in sys.stdin:
         pass
 
 for i in successes:
-    if installes.has_key(i):
-        installes[i] = 0 if installes[i] < 2 else installes[i] - 1
-    print "INSERT INTO interface_logmeta(date, uid, did, brand, model, subject, installed, client_version) VALUES('%s', '%s', '%s', '%s', '%s', %s, %s, '%s');" % \
-              ( lastDay.isoformat(), map[i[0]][0], i[1], i[2], i[3], i[4], '1', i[5])
+    try:
+        if installes.has_key(i):
+            installes[i] = 0 if installes[i] < 2 else installes[i] - 1
+        if i[0] == 'root': continue
+        print "INSERT INTO interface_logmeta(date, uid, did, brand, model, subject, installed, client_version) VALUES('%s', '%s', '%s', '%s', '%s', %s, %s, '%s');" % \
+                 ( lastDay.isoformat(), map[i[0]][0], i[1], i[2], i[3], i[4], '1', i[5])
+    except:
+        pass
 
 
 for i in installes.keys():
     for j in range(installes[i]):
-        print "INSERT INTO interface_logmeta(date, uid, did, brand, model, subject, installed, client_version) VALUES('%s', '%s', '%s', '%s', '%s', %s, %s, '%s');" % \
-              ( lastDay.isoformat(), map[i[0]][0], i[1], i[2], i[3], i[4], '0', i[5])
+        try:
+            if i[0] == 'root': continue
+            print "INSERT INTO interface_logmeta(date, uid, did, brand, model, subject, installed, client_version) VALUES('%s', '%s', '%s', '%s', '%s', %s, %s, '%s');" % \
+                  ( lastDay.isoformat(), map[i[0]][0], i[1], i[2], i[3], i[4], '0', i[5])
+        except:
+            pass

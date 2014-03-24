@@ -8,7 +8,7 @@ dbpass = 'nameLR9969'
 dbname = 'tianyin'
 
 #设置脚本的目录，末尾带斜杠
-jobpath = '/data/tianyin/server_scripts/'
+jobpath = '/data/tianyin.proj/tianyin/server_scripts/'
 
 #是否删除hdfs上各个机器保留的日志拼接文件,建议False
 remove_logs = False
@@ -24,7 +24,7 @@ else:
 #是否清理垃圾文件
 auto_remove_files = False
 #用于临时进行日志合并的目录
-tmpdir = "/data/tianyin/tmp"
+tmpdir = "/data/tianyin.proj/tianyin/logs"
 
 #这里记录了hadoop需要执行的脚本以及结果存放的位置
 jobs = [
