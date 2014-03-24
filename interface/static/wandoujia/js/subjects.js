@@ -31,7 +31,7 @@ require(["Narya"], function() {
                 parseInt(Narya.Device.get("externalSDFreeCapacity"));
 
             var build = Narya.Device.get("build");
-            var model = build ? (build.get("model") || "") : "";
+            var model = build ? (build.get("model") || "unknown") : "unknown";
 
             return {
                 model: model,
@@ -57,6 +57,7 @@ require(["Narya"], function() {
             };
 
             var device = getDeviceInfo();
+            console.log("device", device);
             $loading.show();
             $subjects_wrap.hide();
             count++;
@@ -82,8 +83,8 @@ require(["Narya"], function() {
             }, count));
         }
 
-        Narya.Device.on('change:build', function() {
-            console.log("build changed");
+        Narya.Device.get("build").on("change", function() {
+            console.log("build attributes changed");
             refreshSubjects();
         });
 
