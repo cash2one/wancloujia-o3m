@@ -2,89 +2,89 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c3dfefef-aaad-4104-b895-f49c5694acd3" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/statistics/static/css/flow.css" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/oplog/templates/period.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/templates/subject_map_memsize_modal.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/templates/subject_map_ops.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/templates/subject_map_model_modal.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/interface/static/wandoujia/images/loading.gif" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/oplog/tables.py" />
       <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/static/js/subject_map.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/oplog/urls.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/oplog/templates/oplog.html" />
       <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/oplog/static/css/oplog.css" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/assets/js/django_select2_cn.js" />
       <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/oplog/ajax.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/framework/widgets.py" />
       <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/oplog/templates/oplog_filter.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/templates/subject_map_memsize_modal.html" />
       <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/oplog/forms.py" />
       <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/templates/subject_map.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/oplog/urls.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/templates/subject_map_model_modal.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/oplog/tables.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/oplog/templates/oplog.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/interface/static/wandoujia/images/loading.gif" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/templates/subject_map_ops.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/oplog/templates/period.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/assets/js/django_select2_cn.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/statistics/static/css/flow.css" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/framework/widgets.py" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/suning.iml" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/views.py" afterPath="$PROJECT_DIR$/app/views.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/statistics/static/js/capacity.js" afterPath="$PROJECT_DIR$/statistics/static/js/capacity.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/oplog/views.py" afterPath="$PROJECT_DIR$/oplog/views.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/suning/decorators.py" afterPath="$PROJECT_DIR$/suning/decorators.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server_scripts/slave_do.py" afterPath="$PROJECT_DIR$/server_scripts/slave_do.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/interface/views.py" afterPath="$PROJECT_DIR$/interface/views.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/suning/settings.py" afterPath="$PROJECT_DIR$/suning/settings.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/templates/app_modal.html" afterPath="$PROJECT_DIR$/app/templates/app_modal.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server_scripts/log_mapper_userdev.py" afterPath="$PROJECT_DIR$/server_scripts/log_mapper_userdev.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server_scripts/crontab" afterPath="$PROJECT_DIR$/server_scripts/crontab" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server_scripts/autorebuild_static.sh" afterPath="$PROJECT_DIR$/server_scripts/autorebuild_static.sh" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/static/js/jquery.uploadify.js" afterPath="$PROJECT_DIR$/app/static/js/jquery.uploadify.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/statistics/templates/capacity.html" afterPath="$PROJECT_DIR$/statistics/templates/capacity.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server_scripts/log_reducer_devicelog.py" afterPath="$PROJECT_DIR$/server_scripts/log_reducer_devicelog.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/framework/templatetags/perm_filters.py" afterPath="$PROJECT_DIR$/framework/templatetags/perm_filters.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/statistics/static/js/flow.js" afterPath="$PROJECT_DIR$/statistics/static/js/flow.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/views.py" afterPath="$PROJECT_DIR$/app/views.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ad/ajax.py" afterPath="$PROJECT_DIR$/ad/ajax.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server_scripts/log_mapper_devicelog.py" afterPath="$PROJECT_DIR$/server_scripts/log_mapper_devicelog.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server_scripts/crontab" afterPath="$PROJECT_DIR$/server_scripts/crontab" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/statistics/static/js/organization_stat.js" afterPath="$PROJECT_DIR$/statistics/static/js/organization_stat.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/interface/static/wandoujia/css/apps_fix.css" afterPath="$PROJECT_DIR$/interface/static/wandoujia/css/apps_fix.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server_scripts/log_mapper_userdev.py" afterPath="$PROJECT_DIR$/server_scripts/log_mapper_userdev.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/suning/decorators.py" afterPath="$PROJECT_DIR$/suning/decorators.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/statistics/models.py" afterPath="$PROJECT_DIR$/statistics/models.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/scaffolding.html" afterPath="$PROJECT_DIR$/templates/scaffolding.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ad/ajax.py" afterPath="$PROJECT_DIR$/ad/ajax.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/encodings.xml" afterPath="$PROJECT_DIR$/.idea/encodings.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server_scripts/log_reducer_appstat.py" afterPath="$PROJECT_DIR$/server_scripts/log_reducer_appstat.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mgr/urls.py" afterPath="$PROJECT_DIR$/mgr/urls.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/statistics/static/js/statistics.js" afterPath="$PROJECT_DIR$/statistics/static/js/statistics.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server_scripts/log_mapper_appstat.py" afterPath="$PROJECT_DIR$/server_scripts/log_mapper_appstat.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/tables.py" afterPath="$PROJECT_DIR$/app/tables.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/oplog/models.py" afterPath="$PROJECT_DIR$/oplog/models.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/statistics/templates/device.html" afterPath="$PROJECT_DIR$/statistics/templates/device.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/static/css/uploadify.css" afterPath="$PROJECT_DIR$/app/static/css/uploadify.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/suning/settings.py" afterPath="$PROJECT_DIR$/suning/settings.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/interface/templates/wandoujia/apps.html" afterPath="$PROJECT_DIR$/interface/templates/wandoujia/apps.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/interface/static/wandoujia/css/subjects_fix.css" afterPath="$PROJECT_DIR$/interface/static/wandoujia/css/subjects_fix.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/suning/permissions.py" afterPath="$PROJECT_DIR$/suning/permissions.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server_scripts/master_do.py" afterPath="$PROJECT_DIR$/server_scripts/master_do.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ad/views.py" afterPath="$PROJECT_DIR$/ad/views.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server_scripts/log_mapper_devicelog.py" afterPath="$PROJECT_DIR$/server_scripts/log_mapper_devicelog.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/forms.py" afterPath="$PROJECT_DIR$/app/forms.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/suning/urls.py" afterPath="$PROJECT_DIR$/suning/urls.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Makefile" afterPath="$PROJECT_DIR$/Makefile" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/interface/urls.py" afterPath="$PROJECT_DIR$/interface/urls.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/statistics/urls.py" afterPath="$PROJECT_DIR$/statistics/urls.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/statistics/ajax.py" afterPath="$PROJECT_DIR$/statistics/ajax.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/ajax.py" afterPath="$PROJECT_DIR$/app/ajax.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/statistics/forms.py" afterPath="$PROJECT_DIR$/statistics/forms.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wandoujia/manifest.json" afterPath="$PROJECT_DIR$/wandoujia/manifest.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/interface/templates/wandoujia/subjects.html" afterPath="$PROJECT_DIR$/interface/templates/wandoujia/subjects.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/urls.py" afterPath="$PROJECT_DIR$/app/urls.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/statistics/static/js/flow.js" afterPath="$PROJECT_DIR$/statistics/static/js/flow.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server_scripts/log_reducer_meta.py" afterPath="$PROJECT_DIR$/server_scripts/log_reducer_meta.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mgr/ajax.py" afterPath="$PROJECT_DIR$/mgr/ajax.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/templatetags/app_filters.py" afterPath="$PROJECT_DIR$/app/templatetags/app_filters.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/statistics/views.py" afterPath="$PROJECT_DIR$/statistics/views.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server_scripts/log_mapper_appstat.py" afterPath="$PROJECT_DIR$/server_scripts/log_mapper_appstat.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/statistics/urls.py" afterPath="$PROJECT_DIR$/statistics/urls.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/statistics/static/js/statistics.js" afterPath="$PROJECT_DIR$/statistics/static/js/statistics.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/oplog/views.py" afterPath="$PROJECT_DIR$/oplog/views.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/interface/templates/wandoujia/apps.html" afterPath="$PROJECT_DIR$/interface/templates/wandoujia/apps.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wandoujia/manifest.json" afterPath="$PROJECT_DIR$/wandoujia/manifest.json" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/base.html" afterPath="$PROJECT_DIR$/templates/base.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/oplog/models.py" afterPath="$PROJECT_DIR$/oplog/models.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/suning/permissions.py" afterPath="$PROJECT_DIR$/suning/permissions.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/statistics/templates/capacity.html" afterPath="$PROJECT_DIR$/statistics/templates/capacity.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mgr/urls.py" afterPath="$PROJECT_DIR$/mgr/urls.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Makefile" afterPath="$PROJECT_DIR$/Makefile" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ad/views.py" afterPath="$PROJECT_DIR$/ad/views.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/statistics/templates/device.html" afterPath="$PROJECT_DIR$/statistics/templates/device.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/templatetags/app_filters.py" afterPath="$PROJECT_DIR$/app/templatetags/app_filters.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/interface/urls.py" afterPath="$PROJECT_DIR$/interface/urls.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/ajax.py" afterPath="$PROJECT_DIR$/app/ajax.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/encodings.xml" afterPath="$PROJECT_DIR$/.idea/encodings.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server_scripts/log_reducer_userdev.py" afterPath="$PROJECT_DIR$/server_scripts/log_reducer_userdev.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/interface/views.py" afterPath="$PROJECT_DIR$/interface/views.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/static/css/uploadify.css" afterPath="$PROJECT_DIR$/app/static/css/uploadify.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/urls.py" afterPath="$PROJECT_DIR$/app/urls.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/statistics/static/js/capacity.js" afterPath="$PROJECT_DIR$/statistics/static/js/capacity.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/.name" afterPath="$PROJECT_DIR$/.idea/.name" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/interface/models.py" afterPath="$PROJECT_DIR$/interface/models.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/static/img/uploadify-cancel.png" afterPath="$PROJECT_DIR$/app/static/img/uploadify-cancel.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/feedback/ajax.py" afterPath="$PROJECT_DIR$/feedback/ajax.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server_scripts/autorebuild_static.sh" afterPath="$PROJECT_DIR$/server_scripts/autorebuild_static.sh" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/framework/templatetags/perm_filters.py" afterPath="$PROJECT_DIR$/framework/templatetags/perm_filters.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/models.py" afterPath="$PROJECT_DIR$/app/models.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/interface/templates/wandoujia/subjects.html" afterPath="$PROJECT_DIR$/interface/templates/wandoujia/subjects.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/statistics/templates/organization_stat.html" afterPath="$PROJECT_DIR$/statistics/templates/organization_stat.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server_scripts/log_reducer_devicelog.py" afterPath="$PROJECT_DIR$/server_scripts/log_reducer_devicelog.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/interface/static/wandoujia/css/subjects_fix.css" afterPath="$PROJECT_DIR$/interface/static/wandoujia/css/subjects_fix.css" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/statistics/templates/flow.html" afterPath="$PROJECT_DIR$/statistics/templates/flow.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/suning/urls.py" afterPath="$PROJECT_DIR$/suning/urls.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server_scripts/log_reducer_meta.py" afterPath="$PROJECT_DIR$/server_scripts/log_reducer_meta.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/models.py" afterPath="$PROJECT_DIR$/app/models.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/statistics/forms.py" afterPath="$PROJECT_DIR$/statistics/forms.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/interface/models.py" afterPath="$PROJECT_DIR$/interface/models.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/statistics/ajax.py" afterPath="$PROJECT_DIR$/statistics/ajax.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/interface/static/wandoujia/css/apps_fix.css" afterPath="$PROJECT_DIR$/interface/static/wandoujia/css/apps_fix.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server_scripts/slave_do.py" afterPath="$PROJECT_DIR$/server_scripts/slave_do.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/templates/app_modal.html" afterPath="$PROJECT_DIR$/app/templates/app_modal.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/forms.py" afterPath="$PROJECT_DIR$/app/forms.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/feedback/ajax.py" afterPath="$PROJECT_DIR$/feedback/ajax.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server_scripts/log_reducer_appstat.py" afterPath="$PROJECT_DIR$/server_scripts/log_reducer_appstat.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server_scripts/master_do.py" afterPath="$PROJECT_DIR$/server_scripts/master_do.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mgr/ajax.py" afterPath="$PROJECT_DIR$/mgr/ajax.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/static/img/uploadify-cancel.png" afterPath="$PROJECT_DIR$/app/static/img/uploadify-cancel.png" />
     </list>
     <ignored path="suning.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -110,7 +110,7 @@
       <file leaf-file-name="master_do.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/server_scripts/master_do.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="30" column="56" selection-start="614" selection-end="614" vertical-scroll-proportion="36.56" vertical-offset="1364" max-vertical-offset="2265">
+            <state line="30" column="56" selection-start="614" selection-end="614" vertical-scroll-proportion="0.0" vertical-offset="1364" max-vertical-offset="2265">
               <folding />
             </state>
           </provider>
@@ -119,7 +119,7 @@
       <file leaf-file-name="views.py" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/interface/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="74" column="2" selection-start="2061" selection-end="2061" vertical-scroll-proportion="0.36199096" vertical-offset="510" max-vertical-offset="3870">
+            <state line="74" column="2" selection-start="2061" selection-end="2061" vertical-scroll-proportion="0.0" vertical-offset="1110" max-vertical-offset="3870">
               <folding />
             </state>
           </provider>
@@ -128,7 +128,7 @@
       <file leaf-file-name="ajax.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/statistics/ajax.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="178" column="12" selection-start="4893" selection-end="5295" vertical-scroll-proportion="-13.8" vertical-offset="2070" max-vertical-offset="8880">
+            <state line="178" column="12" selection-start="4893" selection-end="5295" vertical-scroll-proportion="0.0" vertical-offset="2670" max-vertical-offset="9135">
               <folding />
             </state>
           </provider>
@@ -292,12 +292,12 @@
   <component name="PropertiesComponent">
     <property name="GoToFile.includeJavaFiles" value="false" />
     <property name="options.splitter.main.proportions" value="0.3" />
-    <property name="recentsLimit" value="5" />
     <property name="options.lastSelected" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+    <property name="recentsLimit" value="5" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../tianyinmerge" />
     <property name="FullScreen" value="false" />
-    <property name="options.searchVisible" value="true" />
     <property name="options.splitter.details.proportions" value="0.2" />
+    <property name="options.searchVisible" value="true" />
   </component>
   <component name="PyConsoleOptionsProvider">
     <option name="myPythonConsoleState">
@@ -508,7 +508,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="22" width="1440" height="824" extended-state="0" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.28730822" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -543,9 +543,9 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.159375" sideWeight="0.78476423" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
     </layout-to-restore>
   </component>
   <component name="VcsContentAnnotationSettings">
@@ -629,21 +629,21 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/server_scripts/master_do.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="30" column="56" selection-start="614" selection-end="614" vertical-scroll-proportion="36.56" vertical-offset="1364" max-vertical-offset="2265">
+        <state line="30" column="56" selection-start="614" selection-end="614" vertical-scroll-proportion="0.0" vertical-offset="1364" max-vertical-offset="2265">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/statistics/ajax.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="178" column="12" selection-start="4893" selection-end="5295" vertical-scroll-proportion="-13.8" vertical-offset="2070" max-vertical-offset="8880">
+        <state line="178" column="12" selection-start="4893" selection-end="5295" vertical-scroll-proportion="0.0" vertical-offset="2670" max-vertical-offset="9135">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/interface/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="74" column="2" selection-start="2061" selection-end="2061" vertical-scroll-proportion="0.36199096" vertical-offset="510" max-vertical-offset="3870">
+        <state line="74" column="2" selection-start="2061" selection-end="2061" vertical-scroll-proportion="0.0" vertical-offset="1110" max-vertical-offset="3870">
           <folding />
         </state>
       </provider>
