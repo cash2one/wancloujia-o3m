@@ -124,7 +124,16 @@ def upload(request):
     if request.method == "POST":
         log = zlib.decompress(str(request.raw_post_data), 16+zlib.MAX_WBITS, 16384)
         logger.info(log)
-        return HttpResponse(status=status.HTTP_201_CREATED)
+        return HttpResponse(status=status.HTTP_200_OK)
+    return HttpResponse(status=status.HTTP_404_NOT_FOUND)
+
+@csrf_exempt
+@api_view(['GET', 'POST'])
+def signal(request):
+    if request.method == "POST":
+        log = "logs begin"
+        logger.info(log)
+        return HttpResponse(status=status.HTTP_200_OK)
     return HttpResponse(status=status.HTTP_404_NOT_FOUND)
 
 @csrf_exempt
