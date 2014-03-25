@@ -174,7 +174,7 @@ function _log(event) {
 
     function get_model() {
         var build = Narya.Device.get("build");
-        return build ? (build.get("model") || "unknown" : "unknown";
+        return build ? (build.get("model") || "unknown") : "unknown";
     }
 
     var log = {
