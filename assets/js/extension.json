@@ -1,0 +1,24 @@
+{
+  "extensions" : [
+    {
+      "name" : "应用下载",
+      "icon_url" : "http://img.wdjimg.com/common/download/download_icon_30.png",
+      "index_url" : "index.html",
+      "auto_redirect" : true,
+      "navigates" : [
+        {
+          "name" : "导航1",
+          "url" : "index1.html"
+        },
+        {
+          "name" : "导航2",
+          "url" : "index2.html"
+        },
+        {
+          "name" : "导航3",
+          "url" : "index3.html"
+        }
+      ]
+    }
+  ]
+}
