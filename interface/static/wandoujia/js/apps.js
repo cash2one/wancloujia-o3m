@@ -254,6 +254,7 @@ function onDeviceInfoReady() {
                 user: username,
                 subj: subject_id,
                 brand: brand,
+                did: deviceid,
                 model: model
             };
             console.log(log);
