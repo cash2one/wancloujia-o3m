@@ -46,6 +46,7 @@ else:
 	file = logdir + "/windows2x.log.%s" % (lastDay.isoformat(),)
 
 headerRE = re.compile(r"^\[windows2x\](?P<header>.*)")
+headerRE2 = re.compile(r"clientVersion=(?P<client>[^,]+),")
 contentRE = re.compile(r"^tianyin\.install\.success\s(?P<content>[^\t]+)\s\d+")
 #contentRE2 = re.compile(r"^tianyin\.install\s(?P<content>[^\t]+)\s\d+")
 contentRE2 = re.compile(r"^(?P<content>[^\t]+)\s(?P<content2>[^\s]+)\s\d+")
@@ -57,7 +58,7 @@ print "正则匹配出我们需要处理的日志项到临时文件里面去"
 ###################################
 # 正则匹配出我们需要处理的日志项到临时文件里面去
 ###################################
-def remap_log_content(content):
+def remap_log_content(content, version="1.0.0.0"):
     result = re.match(contentRE, content)
     result2 = re.match(contentRE2, content)
     is_success = False
@@ -73,10 +74,12 @@ def remap_log_content(content):
         k = json.loads(resultdict['content2'])
     	j["log_type"] = 'success' if j['event'] == 'tianyin.install.success' else 'install'
         j['deviceId'] = k['deviceId']
+        j['client'] = version
     	encodedjson = json.dumps(j)
     	fp2.write(encodedjson + "\n")
 
 for i in fp.readlines():
+    version = "1.0.0.0"
     try:
         result = re.match(headerRE, i)
         if result:
@@ -84,11 +87,15 @@ for i in fp.readlines():
         else:
             resultdict = None
         if resultdict and "header" in resultdict:
+            header = resultdict['header']
+            result = re.match(headerRE2, header)
+            if result:
+                resultdict = result.groupdict()
+                if resultdict and "client" in resultdict:
+                    version = resultdict['client']
             pass #new log header
         else:
-            if i.index('install') == 0:
-                pass
-            remap_log_content(i)
+            remap_log_content(i, version)
     except:
         pass
 
