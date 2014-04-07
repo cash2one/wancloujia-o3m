@@ -47,7 +47,8 @@ else:
 
 headerRE = re.compile(r"^\[windows2x\](?P<header>.*)")
 contentRE = re.compile(r"^tianyin\.install\.success\s(?P<content>[^\t]+)\s\d+")
-contentRE2 = re.compile(r"^tianyin\.install\s(?P<content>[^\t]+)\s\d+")
+#contentRE2 = re.compile(r"^tianyin\.install\s(?P<content>[^\t]+)\s\d+")
+contentRE2 = re.compile(r"^(?P<content>[^\t]+)\s(?P<content2>[^\s]+)\s\d+")
 fp = open(file)
 fp2 = open(file_tmp, "w")
 
@@ -67,9 +68,11 @@ def remap_log_content(content):
         resultdict = result2.groupdict()
     else:
     	resultdict = None
-    if resultdict and "content" in resultdict:
+    if resultdict and "content" in resultdict and "content2" in resultdict:
     	j =json.loads(resultdict['content'])
-    	j["log_type"] = 'success' if is_success else 'install'
+        k = json.loads(resultdict['content2'])
+    	j["log_type"] = 'success' if j['event'] == 'tianyin.install.success' else 'install'
+        j['deviceId'] = k['deviceId']
     	encodedjson = json.dumps(j)
     	fp2.write(encodedjson + "\n")
 
