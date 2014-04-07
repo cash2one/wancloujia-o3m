@@ -6,14 +6,16 @@ body {
 
 .container {
     width: 960px;
-    box-sizing: border-box;
     margin: 0 auto;
+}
+
+.toolsbar.container {
+    width: 950px;
 }
 
 
 body .banner-wrap {
     font-size: 16px;
-    box-sizing: content-box;
     height: 20px;
     line-height: 20px;
     padding: 10px 0px;
@@ -26,6 +28,8 @@ body .banner-wrap {
 }
 
 .app-list {
+    margin: 0px;
+    padding: 0px;
     margin-left: -20px;
 }
 
@@ -45,21 +49,13 @@ body .banner-wrap {
     -webkit-user-select: none;
     padding: 0px;
     height: 163px;
-    width: 225px;
+    width: 209px;
     overflow: hidden;
     background: #fff;
     border: none;
     margin-left: 20px;
     padding: 8px;
-    box-sizing: border-box;
     box-shadow: 0px 1px 2px rgba(0, 0, 0, .1);
-}
-
-@media screen and (max-width: 960px) {
-    .container {
-        width: 715px;
-        margin: 0 auto;
-    }
 }
 
 .app .name:hover {
@@ -104,40 +100,44 @@ body .banner-wrap {
 	overflow: hidden;
 }
 
-
 .statusbar {
-    position: relative; 
     background: #dbe3f0;
     border: 1px solid #c3d0de;
     margin-top: 10px;
-    padding: 6px 12px;
+    height: 43px;
+    font-size: 14px;
 }
 
 .statusbar > .progress-section,
 .statusbar > .result-section {
-    height: 25px;
-    line-height: 25px;
-    left: 0px;
-    top: 0px;
+    margin: 6px 12px;
+    height: 30px;
+    line-height: 30px;
+    float: left;
+}
+
+.statusbar > .progress-section {
+    width: 450px;
 }
 
 .statusbar > .progress-section > .progressbar,
-.statusbar > .progress-section > .progress-info, 
-.statusbar > .progress-section > .cancel-btn {
-    display: inline-block;
-    vertical-align: middle;
+.statusbar > .progress-section > .progress-info {
+    height: 30px;
+    line-height: 30px;
+    float: left;
     margin-right: 20px;
 }
 
-.statusbar > .progress-section > .cancel-btn {
-    margin-top: -3px;
-    margin-left: 0px;
-    margin-bottom: 0px;
-    border-radius: 3px;
+.statusbar > .progress-section > .progressbar {
+    margin-top: 11px;
+    width: 250px;
+}
+
+.statusbar > .progress-section > .progress-info {
+    width: 150px;
 }
 
 .statusbar > .progress-section > .progressbar {
-    width: 300px;
     border: 1px solid #bbb;
     background: #fff;
     border-radius: 8px;
@@ -146,6 +146,7 @@ body .banner-wrap {
 }
 
 .statusbar > .progress-section > .progressbar > .progressbar-block {
+    filter:progid:DXImageTransform.Microsoft.Gradient(gradientType=0,startColorStr=#7dc023,endColorStr=#62ad1d);
     background-image: linear-gradient(#7dc023, #62ad1d);
     border-radius: 12px;
     height: 100%;
@@ -160,25 +161,24 @@ body .banner-wrap {
     position: relative;
 }
 
-.statusbar > .result-section > #close-btn {
+.statusbar > #close-btn {
     width: 8px;
     height: 8px;
-    right: 0px;
-    top: 50%;
-    margin-top: -4px;
+    float: right;
+    margin-top: 17px;
+    margin-right: 8px;
     border: none;
     background: transparent;
     cursor: pointer;
     background: url(../images/close_progress.png) center center no-repeat;
-    position: absolute;
 }
 
 .statusbar > .result-section > p.result,
 .statusbar > .result-section > p.failed-apps {
     float: left;
-    height: 25px;
-    line-height: 25px;
-    padding-left: 20px;
+    height: 30px;
+    line-height: 30px;
+    padding-left: 30px;
 }
 
 .statusbar > .result-section > p.result.success {

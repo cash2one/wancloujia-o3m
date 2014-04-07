@@ -9,7 +9,7 @@ $(function() {
 
         var params = {
             username: this.username.value,
-            password: this.password.value,
+            password: this.password.value
         };
         /*
         if (!this.wandoujia.value) {

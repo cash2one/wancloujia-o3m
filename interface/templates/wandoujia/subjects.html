@@ -18,6 +18,17 @@
     <div id="empty" style="display: none">暂无应用专题</div>
     <div id="loading" style="display: none">加载应用专题</div>
 
+    <ul id="logs" style="height: 300px;overflow: auto;"></ul>
+    
+    <script type="text/javascript" src="{{ STATIC_URL }}js/console-polyfill.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" 
+            src="{{ STATIC_URL }}wandoujia/js/jquery.json-2.4.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/underscore-min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}wandoujia/js/ie-webview.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}wandoujia/js/subjects.js"></script>
+
     <script type="text/template" id="subject_template">
         <div class="special-item" data-id="<%- subject.id %>">
             <div class="special-wrap" title="<%- subject.name %>">
@@ -33,33 +44,5 @@
             </div>
         </div>
     </script>
-
-    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.9.1.min.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}js/require.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}wandoujia/js/Narya.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}wandoujia/js/subjects.js"></script>
-
-    {% if development %}
-	<script type="text/javascript">
-    var _usersnapconfig = {
-        apiKey: '44454a5d-a6be-48dd-baf0-be92350732c0',
-        valign: 'bottom',
-        halign: 'right',
-        tools: ["pen", "highlight", "note"],
-        lang: 'en',
-        commentBox: true,
-        emailBox: false
-    }; 
-    (function() {
-        var s = document.createElement('script');
-        s.type = 'text/javascript';
-        s.async = true;
-        s.src = '//api.usersnap.com/usersnap.js';
-        var x = document.getElementsByTagName('head')[0];
-        x.appendChild(s);
-    })();
-    </script>
-    {% endif %}
 </body>
 </html>

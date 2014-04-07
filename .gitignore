@@ -60,3 +60,5 @@ nosetests.xml
 .mr.developer.cfg
 .project
 .pydevproject
+
+bower_components

@@ -7,7 +7,7 @@
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}wandoujia/css/style.css" />
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}wandoujia/css/apps_fix.css" />
 </head>
-<body>        
+<body>
         <div class="banner-wrap container nav">
             <div style="float: left">{{ subject.name }}</div>
             {% include "wandoujia/user_area.html" %}
@@ -17,7 +17,7 @@
             <span id="tip"></span>
         </div>
 
-        <div id="statusbar" class="container statusbar" style="display: none">
+        <div id="statusbar" class="container statusbar" >
             <div class="progress-section">
                 <div class="progressbar">
                     <div class="progressbar-block">
@@ -26,14 +26,12 @@
                 <div class="progress-info">
                     已经安装<span class="amount">-</span>款应用
                 </div>
-                <button id="cancel-btn" class="btn cancel-btn">取消安装</button>
             </div>
-            <div class="result-section" style="display: none">
+            <div class="result-section" >
                 <p class='result'></p>
                 <p class='failed-apps' style="color: #888"></p>
-                <button id="close-btn">
-                </button>
             </div>
+            <button id="close-btn"></button>
         </div>
 
         <div class="app-block with-comments container">
@@ -55,11 +53,15 @@
                                 <span title="{{ app.version }}&nbsp;&nbsp;{{ app.size }}">
 									{{ app.version }}&nbsp;&nbsp;{{ app.size }}
 								</span>
-                                <a  data-id="{{ app.id }}" download="{{ app.name }}.apk" 
+                                <a download="{{ app.name }}.apk" class="btn install-link"
                                     style="display: none"
-                                    class="btn install-link"
+                                    data-id="{{ app.id }}" 
+                                    data-md5="{{ app.md5 }}"
+                                    data-size="{{ app.bits }}"
                                     data-package="{{ app.package }}" 
-                                    href="{{ MEDIA_URL }}{{ app.apk }}?md5={{ app.md5 }}#name={{ app.name }}&icon=http://{{ request.META.HTTP_HOST }}{{ app.icon }}&content-type=application" >安装</a>
+                                    data-name="{{ app.name }}"
+                                    data-icon="http://{{ request.META.HTTP_HOST }}{{ app.icon }}"
+                                    href="http://{{ request.META.HTTP_HOST }}{{ MEDIA_URL }}{{ app.apk }}?md5={{ app.md5 }}#name={{ app.name }}&icon=http://{{ request.META.HTTP_HOST }}{{ app.icon }}&content-type=application" >安装</a>
                             </span>    
                         </div>
                     </div>
@@ -72,39 +74,19 @@
             </ul>
         </div>
 
+    <ul id="logs" style="height: 300px; overflow: auto;"></ul>
     <script type="text/javascript"> 
     var subject_id = {{ subject.pk }}; 
     </script>
 
+    <script type="text/javascript" src="{{ STATIC_URL }}js/console-polyfill.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/async.min.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}js/require.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" 
+            src="{{ STATIC_URL }}wandoujia/js/jquery.json-2.4.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/underscore-min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}wandoujia/js/ie-webview.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}wandoujia/js/Narya.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}wandoujia/js/apps.js"></script>
-    
-    
-    {% if development %}
-	<script type="text/javascript">
-    var _usersnapconfig = {
-        apiKey: '44454a5d-a6be-48dd-baf0-be92350732c0',
-        valign: 'bottom',
-        halign: 'right',
-        tools: ["pen", "highlight", "note"],
-        lang: 'en',
-        commentBox: true,
-        emailBox: false
-    }; 
-    (function() {
-        var s = document.createElement('script');
-        s.type = 'text/javascript';
-        s.async = true;
-        s.src = '//api.usersnap.com/usersnap.js';
-        var x = document.getElementsByTagName('head')[0];
-        x.appendChild(s);
-    })();
-    </script>
-    {% endif %}
-
 </body>
 </html>
