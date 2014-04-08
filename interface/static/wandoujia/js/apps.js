@@ -132,10 +132,16 @@ var model = "";
 var brand = "";
 var deviceid = "";
 
+setTimeout(function() {
+    if (model === "" || brand === "") {
+        return alert("手机连接异常，请重试");
+    }
+}, 10 * 1000);
+
 $(nativeMessage).on("device.info", function(e, deviceInfo) {
     __log(_.pairs(deviceInfo));
     if (!deviceInfo.is_available) {
-        return alert("手机连接失败，请重试");
+        return alert("手机连接异常，请重试");
     }
 
     if (!deviceInfo.is_connected || 
