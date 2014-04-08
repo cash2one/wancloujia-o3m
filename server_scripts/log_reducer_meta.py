@@ -242,7 +242,7 @@ for i in successes:
         if i[0] == 'root': continue
         print "INSERT INTO interface_logmeta(date, uid, did, brand, model, subject, installed, client_version) VALUES('%s', '%s', '%s', '%s', '%s', %s, %s, '%s');" % \
                  ( lastDay.isoformat(), map[i[0]][0], i[1], i[2], i[3], i[4], '1', i[5])
-    except:
+    except Exception as e:
         pass
 
 
@@ -252,5 +252,5 @@ for i in installes.keys():
             if i[0] == 'root': continue
             print "INSERT INTO interface_logmeta(date, uid, did, brand, model, subject, installed, client_version) VALUES('%s', '%s', '%s', '%s', '%s', %s, %s, '%s');" % \
                   ( lastDay.isoformat(), map[i[0]][0], i[1], i[2], i[3], i[4], '0', i[5])
-        except:
+        except Exception as e:
             pass

@@ -1,4 +1,5 @@
 function __log(s) {
+    //return;
     $("#logs").append("<li>" + s + "</li>");
 }
 
@@ -132,16 +133,22 @@ var brand = "";
 var deviceid = "";
 
 $(nativeMessage).on("device.info", function(e, deviceInfo) {
+    __log(_.pairs(deviceInfo));
+    if (!deviceInfo.is_available) {
+        return alert("手机连接失败，请重试");
+    }
+
     if (!deviceInfo.is_connected || 
         deviceInfo.model === undefined) {
         return;
     }
 
-    if(model !== "") {
+    if(model !== "" && brand !== "") {
         return;
     }
 
     model = deviceInfo.model;
+    brand = deviceInfo.brand;
     deviceid = deviceInfo.device_id;
 
     onDeviceInfoReady();
@@ -275,6 +282,7 @@ function onDeviceInfoReady() {
         });
 
         var $install = $("#install");
+        $install.removeAttr("disabled", "disabled");
         $install.click(function() {
             if (installer.status === self.PROCESSING) {
                 return console.log("installer is processing tasks now, ignore it!");
@@ -326,7 +334,7 @@ function onDeviceInfoReady() {
                 statusBar.showSuccessMsg();
             } else {
                 installer.status = installer.FAILED;
-                __log("only", apps.countFinished(), "installed");
+                __log("only " + apps.countFinished() + " installed");
                 statusBar.showFailMsg(apps.count() - apps.countFinished());
             }
         }
@@ -346,8 +354,10 @@ function onDeviceInfoReady() {
             }
 
             if (status === STATUS_FINISH) {
+                __log("app " + task.package_name + " install successfully");
                 apps.success(task.package_name);
             } else {
+                __log("app " + task.package_name + " fail to be installed");
                 apps.fail(task.package_name);
             }
             onTaskStatusChanged();

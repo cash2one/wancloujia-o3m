@@ -13,11 +13,11 @@
             {% include "wandoujia/user_area.html" %}
         </div>
         <div class="toolsbar container">
-            <button class="btn btn-primary" id="install">一键安装</button>
+            <button class="btn btn-primary" disabled="disabled" id="install">一键安装</button>
             <span id="tip"></span>
         </div>
 
-        <div id="statusbar" class="container statusbar" >
+        <div id="statusbar" class="container statusbar" style="display: none">
             <div class="progress-section">
                 <div class="progressbar">
                     <div class="progressbar-block">
@@ -27,11 +27,11 @@
                     已经安装<span class="amount">-</span>款应用
                 </div>
             </div>
-            <div class="result-section" >
+            <div class="result-section" style="display: none">
                 <p class='result'></p>
                 <p class='failed-apps' style="color: #888"></p>
             </div>
-            <button id="close-btn"></button>
+            <button style="display: none" id="close-btn"></button>
         </div>
 
         <div class="app-block with-comments container">

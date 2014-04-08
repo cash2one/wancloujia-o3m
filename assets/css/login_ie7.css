@@ -1,0 +1,22 @@
+#username, #password {
+    height: 23px;
+}
+
+#remember_me {
+    display: inline-block;
+}
+
+#remember_me + label {
+    display: inline;
+}
+
+.form {
+    position: relative;
+}
+
+#submit {
+    position: absolute;
+    bottom: 40px;
+    right: 40px;
+    width: 200px;
+}
