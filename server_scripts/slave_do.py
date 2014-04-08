@@ -93,6 +93,10 @@ for i in fp.readlines():
                 resultdict = result.groupdict()
                 if resultdict and "client" in resultdict:
                     version = resultdict['client']
+                else:
+                    version = "未知"
+            else:
+                version = "未知"
             pass #new log header
         else:
             remap_log_content(i, version)
