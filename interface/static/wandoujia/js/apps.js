@@ -281,12 +281,6 @@ function onDeviceInfoReady() {
             }
         };
 
-        $(".user-area a").click(function(e) {
-            if (installer.status === installer.PROCESSING) {
-                e.preventDefault();
-            }
-        });
-
         var $install = $("#install");
         $install.removeAttr("disabled", "disabled");
         $install.click(function() {
