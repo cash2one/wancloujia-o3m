@@ -3,7 +3,6 @@ import logging
 import datetime
 import re
 from functools import wraps
-from hashlib import md5
 
 from django.http import HttpResponse
 from django.utils import simplejson

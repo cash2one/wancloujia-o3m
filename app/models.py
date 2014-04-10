@@ -14,7 +14,6 @@ class UploadApk(models.Model):
     md5 = models.CharField(max_length=32, null=True)
 
 
-
 class Category(models.Model):
     parent = models.ForeignKey("self", verbose_name=u'所属类型', null=True)
     name = models.CharField(verbose_name=u'名称', unique=True, max_length=20)

@@ -71,6 +71,13 @@ class UploadForm(forms.ModelForm):
         fields = ('file',)
 
 
+def _file_md5(path):
+    with open(path, 'rb') as f:
+        m = md5()
+        m.update(f.read())
+        return m.hexdigest()
+
+
 @require_POST
 @login_required(login_url=settings.LOGIN_JSON_URL)
 def upload(request):
@@ -86,8 +93,7 @@ def upload(request):
     logger.debug("md5");
     uploaded_file.save();
     logger.debug("save md5");
-    uploaded_file = form.save()
-
+    
     try:
         apk_info = apk.inspect(uploaded_file.file.path)
         #dfs = hdfs_storage()
