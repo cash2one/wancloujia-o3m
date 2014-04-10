@@ -113,8 +113,8 @@ lastDay = datetime.date.today() - datetime.timedelta(days=0 if debug else 1)
 
 existed = set()
 existed2 = set()
-db.query("DELETE FROM interface_userdevicelogentity WHERE date ='%s';" % (lastDay.isoformat()))
-r = db.store_result()
+#db.query("DELETE FROM interface_userdevicelogentity WHERE date ='%s';" % (lastDay.isoformat()))
+#r = db.store_result()
 for line in sys.stdin:
 	#print line
 	try:

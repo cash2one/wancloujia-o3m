@@ -222,13 +222,13 @@ def filter_installed_capacity_logs(user, form):
     logs = InstalledAppLogEntity.objects.all()
     logs = PeriodFilter(logs, from_date, to_date).filter()
     if emp_id:
-        logs = InstalledAppLogEntity.objects.filter(uid=emp_id)
+        logs = logs.filter(uid=emp_id)
     elif store_id:
-        logs = InstalledAppLogEntity.objects.filter(store=store_id)
+        logs = logs.filter(store=store_id)
     elif company_id:
-        logs = InstalledAppLogEntity.objects.filter(company=company_id)
+        logs = logs.filter(company=company_id)
     elif region_id:
-        logs = InstalledAppLogEntity.objects.filter(region=region_id)
+        logs = logs.filter(region=region_id)
     else:
         pass#logs = InstalledAppLogEntity.objects.all()
 
@@ -266,6 +266,7 @@ def installed_capacity_to_dict(capacity):
         for i, item in enumerate(emp.organizations()):
             organizations[i] = item.name
     else:
+        dict["empid"] = None
         dict["emp"] = None
     dict["region"], dict["company"], dict["store"] = organizations
     dict["count"] = capacity['count']

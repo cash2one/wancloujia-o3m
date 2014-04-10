@@ -53,13 +53,15 @@
             </ul>
         </div>
 
-    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.9.1.min.js"></script>
+     <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.9.1.min.js"></script>
+          <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.cookie.js"></script>
+     <script type="text/javascript" src="{{ STATIC_URL }}js/async.min.js"></script>
+     <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/require.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}wandoujia/js/Narya.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.cookie.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}js/async.min.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}wandoujia/js/log.js"></script>
+     <script type="text/javascript" src="{{ STATIC_URL }}wandoujia/js/Narya.js"></script>
+
+     <script type="text/javascript" src="{{ STATIC_URL }}wandoujia/js/log.js"></script>
+
     <script type="text/javascript"> 
 
     function bitsize(size) {
@@ -139,12 +141,12 @@
 
         function get_brand() {
             var build = Narya.Device.get("build");
-            return build ? (build.get("brand") || "") : "";
+            return build ? (build.get("brand") || "unknown") : "unknown";
         }
 
         function get_model() {
             var build = Narya.Device.get("build");
-            return build ? (build.get("model") || "") : "";
+            return build ? (build.get("model") || "unknown") : "unknown";
         }
 
         $(".app-list").on("click", "a.install-link", function() {
@@ -165,11 +167,11 @@
         });
 
         function _type(type) {
-            return type == 1 || type == 3 ? "install" : "unkown";
+            return type == 1 || type == 3 ? "install" : "unknown";
         }
 
         function _state(state) {
-            var result = "unkown";
+            var result = "unknown";
             switch(state) {
                 case 4:
                     result = "success";
@@ -183,14 +185,46 @@
             return result;
         }
 
+        var app_timestamps = {};
+
+	    IO.onmessage({
+                "data.channel": "apps.installed"
+        }, function(result) {
+            if (app_timestamps[''+result.last_update_time]) {
+                return console.log("duplicated install event", result.package_name);
+            }
+
+            app_timestamps[''+result.last_update_time] = 1;
+	        console.log("apps.installed", result);
+                $appList.find("a.install-link").each(function() {
+                        var $this = $(this);
+                        if(result.package_name === $this.data("package")) {
+                                var username = $(".user-area > .username").html();
+                                var appid = $this.data("id");
+                                var package = $this.data("package");
+                                var log = {
+                                        event: "install.success",
+                                        user: username,
+                                        app: appid,
+                                        package: package,
+                                        brand: get_brand(),
+                                        model: get_model()
+                                };
+                                console.log(log);
+                                Log(log);
+                        }
+                });
+        });
+        /*
         IO.onmessage({
             "data.channel": "jobs.stop"
         }, function(result) {
+	    console.log("jobs.stop", result);
             var data = result.status[0];
             console.log(data.state, _state(data.state));
             console.log(data.type, _type(data.type));
 
-            if (_type(data.type) === 'unkown' ||
+            if (_type(data.type) === 'unknown' ||
                 _state(data.state) !== 'success') {
                 return;
             }
@@ -216,6 +250,7 @@
                 Log(log);
             });
         });
+        */
 
         $install.click(function() {
             var linkEls = $appList.find(".app.selected a.install-link").toArray();
@@ -235,7 +270,7 @@
     });
     });
     </script>
-<!--
+        <!--
 	<script type="text/javascript">
     var _usersnapconfig = {
         apiKey: '44454a5d-a6be-48dd-baf0-be92350732c0',

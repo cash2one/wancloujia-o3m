@@ -37,7 +37,7 @@ else:
 
 headerRE = re.compile(r"^\[windows2x\](?P<header>.*)")
 #contentRE = re.compile(r"(?P<type>[a-zA-Z0-9_\.]+)\t(?P<content>\S+)\t\d+")
-contentRE = re.compile(r"^install\s(?P<content>[^\t]+)\s\d+")
+contentRE = re.compile(r"^install\.success\s(?P<content>[^\t]+)\s\d+")
 
 #os.popen("dos2unix " + file)
 

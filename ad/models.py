@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 
 class AD(models.Model):
     title = models.CharField(verbose_name=u'广告标题', max_length=50)
-    cover = models.CharField(verbose_name=u'广告图片', max_length=100)
+    cover = models.CharField(verbose_name=u'广告图片', max_length=1024)
     desc = models.CharField(verbose_name=u'广告介绍', max_length=50)
     from_date = models.DateTimeField(verbose_name=u'上线时间')
     to_date = models.DateTimeField(verbose_name=u'下线时间')
