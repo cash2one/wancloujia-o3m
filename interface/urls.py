@@ -4,6 +4,7 @@ from django.conf.urls import patterns, url
 urlpatterns = patterns('interface.views',
     url(r'^logout$', 'logout'),
     url(r'^data', 'upload'),
+    url(r'^signal', 'signal'),
     url(r'^echo$', 'echo'),
 
     url(r'^welcome$', 'welcome'),

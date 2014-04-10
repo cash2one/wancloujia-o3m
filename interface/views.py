@@ -29,11 +29,14 @@ from mgr.models import Staff
 from app.models import Subject, App, AppGroup
 from app.tables import bitsize
 from ad.models import AD
+import json
+import re
 
 import zlib
 from django.core.cache import cache
+from interface.models import LogEntity
 
-
+contentRE = re.compile(r"^install\.success\s(?P<content>[^\t]+)\s\d+")
 logger = logging.getLogger('windows2x.post')
 @parser_classes(JSONParser,)
 @renderer_classes(JSONRenderer,)
@@ -102,6 +105,27 @@ def snippet_detail(request, pk):
 def upload(request):
     if request.method == "POST":
         log = zlib.decompress(str(request.raw_post_data), 16+zlib.MAX_WBITS, 16384)
+        result = re.match(contentRE, log)
+        resultdict = None
+        if result:
+            resultdict = result.groupdict()
+        if resultdict and "content" in resultdict:
+            j =json.loads(resultdict['content'])
+            j["log_type"] = 'install'
+            encodedjson = json.dumps(j)
+            entity = LogEntity()
+            entity.create = datetime.date.today()
+            entity.content = encodedjson
+            entity.save()
+        logger.info(log)
+        return HttpResponse(status=status.HTTP_200_OK)
+    return HttpResponse(status=status.HTTP_404_NOT_FOUND)
+
+@csrf_exempt
+@api_view(['GET', 'POST'])
+def signal(request):
+    if request.method == "POST":
+        log = "logs begin"
         logger.info(log)
         return HttpResponse(status=status.HTTP_201_CREATED)
     return HttpResponse(status=status.HTTP_404_NOT_FOUND)
