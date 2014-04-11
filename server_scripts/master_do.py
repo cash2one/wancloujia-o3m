@@ -131,7 +131,7 @@ print "config hadoop"
 filename = targetdir + "/windows2x.log.%s" % (lastDay.isoformat(),)
 #dump 数据库到本地文件
 fp = open(filename, "w")
-db.query("SELECT content FROM interface_logentity WHERE create=\'%s\';" % (lastDay.isoformat(),))
+db.query("SELECT content FROM interface_logentity;" )
 r = db.store_result()
 n = r.num_rows()
 for i in range(0, n):
