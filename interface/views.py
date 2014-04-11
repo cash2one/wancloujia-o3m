@@ -104,18 +104,20 @@ def snippet_detail(request, pk):
 def upload(request):
     if request.method == "POST":
         log = zlib.decompress(str(request.raw_post_data), 16+zlib.MAX_WBITS, 16384)
-        result = re.match(contentRE, log)
-        resultdict = None
-        if result:
-            resultdict = result.groupdict()
-        if resultdict and "content" in resultdict:
-            j =json.loads(resultdict['content'])
-            j["log_type"] = 'install'
-            encodedjson = json.dumps(j)
-            entity = LogEntity()
-            entity.create = datetime.date.today()
-            entity.content = encodedjson
-            entity.save()
+        for i in log.split('\n'):
+            i = i.strip()
+            result = re.match(contentRE, i)
+            resultdict = None
+            if result:
+                resultdict = result.groupdict()
+            if resultdict and "content" in resultdict:
+                j =json.loads(resultdict['content'])
+                j["log_type"] = 'install'
+                encodedjson = json.dumps(j)
+                entity = LogEntity()
+                entity.create = datetime.date.today()
+                entity.content = encodedjson
+                entity.save()
         logger.info(log)
         return HttpResponse(status=status.HTTP_200_OK)
     return HttpResponse(status=status.HTTP_404_NOT_FOUND)
