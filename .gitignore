@@ -18,6 +18,9 @@ dump.rdb
 *.pyproj
 *.pyproj.user
 
+#PyCharm files
+.idea
+
 suning/whoosh_index/*
 static/*
 logs/*
