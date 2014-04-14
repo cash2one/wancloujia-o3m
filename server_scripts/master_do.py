@@ -141,8 +141,9 @@ fp.close()
 
 print "begin clean db"
 # truncate interface_logentity
-db.query("truncate table interface_logentity;")
-r = db.store_result()
+if not last_day:
+    db.query("truncate table interface_logentity;")
+    db.store_result()
 sqlexe = '/usr/bin/mysql -u%s -p%s -h%s %s' % (dbuser, dbpass, dbhost, dbname)
 os.popen('echo "DELETE FROM interface_logmeta WHERE date=\'%s\';" | %s' % (lastDay.isoformat(), sqlexe))
 os.popen('echo "DELETE FROM interface_devicelogentity WHERE date=\'%s\';" | %s' % (lastDay.isoformat(), sqlexe))
