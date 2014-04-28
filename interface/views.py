@@ -34,11 +34,10 @@ from ad.models import AD
 import re
 import zlib
 from django.core.cache import cache
-
+import json
 import urllib
 from interface.models import LogEntity
 
-headerRE = re.compile(r"^\[windows2x\](?P<header>.*)")
 headerRE2 = re.compile(r"clientVersion=(?P<client>[^,]+),")
 contentRE2 = re.compile(r"^(?P<content>[^\t]+)\s(?P<content2>[^\s]+)\s\d+")
 logger = logging.getLogger('windows2x.post')
@@ -117,24 +116,17 @@ def savelog(arr):
     for i in arr:
         try:
             i = i.strip()
-            result = re.match(headerRE, i)
+            result = re.match(headerRE2, i)
             if result: #判断是不是日志报头
                 resultdict = result.groupdict()
             else:
                 resultdict = None
-            if resultdict and "header" in resultdict:
-                header = resultdict['header']
-                result = re.match(headerRE2, header)
-                if result:  #如果是日志报头，能否拿出来他的客户端版本号码
-                    resultdict = result.groupdict()
-                    if resultdict and "client" in resultdict:
-                        version = resultdict['client']
-                    else:
-                        version = "未知"
+            if resultdict:
+                if resultdict and "client" in resultdict:
+                    version = resultdict['client']
                 else:
                     version = "未知"
-                pass #new log header
-            else:   #不是日志报头的，交给这个函数处理
+            else:   #不是日志报头的，交给这个函数处理i
                 remap_log_content(i, version)
         except:
             pass
@@ -145,7 +137,6 @@ def upload(request):
     if request.method == "POST":
         log = zlib.decompress(str(request.raw_post_data), 16+zlib.MAX_WBITS, 16384)
         savelog(log.split('\n'))
-        logger.info(log)
         return HttpResponse(status=status.HTTP_200_OK)
     return HttpResponse(status=status.HTTP_404_NOT_FOUND)
 
