@@ -6,6 +6,8 @@ from datetime import datetime
 from django.db import models, transaction, connection
 from django.contrib.auth.models import User
 
+from django.core.cache import cache
+
 logger = logging.getLogger(__name__)
 
 
@@ -39,7 +41,12 @@ class App(models.Model):
         return self.online
 
     def size(self):
-        return os.path.getsize(self.apk.file.path)
+        val = cache.get(self.package, -1)
+        cache.close()
+        if val == -1:
+            val = os.path.getsize(self.apk.file.path)
+            cache.set(self.package, val, 30)
+        return val
         #import interface.storage
         #dfs = interface.storage.hdfs_storage()
         #return dfs.size(self.apk.file.path)

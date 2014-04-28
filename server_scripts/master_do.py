@@ -159,3 +159,6 @@ if remove_logs:
 	cmd = "rm -f %s.*" % (filename,)
 	os.popen(cmd)
 print "hadoop over"
+
+commits = None
+{c['sha']: c for c in commits}
