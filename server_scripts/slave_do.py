@@ -59,13 +59,13 @@ print "正则匹配出我们需要处理的日志项到临时文件里面去"
 # 正则匹配出我们需要处理的日志项到临时文件里面去
 ###################################
 def remap_log_content(content, version="1.0.0.0"):
-    result = re.match(contentRE, content)
+    #result = re.match(contentRE, content)
     result2 = re.match(contentRE2, content)
-    is_success = False
-    if result:
-    	resultdict = result.groupdict()
-        is_success = True
-    elif result2:
+    #is_success = False
+    #if result:
+    	#resultdict = result.groupdict()
+        #is_success = True
+    if result2:
         resultdict = result2.groupdict()
     else:
     	resultdict = None
@@ -78,18 +78,18 @@ def remap_log_content(content, version="1.0.0.0"):
     	encodedjson = json.dumps(j)
     	fp2.write(encodedjson + "\n")
 
+version = "1.0.0.0"
 for i in fp.readlines():
-    version = "1.0.0.0"
     try:
         result = re.match(headerRE, i)
-        if result:
+        if result: #判断是不是日志报头
             resultdict = result.groupdict()
         else:
             resultdict = None
         if resultdict and "header" in resultdict:
             header = resultdict['header']
             result = re.match(headerRE2, header)
-            if result:
+            if result:  #如果是日志报头，能否拿出来他的客户端版本号码
                 resultdict = result.groupdict()
                 if resultdict and "client" in resultdict:
                     version = resultdict['client']
@@ -98,7 +98,7 @@ for i in fp.readlines():
             else:
                 version = "未知"
             pass #new log header
-        else:
+        else:   #不是日志报头的，交给这个函数处理
             remap_log_content(i, version)
     except:
         pass
