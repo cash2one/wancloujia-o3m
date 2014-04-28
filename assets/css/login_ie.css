@@ -1,9 +1,9 @@
 #username-wrap {
-    background: url(../img/user.png) no-repeat 95% center;
+    background: url(../img/user.png) no-repeat 5% center;
 }
 
 #password-wrap {
-    background: url(../img/password.png) no-repeat 95% center;
+    background: url(../img/password.png) no-repeat 5% center;
 }
 
 input#password, input#username {
@@ -14,8 +14,8 @@ input#password, input#username {
     box-shadow: none;
     border: 1px solid #d8d8d8;
     border-radius: 0px;
-    padding-right: 60px;
-    padding-left: 20px;
+    padding-right: 20px;
+    padding-left: 60px;
 }
 
 .container > .form .form-group input {

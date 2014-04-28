@@ -20,3 +20,8 @@
     right: 40px;
     width: 200px;
 }
+
+label.sr-only {
+    display: inline;
+}
+

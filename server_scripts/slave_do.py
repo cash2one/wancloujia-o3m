@@ -78,8 +78,8 @@ def remap_log_content(content, version="1.0.0.0"):
     	encodedjson = json.dumps(j)
     	fp2.write(encodedjson + "\n")
 
+version = "1.0.0.0"
 for i in fp.readlines():
-    version = "1.0.0.0"
     try:
         result = re.match(headerRE, i)
         if result:

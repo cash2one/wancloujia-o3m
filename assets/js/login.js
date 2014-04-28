@@ -1,6 +1,5 @@
 $(function() {
     var $form = $(".form");
-    $(".form-group input").placeholder();
     $form.submit(function(e) {
         e.preventDefault();
 

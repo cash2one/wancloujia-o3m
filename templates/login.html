@@ -49,5 +49,20 @@
 {% block js %}
 {{ block.super }}
 <script type="text/javascript" src="{{ STATIC_URL }}js/login.js"></script>
+
+{% if not wandoujia|default:False %}
+<script>
+$(function() {
+    $(".form-group input").placeholder();
+});
+</script>
+{% endif %}
+
 <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.placeholder.js"></script>
+
+{% if wandoujia|default:False %}
+<script type="text/javascript" 
+            src="{{ STATIC_URL }}wandoujia/js/jquery.json-2.4.min.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}wandoujia/js/ie-webview.js"></script>
+{% endif %}
 {% endblock %}
