@@ -40,6 +40,7 @@ class LogMeta(models.Model):
     uid = models.IntegerField(db_index=True, editable=False)
     did = models.CharField(verbose_name=u'chuanhao', max_length=16, editable=False)
     brand = models.CharField(verbose_name=u'pinpai', max_length=BRAND_LENGTH_LIMIT, editable=False)
+    imei = models.CharField(verbose_name=u'IMEI', max_length=64, editable=False, null=True)
     model = models.CharField(verbose_name=u'jixing', max_length=16, editable=False)
     subject = models.IntegerField(verbose_name=u'zhuti', editable=False)
     client_version = models.CharField(max_length=20)

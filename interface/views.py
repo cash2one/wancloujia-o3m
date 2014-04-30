@@ -95,7 +95,7 @@ def export(request):
 
 def remap_log_content(content, version="1.0.0.0"):
     result2 = re.match(contentRE2, content)
-    if result2:
+    if content.find("tianyin.install") > -1 and result2:
         resultdict = result2.groupdict()
     else:
         resultdict = None
