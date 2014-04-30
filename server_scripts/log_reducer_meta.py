@@ -210,6 +210,7 @@ for line in sys.stdin:
         client = _mysql.escape_string(str(j["client"]).strip())
         #succ = _mysql.escape_string(str(j["success"]).strip())
         log_type = _mysql.escape_string(str(j["log_type"]).strip())
+        imei = _mysql.escape_string(str(j["imei"]).strip())
         #print "subj:", subj
         logitem = (user,did,brand,model,subj,client,)
         if log_type == 'success':
@@ -236,6 +237,7 @@ for line in sys.stdin:
         pass
 
 for i in successes:
+<<<<<<< HEAD
     try:
         if installes.has_key(i):
             installes[i] = 0 if installes[i] < 2 else installes[i] - 1
@@ -244,13 +246,24 @@ for i in successes:
                  ( lastDay.isoformat(), map[i[0]][0], i[1], i[2], i[3], i[4], '1', i[5])
     except Exception as e:
         pass
+=======
+    if installes.has_key(i):
+        installes[i] = 0 if installes[i] < 2 else installes[i] - 1
+    print "INSERT INTO interface_logmeta(date, uid, did, brand, model, subject, installed, client_version, imei) VALUES('%s', '%s', '%s', '%s', '%s', %s, %s, '%s', '%s');" % \
+              ( lastDay.isoformat(), map[i[0]][0], i[1], i[2], i[3], i[4], '1', i[5], imei)
+>>>>>>> a09057ec2ebc1bb85ee4b362baccaf7be395a057
 
 
 for i in installes.keys():
     for j in range(installes[i]):
+<<<<<<< HEAD
         try:
             if i[0] == 'root': continue
             print "INSERT INTO interface_logmeta(date, uid, did, brand, model, subject, installed, client_version) VALUES('%s', '%s', '%s', '%s', '%s', %s, %s, '%s');" % \
                   ( lastDay.isoformat(), map[i[0]][0], i[1], i[2], i[3], i[4], '0', i[5])
         except Exception as e:
             pass
+=======
+        print "INSERT INTO interface_logmeta(date, uid, did, brand, model, subject, installed, client_version, imei) VALUES('%s', '%s', '%s', '%s', '%s', %s, %s, '%s', '%s');" % \
+              ( lastDay.isoformat(), map[i[0]][0], i[1], i[2], i[3], i[4], '0', i[5], imei)
+>>>>>>> a09057ec2ebc1bb85ee4b362baccaf7be395a057
