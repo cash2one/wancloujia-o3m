@@ -298,7 +298,7 @@ $(function() {
             imei: imei,
             model: model
         };
-        console.log(log);
+	__log($.toJSON(log));
         sendLog($.toJSON(log));
     };
 
