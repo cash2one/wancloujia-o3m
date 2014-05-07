@@ -131,17 +131,19 @@ function show_tip() {
 var model = "";
 var brand = "";
 var deviceid = "";
+var _deviceInfo = {};
 
 setTimeout(function() {
     if (model === "" || brand === "") {
-        return alert("手机连接异常，请重试");
+        return $(".alert").html("手机连接异常，请重试").fadeIn();
     }
 }, 10 * 1000);
 
 $(nativeMessage).on("device.info", function(e, deviceInfo) {
+    _deviceInfo = deviceInfo;
     __log(_.pairs(deviceInfo));
-    if (!deviceInfo.is_available) {
-        return alert("手机连接异常，请重试");
+	if (!deviceInfo.is_available) {
+        return $(".alert").html("手机连接异常，请重试").fadeIn();
     }
 
     if (!deviceInfo.is_connected || 
