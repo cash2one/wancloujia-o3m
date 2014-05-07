@@ -131,16 +131,15 @@ function show_tip() {
 var model = "";
 var brand = "";
 var deviceid = "";
-var _deviceInfo = {};
+var imei = "";
 
 setTimeout(function() {
-    if (model === "" || brand === "") {
+    if (model === "" || brand === "" || imei === "") {
         return $(".alert").html("手机连接异常，请重试").fadeIn();
     }
 }, 10 * 1000);
 
 $(nativeMessage).on("device.info", function(e, deviceInfo) {
-    _deviceInfo = deviceInfo;
     __log(_.pairs(deviceInfo));
 	if (!deviceInfo.is_available) {
         return $(".alert").html("手机连接异常，请重试").fadeIn();
@@ -151,11 +150,12 @@ $(nativeMessage).on("device.info", function(e, deviceInfo) {
         return;
     }
 
-    if(model !== "" && brand !== "") {
+    if(model !== "" && brand !== "" && imei !== "") {
         return;
     }
 
     model = deviceInfo.model;
+    imei = deviceInfo.imei;
     brand = deviceInfo.brand;
     deviceid = deviceInfo.device_id;
 
@@ -270,7 +270,8 @@ function onDeviceInfoReady() {
                 subj: subject_id,
                 brand: brand,
                 did: deviceid,
-                model: model
+                model: model,
+		imei: imei
             };
             console.log(log);
             sendLog($.toJSON(log));
