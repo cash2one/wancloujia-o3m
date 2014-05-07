@@ -48,7 +48,6 @@ td.subjects {
 
 {% block main %}
 <div class="main">
-    <p class="alert" style="display: none; background: #b20; color: #fff; padding: 6px 12px; margin-bottom: 10px;"></p>
     <div class="toolbar">
         <a class="btn btn-primary" href="#add-edit-app"
             {% if request.user|is_employee and not perms.app.add_app %}
