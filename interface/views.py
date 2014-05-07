@@ -34,9 +34,12 @@ from ad.models import AD
 import re
 import zlib
 from django.core.cache import cache
-
+import json
 import urllib
+from interface.models import LogEntity
 
+headerRE2 = re.compile(r"clientVersion=(?P<client>[^,]+),")
+contentRE2 = re.compile(r"^(?P<content>[^\t]+)\s(?P<content2>[^\s]+)\s\d+")
 logger = logging.getLogger('windows2x.post')
 @parser_classes(JSONParser,)
 @renderer_classes(JSONRenderer,)
@@ -90,40 +93,50 @@ def export(request):
              for i in LogMeta.objects.filter(date=dt)]
     return Response(result)
 
-# @api_view(['GET', 'POST'])
-# def get_hdfs_file(request, addr):
-#     if '..' in addr or '~' in addr:
-#         return HttpResponse(status=status.HTTP_404_NOT_FOUND)
-#     addr = settings.MEDIA_ROOT + addr
-#     offset = 0
-#     if 'Range' in request.META:
-#         reResult = re.match(r'^bytes=(?P<offset>\d+)', request.META['Range'])
-#         if 'offset' in reResult.groupdict() and reResult['offset']:
-#             offset = int(reResult.groupdict(['offset']))
-#         else:
-#             return HttpResponse(status=status.HTTP_404_NOT_FOUND)
-#     dfs = hdfs_storage()
-#     blks = dfs.enum_file(addr, offset)
-#     if 'Range' in request.META:
-#         result = HttpResponse(blks, status=206)
-#         result['Content-Range'] = 'bytes %ld-%ld/%ld' % (blks.offset, blks.size - 1 if blks.size - 1 >= 0 else 0,
-#                                                          blks.size)
-#         result['Content-Length'] = str(blks.remain)
-#         result['Content-Type'] = 'application/octet-stream'
-#         return result
-#     else:
-#         result = HttpResponse(blks)
-#         result['Content-Length'] = str(blks.remain)
-#         result['Content-Type'] = 'application/octet-stream'
-#         return result
+def remap_log_content(content, version="1.0.0.0"):
+    result2 = re.match(contentRE2, content)
+    if content.find("tianyin.install") > -1 and result2:
+        resultdict = result2.groupdict()
+    else:
+        resultdict = None
+    if resultdict and "content" in resultdict and "content2" in resultdict:
+        j =json.loads(resultdict['content'])
+        k = json.loads(resultdict['content2'])
+        j["log_type"] = 'success' if j['event'] == 'tianyin.install.success' else 'install'
+        j['deviceId'] = k['deviceId']
+        j['client'] = version
+        encodedjson = json.dumps(j)
+        entity = LogEntity()
+        entity.create = datetime.date.today()
+        entity.content = encodedjson
+        entity.save()
 
+def savelog(arr):
+    version = "1.0.0.0"
+    for i in arr:
+        try:
+            i = i.strip()
+            result = re.match(headerRE2, i)
+            if result: #判断是不是日志报头
+                resultdict = result.groupdict()
+            else:
+                resultdict = None
+            if resultdict:
+                if resultdict and "client" in resultdict:
+                    version = resultdict['client']
+                else:
+                    version = "未知"
+            else:   #不是日志报头的，交给这个函数处理i
+                remap_log_content(i, version)
+        except:
+            pass
 
 @csrf_exempt
 @api_view(['GET', 'POST'])
 def upload(request):
     if request.method == "POST":
         log = zlib.decompress(str(request.raw_post_data), 16+zlib.MAX_WBITS, 16384)
-        logger.info(log)
+        savelog(log.split('\n'))
         return HttpResponse(status=status.HTTP_200_OK)
     return HttpResponse(status=status.HTTP_404_NOT_FOUND)
 

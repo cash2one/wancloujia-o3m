@@ -128,6 +128,15 @@ for i in files:
 #raise NameError()
 print "config hadoop"
 filename = targetdir + "/windows2x.log.%s" % (lastDay.isoformat(),)
+#dump 数据库到本地文件
+fp = open(filename, "w")
+db.query("SELECT content FROM interface_logentity;" )
+r = db.store_result()
+n = r.num_rows()
+for i in range(0, n):
+    content = r.fetch_row()[0][0]
+    fp.write(content + "\n")
+fp.close()
 print "begin clean db"
 sqlexe = '/usr/bin/mysql -u%s -p%s -h%s --default-character-set=utf8 %s' % (dbuser, dbpass, dbhost, dbname)
 os.popen('echo "DELETE FROM interface_logmeta WHERE date=\'%s\';" | %s' % (lastDay.isoformat(), sqlexe))
@@ -137,7 +146,7 @@ os.popen('echo "DELETE FROM interface_installedapplogentity WHERE date=\'%s\';" 
 
 print "begin hadoop"
 for map, red in jobs:
-    cmd = "cat %s.* | /usr/local/bin/python2.7 %s%s | /usr/local/bin/python2.7 %s%s | %s" % \
+    cmd = "cat %s | /usr/local/bin/python2.7 %s%s | /usr/local/bin/python2.7 %s%s | %s" % \
           (filename, jobpath, map, jobpath, red, sqlexe  )
     os.popen(cmd)
 if remove_logs:
