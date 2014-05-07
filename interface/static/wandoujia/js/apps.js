@@ -169,6 +169,7 @@ $(function() {
         }
 
         __log("---connected, devcie info read, installer idle, start install!!!");
+	$(".alert").hide();
         install();
     }
 
