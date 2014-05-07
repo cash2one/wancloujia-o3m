@@ -132,6 +132,7 @@ var model = "";
 var brand = "";
 var deviceid = "";
 var imei = "";
+var connected = false;
 
 setTimeout(function() {
     if (model === "" || brand === "" || imei === "") {
@@ -139,236 +140,261 @@ setTimeout(function() {
     }
 }, 10 * 1000);
 
-$(nativeMessage).on("device.info", function(e, deviceInfo) {
-    __log(_.pairs(deviceInfo));
-	if (!deviceInfo.is_available) {
-        return $(".alert").html("手机连接异常，请重试").fadeIn();
-    }
 
-    if (!deviceInfo.is_connected || 
-        deviceInfo.model === undefined) {
-        return;
-    }
+$(function() {
+    function ensureToInstall() {
+        __log("----ensure connection, device info and installer's status");
 
-    if(model !== "" && brand !== "" && imei !== "") {
-        return;
-    }
-
-    model = deviceInfo.model;
-    imei = deviceInfo.imei;
-    brand = deviceInfo.brand;
-    deviceid = deviceInfo.device_id;
-
-    onDeviceInfoReady();
-});
-
-function onDeviceInfoReady() {
-    $(function() {
-        function StatusBar(el) {
-            var self = this;
-
-            this.el = el;
-            this.$el = $(el);
-            this.show = function() {
-                this.$el.fadeIn();
-            };
-
-            this.hide = function() {
-                this.$el.fadeOut();
-            };
-
-            this.$progressSection = this.$el.find(".progress-section");
-            this.$progressBar = this.$el.find(".progressbar");
-            this.$amount = this.$el.find(".amount");
-
-            this.$resultSection = this.$el.find(".result-section");
-            this.$result = this.$el.find(".result");
-            this.$failedApps = this.$el.find(".failed-apps");
-            this.$closeBtn = this.$el.find("#close-btn");
-            this.$closeBtn.click(function() {
-                self.hide();
-            });
-
-            this.showProgress = function(total) {
-                self.reset();
-                this.total = total;
-            };
-
-            this.updateProgress = function(count) {
-                this.$amount.html(count);
-                var percent = (count * 1.0) / this.total * 100;
-                this.$progressBar.find(".progressbar-block").css("width", percent + "%");
-            };
-
-            this.resetProgress = function() {
-                this.$amount.html("0");
-                this.$progressBar.find(".progressbar-block").css("width", "0%");
-            };
-
-            this.showFailMsg = function(count) {
-                this.resetProgress();
-                this.$progressSection.hide();
-                this.$result.html("安装失败").addClass("fail");
-                this.$failedApps.html(count + "款应用安装失败");
-                this.$resultSection.show();
-                this.$closeBtn.show();
-            };
-
-            this.showSuccessMsg = function(count) {
-                this.resetProgress();
-                this.$progressSection.hide();
-                this.$result.html("安装成功").addClass("success");
-                this.$resultSection.show();
-                this.$closeBtn.show();
-            };
-
-            this.resetResult = function() {
-                this.$result.empty().removeClass("fail").removeClass("success");
-                this.$failedApps.empty();
-            };
-
-            this.reset = function() {
-                this.resetProgress();
-                this.$progressSection.show();
-                this.resetResult();
-                this.$resultSection.hide();
-                this.$closeBtn.hide();
-            };
+        if (!connected) {
+            __log("not connect");
+            return;
         }
 
-        var statusBar = new StatusBar($("#statusbar")[0]);
-        username = $(".user-area > .username").html();
-        $appList = $(".app-list");
-        apps.load();
-        show_tip();
-
-        var installer = {
-            INIT: "init",
-            PROCESSING: "processing",
-            FAILED: "failed",
-            SUCCESS: "success"
-        };
-
-        installer.status = installer.INIT;
-        installer.counter = 0;
-        installer.tasks = null;
-        installer.onProcess = function(func) {
-            var self = this;
-            return function(result) {
-                if (self.status !== self.PROCESSING) {
-                    return console.log("install is not processing, ignore it!");
-                }
-
-                func && func(result);
-            };
-        };
-
-        function _log(event) {
-            var log = {
-                event: event,
-                user: username,
-                subj: subject_id,
-                brand: brand,
-                did: deviceid,
-                model: model,
-		imei: imei
-            };
-            console.log(log);
-            sendLog($.toJSON(log));
-        };
-
-        window.onbeforeunload = function() {
-            if (installer.status === installer.PROCESSING ||
-                installer.status === installer.CANCELLING) {
-                return "确认要离开该专题吗？";
-            }
-        };
-
-        var $install = $("#install");
-        $install.removeAttr("disabled", "disabled");
-        $install.click(function() {
-            if (installer.status === self.PROCESSING) {
-                return console.log("installer is processing tasks now, ignore it!");
-            }
-
-            installer.tasks = {};
-            var timestamp = new Date().getTime();
-            var count = 0;
-            var linkEls = $appList.find(".app a.install-link").toArray();
-            _.each(linkEls, function(el) {
-                var baseid = (timestamp + "_") + (count++);
-                var $el = $(el);
-                var task_info = {
-                    url: $el.attr('href'),
-                    task_type: 1,
-                    task_base_id: baseid,
-                    package_name: $el.data('package'),
-                    display_name: $el.data('name'),
-                    icon: $el.data('icon'),
-                    md5: $el.data('md5'),
-                    size: $el.data('size')
-                };
-                __log(_.pairs(task_info).join("<br/>"));
-                installer.tasks[baseid] = task_info;
-                sendMessageToNative('app.download', task_info);
-            });
-
-            installer.status = installer.PROCESSING;
-            apps.startAll();
-            statusBar.show();
-            statusBar.showProgress(apps.count());
-            $install.attr("disabled", "disabled");
-
-            _log("tianyin.install");
-        });
-
-        function onTaskStatusChanged() {
-            if (apps.isPending()) {
-                var finishedApps = apps.countFinished();
-                statusBar.updateProgress(finishedApps);
-                return console.log(finishedApps, "apps installed");
-            }
-
-            $install.removeAttr("disabled");
-            if (apps.isAllInstalled()) {
-                installer.status = installer.SUCCESS;
-                _log("tianyin.install.success");
-                console.log("all installed!");
-                statusBar.showSuccessMsg();
-            } else {
-                installer.status = installer.FAILED;
-                __log("only " + apps.countFinished() + " installed");
-                statusBar.showFailMsg(apps.count() - apps.countFinished());
-            }
+        if (model === "" || brand === "" || imei === "") {
+            __log("device info not ready");
+            return;
         }
 
-        $(nativeMessage).on('app.progress', function(e, progress) {
-            __log("progress!!! " + _.pairs(progress));
-            var STATUS_FINISH = 5;
-            var STATUS_ERROR = 6;
-            var status = progress.progress_name;
-            if (status !== STATUS_FINISH && status !== STATUS_ERROR) {
-                return;
-            }
+        if (installer.status === installer.PROCESSING) {
+            __log("installer is processing");
+            return;
+        }
 
-            var task = installer.tasks[progress.task_base_id];
-            if (task === undefined) {
-                return __log("Invalid task, ignore it!");
-            }
+        __log("---connected, devcie info read, installer idle, start install!!!");
+        install();
+    }
 
-            if (status === STATUS_FINISH) {
-                __log("app " + task.package_name + " install successfully");
-                apps.success(task.package_name);
-            } else {
-                __log("app " + task.package_name + " fail to be installed");
-                apps.fail(task.package_name);
-            }
-            onTaskStatusChanged();
-        });
+    $(nativeMessage).on("device.info", function(e, deviceInfo) {
+        __log(_.pairs(deviceInfo));
+        if (!deviceInfo.is_available) {
+            return $(".alert").html("手机连接异常，请重试").fadeIn();
+        }
 
-       $install.trigger("click");
+        if (deviceInfo.is_connected !== connected) {
+            connected = deviceInfo.is_connected;
+            __log("connection changed!!!");
+            // on connection changed
+            ensureToInstall();
+        }
+
+        if (model !== "" && brand !== "" && imei !== "") {
+            return;
+        }
+
+        model = deviceInfo.model;
+        brand = deviceInfo.brand;
+        deviceid = deviceInfo.device_id;
+        imei = deviceInfo.imei;
+        __log("device info ready!!!");
+        ensureToInstall();
     });
-}
+
+    function StatusBar(el) {
+        var self = this;
+
+        this.el = el;
+        this.$el = $(el);
+        this.show = function() {
+            this.$el.fadeIn();
+        };
+
+        this.hide = function() {
+            this.$el.fadeOut();
+        };
+
+        this.$progressSection = this.$el.find(".progress-section");
+        this.$progressBar = this.$el.find(".progressbar");
+        this.$amount = this.$el.find(".amount");
+
+        this.$resultSection = this.$el.find(".result-section");
+        this.$result = this.$el.find(".result");
+        this.$failedApps = this.$el.find(".failed-apps");
+        this.$closeBtn = this.$el.find("#close-btn");
+        this.$closeBtn.click(function() {
+            self.hide();
+        });
+
+        this.showProgress = function(total) {
+            self.reset();
+            this.total = total;
+        };
+
+        this.updateProgress = function(count) {
+            this.$amount.html(count);
+            var percent = (count * 1.0) / this.total * 100;
+            this.$progressBar.find(".progressbar-block").css("width", percent + "%");
+        };
+
+        this.resetProgress = function() {
+            this.$amount.html("0");
+            this.$progressBar.find(".progressbar-block").css("width", "0%");
+        };
+
+        this.showFailMsg = function(count) {
+            this.resetProgress();
+            this.$progressSection.hide();
+            this.$result.html("安装失败").addClass("fail");
+            this.$failedApps.html(count + "款应用安装失败");
+            this.$resultSection.show();
+            this.$closeBtn.show();
+        };
+
+        this.showSuccessMsg = function(count) {
+            this.resetProgress();
+            this.$progressSection.hide();
+            this.$result.html("安装成功").addClass("success");
+            this.$resultSection.show();
+            this.$closeBtn.show();
+        };
+
+        this.resetResult = function() {
+            this.$result.empty().removeClass("fail").removeClass("success");
+            this.$failedApps.empty();
+        };
+
+        this.reset = function() {
+            this.resetProgress();
+            this.$progressSection.show();
+            this.resetResult();
+            this.$resultSection.hide();
+            this.$closeBtn.hide();
+        };
+    }
+
+    var statusBar = new StatusBar($("#statusbar")[0]);
+    username = $(".user-area > .username").html();
+    $appList = $(".app-list");
+    apps.load();
+    show_tip();
+
+    var installer = {
+        INIT: "init",
+        PROCESSING: "processing",
+        FAILED: "failed",
+        SUCCESS: "success"
+    };
+
+    installer.status = installer.INIT;
+    installer.counter = 0;
+    installer.tasks = null;
+    installer.onProcess = function(func) {
+        var self = this;
+        return function(result) {
+            if (self.status !== self.PROCESSING) {
+                return console.log("install is not processing, ignore it!");
+            }
+
+            func && func(result);
+        };
+    };
+
+    function _log(event) {
+        var log = {
+            event: event,
+            user: username,
+            subj: subject_id,
+            brand: brand,
+            did: deviceid,
+            imei: imei,
+            model: model
+        };
+        console.log(log);
+        sendLog($.toJSON(log));
+    };
+
+    window.onbeforeunload = function() {
+        if (installer.status === installer.PROCESSING ||
+            installer.status === installer.CANCELLING) {
+            return "确认要离开该专题吗？";
+        }
+    };
+
+    var $install = $("#install");
+    $install.removeAttr("disabled", "disabled");
+    $install.click(function() {
+        if (installer.status === self.PROCESSING) {
+            return console.log("installer is processing tasks now, ignore it!");
+        }
+
+        installer.tasks = {};
+        var timestamp = new Date().getTime();
+        var count = 0;
+        var linkEls = $appList.find(".app a.install-link").toArray();
+        _.each(linkEls, function(el) {
+            var baseid = (timestamp + "_") + (count++);
+            var $el = $(el);
+            var task_info = {
+                url: $el.attr('href'),
+                task_type: 1,
+                task_base_id: baseid,
+                package_name: $el.data('package'),
+                display_name: $el.data('name'),
+                icon: $el.data('icon'),
+                md5: $el.data('md5'),
+                size: $el.data('size')
+            };
+            __log(_.pairs(task_info).join("<br/>"));
+            installer.tasks[baseid] = task_info;
+            sendMessageToNative('app.download', task_info);
+        });
+
+        installer.status = installer.PROCESSING;
+        apps.startAll();
+        statusBar.show();
+        statusBar.showProgress(apps.count());
+        $install.attr("disabled", "disabled");
+
+        _log("tianyin.install");
+    });
+
+    function onTaskStatusChanged() {
+        if (apps.isPending()) {
+            var finishedApps = apps.countFinished();
+            statusBar.updateProgress(finishedApps);
+            return console.log(finishedApps, "apps installed");
+        }
+
+        $install.removeAttr("disabled");
+        if (apps.isAllInstalled()) {
+            installer.status = installer.SUCCESS;
+            _log("tianyin.install.success");
+            console.log("all installed!");
+            statusBar.showSuccessMsg();
+        } else {
+            installer.status = installer.FAILED;
+            __log("only " + apps.countFinished() + " installed");
+            statusBar.showFailMsg(apps.count() - apps.countFinished());
+        }
+    }
+
+    $(nativeMessage).on('app.progress', function(e, progress) {
+        __log("progress!!! " + _.pairs(progress));
+        var STATUS_FINISH = 5;
+        var STATUS_ERROR = 6;
+        var status = progress.progress_name;
+        if (status !== STATUS_FINISH && status !== STATUS_ERROR) {
+            return;
+        }
+
+        var task = installer.tasks[progress.task_base_id];
+        if (task === undefined) {
+            return __log("Invalid task, ignore it!");
+        }
+
+        if (status === STATUS_FINISH) {
+            __log("app " + task.package_name + " install successfully");
+            apps.success(task.package_name);
+        } else {
+            __log("app " + task.package_name + " fail to be installed");
+            apps.fail(task.package_name);
+        }
+        onTaskStatusChanged();
+    });
+
+    function install() {
+        $install.trigger("click");
+    }
+});
 
 $(function() {
     sendMessageToNative('dom.ready', '');
