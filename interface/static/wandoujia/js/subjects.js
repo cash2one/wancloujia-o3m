@@ -1,7 +1,77 @@
 (function() {
 
+    var selections = new Array();
+
+    function parseSelections(value) {
+        var selections = new Array();
+        var arr = value.split(",");
+        if (arr.length < 2) {
+            return selections;
+        }
+
+        for (var i = 0; i < arr.length; i += 2) {
+            selections.push({
+                model: arr[i],
+                subject: parseInt(arr[i + 1], 10)
+            });
+        }
+        return selections;
+    }
+
+    function getSelection(model) {
+        return _.find(selections, function(selection) {
+            return selection.model === model;
+        });
+    }
+
+    function serialize(selections) {
+        var result = null;
+        var arr = new Array();
+        for (var i = 0; i < selections.length; i++) {
+            var selection = selections[i];
+            arr.push(selection.model);
+            arr.push(selection.subject);
+        }
+        result = arr.join(",");
+        __log("serialize selections: " + result + " length: " + result.length);
+
+        if (result.length > 3000) {
+            return serialize(selections.slice(0, selections.length-1));
+        } else {
+            return result;
+        }
+    }
+
+    function getSelections() {
+        var value = $.cookie("selections") || "";
+        __log("selections in cookie: " + value);
+        selections = parseSelections(value);
+        __log(typeof(selections));
+        __log("selections parsed: " + _.map(selections, _.pairs).join(","));
+    }
+
+    function updateSelection(model, subject) {
+        var selection = null;
+        for (var i = 0; i < selections.length; i++) {
+            var _selection = selections[i];
+            if (_selection.model === model) {
+                _selection.subject = subject;
+                selection = _selection;
+            }
+        }
+
+        if (selection === null) {
+            selections.unshift({
+                model: model,
+                subject: subject
+            });
+        }
+
+        $.cookie("selections", serialize(selections), {expires: 30});
+    }
+
+
     function __log(s) {
-        //return;
         $("#logs").append("<li>" + s + "</li>");
     }
 
@@ -35,15 +105,18 @@
 
 
     function openSubject(id) {
+        //setTimeout(function() {
         window.location = "/interface/subjects/" + id;
+        //}, 2000);
     }
 
     function resetEmpty() {
         $empty.html("暂无应用专题");
     }
 
-
     function ready() {
+        getSelections();
+
         $empty = $("#empty");
         $loading = $("#loading");
         $subjects_wrap = $("#subjects_wrap");
@@ -54,6 +127,7 @@
         $subjects.on('click', '.special-item', function() {
             var subject_id = $(this).data("id");
             if (!subject_id) return;
+            updateSelection(model, subject_id);
             openSubject(subject_id);
         });
 
@@ -62,12 +136,12 @@
                 $loading.hide();
                 $empty.html("连接异常，请尝试重新连接手机");
                 $empty.show();
-             }
+            }
         }, 10 * 1000);
 
 
         $(nativeMessage).on('device.info', function(e, deviceInfo) {
-            if(status !== "init") {
+            if (status !== "init") {
                 return;
             }
 
@@ -132,6 +206,13 @@
                     __log("result subject: " + _.pairs(subjects[0]));
                     __log("ready to jump!");
                     return openSubject(subjects[0].id);
+                }
+
+
+                var selection = getSelection(model);
+                if (selection) {
+                    __log("selection got from cookie: " + _.pairs(selection));
+                    return openSubject(selection.subject);
                 }
 
                 _.each(data.subjects, function(subject) {
