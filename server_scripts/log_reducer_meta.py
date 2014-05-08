@@ -182,36 +182,30 @@ staffs = read_staff()
 regions = read_region()
 companys = read_company()
 stores = read_store()
-#apps = read_app()
 map = map_staff(staffs, regions, companys, stores)
 brandmodel = read_brand_model()
 dids = read_did()
 subjects = read_subj()
-#print subjects
 import datetime
 import collections
 
 successes = collections.deque()
 installes = dict()
-#print staffs
 lastDay = datetime.date.today() - datetime.timedelta(days=0)
 for line in sys.stdin:
     try:
         if len(line.strip()) == 0:
             continue
         j = json.loads(line)
-        #appid = _mysql.escape_string(j["app"].strip())
         brand = _mysql.escape_string(j["brand"].strip().upper())
         did = _mysql.escape_string(j["deviceId"].strip().upper())[-8:]
         model = _mysql.escape_string(j["model"].strip().upper())
-        #pkg = _mysql.escape_string(j["package"].strip())
         user = _mysql.escape_string(str(j["user"]).strip())
         subj = _mysql.escape_string(str(j["subj"]).strip())
         client = _mysql.escape_string(str(j["client"]).strip())
-        #succ = _mysql.escape_string(str(j["success"]).strip())
         log_type = _mysql.escape_string(str(j["log_type"]).strip())
         imei = _mysql.escape_string(str(j["imei"]).strip())
-        #print "subj:", subj
+        did = imei
         logitem = (user,did,brand,model,subj,client,)
         if log_type == 'success':
             successes.append(logitem)
