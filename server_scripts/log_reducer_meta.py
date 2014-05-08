@@ -213,6 +213,7 @@ for line in sys.stdin:
         imei = _mysql.escape_string(str(j["imei"]).strip())
         #print "subj:", subj
         logitem = (user,did,brand,model,subj,client,)
+        did = imei
         if log_type == 'success':
             successes.append(logitem)
         else:
