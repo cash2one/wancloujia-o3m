@@ -40,7 +40,7 @@ from interface.models import LogEntity
 
 headerRE2 = re.compile(r"clientVersion=(?P<client>[^,]+),")
 contentRE2 = re.compile(r"^(?P<content>[^\t]+)\s(?P<content2>[^\s]+)\s\d+")
-logger = logging.getLogger('windows2x.post')
+
 @parser_classes(JSONParser,)
 @renderer_classes(JSONRenderer,)
 def create_feedface(request):
@@ -137,6 +137,13 @@ def upload(request):
     if request.method == "POST":
         log = zlib.decompress(str(request.raw_post_data), 16+zlib.MAX_WBITS, 16384)
         savelog(log.split('\n'))
+        logger = logging.getLogger('windows2x.post')
+        formatter = logging.Formatter('%(asctime)s %(message)s', '%d/%b/%Y %H:%M:%S',)
+        #file_handler = logging.FileHandler("log/test.log")
+        file_handler.setFormatter(formatter)
+        stream_handler = logging.StreamHandler(sys.stderr)
+        logger.addHandler(file_handler)
+        logger.error(log)
         return HttpResponse(status=status.HTTP_200_OK)
     return HttpResponse(status=status.HTTP_404_NOT_FOUND)
 
