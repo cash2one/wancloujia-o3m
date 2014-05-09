@@ -103,7 +103,7 @@ def remap_log_content(content, version="1.0.0.0"):
         j =json.loads(resultdict['content'])
         k = json.loads(resultdict['content2'])
         j["log_type"] = 'success' if j['event'] == 'tianyin.install.success' else 'install'
-        j['deviceId'] = k['deviceId']
+        #j['deviceId'] = k['deviceId']
         j['client'] = version
         encodedjson = json.dumps(j)
         entity = LogEntity()
