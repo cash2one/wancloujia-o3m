@@ -80,6 +80,14 @@ function __log(s) {
         }, 0);
     };
 
+    apps.getFailedAppNames = function() {
+        return _.map(_.filter(this.list, function(app) {
+            return app.status === FAILED;
+        }), function(app) {
+            return app.name;
+        });
+    };
+
     apps.isAllInstalled = function() {
         return this.countFinished() == this.list.length;
     };
@@ -234,7 +242,12 @@ $(function() {
             this.resetProgress();
             this.$progressSection.hide();
             this.$result.html("安装失败").addClass("fail");
-            this.$failedApps.html(count + "款应用安装失败");
+
+            var appNames = apps.getFailedAppNames().join(", ");
+            this.$failedApps.empty();
+            $("<p style='overflow: hidden; text-overflow: ellipsis; white-space: nowrap;' " +
+                "title='" + appNames + "'>" + count + "款应用安装失败, " + appNames + "</p>").appendTo(this.$failedApps);
+
             this.$resultSection.show();
             this.$closeBtn.show();
         };
