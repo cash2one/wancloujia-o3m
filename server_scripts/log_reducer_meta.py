@@ -198,7 +198,7 @@ for line in sys.stdin:
             continue
         j = json.loads(line)
         brand = _mysql.escape_string(j["brand"].strip().upper())
-        did = _mysql.escape_string(j["deviceId"].strip().upper())[-8:]
+        #did = _mysql.escape_string(j["deviceId"].strip().upper())[-8:]
         model = _mysql.escape_string(j["model"].strip().upper())
         user = _mysql.escape_string(str(j["user"]).strip())
         subj = _mysql.escape_string(str(j["subj"]).strip())
