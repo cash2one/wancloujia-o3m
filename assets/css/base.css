@@ -13,31 +13,31 @@ body {
 }
 
 .navbar.navbar-fixed-top {
-    background: #007fce;
+    background: #f53101;
 }
 
 .navbar {
-    border-color: #007fce;
+    border-color: #f53101;
 }
 
 .navbar {
-    color: #ccc;
+    color: white;
 }
 
 .navbar .nav > li > a {
-    color: #ccc;
+    color: white;
 }
 
 .navbar .nav .open>li>a, .navbar .nav .open>li>a:hover, .navbar .nav .open>li>a:focus {
-    background: #007fce;
+    background: #f53101;
 }
 
 .navbar .nav>li>a, .navbar .nav>li>a:hover, .navbar .nav>li>a:focus {
-    background: #007fce;
+    background: #f53101;
 }
 
 .open>a:hover, .open>a:focus {
-    background: #007fce;
+    background: #f53101;
 }
 
 .nav .caret,
@@ -77,8 +77,8 @@ body {
 
 .sidebar li.active>a {
     font-weight: bold;
-    color: #007fce;
-    border-right: 1px solid #007fce;
+    color: #f53101;
+    border-right: 1px solid #f53101;
 }
 
 .nav .nav {
