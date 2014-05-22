@@ -18,5 +18,5 @@ echo "ensure groups and permissions" &&
 ./manage.py ensure_groups_and_permissions --traceback &&
 
 echo "create root user" &&
-./manage.py set_root root looyu --traceback
+./manage.py set_root root looyu1 --traceback
 
