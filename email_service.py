@@ -43,7 +43,7 @@ def main():
 		
 		content = t.render(username=user["username"], realname=user["realname"], 
 							password=user["password"], link=user["link"])
-		subject = u'乐语豌豆荚手机助手后台账号已经开通'
+		subject = u'乐语门店手机助手后台账号已经开通'
 		try:
 			_send_email(subject, content, user["email"])
 			logger.debug("email has been sent")
