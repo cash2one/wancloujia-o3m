@@ -20,8 +20,8 @@ DATABASE_ENGINE = 'mysql'
 DATABASE_HOST = 'localhost'
 DATABASE_PORT = '3306'
 DATABASE_USER = 'root'
-DATABASE_PASSWORD = 'password'
-DATABASE_NAME = 'leyu'
+DATABASE_PASSWORD = 'funtalkwdj'
+DATABASE_NAME = 'funtalk'
 
 DATABASES = {
     'default': {

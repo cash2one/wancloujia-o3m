@@ -13,11 +13,11 @@ body {
 }
 
 .navbar.navbar-fixed-top {
-    background: #f53101;
+    background: #e99800;
 }
 
 .navbar {
-    border-color: #f53101;
+    border-color: #e99800;
 }
 
 .navbar {
@@ -29,15 +29,15 @@ body {
 }
 
 .navbar .nav .open>li>a, .navbar .nav .open>li>a:hover, .navbar .nav .open>li>a:focus {
-    background: #f53101;
+    background: #e99800;
 }
 
 .navbar .nav>li>a, .navbar .nav>li>a:hover, .navbar .nav>li>a:focus {
-    background: #f53101;
+    background: #e99800;
 }
 
 .open>a:hover, .open>a:focus {
-    background: #f53101;
+    background: #e99800;
 }
 
 .nav .caret,
@@ -77,8 +77,8 @@ body {
 
 .sidebar li.active>a {
     font-weight: bold;
-    color: #f53101;
-    border-right: 1px solid #f53101;
+    color: #e99800;
+    border-right: 1px solid #e99800;
 }
 
 .nav .nav {
