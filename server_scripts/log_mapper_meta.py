@@ -1,10 +1,10 @@
 #!/usr/bin/env python
-dbhost = '10.19.221.11'
+dbhost = 'localhost'
 dbport = 3306
-dbuser = 'suningwdj'
-dbpass = 'suningwdj'
-dbname = 'suningwdj'
-debug = True  #true->today false->last day 
+dbuser = 'root'
+dbpass = 'funtalkwdj'
+dbname = 'funtalk'
+debug = False  #true->today false->last day 
 import _mysql
 import sys
 import HTMLParser

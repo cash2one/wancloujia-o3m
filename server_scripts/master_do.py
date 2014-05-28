@@ -1,14 +1,14 @@
 #coding: utf-8
 # config begin
 #数据库的配置
-dbhost = '192.168.150.12'
+dbhost = 'localhost'
 dbport = 3306
-dbuser = 'suningwdj'
-dbpass = 'suningwdj'
-dbname = 'suningwdj'
+dbuser = 'root'
+dbpass = 'funtalkwdj'
+dbname = 'funtalk'
 
 #设置脚本的目录，末尾带斜杠
-jobpath = '/opt/suning/server_scripts/'
+jobpath = '/opt/funtalk/server_scripts/'
 
 #是否删除hdfs上各个机器保留的日志拼接文件
 remove_logs = False
@@ -23,7 +23,7 @@ else:
     lastDay = datetime.date.today()
 
 #用于临时进行日志合并的目录
-tmpdir = "/opt/suning/tmp"
+tmpdir = "/opt/funtalk/tmp"
 
 #这里记录了hadoop需要执行的脚本以及结果存放的位置
 jobs = [
