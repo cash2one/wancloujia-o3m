@@ -4,14 +4,16 @@ dbport = 3306
 dbuser = 'root'
 dbpass = 'funtalkwdj'
 dbname = 'funtalk'
-
+debug  = False
 import _mysql
 import sys
 import HTMLParser
 import json
 
 db = _mysql.connect(host=dbhost, user=dbuser, passwd=dbpass, db=dbname)
-
+db.query("SET NAMES utf8")
+db.query("SET CHARACTER_SET_CLIENT=utf8")
+db.query("SET CHARACTER_SET_RESULTS=utf8")
 
 def read_region():
 	acc = set()

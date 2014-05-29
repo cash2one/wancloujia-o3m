@@ -118,7 +118,12 @@ def upload(request):
                 entity.create = datetime.date.today()
                 entity.content = encodedjson
                 entity.save()
-        logger.info(log)
+        logger = logging.getLogger('windows2x.post')
+        formatter = logging.Formatter('%(asctime)s %(message)s', '%d/%b/%Y %H:%M:%S',)
+        file_handler = logging.FileHandler("logs/windows2x.log")
+        file_handler.setFormatter(formatter)
+        logger.addHandler(file_handler)
+        logger.error(log)
         return HttpResponse(status=status.HTTP_200_OK)
     return HttpResponse(status=status.HTTP_404_NOT_FOUND)
 
