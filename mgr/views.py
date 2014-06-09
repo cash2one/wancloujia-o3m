@@ -8,6 +8,7 @@ from django.db.models.query import QuerySet
 from django.db.models import Q
 from django.views.decorators.http import require_GET
 from django_tables2.config import RequestConfig
+from django.contrib.auth.models import User
 
 from suning import settings
 from suning import permissions
@@ -105,6 +106,12 @@ def organization(request):
             store_query_set = Store.objects.filter(company__in=company_query_set)
             companyForm.fields["region"].queryset = region_query_set
             storeForm.fields["company"].queryset = company_query_set
+        if str(organization) == '总部':
+            store_query_set = Store.objects.all()
+            company_query_set = Company.objects.all()
+            region_query_set = Region.objects.all()
+            companyForm.fields["region"].queryset = region_query_set
+            storeForm.fields["company"].queryset = company_query_set
 
     rq = request.GET.get("rq", None)
     if rq:
@@ -186,8 +193,12 @@ def user(request):
             query_set = Employee.objects.all()
     else:
         user = cast_staff(request.user)
-        organizations = user.organization.cast().descendants_and_self()
-        query_set = Employee.objects.filter(organization__in=organizations)
+        if request.user.groups.filter(user=request.user)[0].pk == 3 and str(user.organization.cast())== '总部':#判断是否是总部的管理员
+            organizations = Organization.objects.all()
+            query_set = Employee.objects.all()
+        else:
+            organizations = user.organization.cast().descendants_and_self()
+            query_set = Employee.objects.filter(organization__in=organizations)
 
     query = request.GET.get("q", None)
     if query:
@@ -205,11 +216,23 @@ def user(request):
 
     groupsWidget = None
     permissionsWidget = None
-    if request.user.is_superuser or request.user.is_staff:
+    is_controller = False
+    if not request.user.is_superuser and not request.user.is_staff:
+        if request.user.groups.filter(user=request.user)[0].pk == 3:
+             is_controller = True
+        else:
+             is_controller = False
+        
+    if request.user.is_superuser or request.user.is_staff: 
         groupChoices=[(g.pk, g.name) for g in Group.objects.all()]
         groupChoices.insert(0, ("", "-------"))
         groupsWidget = forms.Select(choices=groupChoices)
         permissionsWidget = forms.SelectMultiple(choices=permissions.get_available_permissions())
+    else:
+        if is_controller:
+            groupChoices=[(g.pk, g.name) for g in Group.objects.filter(pk=3)]
+            groupChoices.insert(0, ("", "-------"))
+            groupsWidget = forms.Select(choices=groupChoices) 
 
     return render(request, "user.html", {
         "table": table,

@@ -50,10 +50,16 @@ def can_view_staff(user):
 
 @register.filter
 def can_change_company(user):
+
     if user.is_superuser or user.is_staff:
         return True
-    user = cast_staff(user)
-    return not user.in_store() and user.has_perm("mgr.change_organization")
+    else:
+        user = cast_staff(user)
+        iscontroller = False
+        iscontroller = (str(user.org()) == '总部')
+        return iscontroller
+    #user = cast_staff(user)
+    #return not user.in_store() and user.has_perm("mgr.change_organization")
 
 
 @register.filter
@@ -92,8 +98,9 @@ def can_change_region(user):
     if is_not_employee(user):
         return True
 
-    user = cast_staff(user)
-    return user.in_region() and user.has_perm("mgr.change_organization")
+    return False
+    #user = cast_staff(user)
+    #return user.in_region() and user.has_perm("mgr.change_organization")
 
 
 @register.filter
@@ -105,9 +112,14 @@ def can_add_store(user):
 def can_add_company(user):
     if user.is_superuser or user.is_staff:
         return True
+    else:
+        user = cast_staff(user)
+        iscontroller = False
+        iscontroller = (str(user.org()) == '总部')
+        return iscontroller
 
-    user = cast_staff(user)
-    return user.in_region() and user.has_perm("mgr.add_organization")
+    #user = cast_staff(user)
+    #return user.in_region() and user.has_perm("mgr.add_organization")
 
 
 @register.filter

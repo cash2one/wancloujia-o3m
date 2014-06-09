@@ -139,7 +139,13 @@ def add_edit_employee(request, form, permissions):
         employee.password = Employee.objects.get(pk=id).password
         __edit_user(employee, request.user.username)
 
-    if not request.user.is_staff and not request.user.is_superuser:
+    is_controller = False
+    if len(request.user.groups.filter(user=request.user)) != 0:
+        if request.user.groups.filter(user=request.user)[0].pk == 3:
+            is_controller = True
+        else: 
+            is_controller = False
+    if not request.user.is_staff and not request.user.is_superuser and not is_controller:
         return _ok_json
 
     if permissions is not None and form.has_key("groups"):
