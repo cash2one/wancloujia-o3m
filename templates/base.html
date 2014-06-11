@@ -20,12 +20,10 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="#">&nbsp;</a>
     </div>
-    <p class="navbar-text">苏宁豌豆荚手机助手管理后台</p>
+    <p class="navbar-text">豌豆荚网游专区管理后台</p>
     <div class="collapse navbar-collapse navbar-ex1-collapse">
         <ul class="nav navbar-nav navbar-right">
-			<li><a class="navbar-link" href="/interface/subjects"><span class="glyphicon glyphicon-share-alt" style="top: 2px; right: 2px;"></span>前往一键安装</a></li>
 			<li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                     <span class="glyphicon glyphicon-user"></span>
@@ -74,6 +72,7 @@
             </li>
             {% endif %}
 
+            <!--
             {% if request.user|can_view_subject %}
             <li {% if request.nav.active_tab == "subject" %}class="active"{% endif %}>
                 <a href="/app/subject/">
@@ -81,11 +80,13 @@
                 </a>
             </li>
             {% endif %}
-<!--
+            -->
+            <!--
             <li {% if request.nav.active_tab == "feedback" %}class="active"{% endif %}><a href="/feedback/">
                 <span class="glyphicon glyphicon-phone-alt"></span>&nbsp;&nbsp;反馈管理
             </a></li>
--->
+            -->
+            <!--
             {% if request.user|is_not_employee or  perms.mgr %}
             <li {% if request.nav.active_tab == "system" %}class="active"{% endif %}>
                 <a class="accordin-toggle" data-toggle="collapse" data-parent="#accordin" href="#sub_system">
@@ -151,6 +152,7 @@
                     </li>
                 </ul>
             </li>
+            -->
         </ul>
     </div>
 </div>
