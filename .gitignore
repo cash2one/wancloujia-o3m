@@ -23,7 +23,7 @@ dump.rdb
 
 suning/whoosh_index/*
 static/*
-logs/*
+*log
 nohup.out
 
 # C extensions
@@ -59,3 +59,5 @@ nosetests.xml
 .mr.developer.cfg
 .project
 .pydevproject
+
+venv

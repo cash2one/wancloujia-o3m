@@ -4,9 +4,8 @@ import os
 #import mongoengine
 #from pyhdfs import hdfs
 
-DEBUG = False
-#DEBUG = True
-#TEMPLATE_DEBUG = DEBUG
+DEBUG = True
+TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
     ('yangchen', 'yuhan534@126.com'),
@@ -21,7 +20,7 @@ DATABASE_HOST = 'localhost'
 DATABASE_PORT = '3306'
 DATABASE_USER = 'root'
 DATABASE_PASSWORD = 'nameLR9969'
-DATABASE_NAME = 'suning'
+DATABASE_NAME = 'onlinegame'
 
 DATABASES = {
     'default': {
@@ -32,16 +31,7 @@ DATABASES = {
         'PASSWORD': DATABASE_PASSWORD,
         'HOST': DATABASE_HOST,                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
         'PORT': DATABASE_PORT,                      # Set to empty string for default.
-    },
-    # 'gridfs': {
-    #     'ENGINE': 'django_mongodb_engine',
-    #     'NAME': 'fs',
-    #     'USER': '',
-    #     'PASSWORD': '',
-    #     'HOST': 'localhost',
-    #     'PORT': 27017,
-    #     'SUPPORTS_TRANSACTIONS': False,
-    # },
+    }
 }
 
 
@@ -311,18 +301,3 @@ LOGGING = {
         'propagate': False,
     }
 }
-
-# import django
-# from django_mongodb_engine.storage import GridFSStorage
-# if True:
-#     django.core.files.storage.default_storage = GridFSStorage(database='gridfs', location='/')
-if False:
-    pass
-    #import django.core.files.storage
-    #import interface.storage
-    #storage = interface.storage.hdfs_storage()
-    #django.core.files.storage.default_storage.listdir = storage.listdir
-    #django.core.files.storage.default_storage.exist = storage.exist
-    #django.core.files.storage.default_storage.delete = storage.delete
-    #DEFAULT_FILE_STORAGE = 'interface.storage.hdfs_storage'
-

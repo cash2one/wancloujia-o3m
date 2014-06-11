@@ -1,30 +1,47 @@
-all: runserver
+host:=0.0.0.0
+port:=9000
+activate_venv=source venv/bin/activate
 
-TEST_APPS=mgr statistics
-PORT=11112
+debug:
+	$(activate_venv) && ./manage.py runserver $(host):$(port)
 
-runserver:
-	nohup ./manage.py runserver $(PORT) &
+start-uwsgi:
+	$(activate_venv) \
+	&& uwsgi --socket 127.0.0.1:$(PORT) \
+          --chdir $(shell pwd) \
+          --wsgi-file base/wsgi.py \
+          --master \
+          --process 4 \
+          --daemonize $(shell pwd)/logs/uwsgi.log \
+          --pidfile $(shell pwd)/uwsgi.pid  
 
-test:
-	./manage.py test $(TEST_APPS) --settings=suning.settings_test
+stop-uwsgi:
+	$(activate_venv) && uwsgi --stop uwsgi.pid
 
-rebuild_db:
-	./rebuild_db.sh
+reload-uwsgi: 
+	$(activate_venv) && uwsgi --reload uwsgi.pid
 
 collectstatic:
-	./manage.py collectstatic
+	$(activate_venv) \
+	&& ./manage.py collectstatic --noinput
 
-restart_nginx:
-	/sbin/service nginx restart
+database:=onlinegame
+password:=
+db:
+	-mysql -u root --password=$(password) -e \
+		"drop database $(database)"
+	mysql -u root --password=$(password) -e \
+		"create database $(database)"
+	$(activate_venv) && ./manage.py syncdb --noinput
 
-deploy_static: collectstatic restart_nginx
+deps: 
+	$(activate_venv) && pip install -r requirements.txt
 
-.PHONY: runserver \
-		test \
-		rebuild_db \
-		collectstatic \
-		restart_nginx \
-		deploy_static
-
+.PHONY: debug \
+	db \
+	collectstatic \
+	reload-uwsgi \
+	start-uwsgi \
+	stop-uwsgi \
+	deps
 
