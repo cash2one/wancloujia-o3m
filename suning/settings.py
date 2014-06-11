@@ -4,7 +4,7 @@ import os
 #import mongoengine
 #from pyhdfs import hdfs
 
-DEBUG = False
+DEBUG = True
 #DEBUG = True
 #TEMPLATE_DEBUG = DEBUG
 
@@ -103,7 +103,7 @@ USE_TZ = True
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.normpath(__file__)))
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/var/www/example.com/media/"
-MEDIA_ROOT = '/data/media'
+MEDIA_ROOT = '/datax/media'
 #MEDIA_ROOT = '/home/yangchen/media'
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
@@ -286,6 +286,14 @@ LOGGING = {
             'maxBytes': 1024*1024*5,
             'backupCount': 5,
             'formatter':'standard',
+        },
+        'import_data': {
+            'level':'DEBUG',
+            'class':'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(PROJECT_ROOT + '/logs/','import_data.log'),
+            'maxBytes': 1024*1024*5,
+            'backupCount': 5,
+            'formatter':'standard',
         }
     },
     'loggers': {
@@ -301,6 +309,11 @@ LOGGING = {
         },
         'django': {
             'handlers': ['django'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+        'import_data': {
+            'handlers': ['import_data'],
             'level': 'DEBUG',
             'propagate': False,
         }
