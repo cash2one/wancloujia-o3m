@@ -11,7 +11,7 @@ djangorestframework
 redis
 jinja2
 django-filter
-pysqlite
+#pysqlite
 xlwt
 django-mysqlpool
 httplib2

@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 #coding: utf-8
-dbhost = 'dev-node1.limijiaoyin.com'
+dbhost = 'localhost'
 dbport = 3306
-dbuser = 'root'
-dbpass = 'nameLR9969'
+dbuser = 'tianyinuser'
+dbpass = '14A0420S'
 dbname = 'tianyin'
 
 import sys  
@@ -227,7 +227,8 @@ for line in sys.stdin:
             dids.add(did)
         # print "INSERT INTO interface_logmeta(date, uid, did, brand, model, subject, installed, client_version) VALUES('%s', '%s', '%s', '%s', '%s', %s, %s, '%s');" % \
         #       ( lastDay.isoformat(), map[user][0], did, brand, model, subj, succ, '1.0.0.0')
-    except:
+    except Exception , e:
+	print e
         pass
 
 for i in successes:

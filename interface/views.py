@@ -27,7 +27,7 @@ from suning import settings
 from suning import utils
 from interface.models import LogMeta
 # from interface.storage import hdfs_storage
-from mgr.models import Staff
+from mgr.models import Staff, Employee, Store, Company
 from app.models import Subject, App, AppGroup, SubjectMap
 from app.tables import bitsize
 from ad.models import AD
@@ -57,6 +57,20 @@ def find_username(uid, cache):
         except:
             return u'未知用户'
 
+def find_org_code(uid, cache):
+    if cache.has_key(uid):
+        return cache[uid]
+    else:
+        try:
+            result = Employee.objects.get(pk=uid)
+            org = result.org()
+	    val = org.code if isinstance(org, Store) or isinstance(org, Company) \
+                else ""
+            cache[uid] = val
+            return val
+        except:
+            return u'Unknown'
+
 def find_subject(sid, cache):
     if cache.has_key(sid):
         return cache[sid]
@@ -82,13 +96,14 @@ def get_pici(subj_name):
 def export(request):
     users = {}
     subjs = {}
+    orgs = {}
     dt = datetime.date.today().isoformat()
     if request.method == "GET":
         dt = request.GET.get('upload_dt',datetime.date.today().isoformat())
     elif request.method == "POST":
         dt = request.POST.get('upload_dt',datetime.date.today().isoformat())
     dt = datetime.datetime.strptime(dt, '%Y-%m-%d')
-    result =[{"model": i.model, "imei": i.did, "batch_no": get_pici(find_subject(i.subject, subjs)), "install_dt":i.date, "info":find_subject(i.subject, subjs),
+    result =[{"model": i.model, "deptId":find_org_code(i.uid, orgs), "imei": i.did, "batch_no": get_pici(find_subject(i.subject, subjs)), "install_dt":i.date, "info":find_subject(i.subject, subjs),
               "result":i.installed,"account":find_username(i.uid, users),"version":i.client_version}
              for i in LogMeta.objects.filter(date=dt)]
     return Response(result)
