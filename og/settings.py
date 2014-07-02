@@ -26,7 +26,6 @@ DATABASES = {
     'default': {
         'ENGINE': 'django_mysqlpool.backends.mysqlpool',#'django.db.backends.mysqlpool', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
         'NAME': DATABASE_NAME,                      # Or path to database file if using sqlite3.
-        # The following settings are not used with sqlite3:
         'USER': DATABASE_USER,
         'PASSWORD': DATABASE_PASSWORD,
         'HOST': DATABASE_HOST,                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
@@ -34,17 +33,6 @@ DATABASES = {
     }
 }
 
-
-# DEFAULT_FILE_STORAGE = 'django_mongodb_engine.storage.GridFSStorage'
-# GRIDFS_DATABASE = 'gridfs'
-#mongoengine.connect('gridfs')
-#HDFS_CONFIG = {
-#    'username': 'songwei', #HDFS linux owner username
-#    'hostname': 'dev-node1.limijiaoyin.com', #HDFS web host name
-#    'port': '50070' #HDFS web port
-#}
-
-#hdfs.setConfig(**HDFS_CONFIG)
 
 CACHES = {
     'default': {
@@ -114,9 +102,7 @@ STATIC_URL = '/static/'
 # Additional locations of static files
 STATICFILES_DIRS = (
     PROJECT_ROOT + '/assets',
-    # Put strings here, like "/home/html/static" or "C:/www/django/static".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
+    PROJECT_ROOT + '/components',
 )
 
 LOGIN_URL = '/welcome'
@@ -169,22 +155,17 @@ MIDDLEWARE_CLASSES = (
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-ROOT_URLCONF = 'suning.urls'
+ROOT_URLCONF = 'og.urls'
 
 PAGINATION_PAGE_SIZE = 10
 NO_SEARCH_RESULTS = u'无搜索结果'
 
 # Python dotted path to the WSGI application used by Django's runserver.
-WSGI_APPLICATION = 'suning.wsgi.application'
+WSGI_APPLICATION = 'og.wsgi.application'
 
 TEMPLATE_DIRS = (
     os.path.join(PROJECT_ROOT, 'templates'),
 )
-
-CRONJOBS = [
-    ('00 00 * * *', 'ad.cron.update_index'),
-    ('00 00 * * *', 'framework.cron.clear_expired_token')
-]
 
 INSTALLED_APPS = (
     'django.contrib.auth',
@@ -193,12 +174,7 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # Uncomment the next line to enable the admin:
-    # 'django.contrib.admin',
-    # Uncomment the next line to enable admin documentation:
-    # 'django.contrib.admindocs',
-    #'haystack',
-    #'djangosphinx'
+
     'framework',
     'oplog',
     'ad',
@@ -212,20 +188,13 @@ INSTALLED_APPS = (
     'ajax_upload',
     'django_select2',
 	'dajaxice',
-    'django_crontab',
     'parsley',
-    'auth_remember',
-    # 'django_mongodb_engine',
+    'auth_remember'
 )
 
 AUTH_REMEMBER_COOKIE_NAME = 'remember_token'
 AUTH_REMEMBER_COOKIE_AGE = 86400 * 2
 
-# A sample logging configuration. The only tangible logging
-# performed by this configuration is to send an email to
-# the site admins on every HTTP 500 error when DEBUG=False.
-# See http://docs.djangoproject.com/en/dev/topics/logging for
-# more details on how to customize your logging configuration.
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -295,7 +264,7 @@ LOGGING = {
             'propagate': False,
         }
     },
-    'root': {
+    '': {
         'handlers': ['default'],
         'level': 'DEBUG',
         'propagate': False,

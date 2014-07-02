@@ -20,7 +20,7 @@ from suning import settings
 from app.models import App, UploadApk, Subject
 from app.forms import AppForm, SubjectForm
 from app.tables import AppTable, SubjectTable
-from suning.decorators import active_tab
+from og.decorators import active_tab
 #from interface.storage import hdfs_storage
 def _file_md5(path):
      with open(path, 'rb') as f:

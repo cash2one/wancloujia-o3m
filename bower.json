@@ -1,0 +1,22 @@
+{
+  "name": "og",
+  "version": "0.0.0",
+  "homepage": "https://github.com/jarvys/wandoujia-oem",
+  "authors": [
+    "Jarvys <yuhan534@126.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "1.11.0",
+    "bootstrap": "~3.2.0",
+    "underscore": "~1.6.0",
+    "django-csrf-support": "~0.0.3"
+  }
+}

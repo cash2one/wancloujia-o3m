@@ -7,7 +7,7 @@ from dajaxice.decorators import dajaxice_register
 
 from ad import models
 from forms import *
-from suning.decorators import *
+from og.decorators import *
 
 logger = logging.getLogger(__name__)
 

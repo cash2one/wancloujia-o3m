@@ -3,8 +3,8 @@ $(function() {
     
 });
 
-var login_check = suning.decorators.login_check;
-var error_check = suning.decorators.error_check;
+var login_check = og.decorators.login_check;
+var error_check = og.decorators.error_check;
 
 $(function() {
     var $modal = $("#reorder-ad");

@@ -9,7 +9,7 @@ from dajaxice.decorators import dajaxice_register
 from dajaxice.utils import deserialize_form
 from suning import settings
 
-from suning.decorators import *
+from og.decorators import *
 from suning.service import notify
 from models import *
 

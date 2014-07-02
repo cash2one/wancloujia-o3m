@@ -1,7 +1,7 @@
 # coding: utf-8
 from dajaxice.decorators import dajaxice_register
 import feedback.models
-from suning.decorators import *
+from og.decorators import *
 
 logger = logging.getLogger(__name__)
 

@@ -14,7 +14,7 @@ from suning import settings
 from ad.models import AD
 from ad.forms import ADForm
 from ad.tables import ADTable
-from suning.decorators import active_tab
+from og.decorators import active_tab
 logger = logging.getLogger(__name__)
 
 def can_view_ad(user):

@@ -11,7 +11,7 @@ from django_tables2.config import RequestConfig
 
 from suning import settings
 from suning import permissions
-from suning.decorators import active_tab
+from og.decorators import active_tab
 from mgr.models import cast_staff, Staff, Company, Store, Region
 from mgr.forms import *
 from mgr.tables import *

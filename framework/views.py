@@ -7,8 +7,8 @@ from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_GET, require_POST
 
-from suning.decorators import active_tab
-from suning.utils import render_json
+from og.decorators import active_tab
+from og.utils import render_json
 
 logger = logging.getLogger(__name__)
 
