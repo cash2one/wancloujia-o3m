@@ -10,7 +10,7 @@ from django.views.decorators.http import require_GET
 from django_tables2.config import RequestConfig
 from app.models import Subject
 
-from suning import settings
+from django.conf import settings
 from ad.models import AD
 from ad.forms import ADForm
 from ad.tables import ADTable

@@ -4,6 +4,5 @@ urlpatterns = patterns('framework.views',
     url(r'^welcome$', 'welcome'),
     url(r'^$', 'welcome'),
     url(r'^logout$', 'logout'),
-    url(r'^login$', 'login'),
-    url(r'^welcome_json$', 'welcome_json')
+    url(r'^login$', 'login')
 )

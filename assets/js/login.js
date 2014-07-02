@@ -9,7 +9,7 @@ define(function(require) {
 
     function login(username, password, remember_me) {
         return $.post("/login", {
-            usrename: username,
+            username: username,
             password: password,
             remember_me: remember_me
         }, "json");
@@ -30,7 +30,7 @@ define(function(require) {
 
             var username = this.username.value;
             var password = this.password.value;
-            var remember_me = this.remember_me.value;
+            var remember_me = this.remember_me.value ? true : false;
 
             $submit.button('loading');
             login(username, password, remember_me).done(function(result) {

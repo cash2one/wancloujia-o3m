@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 @require_GET
 def welcome(request):
     if request.user.is_authenticated():
-        return redirect("/mgr/account/")
+        return redirect("/app/")
     else:
         return render(request, "login.html") 
 
@@ -61,8 +61,6 @@ def login(request):
 
     logger.debug("user is authenticated")
     auth.login(request, user)
-    if remember_me:
-        remember_user(request, user)
 
     return {
         'ret_code': 0

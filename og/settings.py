@@ -176,12 +176,10 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
 
     'framework',
-    'oplog',
     'ad',
     'mgr',
     'app',
     'rest_framework',
-    'interface',
     'statistics',
     'feedback',
     'django_tables2',
@@ -264,7 +262,7 @@ LOGGING = {
             'propagate': False,
         }
     },
-    '': {
+    'root': {
         'handlers': ['default'],
         'level': 'DEBUG',
         'propagate': False,

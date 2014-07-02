@@ -1,7 +1,7 @@
 <div class="search pull-right">
 <form data-provide="search-form" method="GET" action="{{ action|default:"." }}">
     <input class="query" type="text" name="{{ query_name|default:"q" }}" 
-            readonly="readonly" value="{{ query|default:"" }}">
+            value="{{ query|default:"" }}">
 
     <button type="submit" 
     		{% if query %}

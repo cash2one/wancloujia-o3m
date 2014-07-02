@@ -11,7 +11,5 @@ urlpatterns = patterns('',
     url(r'', include('framework.urls')),
     url(r'^app/', include('app.urls')),
     url(r'^mgr/', include('mgr.urls')),
-    url(r'ad/', include('ad.urls')),
-    url(r'interface/', include('interface.urls')),
-    url(r'oplog/', include('oplog.urls')),
+    url(r'ad/', include('ad.urls'))
 ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

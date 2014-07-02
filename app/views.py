@@ -4,6 +4,7 @@ import logging
 from itertools import chain
 from hashlib import md5
 from django.shortcuts import render, redirect
+from django.conf import settings
 from django.core.files.images import ImageFile
 from django.core.files.storage import default_storage        
 from django.utils import simplejson
@@ -16,7 +17,6 @@ from django import forms
 
 from django_tables2.config import RequestConfig
 
-from suning import settings
 from app.models import App, UploadApk, Subject
 from app.forms import AppForm, SubjectForm
 from app.tables import AppTable, SubjectTable

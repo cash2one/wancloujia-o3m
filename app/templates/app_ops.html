@@ -1,5 +1,4 @@
 {% load organization_filters %}
-{% load perm_filters %}
 
 <div class="btn-group btn-group-sm" 
     data-id="{{ record.id }}"
@@ -27,37 +26,21 @@
     {% endif %}
     >
 
-    <button type="button"  
-            {% if request.user|is_employee and not perms.app.change_app %}
-            disabled='disabled'
-            {% endif %}
-            class="btn btn-default edit" title="编辑">
+    <button type="button" class="btn btn-default edit" title="编辑">
         <span class="glyphicon glyphicon-edit"></span>
     </button>
 
     {% if not record.online %}
-        <button type="button" 
-            {% if request.user|is_employee and not perms.app.publish_app %}
-            disabled="disabled" 
-            {% endif %}
-            class="btn btn-default publish" title="上线">
+        <button type="button" class="btn btn-default publish" title="上线">
             <span class="glyphicon glyphicon-export"></span>
         </button>
     {% else %}
-        <button type="button" 
-            {% if request.user|is_employee and not perms.app.drop_app %}
-            disabled="disabled"
-            {% endif %}
-            class="btn btn-default drop" title="下线">
+        <button type="button" class="btn btn-default drop" title="下线">
             <span class="glyphicon glyphicon-import"></span>
         </button>
     {% endif %}
 
-    <button type="button"  
-            {% if request.user|is_employee and not perms.app.delete_app %}
-            disabled='disabled'
-            {% endif %}
-            class="btn btn-danger delete" title="删除">
+    <button type="button" class="btn btn-danger delete" title="删除">
         <span class="glyphicon glyphicon-trash"></span>
     </button>
 </div>

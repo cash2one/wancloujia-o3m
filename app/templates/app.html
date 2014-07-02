@@ -2,10 +2,9 @@
 
 {% load render_table from django_tables2 %}
 {% load django_select2_tags %}
-{% load perm_filters %}
 
 {% block css %}
-{{ block.super }}
+<link rel="stylesheet" href="{{ STATIC_URL }}css/app.css">
 <link rel="stylesheet" href="{{ STATIC_URL }}ajax_upload/css/ajax-upload-widget.css" />
 <style type="text/css">
 .uploadify {
@@ -49,10 +48,7 @@ td.subjects {
 {% block main %}
 <div class="main">
     <div class="toolbar">
-        <a class="btn btn-primary" href="#add-edit-app"
-            {% if request.user|is_employee and not perms.app.add_app %}
-            disabled='disabled'
-            {% endif %}>
+        <a class="btn btn-primary" href="#add-edit-app">
             <span class="glyphicon glyphicon-plus"></span> 新增应用
         </a>
     </div>
@@ -74,7 +70,7 @@ td.subjects {
 {% endblock %}
 
 {% block js %}
-{{ block.super }}
+<!--
 <script type="text/javascript" src="{{ STATIC_URL }}ajax_upload/js/jquery.iframe-transport.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}ajax_upload/js/ajax-upload-widget.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.uploadify.js"></script>
@@ -83,4 +79,11 @@ td.subjects {
 <script type="text/javascript" src="{{ STATIC_URL }}js/category.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/apk_upload.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/app.js"></script>
+-->
+
+<script type="text/javascript" src="{{ STATIC_URL }}components/requirejs/require.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/require.config.js"></script>
+<script>
+    require(["login"]);
+</script>
 {% endblock %}
