@@ -1,0 +1,26 @@
+{
+  "name": "backend-less-misc",
+  "version": "0.1.0",
+  "authors": [
+    "Jarvys <yuhan534@126.com>"
+  ],
+  "description": "backend style misc",
+  "keywords": [
+    "style",
+    "backend",
+    "bootstrap",
+    "django"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "~3.2.0",
+    "font-awesome": "~4.1.0"
+  }
+}

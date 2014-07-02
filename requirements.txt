@@ -16,3 +16,4 @@ uwsgi
 
 django-render-json
 django-render-csv
+django-auth-json

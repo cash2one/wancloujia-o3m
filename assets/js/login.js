@@ -1,56 +1,47 @@
-$(function() {
-    var $form = $(".form");
-    $(".form-group input").placeholder();
-    $form.submit(function(e) {
-        e.preventDefault();
+define(function(require) {
+    require("jquery");
+    require("underscore");
+    require("django-csrf-support");
+    require("bootstrap");
+    require("jquery.placeholder");
 
-        var self = this;
-        var $submit = $("#submit");
+    var toast = require("toast");
 
-        var params = {
-            username: this.username.value,
-            password: this.password.value,
-        };
-        /*
-        if (!this.wandoujia.value) {
-            */
-            params.remember_me = this.remember_me.checked;
-            /*
-    } else {
-            params.csrfmiddlewaretoken = this.csrfmiddlewaretoken.value;
-        }
-        */
+    function login(username, password, remember_me) {
+        return $.post("/login", {
+            usrename: username,
+            password: password,
+            remember_me: remember_me
+        }, "json");
+    }
 
-        function lock_check(func) {
-            return function() {
-                $submit.button('reset');
-                func && func.apply(this, arguments);
+    $(function() {
+        var $form = $(".form");
+        $(".form-group input").placeholder();
+        $form.submit(function(e) {
+            e.preventDefault();
+
+            var self = this;
+            var $submit = $("#submit");
+
+            function reload() {
+                window.location = self.next.value ? self.next.value : window.location;
             }
-        }
 
-        function toastNetworkError() {
-            toast('error', '网路异常');
-        }
+            var username = this.username.value;
+            var password = this.password.value;
+            var remember_me = this.remember_me.value;
 
-        function reload() {
-            window.location = self.next.value ? self.next.value : window.location;
-        }
-
-        function error_check(func) {
-            return function(data) {
-                if (data.ret_code != 0) {
-                    toast('error', data.ret_msg);
-                    return;
+            $submit.button('loading');
+            login(username, password, remember_me).done(function(result) {
+                if (result.ret_code !== 0) {
+                    return toast('error', result.ret_msg);
                 }
 
-                func && func.apply(this, arguments);
-            }
-        }
-
-        var onResult = lock_check(error_check(reload));
-        var onError = lock_check(toastNetworkError);
-
-        $submit.button('loading');
-        Dajaxice.framework.login(onResult, params, {error_callback: onError});
+                reload();
+            }).fail(_.partial(toast, 'error', '网络异常')).always(function() {
+                $submit.button('reset');
+            });
+        });
     });
 });

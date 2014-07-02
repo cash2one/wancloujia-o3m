@@ -1,7 +1,7 @@
 # coding: utf-8
 from django import forms
 
-from suning.user_constraits import PWD_MAX_LEN, PWD_MIN_LEN, USERNAME_MAX_LEN
+from og.user_constraits import PWD_MAX_LEN, PWD_MIN_LEN, USERNAME_MAX_LEN
 
 class LoginForm(forms.Form):
     username = forms.CharField(label=u'用户名', max_length=USERNAME_MAX_LEN)

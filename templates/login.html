@@ -1,7 +1,6 @@
 {% extends "scaffolding.html" %}
 
 {% block css %}
-{{ block.super }}
 <link rel="stylesheet" href="{{ STATIC_URL }}css/login.css" />
 <!--[if lte IE 8]>
 <link rel="stylesheet" href="{{ STATIC_URL }}css/login_ie.css"/>
@@ -11,7 +10,6 @@
 {% block content %}
 <div class="container" style="width: 520px;">
     <form class='form' role='form' method='POST'>
-        {% csrf_token %}
         <input type="hidden" name='next' value="{{ request.GET.next }}"/>
         <div class="form-group" id="username-wrap">
             <label class="sr-only" for="username">用户名</label>
@@ -35,7 +33,9 @@
 {% endblock %}
 
 {% block js %}
-{{ block.super }}
-<script type="text/javascript" src="{{ STATIC_URL }}js/login.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.placeholder.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}components/requirejs/require.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/require.config.js"></script>
+<script>
+    require(["login"]);
+</script>
 {% endblock %}

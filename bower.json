@@ -17,6 +17,8 @@
     "jquery": "1.11.0",
     "bootstrap": "~3.2.0",
     "underscore": "~1.6.0",
-    "django-csrf-support": "~0.0.3"
+    "django-csrf-support": "~0.0.3",
+    "jquery.placeholder": "~0.2.4",
+    "requirejs": "~2.1.14"
   }
 }

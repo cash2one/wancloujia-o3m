@@ -1,0 +1,4 @@
+.form-group.last,
+.form-group:last-child {
+  margin-bottom: 0px;
+}

@@ -1,0 +1,102 @@
+@import "bootstrap/less/bootstrap.less";
+@import "bootstrap-pnotify.less";
+@import "base-font.less";
+
+body {
+    background: #ededed;
+    color: #464646;
+    font-size: 18px;
+}
+
+img {
+    width: 100%;
+}
+
+.container {
+    padding: 0px;
+    width: 520px;
+    position: absolute;
+    top: 10%;
+    left: 50%;
+    margin-left: -260px;
+    background: url(../img/login_shadow.png) no-repeat center bottom;
+    padding-bottom: 24px;
+}
+
+.container > .form {
+    border-radius: 3px;
+    padding: 55px 40px 40px;
+    background-color: #fff;
+    border: 1px solid #d8d8d8;
+    overflow: hidden;
+}
+
+input#username {
+    background: url(../img/user.png) no-repeat 95% center;
+}
+
+input#password {
+    background: url(../img/password.png) no-repeat 95% center;
+}
+
+.container > .form > .form-group {
+    margin-bottom: 25px;
+}
+
+.container > .form .form-group input {
+    box-shadow: none;
+    border: 1px solid #d8d8d8;
+    color: #464646;
+    background-color: #fff;
+    font-size: 18px;
+    border-radius: 0px;
+    line-height: 30px;
+    height: 60px;
+    padding: 16px 60px 16px 20px;
+}
+
+.container > .form input:focus {
+    box-shadow: none;
+}
+
+#submit {
+    background-color: #0089d1;
+    border-radius: 3px;
+    padding: 19px 80px;
+    line-height: 20px;
+    font-size: 20px;
+    border: none;
+}
+
+#submit:focus {
+    outline: none;
+}
+
+.submit-control {
+    margin-top: 30px;
+}
+
+.submit-control > input, .submit-control > label {
+    line-height: 58px;
+    font-weight: normal;
+    margin: 0px;
+    vertical-align: middle;
+}
+
+.submit-control > label {
+    font-size: 20px;
+}
+
+::-webkit-input-placeholder { /* WebKit browsers */
+    color: #a7a7a7;
+}
+:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    color: #a7a7a7;
+}
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+    color: #a7a7a7;
+}
+:-ms-input-placeholder { /* Internet Explorer 10+ */
+    color: #a7a7a7;
+}
+

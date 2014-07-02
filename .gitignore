@@ -61,4 +61,4 @@ nosetests.xml
 .pydevproject
 
 venv
-components
+assets/components
