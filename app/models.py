@@ -26,6 +26,7 @@ class App(models.Model):
     version = models.CharField(verbose_name=u'版本号', max_length=255)
     version_code = models.IntegerField(verbose_name=u'版本代码')
     create_date = models.DateTimeField(verbose_name=u'创建时间', auto_now_add=True)
+    update_date = models.DateTimeField(verbose_name=u'更新时间', auto_now=True)
     desc = models.CharField(verbose_name=u'编辑点评', max_length=255)
     longDesc = models.TextField(verbose_name=u'应用描述')
 
@@ -65,9 +66,11 @@ class Subject(models.Model):
         return True
 
     def apps(self):
-        apps = map(lambda item: item.app, AppGroup.objects.filter(subject=self))
+        return map(lambda item: item.app, AppGroup.objects.filter(subject=self))
+
+    def appPks(self):
         arr = []
-        for app in apps:
+        for app in self.apps():
             arr = arr + [str(app.pk), app.name]
 
         return ",".join(arr)

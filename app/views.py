@@ -1,5 +1,6 @@
 #coding: utf-8
 import math
+from datetime import datetime
 import logging
 from itertools import chain
 from hashlib import md5
@@ -14,6 +15,7 @@ from django.db.models.query import QuerySet
 from django.db.models import Q
 from django.views.decorators.http import require_GET, require_POST
 from django import forms
+from django.forms.models import model_to_dict
 
 from django_tables2.config import RequestConfig
 
@@ -23,6 +25,7 @@ from app.forms import AppForm, SubjectForm
 from app.tables import AppTable, SubjectTable
 from og.decorators import active_tab
 from django_render_json import json as as_json
+from django_render_json import render_json
 
 import apk
 import os
@@ -48,7 +51,7 @@ def can_view_app(user):
 @require_GET
 @login_required
 @active_tab("app")
-def app(request):
+def apps(request):
     apps = App.objects.all().order_by("-create_date")
     query = request.GET.get("q", None)
     if query:
@@ -63,6 +66,79 @@ def app(request):
         "query": query,
         "table": table,
         'form': AppForm()
+    });
+
+
+def render_jsonp(data, callback=None):
+    if callback is None:
+        return render_json(data, indent=4, ensure_ascii=False)
+
+    import json
+    content = callback + '(' + json.dumps(data, indent=4, ensure_ascii=False) + ')'
+    return HttpResponse(content, content_type='text/plain')
+
+
+def str_size(bits):
+    if bits / pow(10, 6) > 0:
+        return str(round(float(bits/pow(10, 6.0)), 2)) + 'MB'
+    else:
+        return str(round(float(bits/pow(10, 3.0)), 2)) + 'KB'
+
+
+def permalink(host, path, scheme='http'):
+    return scheme + '://' + host + path
+
+
+def app_to_dict(app, host):
+    result = model_to_dict(app)
+    result.update({
+        'file': permalink(host, app.apk.file.url),
+        'size': str_size(app.size()),
+        'icon': permalink(host, app.app_icon),
+        'updateDate': app.update_date.strftime(u'%m-%d'),
+        'longDescription': app.desc,
+        'tags': [u'性能优化', u'流量'],
+        'permissions': [
+            u"显示系统级警报",
+            u"查看 Wi-Fi 状态",
+            u"控制振动器",
+            u"拨打电话",
+            u"读取基于网络的粗略位置",
+            u"查看网络状态",
+            u"修改全局系统设置"
+         ],
+         'system': u'Android 2.2.x以上',
+         'total': u'1727 万'
+    })
+
+    screens = []
+    for i in range(1, 7):
+        img = result['screen' + str(i)]
+        if img is not None and img != '':
+            screens.append(permalink(host, img))
+    result['screens'] = screens
+
+    for i in range(1, 7):
+        del result['screen' + str(i)]
+    for key in ['app_icon', 'version_code', 'id', 'apk', 'longDesc']:
+        del result[key]
+
+    return result
+
+
+@require_GET
+def app(request, package):
+    host = request.META['HTTP_HOST']
+    callback = request.GET.get('callback', None)
+    apps = App.objects.filter(package=package)
+    data = apps[0] if apps.exists() else None
+    if data is not None: 
+        instance = app_to_dict(data, host)
+    else:
+        instance = data
+
+    return render_jsonp({
+        'app': instance
     });
 
 
@@ -237,3 +313,28 @@ def add_edit_subject(request):
     models.edit_subject(subject, apps, request.user)
 
     return {'ret_code': 0}
+
+ 
+def category(code):
+    def handler(request):
+        callback = request.GET.get('callback', None)
+        subject = Subject.objects.get(code=code)
+        return render_jsonp({
+            'apps': map(lambda item: app_to_dict(item, request.META['HTTP_HOST']), subject.apps())
+        }, callback)
+        
+    return handler
+
+
+def ads(request):
+    return render_jsonp({
+        "main": {
+            "cover": "http://ubmcmm.baidustatic.com/media/v1/0f000PLHkfGTh3aB7ncyYs.gif",
+            "url": "http://jiaoyin.cm"
+        },
+        "side": {
+            "cover": "http://ubmcmm.baidustatic.com/media/v1/0f0005UspaAo5OIP1PDpVf.gif",
+            "url": "http://jiaoyin.cm"
+        }
+    }, request.GET.get('callback'))
+
