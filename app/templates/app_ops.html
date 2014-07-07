@@ -1,44 +1,9 @@
-{% load organization_filters %}
-
 <div class="btn-group btn-group-sm" 
-    data-id="{{ record.id }}"
     data-name="{{ record.name }}"
-    data-icon="{{ record.app_icon }}"
-    data-version="{{ record.version }}"
-    data-version_code="{{ record.version_code }}"
-    data-size="{{ record.size }}"
-    data-package="{{ record.package }}"
-    data-apk="{{ record.apk.id }}"
-    data-category="{{ record.category.pk }}"
-    data-desc="{{ record.desc }}"
-    data-popularize="{{ record.popularize }}"
-
-    {% if record.popularize %}
-    data-popularize="true"
-    {% else %}
-    data-popularize="false"
-    {% endif %}
-
-    {% if record.online %}
-    data-online="true"
-    {% else %}
-    data-online="false"
-    {% endif %}
-    >
-
-    <button type="button" class="btn btn-default edit" title="编辑">
+    data-id="{{ record.pk }}">
+    <a href="edit?id={{ record.pk }}" class="btn btn-default edit" title="编辑">
         <span class="glyphicon glyphicon-edit"></span>
-    </button>
-
-    {% if not record.online %}
-        <button type="button" class="btn btn-default publish" title="上线">
-            <span class="glyphicon glyphicon-export"></span>
-        </button>
-    {% else %}
-        <button type="button" class="btn btn-default drop" title="下线">
-            <span class="glyphicon glyphicon-import"></span>
-        </button>
-    {% endif %}
+    </a>
 
     <button type="button" class="btn btn-danger delete" title="删除">
         <span class="glyphicon glyphicon-trash"></span>

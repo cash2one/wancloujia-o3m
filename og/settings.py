@@ -174,8 +174,8 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
     'framework',
+    'ajax_upload',
     'ad',
     'mgr',
     'app',

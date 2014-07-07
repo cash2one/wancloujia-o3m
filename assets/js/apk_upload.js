@@ -1,4 +1,7 @@
-(function(global) {
+define(function(require) {
+    require("jquery");
+    require("jquery.uploadify");
+    
     function apk_upload($form, options) {
         var form = $form[0];
         var $upload = $(form.file);
@@ -31,7 +34,7 @@
                 $("#fileupload").uploadify('disable', true);
                 $cancelBtn.show();
                 $tip.empty();
-                func && func.apply(global, arguments);
+                func && func.apply(null, arguments);
             }
         }
 
@@ -40,14 +43,13 @@
                 $("#fileupload").uploadify('disable', false);
                 $cancelBtn.hide();
                 $tip.empty();
-                func && func.apply(global, arguments);
+                func && func.apply(null, arguments);
             }
         }
 
         function setButtonText(text) {
             var html = "<span class='glyphicon glyphicon-upload'></span>&nbsp;" + text;
             $("#fileupload .uploadify-button-text").html(html);
-
         }
 
         function upload_error_check(func) {
@@ -70,7 +72,7 @@
 
                 setButtonText("选择文件");
                 $tip.html('上传成功');
-                func && func.apply(global, [data]);
+                func && func.apply(null, [data]);
             }
         }
 
@@ -79,7 +81,7 @@
             uploader: 'upload',
             buttonText: "<span class='glyphicon glyphicon-upload'></span>&nbsp;选择文件",
             fileObjName: 'file',
-            fileTypeExts: "*.apk",
+            fileTypeExts: "*",
             width: 100,
             height: 34,
             multi: false,
@@ -120,5 +122,5 @@
         };
     }
 
-    global.apk_upload = apk_upload;
-})(window);
+    return apk_upload;
+});

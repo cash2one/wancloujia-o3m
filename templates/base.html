@@ -19,6 +19,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </button>
+        <a class="navbar-brand" href="#">管理后台</a>
     </div>
     <div class="collapse navbar-collapse">
         <ul class="nav navbar-nav navbar-right">
@@ -48,15 +49,23 @@
 <div id="sidebar" class="sidebar affix">
     <div class="bs-sidebar hidden-print" role="complementary">
         <ul class="nav bs-sidenav">
+            <!--
             <li {% if request.nav.active_tab == "ad" %}class="active"{% endif %}>
                 <a href="/ad/">
                     <span class="glyphicon glyphicon-facetime-video"></span>&nbsp;&nbsp;广告管理
                 </a>
             </li>
+            -->
 
             <li {% if request.nav.active_tab == "app" %}class="active"{% endif %}>
                 <a href="/app/">
                     <span class="glyphicon glyphicon-circle-arrow-down"></span>&nbsp;&nbsp;应用管理
+                </a>
+            </li>
+
+            <li {% if request.nav.active_tab == "subject" %}class="active"{% endif %}>
+                <a href="/app/subject">
+                    <span class="glyphicon glyphicon-leaf"></span>&nbsp;&nbsp;专题管理
                 </a>
             </li>
         </ul>
@@ -78,4 +87,3 @@
 <script type="text/javascript" src="{{ STATIC_URL }}js/suning_helper.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-ui-1.10.3.custom.min.js"></script>
 {% endblock %}
-

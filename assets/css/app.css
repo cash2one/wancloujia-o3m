@@ -6362,7 +6362,7 @@ td.ops {
   margin-bottom: 18px;
 }
 .sidebar {
-  top: 58px;
+  top: 65px;
   padding: 10px 0px;
   position: fixed;
   width: 228px;
@@ -6389,8 +6389,79 @@ td.ops {
   background: #edf2f5;
 }
 .main {
-  margin: 58px 8px 0px 240px;
+  margin: 65px 8px 0px 240px;
 }
 .toolbar {
   margin: 8px 0px;
+}
+.control-label.required:after {
+  content: '*';
+  color: #d9534f;
+  margin-right: -10px;
+}
+.uploadify {
+  float: left;
+  position: absolute;
+}
+.uploadify-button {
+  text-align: center;
+  background: #5CB85C;
+  color: #FFF;
+  cursor: pointer;
+  border-radius: 4px;
+  border: 1px solid #4CAE4C;
+}
+.uploadify-button:hover {
+  background-color: #47A447;
+  border-color: #398439;
+}
+.uploadify-queue {
+  display: none;
+}
+#cancel-upload {
+  float: left;
+}
+.ajax-upload-preview-area {
+  display: inline-block;
+  background: #ddd;
+  border-radius: 6px;
+  border: 2px dashed #999;
+  padding: 5px;
+  margin-right: 5px;
+  font-size: 12px;
+  font-family: Arial, sans-serif;
+  text-align: center;
+}
+.ajax-upload-preview-area img {
+  display: block;
+  max-width: 130px;
+  max-height: 130px;
+  border: 1px solid #666;
+  margin: 0 auto;
+  margin-top: 5px;
+}
+ul.errorlist {
+  padding-left: 0;
+  list-style: none;
+  margin-top: 6px;
+  color: #d9534f;
+}
+td.ops {
+  width: 120px;
+}
+.field {
+  position: relative;
+  float: left;
+  width: 20%;
+  min-height: 1px;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+.value {
+  position: relative;
+  float: left;
+  width: 70%;
+  min-height: 1px;
+  padding-left: 15px;
+  padding-right: 15px;
 }

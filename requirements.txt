@@ -9,11 +9,13 @@ django-parsley
 django-auth-remember
 python-memcached
 djangorestframework
-redis
 django-mysqlpool
 httplib2
 uwsgi
+pillow
 
+django-upload-path-generator
 django-render-json
 django-render-csv
 django-auth-json
+
