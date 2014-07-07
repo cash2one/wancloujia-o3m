@@ -139,7 +139,7 @@ def app(request, package):
 
     return render_jsonp({
         'app': instance
-    });
+    }, callback);
 
 
 @login_required
