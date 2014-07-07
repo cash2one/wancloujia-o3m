@@ -19,7 +19,7 @@ class AppForm(forms.ModelForm):
     desc = forms.CharField(label=u'专题描述', max_length=50,required=False)
     class Meta:
         model = App
-        fields = ('version', 'name', 'apk', 'category', 'online', 'popularize', 'desc', 'version_code')
+        fields = ('version', 'name', 'apk', 'category', 'online', 'popularize', 'open_after_install', 'desc', 'version_code')
         widgets = {
             'online': forms.HiddenInput,
             'version': forms.TextInput(attrs={

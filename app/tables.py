@@ -40,9 +40,12 @@ class AppTable(tables.Table):
     def render_online(self, record):
         return u'已上线' if record.online else u'已下线'
 
+    def render_open_after_install(self, record):
+        return u'是' if record.open_after_install else u'否'
+
     class Meta:
         model = App
-        fields = ('name', 'version', 'category', 'online', 'create_date')
+        fields = ('name', 'version', 'category', 'online', 'create_date', 'open_after_install')
         orderable = False
         attrs = {'class': 'table table-hover table-bordered'}
         empty_text = u'暂无应用'

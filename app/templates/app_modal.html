@@ -85,6 +85,18 @@
     </div>
     <div class="form-group">
         <label class="col-xs-3 control-label">
+            <span class="required">*</span>{{ f.open_after_install.label }}
+        </label>
+        <div class="col-xs-8" style="padding-top: 7px;">
+            <input id="opened_after_install" data-required="true" type="radio" name="open_after_install" value="True">
+            <label for="opened_after_install">是</label>
+            &nbsp;
+            <input id="unopened_after_install" data-required="true" type="radio" name="open_after_install" checked value="False">
+            <label for="unopened_after_install">否</label>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-xs-3 control-label">
             {{ f.desc.label }}
         </label>
         <div class="col-xs-8"> {{ f.desc }} </div>

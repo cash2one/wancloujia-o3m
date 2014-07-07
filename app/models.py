@@ -35,6 +35,7 @@ class App(models.Model):
     version = models.CharField(verbose_name=u'版本号', max_length=255)
     version_code = models.IntegerField(verbose_name=u'版本代码')
     popularize = models.BooleanField(verbose_name=u'是否推广')
+    open_after_install = models.BooleanField(verbose_name=u'安装后是否打开')
     create_date = models.DateTimeField(verbose_name=u'创建时间', auto_now_add=True)
     online = models.BooleanField(verbose_name=u'是否上线')
     desc = models.CharField(verbose_name=u'应用描述', max_length=50, null=True)
