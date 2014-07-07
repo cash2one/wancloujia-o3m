@@ -13,6 +13,7 @@ define(function(require) {
         before_open: function(pnotify) {
             pnotify.css({
                 "position": "absolute",
+                "z-index": "2001",
                 "top": ($(window).height() / 2) - (pnotify.height() / 2) + 'px',
                 "left": ($(window).width() / 2) - (pnotify.width() / 2) + 'px'
             });

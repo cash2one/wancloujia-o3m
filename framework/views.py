@@ -7,6 +7,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_GET, require_POST
+from django.views.decorators.csrf import ensure_csrf_cookie
 
 from django_render_json import json as re_json
 
@@ -16,6 +17,7 @@ logger = logging.getLogger(__name__)
 
 
 @require_GET
+@ensure_csrf_cookie
 def welcome(request):
     if request.user.is_authenticated():
         return redirect("/app/")

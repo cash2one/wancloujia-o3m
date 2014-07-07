@@ -64,13 +64,13 @@ class Subject(models.Model):
     def available(self):
         return True
 
-    class Meta:
-        permissions = (
-            ('publish_subject', 'Can publish subject'),
-            ('drop_subject', 'Can drop subject'),
-            ('sort_subject', 'Can sort subject'),
-            ('audit_subject', 'Can audit subject')
-        )
+    def apps(self):
+        apps = map(lambda item: item.app, AppGroup.objects.filter(subject=self))
+        arr = []
+        for app in apps:
+            arr = arr + [str(app.pk), app.name]
+
+        return ",".join(arr)
 
 
 class AppGroup(models.Model):

@@ -1,34 +1,22 @@
 {% extends "modal.html" %}
 
-{% block title %}新增应用专题{% endblock %}
+{% block title %}编辑应用专题{% endblock %}
 
 {% block body %}
 <form role="form" class="form-horizontal">
     <input type="hidden" name="id">
     <div class="form-group">
         <label class="col-xs-3 control-label"> 
-            <span class="required">*</span>{{ f.name.label }} 
+            {{ f.name.label }} 
         </label>
         <div class="col-xs-8"> {{ f.name }} </div>
     </div>
     <div class="form-group">
         <label class="col-xs-3 control-label">
-            <span class="required">*</span>{{ f.cover.label }}
+            应用列表
         </label>
         <div class="col-xs-8">
-            {{ f.cover }}
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="col-xs-3 control-label">{{ f.desc.label }}</label>
-        <div class="col-xs-8"> {{ f.desc }} </div>
-    </div>
-    <div class="form-group">
-        <label class="col-xs-3 control-label">
-            <span class="required">*</span>应用列表
-        </label>
-        <div class="col-xs-8">
-            <input type="text" data-required='true' name="apps">
+            <input type="text" data-required='true' class="form-control" name="apps">
             <span class="help-block">选中的应用是可以通过托拽调整顺序的</span>
         </div>
     </div>

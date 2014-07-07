@@ -17,6 +17,7 @@ from django import forms
 
 from django_tables2.config import RequestConfig
 
+from app import models
 from app.models import App, UploadApk, Subject
 from app.forms import AppForm, SubjectForm
 from app.tables import AppTable, SubjectTable
@@ -213,7 +214,7 @@ def search_apps(request):
     page = int(request.GET.get("p"))
     page_limit = int(request.GET.get("page_limit"))
 
-    apps = App.objects.filter(online=True).filter(name__contains=query)
+    apps = App.objects.filter(name__contains=query)
     total = apps.count()
     apps = apps[(page-1)*page_limit:page*page_limit]
     results = [{'id': app.pk, 'text': app.name} for app in apps]
@@ -227,16 +228,12 @@ def search_apps(request):
 
 @require_POST
 @as_json
-def add_edit_subject(request, form):
-    pk = request.POST["id"]
-    apps = request.POST["apps"]
-
-    if not apps:
-        logger("%s: param is invalid", __name__)
-        return _invalid_data_json
-
-    apps = [int(item) for item in form["apps"].split(",")]
+def add_edit_subject(request):
+    pk = request.POST["pk"]
     subject = Subject.objects.get(pk=int(pk))
+
+    apps = request.POST.get("apps", None)
+    apps = [] if not apps else [int(item) for item in apps.split(",")]
     models.edit_subject(subject, apps, request.user)
 
     return {'ret_code': 0}

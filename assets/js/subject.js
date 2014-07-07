@@ -1,6 +1,17 @@
 define(function(require) {
     require("jquery");
     require("bootstrap");
+    require("select2");
+    //require("jquery.ui.sortable");
+    require("django-csrf-support");
+    var toast = require("toast");
+
+    function editSubject(pk, apps) {
+        return $.post("/app/subject/edit", {
+            pk: pk,
+            apps: apps
+        }, "json");
+    }
 
     $(function() {
         var $modal = $("#add-edit-subject");
@@ -25,7 +36,13 @@ define(function(require) {
             return results;
         }
 
-        var select2_options = $.extend({}, select2_tip_options, {
+        var select2_options = {
+            formatSearching: function() {
+                return "搜索中...";
+            },
+            formatNoMatches: function() {
+                return "没有搜索结果";
+            },
             tags: [],
             ajax: {
                 url: '/app/search_apps/',
@@ -58,9 +75,10 @@ define(function(require) {
 
                 callback(apps_cache);
             }
-        });
+        };
 
         $apps.select2(select2_options);
+        /*
         $apps.select2("container").find("ul.select2-choices").sortable({
             containment: 'parent',
             start: function() {
@@ -70,6 +88,7 @@ define(function(require) {
                 $apps.select2("onSortEnd");
             }
         });
+        */
 
         $("table").on("click", ".edit", function() {
             var subject = $(this.parentNode).data();
@@ -82,7 +101,6 @@ define(function(require) {
         });
 
         $modal.on('hide.bs.modal', function() {
-            auw.abort();
             form.id.value = "";
             form.name.value = "";
 
@@ -90,53 +108,47 @@ define(function(require) {
             $apps.select2('readonly', false);
             apps_cache = [];
             query_id++;
-            $form.parsley('destroy');
         });
 
         $modal.on('show.bs.modal', function() {
-            $form.parsley(parsley.bs_options);
-            suning.modal.setTitle($modal, '修改应用专题');
+            $modal.find(".title").html('修改应用专题');
         });
 
         $saveBtn.click(function() {
             $form.submit();
         });
 
-        function field_check(func) {
-            return function(data) {
-                if (data.ret_code != 0 && data.field) {
-                    parsley.highlightError(form, data.field);
-                    toast('error', data.error);
-                    return;
-                }
-
-                func(data);
-            }
-        }
-
         $form.submit(function(e) {
             e.preventDefault();
-            if (!$form.parsley('validate')) return;
 
-            var onSuccess = lock_check(login_check(field_check(error_check(function(data) {
+            var onSuccess = function(data) {
                 var msg = !form.id.value ? '新增应用专题成功' : '应用专题修改成功';
                 toast('success', msg);
                 $modal.modal("hide");
-                suning.reload(2000);
-            }))));
-            var onError = lock_check(suning.toastNetworkError);
+            };
 
-            suning.modal.lock($modal);
             console.log("apps: ", form.apps.value);
-            Dajaxice.app.add_edit_subject(onSuccess, {
-                form: $form.serialize(true)
-            }, {
-                error_callback: onError
+            $modal.find(".save").button("loading");
+            editSubject(form.id.value, form.apps.value).done(function(data) {
+                if(data.ret_code !== 0) {
+                    toast('error', '操作失败');
+                    return;
+                }
+                
+                toast('success', '操作成功');
+                setTimeout(function() {
+                    window.location.reload();
+                }, 500);
+            }).fail(function() {
+                toast('error', '操作失败');
+            }).always(function() {
+                $modal.find(".save").button("reset");
             });
         });
     });
 
     $(function() {
+        /*
         var modal = new modals.ActionModal($("#delete-subject")[0], {
             tip: _.template("确认要删除&nbsp;<strong><%- name %></strong>&nbsp;吗?"),
             msg: '删除成功',
@@ -146,98 +158,6 @@ define(function(require) {
         $("table").on('click', '.delete', function() {
             modal.show($(this.parentNode).data());
         });
-    });
-
-
-    $(function() {
-        var mode = null;
-        var PUBLISH_SUBJECT = "publish_subject";
-        var DROP_SUBJECT = "drop_subject";
-        var subject = null;
-        var $modal = $("#prompt");
-        var $saveBtn = $modal.find(".save");
-
-        $("table").on("click", ".publish", function() {
-            mode = PUBLISH_SUBJECT;
-            subject = $(this.parentNode).data();
-            $modal.modal('show');
-        });
-
-        $("table").on("click", ".drop", function() {
-            mode = DROP_SUBJECT;
-            subject = $(this.parentNode).data();
-            $modal.modal('show');
-        });
-
-        function lock_check(func) {
-            return function(data) {
-                suning.modal.unlock($modal);
-                func(data);
-            }
-        }
-
-        $modal.on('show.bs.modal', function() {
-            var action = mode == PUBLISH_SUBJECT ? "上线应用专题" : "下线应用专题";
-            $modal.find(".modal-title").html(action);
-            if (mode == PUBLISH_SUBJECT) {
-                var template = _.template("确定要上线应用专题&nbsp;<strong><%= name %></strong>&nbsp;吗?");
-                $modal.find(".modal-body").html(template({
-                    name: subject.name
-                }));
-            } else {
-                $modal.find(".modal-body").html("如果应用专题下线了，将不能被手机助手用户看到，并且会排在应用专题列表的后面。确认继续吗？");
-            }
-        });
-
-        $saveBtn.click(function() {
-            var func = Dajaxice.app[mode];
-            suning.modal.lock($modal);
-            func(lock_check(login_check(error_check(function(data) {
-                toast('success', mode == PUBLISH_SUBJECT ? '应用专题已上线' : '应用专题已下线');
-                $modal.modal('hide');
-                suning.reload(2000);
-            }))), {
-                id: subject.id
-            }, {
-                error_callback: lock_check(suning.toastNetworkError)
-            });
-        });
-    });
-
-    $(function() {
-        var $modal = $("#sort-subjects");
-        if ($modal.find(".subject").length == 0) return;
-
-        $modal.find("table").tableDnD({
-            onDragClass: "drag"
-        });
-        var $saveBtn = $modal.find(".save");
-
-        function lock_check(func) {
-            return function(data) {
-                suning.modal.unlock($modal);
-                func(data);
-            }
-        }
-
-        $saveBtn.click(function() {
-            var pks = [];
-            $modal.find(".subject").each(function() {
-                var id = $(this).data("id")
-                if (id) pks.push(id);
-            });
-            if (pks.length == 0) return;
-
-            suning.modal.lock($modal);
-            Dajaxice.app.sort_subjects(lock_check(login_check(error_check(function(data) {
-                toast('success', '操做成功！');
-                $modal.modal('hide');
-                suning.reload(2000);
-            }))), {
-                pks: pks.join(",")
-            }, {
-                error_callback: lock_check(suning.toastNetworkError)
-            });
-        });
+        */
     });
 });
