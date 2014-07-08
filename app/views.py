@@ -161,7 +161,8 @@ def editApp(request):
             }, instance=app)
 
         return render(request, "edit_app.html", {
-            "form": form
+            "form": form,
+            "action": u"编辑" if app else u"添加"
         });
     else:
         if app:
@@ -173,7 +174,8 @@ def editApp(request):
             logger.warn("form is invalid")
             logger.warn(form.errors)
             return render(request, "edit_app.html", {
-                "form": form 
+                "form": form,
+                "action": u"编辑" if app else u"添加"
             });
             
         form.save()
