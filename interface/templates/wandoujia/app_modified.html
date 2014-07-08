@@ -1,0 +1,260 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>{{ subject.name }}</title>
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}wandoujia/css/apps.css" />
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}wandoujia/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}wandoujia/css/apps_fix.css" />
+</head>
+<body>        
+        <div class="banner-wrap container nav">
+            <div style="float: left">{{ subject.name }}</div>
+            {% include "wandoujia/user_area.html" %}
+        </div>
+        <div class="toolsbar container">
+            <button class="btn" id="select-all">全选</button>
+            <button class="btn btn-primary" id="install">安装已选应用</button>
+            <span id="tip"></span>
+            <a id="cancel" class="btn btn-link">取消选择</a>
+        </div>
+        <div class="app-block with-comments container">
+            <ul class="app-list clearfix">
+            {% for app in apps %}
+            <li class="app selected" data-size="{{ app.bits }}"data-pn="com.uc.browser">
+                <div class="app-inner">
+                    <div class="info">
+                        <div class="icon-area">
+                            <img src="{{ app.icon }} " alt="{{ app.name }}" class="icon" />
+                        </div>
+                        <div class="operate">
+                            <span class="name" title="{{ app.name }}">
+                                <span class="txt">{{ app.name }}</span>
+                            </span>
+                            <span class="meta">
+                                <span title="{{ app.version }}&nbsp;&nbsp;{{ app.size }}">
+									{{ app.version }}&nbsp;&nbsp;{{ app.size }}
+								</span>
+                                <a  data-id="{{ app.id }}" download="{{ app.name }}.apk" 
+                                    data-icon="http://{{ request.META.HTTP_HOST }}{{ app.icon }}"
+                                    class="btn install-link"
+                                    data-package="{{ app.package }}" 
+                                    href="{{ MEDIA_URL }}{{ app.apk }}?md5={{ app.md5 }}#name={{ app.name }}&icon=http://{{ request.META.HTTP_HOST }}{{ app.icon }}&content-type=application" >安装</a>
+                            </span>    
+                        </div>
+                    </div>
+                    <div class="pos-comment">
+                        <div class="cmt-split"><i></i></div>
+                        <div class="cmt-content">{{ app.desc }}</div>
+                    </div>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/require.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}wandoujia/js/Narya.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.cookie.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/async.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}wandoujia/js/log.js"></script>
+    <script type="text/javascript"> 
+
+    function bitsize(size) {
+        var result = "";
+        if (size < 1024 * 1024) {
+            result = (size / 1024).toFixed(2) + " KB";
+        } else {
+            result = (size / 1024 / 1024).toFixed(2) + " MB";
+        }
+        return result;
+    }
+
+    requirejs(["Narya", "IO/IO"], function(narya, IO) {
+
+    $(function() {
+        var $appList = $(".app-list");
+        var $tip = $("#tip");
+        var $cancel = $("#cancel");
+        var $install = $("#install");
+        var $select_all = $("#select-all");
+
+        function count_selected_apps() {
+            return $appList.find(".app.selected").length;
+        }
+
+        function count_total_apps() {
+            return $appList.find(".app").length;
+        }
+
+        function show_tip() {
+            var count = count_selected_apps();
+            var bits = 0;
+            $appList.find(".app.selected").each(function() {
+                var $this = $(this);
+                bits += parseInt($this.data("size"), 10);
+            });
+            $tip.html("已经" + count + "选择款应用，共" + bitsize(bits));
+        }
+
+        on_selection_changed();
+
+        $appList.on("click", ".app", function(e) {
+            var $this = $(this);
+            if(e.target == $this.find(".install-link")[0]) {
+                return;
+            }
+
+            $this.toggleClass("selected");
+            on_selection_changed();
+        });
+
+        $select_all.click(function() {
+            $appList.find(".app").addClass("selected");
+            on_selection_changed();
+        });
+
+        $cancel.click(function() {
+            $appList.find(".app").removeClass("selected");
+            on_selection_changed();
+        });
+
+        function on_selection_changed() {
+            if(count_selected_apps() == 0) {
+                $install.attr("disabled", "disabled");
+            } else {
+                $install.removeAttr("disabled");
+            }
+
+            if(count_selected_apps() == count_total_apps()) {
+                $select_all.attr("disabled", "disabled");
+            } else {
+                $select_all.removeAttr("disabled");
+            }
+
+            show_tip();
+        }
+
+        function get_brand() {
+            var build = Narya.Device.get("build");
+            return build ? (build.get("brand") || "") : "";
+        }
+
+        function get_model() {
+            var build = Narya.Device.get("build");
+            return build ? (build.get("model") || "") : "";
+        }
+
+        $(".app-list").on("click", "a.install-link", function() {
+            var $this = $(this);
+            var username = $(".user-area > .username").html();
+            var appid = $this.data("id");
+            var package = $this.data("package");
+            var log = {
+                event: "install", 
+                user: username, 
+                app: appid, 
+                package: package, 
+                brand: get_brand(), 
+                model: get_model()
+            };
+            console.log(log);
+            Log(log);
+        });
+
+        function _type(type) {
+            return type == 1 || type == 3 ? "install" : "unkown";
+        }
+
+        function _state(state) {
+            var result = "unkown";
+            switch(state) {
+                case 4:
+                    result = "success";
+                    break;
+                case 5:
+                case 6:
+                    result = "failed";
+                    break;
+            }
+
+            return result;
+        }
+
+        IO.onmessage({
+            "data.channel": "jobs.stop"
+        }, function(result) {
+            var data = result.status[0];
+            console.log(data.state, _state(data.state));
+            console.log(data.type, _type(data.type));
+
+            if (_type(data.type) === 'unkown' ||
+                _state(data.state) !== 'success') {
+                return;
+            }
+
+            $appList.find("a.install-link").each(function() {
+                var $this = $(this);
+                if ($this.data("icon") !== data.icon) {
+                    return;
+                }
+
+                var username = $(".user-area > .username").html();
+                var appid = $this.data("id");
+                var package = $this.data("package");
+                var log = {
+                    event: "install.success", 
+                    user: username, 
+                    app: appid, 
+                    package: package, 
+                    brand: get_brand(), 
+                    model: get_model()
+                };
+                console.log(log);
+                Log(log);
+            });
+        });
+
+        $install.click(function() {
+            var linkEls = $appList.find(".app.selected a.install-link").toArray();
+            _.each(linkEls, function(el) {
+                el.click();
+            });
+            /*
+            async.eachSeries(linkEls, function(item, callback) {
+                var time = linkEls.indexOf(item) == 0 ? 4 : 300;
+                setTimeout(function() {
+                    item.click();
+                    callback(null);
+                }, time);
+            });
+            */
+        });
+    });
+    });
+    </script>
+        <!--
+	<script type="text/javascript">
+    var _usersnapconfig = {
+        apiKey: '44454a5d-a6be-48dd-baf0-be92350732c0',
+        valign: 'bottom',
+        halign: 'right',
+        tools: ["pen", "highlight", "note"],
+        lang: 'en',
+        commentBox: true,
+        emailBox: false
+    }; 
+    (function() {
+        var s = document.createElement('script');
+        s.type = 'text/javascript';
+        s.async = true;
+        s.src = '//api.usersnap.com/usersnap.js';
+        var x = document.getElementsByTagName('head')[0];
+        x.appendChild(s);
+    })();
+    </script>
+-->
+</body>
+</html>
