@@ -338,6 +338,7 @@ $(function() {
             var $el = $(el);
             var task_info = {
                 url: $el.attr('href'),
+                open_after_install:$el.data('open_after_install'),
                 task_type: 1,
                 task_base_id: baseid,
                 package_name: $el.data('package'),

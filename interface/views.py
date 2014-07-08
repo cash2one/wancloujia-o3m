@@ -304,7 +304,8 @@ def _get_app(grp):
         "version": app.version,
         "size": bitsize(app.apk.size),
         "bits": app.apk.size,
-        "apk": app.apk.file
+        "apk": app.apk.file,
+        "open_after_install":"true" if app.open_after_install else "false"
     }
 
 
