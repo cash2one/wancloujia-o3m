@@ -105,6 +105,7 @@ def upload(request):
         }), mimetype='application/json')
 
     holder = {'icon_url': None}
+    logger.debug("finish inspect")
     def copy_icon(name, f):
         path = "apk_icons/" + apk_info.getPackageName() + "/" + name
         sub_path = default_storage.save(path, ImageFile(f))
@@ -112,6 +113,7 @@ def upload(request):
         holder['icon_url'] = settings.MEDIA_URL + sub_path
         #dfs.create(key_path, key_path)
     apk.read_icon(uploaded_file.file.path, copy_icon)
+    logger.debug("finish read icon")
     app_dict = {
         'ret_code': 0,
         'apk_id': uploaded_file.pk,
@@ -123,7 +125,7 @@ def upload(request):
         'icon': holder['icon_url']
     }
 
-    apps = App.objects.filter(package=apk_info.getPackageName())
+    apps = App.objects.filter(package=apk_info.getPackageName(), version=apk_info.versionName)
     if len(apps) > 0:
         app = apps[0]
         app_dict["id"] = app.pk
@@ -132,6 +134,7 @@ def upload(request):
         app_dict["popularize"] = "True" if app.popularize else "False"
         app_dict["oldVersionCode"] = app.version_code
         app_dict["oldVersion"] = app.version
+    logger.debug("finish filter")
 	
     return HttpResponse(simplejson.dumps(app_dict), 
                         mimetype='application/json')
