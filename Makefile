@@ -37,6 +37,9 @@ db:
 deps: 
 	$(activate_venv) && pip install -r requirements.txt
 
+prepare_data:
+	export PYTHONPATH="." && $(activate_venv) && python scripts/create_data.py
+ 
 .PHONY: debug \
 	db \
 	collectstatic \

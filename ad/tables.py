@@ -26,20 +26,15 @@ class AvailableColumn(tables.Column):
 
 
 class ADTable(tables.Table):
-    cover = tables.TemplateColumn(verbose_name=u'广告图片', template_name="ad_cover.html")
-    desc = tables.TemplateColumn(verbose_name=u'广告介绍', template_name="ad_desc.html")
-    visible = AvailableColumn(verbose_name=u'广告状态', empty_values=())
-    period = tables.TemplateColumn(verbose_name=u'有效时间段', 
-                                   template_code='''
-                                        {{ record.from_date|date:"Y-m-d H:i"}} 
-                                        - {{ record.to_date|date:"Y-m-d H:i"}}
-                                   ''')
-    ops_2 = tables.TemplateColumn(verbose_name=u"操作", template_name="ad_ops.html")
+    cover = tables.TemplateColumn(verbose_name=u'广告图片', 
+                template_name="ad_cover.html", empty_values=(None, ''))
+    ops = tables.TemplateColumn(verbose_name=u"操作", 
+                template_name="ad_ops.html")
 
     class Meta:
         model = AD
         orderable = False
         attrs = {'class': 'table table-hover table-bordered'}
-        fields = ('title', 'cover', 'desc', 'visible')
+        fields = ('title', 'cover', 'link')
         empty_text = '暂无广告'
 

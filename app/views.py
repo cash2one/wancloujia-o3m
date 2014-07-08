@@ -328,15 +328,4 @@ def category(code):
     return handler
 
 
-def ads(request):
-    return render_jsonp({
-        "main": {
-            "cover": "http://ubmcmm.baidustatic.com/media/v1/0f000PLHkfGTh3aB7ncyYs.gif",
-            "url": "http://jiaoyin.cm"
-        },
-        "side": {
-            "cover": "http://ubmcmm.baidustatic.com/media/v1/0f0005UspaAo5OIP1PDpVf.gif",
-            "url": "http://jiaoyin.cm"
-        }
-    }, request.GET.get('callback'))
 

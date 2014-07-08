@@ -3,6 +3,7 @@ require.config({
     paths: {
         "login": "js/login",
         "app": "js/app",
+        "ad": "js/ad",
         "edit_app": "js/edit_app",
         "subject": "js/subject",
         "jquery.pnotify": "js/jquery.pnotify.min",
