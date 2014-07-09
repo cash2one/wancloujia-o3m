@@ -18,8 +18,8 @@
     </div>
     <div class="panel panel-default">
         <div class="panel-heading">
-            应用列表
             {% include "search_form.html" with query=query %} 
+            应用列表
         </div>
         <div class="panel-body"> 
             {% render_table table "multiple_table_template.html" %}

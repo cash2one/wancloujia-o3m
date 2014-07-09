@@ -6178,8 +6178,8 @@ body {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif, '微软雅黑';
 }
 .navbar-og {
-  background-color: #007fce;
-  border-color: #007fce;
+  background-color: #428bca;
+  border-color: #428bca;
 }
 .navbar-og .navbar-brand {
   color: #ffffff;
@@ -6204,7 +6204,7 @@ body {
 .navbar-og .navbar-nav > .active > a:hover,
 .navbar-og .navbar-nav > .active > a:focus {
   color: #ffffff;
-  background-color: #006bad;
+  background-color: #337ab7;
 }
 .navbar-og .navbar-nav > .disabled > a,
 .navbar-og .navbar-nav > .disabled > a:hover,
@@ -6217,19 +6217,19 @@ body {
 }
 .navbar-og .navbar-toggle:hover,
 .navbar-og .navbar-toggle:focus {
-  background-color: #007fce;
+  background-color: #428bca;
 }
 .navbar-og .navbar-toggle .icon-bar {
   background-color: #ffffff;
 }
 .navbar-og .navbar-collapse,
 .navbar-og .navbar-form {
-  border-color: #007fce;
+  border-color: #428bca;
 }
 .navbar-og .navbar-nav > .open > a,
 .navbar-og .navbar-nav > .open > a:hover,
 .navbar-og .navbar-nav > .open > a:focus {
-  background-color: #006bad;
+  background-color: #337ab7;
   color: #ffffff;
 }
 @media (max-width: 767px) {
@@ -6245,7 +6245,7 @@ body {
   .navbar-og .navbar-nav .open .dropdown-menu > .active > a:hover,
   .navbar-og .navbar-nav .open .dropdown-menu > .active > a:focus {
     color: #ffffff;
-    background-color: #006bad;
+    background-color: #337ab7;
   }
   .navbar-og .navbar-nav .open .dropdown-menu > .disabled > a,
   .navbar-og .navbar-nav .open .dropdown-menu > .disabled > a:hover,

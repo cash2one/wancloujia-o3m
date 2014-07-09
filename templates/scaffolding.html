@@ -8,11 +8,14 @@
     <!--<meta name="viewport" content="width=device-width, initial-scale=1.0">-->
     <title>{% block title %}{% endblock %}</title>
 
-    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="shortcut icon" href="http://img.shunwang.com/templates/shunwang/img/shunwang32.ico" />
     {% block css %}
     <link rel="stylesheet" href="{{ STATIC_URL }}bootstrap/dist/css/bootstrap.min.css" />
     {% endblock %}
 
+    
+    <script type="text/javascript" src="{{ STATIC_URL }}components/console-polyfill/index.js">
+    </script>
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
     <script type="text/javascript" src="{{ STATIC_URL }}js/html5shiv.js"></script>
