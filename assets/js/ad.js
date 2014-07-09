@@ -37,6 +37,8 @@ $(function() {
             form[attr].value = ad[attr]
         });
         $(form.cover).val(ad.cover).trigger('change');
+        var tip = ad.title === '主广告位' ? '图片尺寸为725px*90px' : '图片尺寸为220px*90px';
+        $modal.find(".cover-tip").html(tip);
         $modal.modal('show');
     });
     
