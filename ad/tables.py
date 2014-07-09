@@ -27,7 +27,7 @@ class AvailableColumn(tables.Column):
 
 class ADTable(tables.Table):
     cover = tables.TemplateColumn(verbose_name=u'广告图片', 
-                template_name="ad_cover.html", empty_values=(None, ''))
+                template_name="ad_cover.html", empty_values=('', None))
     ops = tables.TemplateColumn(verbose_name=u"操作", 
                 template_name="ad_ops.html")
 

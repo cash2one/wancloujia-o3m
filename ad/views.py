@@ -4,6 +4,7 @@ from django import forms
 
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.http import HttpResponseBadRequest, HttpResponse, Http404
 from django.db.models.query import QuerySet
 from django.db.models import Q
 from django.views.decorators.http import require_GET, require_POST
@@ -75,11 +76,11 @@ def ads(request):
 
     return render_jsonp({
         "main": {
-            "cover": permalink(host, main.cover),
+            "cover": permalink(host, main.cover or '/static/img/main_ad.png'),
             "url": main.link
         },
         "side": {
-            "cover": permalink(host, side.cover),
+            "cover": permalink(host, side.cover or '/static/img/side_ad.png'),
             "url": side.link
         }
     }, request.GET.get('callback'))

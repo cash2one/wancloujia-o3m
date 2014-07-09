@@ -179,7 +179,7 @@ def editApp(request):
             });
             
         form.save()
-        return redirect("/app");
+        return render(request, "close_page.html")
 
 
 @login_required
@@ -276,7 +276,7 @@ def can_view_subject(user):
 @user_passes_test(can_view_subject, login_url=settings.PERMISSION_DENIED_URL)
 @active_tab("subject")
 def subject(request):
-    query_set = Subject.objects.order_by()
+    query_set = Subject.objects.order_by('pk').exclude(code='zone1').exclude(code='zone2');
     table = SubjectTable(query_set)
     RequestConfig(request, paginate={"per_page": settings.PAGINATION_PAGE_SIZE}).configure(table)
     return render(request, "subject.html", {
@@ -326,6 +326,4 @@ def category(code):
         }, callback)
         
     return handler
-
-
 
