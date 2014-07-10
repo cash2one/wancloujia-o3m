@@ -127,7 +127,7 @@ def upload(request):
     if len(apps) > 0:
         app = apps[0]
         app_dict["id"] = app.pk
-        app_dict["category"] = app.category.pk
+        app_dict["category"] = 1 #app.category.pk
         app_dict["desc"] = app.desc
         app_dict["popularize"] = "True" if app.popularize else "False"
         app_dict["oldVersionCode"] = app.version_code
