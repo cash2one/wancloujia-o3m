@@ -1,0 +1,15 @@
+@import "font-awesome/less/font-awesome.less";
+
+th.sortable.orderable {
+    &.asc:after {
+        .fa();
+        padding-left: 5px;
+        content: @fa-var-angle-up;
+    }
+
+    &.desc:after {
+        .fa();
+        padding-left: 5px;
+        content: @fa-var-angle-down;
+    }
+}

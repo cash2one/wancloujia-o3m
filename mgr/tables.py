@@ -4,7 +4,7 @@ import logging
 from django.contrib.auth.models import Group, User
 
 import django_tables2 as tables
-from suning.permissions import *
+from og.permissions import *
 from models import *
 
 class StaffTable(tables.Table):

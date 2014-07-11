@@ -2,6 +2,7 @@
 import logging
 
 from django import forms
+from django.conf import settings
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.db.models.query import QuerySet
@@ -9,12 +10,12 @@ from django.db.models import Q
 from django.views.decorators.http import require_GET
 from django_tables2.config import RequestConfig
 
-from suning import settings
-from suning import permissions
-from suning.decorators import active_tab
+from og import permissions
+from og.decorators import active_tab
 from mgr.models import cast_staff, Staff, Company, Store, Region
 from mgr.forms import *
 from mgr.tables import *
+
 
 logger = logging.getLogger(__name__)
 
@@ -70,7 +71,6 @@ def can_delete_store(user):
 
 @require_GET
 @login_required
-@user_passes_test(can_view_organization, login_url=settings.PERMISSION_DENIED_URL)
 @active_tab("system", "organization")
 def organization(request):
     companyForm = CompanyForm()
@@ -145,8 +145,6 @@ def organization(request):
 
 @require_GET
 @login_required
-@user_passes_test(lambda u: u.is_staff or u.is_superuser, login_url=settings.PERMISSION_DENIED_URL)
-@active_tab("system", "group")
 def group(request):
     query_set = Group.objects.all().order_by("-pk")
     query = request.GET.get("q", None)
@@ -175,8 +173,6 @@ def can_view_staff(user):
 
 @require_GET
 @login_required
-@user_passes_test(can_view_staff, login_url=settings.PERMISSION_DENIED_URL)
-@active_tab("system", "user")
 def user(request):
     if request.user.is_superuser or request.user.is_staff:
         organizations = Organization.objects.all()

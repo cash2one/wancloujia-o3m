@@ -9,7 +9,7 @@ start-uwsgi:
 	$(activate_venv) \
 	&& uwsgi --socket 127.0.0.1:$(PORT) \
           --chdir $(shell pwd) \
-          --wsgi-file base/wsgi.py \
+          --wsgi-file $(shell basename $(shell pwd))/wsgi.py \
           --master \
           --process 4 \
           --daemonize $(shell pwd)/logs/uwsgi.log \
@@ -37,6 +37,9 @@ db:
 deps: 
 	$(activate_venv) && pip install -r requirements.txt
 
+prepare_data:
+	export PYTHONPATH="." && $(activate_venv) && python scripts/create_data.py
+ 
 .PHONY: debug \
 	db \
 	collectstatic \

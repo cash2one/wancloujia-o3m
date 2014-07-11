@@ -1,6 +1,6 @@
 {% extends "modal.html" %}
 
-{% block title %}新增广告{% endblock %}
+{% block title %}编辑广告{% endblock %}
 
 {% block body %}
 <form role="form" class="form-horizontal">
@@ -11,53 +11,30 @@
         }
     </style>
     <input type="hidden" name="id">
-    <input type="hidden" name="position" value="0">
     <div class="form-group">
-        <label class="col-xs-3 control-label">
-        </label>
-        <div class="col-xs-5 checkbox" style="padding-left: 40px;">
-            {{ f.visible }} 
-            <label style="font-weight: normal;" for="id_visible">显示</label>
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="col-xs-3 control-label">
-            <span class="required">*</span>{{ f.title.label }}
+        <label class="col-xs-3 control-label required">
+            {{ f.title.label }}
         </label>
         <div class="col-xs-8">
             {{ f.title }}
         </div>
     </div>
     <div class="form-group">
-        <label class="col-xs-3 control-label">
-            <span class="required">*</span>{{ f.cover.label }}
+        <label class="col-xs-3 control-label required">
+            {{ f.cover.label }}
         </label>
         <div class="col-xs-8"> 
             {{ f.cover }}
-            <span class="help-block">图片尺寸为950px*235px</span>
+            <span class="help-block cover-tip" style="margin-bottom: 0px;"></span>
         </div>
     </div>
     <div class="form-group">
-        <label class="col-xs-3 control-label">
-            <span class="required">*</span>有效时间
-        </label>
-        <div class="col-xs-8">
-            {{ f.from_date }} <span style="display: inline-block;width: 5%">到</span> {{ f.to_date }}
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="col-xs-3 control-label">
-            <span class="required">*</span>{{ f.desc.label }}
+        <label class="col-xs-3 control-label required">
+            {{ f.link.label }}
         </label>
         <div class="col-xs-8"> 
-            {{ f.desc }}
+            {{ f.link }}
         </div>
-    </div>
-    <div class="form-group">
-        <label class="col-xs-3 control-label">
-            专题
-        </label>
-        <div class="col-lg-8"> {{ f.subject }} </div>
     </div>
 </form>
 {% endblock %}

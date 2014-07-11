@@ -1,18 +1,21 @@
 --index-url http://pypi.douban.com/simple
 
-Django==1.5.2
+Django
 Mysql-python
 django_select2
 django-tables2
 django-dajaxice
 django-parsley
-django-crontab
 django-auth-remember
 python-memcached
 djangorestframework
-redis
-jinja2
-django-filter
-xlwt
 django-mysqlpool
 httplib2
+uwsgi
+pillow
+
+django-upload-path-generator
+django-render-json
+django-render-csv
+django-auth-json
+

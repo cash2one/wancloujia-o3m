@@ -11,27 +11,16 @@ logger = logging.getLogger(__name__)
 class AD(models.Model):
     title = models.CharField(verbose_name=u'广告标题', max_length=50)
     cover = models.CharField(verbose_name=u'广告图片', max_length=1024)
-    desc = models.CharField(verbose_name=u'广告介绍', max_length=50)
-    from_date = models.DateTimeField(verbose_name=u'上线时间')
-    to_date = models.DateTimeField(verbose_name=u'下线时间')
-    visible = models.BooleanField(verbose_name=u'广告状态')
-    approved = models.BooleanField(verbose_name=u'审核状态')
-    position = models.IntegerField(default=0)
-    subject = models.ForeignKey(Subject, null=True)
+    link = models.URLField(verbose_name=u'链接')
 
     def __unicode__(self):
         return self.title
 
     def available(self):
-        return self.visible
+        return True
 
     def in_period(self):
-        return self.from_date <= timezone.now() <= self.to_date
-
-    class Meta:
-        permissions = (
-            ('sort_ad', 'Can sort the advertisements'),
-        )
+        return True
 
 
 _MAX_ADS = 1024

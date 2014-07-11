@@ -1,7 +1,6 @@
 {% extends "scaffolding.html" %}
 
 {% block css %}
-{{ block.super }}
 <link rel="stylesheet" href="{{ STATIC_URL }}css/login.css" />
 <!--[if lte IE 8]>
 <link rel="stylesheet" href="{{ STATIC_URL }}css/login_ie.css"/>
@@ -10,17 +9,8 @@
 
 {% block content %}
 <div class="container" style="width: 520px;">
-    <div class="logo-head">
-        <img src="{{ STATIC_URL }}img/suning.png" class="logo"/> 
-        
-        {% if not wandoujia|default:False %}
-        <p class="pull-right">苏宁 - 豌豆荚手机助手管理后台</p>
-        {% endif %}
-    </div>
     <form class='form' role='form' method='POST'>
         <input type="hidden" name='next' value="{{ request.GET.next }}"/>
-        <input type="hidden" name="wandoujia" value="{{ wandoujia }}" />
-        {% csrf_token %}
         <div class="form-group" id="username-wrap">
             <label class="sr-only" for="username">用户名</label>
             <input type="text"  
@@ -43,7 +33,9 @@
 {% endblock %}
 
 {% block js %}
-{{ block.super }}
-<script type="text/javascript" src="{{ STATIC_URL }}js/login.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.placeholder.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}components/requirejs/require.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/require.config.js"></script>
+<script>
+    require(["login"]);
+</script>
 {% endblock %}

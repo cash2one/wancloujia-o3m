@@ -1,37 +1,9 @@
-{% load organization_filters %}
-{% load perm_filters %}
-
-<div class="btn-group btn-group-sm" 
-    data-id="{{ record.id }}"
-    data-title="{{ record.title }}"
-    data-subject="{{ record.subject.pk }}"
-    data-position="{{ record.position }}"
-    data-cover="{{ MEDIA_URL }}{{ record.cover }}"
-
-    {% if record.visible %}
-    data-visible="true"
-    {% else %}
-    data-visible="false"
-    {% endif %}
-
-    data-from_date="{{ record.from_date|date:'Y-m-d H:i' }}"
-    data-to_date="{{ record.to_date|date:'Y-m-d H:i' }}"
-    data-desc="{{ record.desc }}"
-    >
-
-    <button type="button"  
-            {% if request.user|is_employee and not perms.ad.change_ad %}
-            disabled='disabled'
-            {% endif %}
-            class="btn btn-default edit" title="编辑">
+<div class="btn-group btn-group-sm"
+    data-id='{{ record.id }}'
+    data-title='{{ record.title }}'
+    data-cover='{{ record.cover }}'
+    data-link='{{ record.link }}'>
+    <button type="button" class="btn btn-default edit" title="编辑">
         <span class="glyphicon glyphicon-edit"></span>
-    </button>
-
-    <button type="button"  
-            {% if request.user|is_employee and not perms.ad.delete_ad %}
-            disabled='disabled'
-            {% endif %}
-            class="btn btn-danger delete" title="删除">
-        <span class="glyphicon glyphicon-trash"></span>
     </button>
 </div>

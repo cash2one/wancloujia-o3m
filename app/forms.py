@@ -9,24 +9,36 @@ from ajax_upload.widgets import AjaxClearableFileInput
 from models import *
 
 
-@parsleyfy
 class AppForm(forms.ModelForm):
-    package = forms.CharField(widget=forms.HiddenInput)
-    app_icon = forms.CharField(label=u'应用图标', widget=AjaxClearableFileInput, required=False)
+    size = forms.CharField(label=u'应用大小', max_length=50, widget=forms.HiddenInput)
+    screen2 = forms.CharField(label=u'应用截图2', required=False, widget=AjaxClearableFileInput(attrs={'class': 'form-control'}))
+    screen3 = forms.CharField(label=u'应用截图3', required=False, widget=AjaxClearableFileInput(attrs={'class': 'form-control'}))
+    screen4 = forms.CharField(label=u'应用截图4', required=False, widget=AjaxClearableFileInput(attrs={'class': 'form-control'}))
+    screen5 = forms.CharField(label=u'应用截图5', required=False, widget=AjaxClearableFileInput(attrs={'class': 'form-control'}))
+    screen6 = forms.CharField(label=u'应用截图6', required=False, widget=AjaxClearableFileInput(attrs={'class': 'form-control'}))
 
     class Meta:
         model = App
-        fields = ('version', 'name', 'apk', 'category', 'online', 'popularize', 'desc', 'version_code')
         widgets = {
-            'online': forms.HiddenInput,
+            'app_icon': AjaxClearableFileInput(attrs={'class': 'form-control'}),
+            'screen1': AjaxClearableFileInput(attrs={'class': 'form-control'}),
+            'slogan': forms.TextInput(attrs={'class': 'form-control'}),
             'version': forms.TextInput(attrs={
                 'readonly': 'readonly', 
                 'class': 'form-control'
             }),
-            'desc': forms.Textarea(attrs={
+            'desc': forms.TextInput(attrs={'class': 'form-control'}),
+            'package': forms.TextInput(attrs={
+                'readonly': 'readonly', 
+                'class': 'form-control'
+            }),
+            'longDesc': forms.Textarea(attrs={
                 'rows': 3, 
-                'placeholder': u'最多可以输入50个字',
                 'maxlength': 50,
+                'class': 'form-control'
+            }),
+            'version': forms.TextInput(attrs={
+                'readonly': 'readonly', 
                 'class': 'form-control'
             }),
             'name': forms.TextInput(attrs={
@@ -40,15 +52,12 @@ class AppForm(forms.ModelForm):
 
 @parsleyfy
 class SubjectForm(forms.ModelForm):
-    name = forms.CharField(label=u'专题名称', max_length=20)
-    desc = forms.CharField(label=u'专题描述', max_length=100, required=False, 
-                            widget=forms.Textarea(attrs={
-                                'rows': 4, 
-                                'class': 'form-control'
-                            }))
+    name = forms.CharField(label=u'专题名称', max_length=20, widget=forms.TextInput(attrs={
+                    'class': 'form-control', 
+                    'readonly': 'readonly'
+            }))
 
     class Meta:
         model = Subject
         exclude = ('name', )
-        widgets = {'cover': AjaxClearableFileInput}
 

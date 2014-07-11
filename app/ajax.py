@@ -8,9 +8,9 @@ from django.utils import simplejson
 from django.contrib.auth.models import User
 from dajaxice.decorators import dajaxice_register
 
-from suning.decorators import request_delay, oplogtrack
+from og.decorators import request_delay, oplogtrack
+from og.decorators import *
 from forms import *
-from suning.decorators import *
 from app import models
 
 logger = logging.getLogger(__name__)

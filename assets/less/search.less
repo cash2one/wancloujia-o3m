@@ -1,0 +1,35 @@
+.search {
+    zoom: 1;
+
+    form {
+        margin-top: -5px;
+        position: relative;
+
+        input[type=text]{
+            .form-control();
+            height: 30px;
+            font-size: 14px;
+            line-height: 20px;
+            background: #fdfdfd;
+            padding: 5px 12px;
+            display: block;
+            padding-right: 40px;
+            border-radius: 15px;
+
+            &:focus {
+                background: #fff;
+                outline: none;
+            }
+        }
+    }
+
+    .btn {
+        position: absolute;
+        top: 0px;
+        right: 0px;
+        border: none;
+        padding: 5px 9px;
+        outline: none;
+        color: #444;
+    }
+}
