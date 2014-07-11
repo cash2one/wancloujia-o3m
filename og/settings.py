@@ -4,7 +4,7 @@ import os
 #import mongoengine
 #from pyhdfs import hdfs
 
-DEBUG = False
+DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
@@ -19,7 +19,7 @@ DATABASE_ENGINE = 'mysql'
 DATABASE_HOST = 'localhost'
 DATABASE_PORT = '3306'
 DATABASE_USER = 'root'
-DATABASE_PASSWORD = 'wandoujia_onlinegame'
+DATABASE_PASSWORD = 'nameLR9969'
 DATABASE_NAME = 'onlinegame'
 
 DATABASES = {
