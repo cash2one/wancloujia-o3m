@@ -4,7 +4,7 @@ import os
 #import mongoengine
 #from pyhdfs import hdfs
 
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
@@ -19,7 +19,7 @@ DATABASE_ENGINE = 'mysql'
 DATABASE_HOST = 'localhost'
 DATABASE_PORT = '3306'
 DATABASE_USER = 'root'
-DATABASE_PASSWORD = 'nameLR9969'
+DATABASE_PASSWORD = 'wandoujia_onlinegame'
 DATABASE_NAME = 'onlinegame'
 
 DATABASES = {
@@ -78,10 +78,11 @@ USE_L10N = True
 # If you set this to False, Django will not use timezone-aware datetimes.
 USE_TZ = True
 
-PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.normpath(__file__)))
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.normpath(os.path.abspath(__file__))))
+
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/var/www/example.com/media/"
-MEDIA_ROOT = '/data/og.proj/media'
+MEDIA_ROOT = '/opt/og.proj/media'
 #MEDIA_ROOT = '/home/yangchen/media' # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
 # Examples: "http://example.com/media/", "http://media.example.com/"
@@ -100,7 +101,6 @@ STATIC_URL = '/static/'
 # Additional locations of static files
 STATICFILES_DIRS = (
     PROJECT_ROOT + '/assets',
-    PROJECT_ROOT + '/components',
 )
 
 LOGIN_URL = '/welcome'
@@ -113,8 +113,7 @@ PERMISSION_DENIED_JSON_URL = "/permission_denied_json"
 # various locations.
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
-    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    'dajaxice.finders.DajaxiceFinder'
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder'
 #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
@@ -184,7 +183,6 @@ INSTALLED_APPS = (
     'django_tables2',
     'ajax_upload',
     'django_select2',
-	'dajaxice',
     'parsley',
     'auth_remember'
 )

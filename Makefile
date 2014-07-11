@@ -7,7 +7,7 @@ debug:
 
 start-uwsgi:
 	$(activate_venv) \
-	&& uwsgi --socket 127.0.0.1:$(PORT) \
+	&& uwsgi --socket 127.0.0.1:$(port) \
           --chdir $(shell pwd) \
           --wsgi-file $(shell basename $(shell pwd))/wsgi.py \
           --master \
