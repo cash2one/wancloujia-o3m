@@ -61,3 +61,7 @@ nosetests.xml
 .pydevproject
 
 venv
+assets/components
+node_modules
+*.swp
+*.pid

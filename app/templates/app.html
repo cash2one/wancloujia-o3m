@@ -2,64 +2,24 @@
 
 {% load render_table from django_tables2 %}
 {% load django_select2_tags %}
-{% load perm_filters %}
+
+{% block title %}应用管理{% endblock %}
 
 {% block css %}
-{{ block.super }}
-<link rel="stylesheet" href="{{ STATIC_URL }}ajax_upload/css/ajax-upload-widget.css" />
-<style type="text/css">
-.uploadify {
-    float: left;
-    position: absolute;
-}
-
-.uploadify-button {
-    text-align: center;
-    background: #5CB85C;
-    color: #FFF;
-    cursor: pointer;
-    border-radius: 4px;
-    border: 1px solid #4CAE4C;
-}
-
-.uploadify-button:hover {
-    background-color: #47A447;
-    border-color: #398439;
-}
-
-.uploadify-queue {
-    display: none;
-}
-
-#cancel-upload {
-    float: left;
-}
-
-td.name {
-    width: 120px;
-}
-
-td.subjects {
-    width: 300px;
-}
-
-</style>
+<link rel="stylesheet" href="{{ STATIC_URL }}css/app.css">
 {% endblock %}
 
 {% block main %}
 <div class="main">
     <div class="toolbar">
-        <a class="btn btn-primary" href="#add-edit-app"
-            {% if request.user|is_employee and not perms.app.add_app %}
-            disabled='disabled'
-            {% endif %}>
+        <a class="btn btn-primary" href="add" target="_blank">
             <span class="glyphicon glyphicon-plus"></span> 新增应用
         </a>
     </div>
     <div class="panel panel-default">
         <div class="panel-heading">
-            应用列表
             {% include "search_form.html" with query=query %} 
+            应用列表
         </div>
         <div class="panel-body"> 
             {% render_table table "multiple_table_template.html" %}
@@ -67,20 +27,13 @@ td.subjects {
     </div>
 </div>
 
-{% include "app_modal.html" with modal_id="add-edit-app" f=form %}
 {% include "delete_modal.html" with modal_id="delete-app" model_name="应用" %} 
-{% include "prompt.html" with modal_id="publish-app" %} 
-{% include "prompt.html" with modal_id="drop-app" %} 
 {% endblock %}
 
 {% block js %}
-{{ block.super }}
-<script type="text/javascript" src="{{ STATIC_URL }}ajax_upload/js/jquery.iframe-transport.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}ajax_upload/js/ajax-upload-widget.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.uploadify.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}js/bootbox.min.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}js/modals.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}js/category.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}js/apk_upload.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}js/app.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}components/requirejs/require.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/require.config.js"></script>
+<script>
+    require(["app"]);
+</script>
 {% endblock %}

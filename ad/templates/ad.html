@@ -1,37 +1,26 @@
 {% extends "base.html" %}
 
 {% load render_table from django_tables2 %}
-{% load perm_filters %}
 
+{% block title %}广告管理{% endblock %}
 {% block css %}
-{{ block.super }}
-<link rel="stylesheet" href="{{ STATIC_URL }}ajax_upload/css/ajax-upload-widget.css" />
-<link rel="stylesheet" href="{{ STATIC_URL }}css/bootstrap-datetimepicker.min.css" />
-<link rel="stylesheet" href="{{ STATIC_URL }}css/bootstrap-datetimepicker.bs3-fix.css" />
-<link rel="stylesheet" href="{{ STATIC_URL }}css/ad.css" />
+<link rel="stylesheet" href="{{ STATIC_URL }}css/app.css" />
 {% endblock %}
 
 {% block main %}
 <div class="main">
+    <!--
     <div class="toolbar">
-        <a id="add_ad" class="btn btn-primary" href="#add-edit-ad"
-            {% if request.user|is_employee and not perms.ad.add_ad %}
-            disabled='disabled'
-            {% endif %}>
+        <a id="add_ad" class="btn btn-primary" href="#add-edit-ad">
             <span class="glyphicon glyphicon-plus"></span> 新增广告
         </a>
-        <a data-toggle="modal" class="btn btn-primary" href="#reorder-ad"
-            {% if request.user|is_employee and not  perms.ad.sort_ad %}
-            disabled='disabled'
-            {% endif %}>
+        <a data-toggle="modal" class="btn btn-primary" href="#reorder-ad">
             <span class="glyphicon glyphicon-sort"></span> 调整顺序
         </a>
     </div>
+    -->
     <div class="panel panel-default">
-        <div class="panel-heading">
-            广告列表
-            {% include "search_form.html" with query=query %}
-        </div>
+        <div class="panel-heading">广告列表</div>
         <div class="panel-body"> 
             {% render_table table "multiple_table_template.html" %}
         </div>
@@ -39,17 +28,13 @@
 </div>
 
 {% include "ad_modal.html" with modal_id="add-edit-ad" f=form %}
-{% include "delete_modal.html" with modal_id="delete-ad" model_name="广告" %} 
-{% include "reorder_ad_modal.html" with modal_id="reorder-ad" %} 
 {% endblock %}
 
 {% block js %}
-{{ block.super }}
-<script type="text/javascript" src="{{ STATIC_URL }}ajax_upload/js/jquery.iframe-transport.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}ajax_upload/js/ajax-upload-widget.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.tablednd.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap-datetimepicker.min.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}js/locales/bootstrap-datetimepicker.zh-CN.js" charset='utf-8'></script>
-<script type="text/javascript" src="{{ STATIC_URL }}js/modals.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}js/ad.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}components/requirejs/require.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/require.config.js"></script>
+<script>
+    require(["ad"]);
+</script>
+
 {% endblock %}

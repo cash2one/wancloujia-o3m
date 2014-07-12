@@ -19,7 +19,7 @@ from suning import settings
 from suning import permissions
 from suning.settings import EMPTY_VALUE
 from suning.utils import render_json, first_valid, get_model_by_pk
-from suning.decorators import active_tab
+from og.decorators import active_tab
 from mgr.models import cast_staff, Region, Company, Store, Organization, Employee
 from app.models import App
 from interface.models import LogMeta, InstalledAppLogEntity, DeviceLogEntity

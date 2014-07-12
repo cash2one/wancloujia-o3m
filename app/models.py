@@ -5,8 +5,8 @@ from datetime import datetime
 
 from django.db import models, transaction, connection
 from django.contrib.auth.models import User
-
 from django.core.cache import cache
+import generate_path
 
 logger = logging.getLogger(__name__)
 
@@ -16,29 +16,29 @@ class UploadApk(models.Model):
     md5 = models.CharField(max_length=32, null=True)
 
 
-class Category(models.Model):
-    parent = models.ForeignKey("self", verbose_name=u'所属类型', null=True)
-    name = models.CharField(verbose_name=u'名称', unique=True, max_length=20)
-
-    def __unicode__(self):
-        return self.name
-
-
 class App(models.Model):
     PACKAGE_LENGTH_LIMIT = 100
     apk = models.ForeignKey(UploadApk)
+    slogan = models.CharField(verbose_name=u'标语', max_length=30)
     name = models.CharField(verbose_name=u'应用名称', max_length=20)
-    package = models.CharField(max_length=PACKAGE_LENGTH_LIMIT, unique=True)
-    category = models.ForeignKey(Category, verbose_name=u'应用类型')
-    app_icon = models.CharField(verbose_name=u'应用图标', max_length=100)
+    package = models.CharField(verbose_name=u'应用包名', max_length=PACKAGE_LENGTH_LIMIT, unique=True)
+    app_icon = models.CharField(verbose_name=u'应用图标', max_length=255)
     version = models.CharField(verbose_name=u'版本号', max_length=255)
     version_code = models.IntegerField(verbose_name=u'版本代码')
-    popularize = models.BooleanField(verbose_name=u'是否推广')
     create_date = models.DateTimeField(verbose_name=u'创建时间', auto_now_add=True)
-    online = models.BooleanField(verbose_name=u'是否上线')
-    desc = models.CharField(verbose_name=u'应用描述', max_length=50, null=True)
+    update_date = models.DateTimeField(verbose_name=u'更新时间', auto_now=True)
+    desc = models.CharField(verbose_name=u'编辑点评', max_length=255)
+    longDesc = models.TextField(verbose_name=u'应用描述')
+
+    screen1 = models.CharField(verbose_name=u'应用截图1', max_length=255)
+    screen2 = models.CharField(verbose_name=u'应用截图2', null=True, max_length=255)
+    screen3 = models.CharField(verbose_name=u'应用截图3', null=True, max_length=255)
+    screen4 = models.CharField(verbose_name=u'应用截图4', null=True, max_length=255)
+    screen5 = models.CharField(verbose_name=u'应用截图5', null=True, max_length=255)
+    screen6 = models.CharField(verbose_name=u'应用截图6', null=True, max_length=255)
+
     def available(self):
-        return self.online
+        return True
 
     def size(self):
         val = cache.get(self.package, -1)
@@ -47,19 +47,9 @@ class App(models.Model):
             val = os.path.getsize(self.apk.file.path)
             cache.set(self.package, val, 30)
         return val
-        #import interface.storage
-        #dfs = interface.storage.hdfs_storage()
-        #return dfs.size(self.apk.file.path)
 
     def __unicode__(self):
         return self.name
-
-    class Meta:
-        permissions = (
-            ('publish_app', 'Can publish app'),
-            ('drop_app', 'Can drop app'),
-            ('audit_app', 'Can audit app')
-        )
 
 
 _MAX_SUBJECTS = 1024 * 1024
@@ -67,30 +57,23 @@ _MAX_SUBJECTS = 1024 * 1024
 
 class Subject(models.Model):
     name = models.CharField(verbose_name=u'名称', max_length=20, unique=True)
-    cover = models.CharField(verbose_name=u'图片', max_length=1024)
-    desc = models.CharField(verbose_name=u'描述', max_length=200, null=True, default="")
-    online = models.BooleanField(verbose_name=u'状态', default=False)
-
-    creator = models.ForeignKey(User, verbose_name=u'创建者', related_name='creator')
-    create_date = models.DateTimeField(verbose_name=u'创建时间')
-    updator = models.ForeignKey(User, verbose_name=u'上次修改者', related_name='updator')
-    update_date = models.DateTimeField(verbose_name=u'上次修改时间')
-
-    position = models.IntegerField(default=_MAX_SUBJECTS)
+    code = models.CharField(max_length=20, unique=True)
 
     def __unicode__(self):
         return self.name
 
     def available(self):
-        return self.online
+        return True
 
-    class Meta:
-        permissions = (
-            ('publish_subject', 'Can publish subject'),
-            ('drop_subject', 'Can drop subject'),
-            ('sort_subject', 'Can sort subject'),
-            ('audit_subject', 'Can audit subject')
-        )
+    def apps(self):
+        return map(lambda item: item.app, AppGroup.objects.filter(subject=self))
+
+    def appPks(self):
+        arr = []
+        for app in self.apps():
+            arr = arr + [str(app.pk), app.name]
+
+        return ",".join(arr)
 
 
 class AppGroup(models.Model):

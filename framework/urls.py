@@ -4,7 +4,5 @@ urlpatterns = patterns('framework.views',
     url(r'^welcome$', 'welcome'),
     url(r'^$', 'welcome'),
     url(r'^logout$', 'logout'),
-    url(r'^welcome_json$', 'welcome_json'),
-    url(r'^permission_denied$', 'permission_denied'),
-    url(r'^permission_denied_json$', 'permission_denied_json'),
+    url(r'^login$', 'login')
 )

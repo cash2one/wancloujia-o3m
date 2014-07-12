@@ -7,8 +7,8 @@ from django.contrib.contenttypes.models import ContentType
 from parsley.decorators import parsleyfy
 
 from models import *
-from suning.permissions import *
-from suning.user_constraits import PWD_MAX_LEN, PWD_MIN_LEN
+from og.permissions import *
+from og.user_constraits import PWD_MAX_LEN, PWD_MIN_LEN
 
 
 @parsleyfy

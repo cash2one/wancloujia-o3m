@@ -11,6 +11,7 @@ from django.shortcuts import render, redirect
 from django.views.decorators.http import require_GET, require_POST
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import auth
+from django.conf import settings
 
 from rest_framework import status
 from rest_framework.renderers import JSONRenderer
@@ -19,7 +20,6 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view, parser_classes, renderer_classes
 
 from serializers import AppSerializer, SubjectSerializer
-from suning import settings
 from interface.models import LogEntity
 from interface.serializer import LogSerializer
 #from interface.storage import hdfs_storage
@@ -213,18 +213,16 @@ def logout(request):
 @require_GET
 @login_required(login_url='/interface/welcome')
 def subjects(request):
-    subjects = Subject.objects.filter(online=True).order_by('position')
+    subjects = Subject.objects.all()
     now = datetime.datetime.now()
     ads = AD.objects.filter(visible=True).filter(from_date__lt=now).filter(to_date__gt=now).order_by('position')
     results = []
     for item in subjects:
-        grps = AppGroup.objects.filter(subject=item).filter(app__online=True)
+        grps = AppGroup.objects.filter(subject=item)
         if  grps.count() != 0:
             results.append({
                 "id": item.pk,
                 "name": item.name,
-                "cover": item.cover,
-                "desc": item.desc,
                 "count": grps.count(),
                 "size": bitsize(get_subject_total_size(item)),
             })        
@@ -233,7 +231,7 @@ def subjects(request):
 
 
 def get_subject_total_size(subject):
-    grps = AppGroup.objects.filter(subject__pk=subject.pk).filter(app__online=True)
+    grps = AppGroup.objects.filter(subject__pk=subject.pk)
     return reduce(lambda acc, grp: acc + grp.app.size(), grps, 0)
 
 

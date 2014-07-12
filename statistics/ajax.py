@@ -15,7 +15,7 @@ from mgr.models import Employee, Organization, cast_staff, Region, Company, Stor
 from statistics.forms import LogMetaFilterForm, InstalledCapacityFilterForm
 from statistics.forms import DeviceStatForm, OrganizationStatForm
 from suning import utils
-from suning.decorators import *
+from og.decorators import *
 
 
 logger = logging.getLogger(__name__)

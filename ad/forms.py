@@ -8,32 +8,19 @@ from parsley.decorators import parsleyfy
 from models import AD
 
 
-@parsleyfy
 class ADForm(forms.ModelForm):
-    title = forms.CharField(label=u'广告标题', max_length=50, required=True)
-
     class Meta:
         model = AD
-        #excludes = ('title','position')
-        excludes = ('title', 'subject')
         widgets = {
-            'to_date': forms.TextInput(attrs={
-                'readonly': '',
-                'data-date-language': 'zh-CN',
-                'data-date-format': 'yyyy-mm-dd hh:ii',
-                'data-provide': 'datetimepicker'
-            }),
-            'from_date': forms.TextInput(attrs={
-                'readonly': '',
-                'data-date-language': 'zh-CN',
-                'data-date-format': 'yyyy-mm-dd hh:ii',
-                'data-provide': 'datetimepicker'
-            }), 
-            'desc': forms.Textarea(attrs={
-                'rows': 2,
-                'maxlength': 50,
+            'title': forms.TextInput(attrs={
+                'readonly': 'readonly', 
                 'class': 'form-control'
             }),
-            'cover': AjaxClearableFileInput
+            'cover': AjaxClearableFileInput(attrs={
+                'class': 'form-control'
+            }),
+            'link': forms.TextInput(attrs={
+                'class': 'form-control'
+            })
         }
 
