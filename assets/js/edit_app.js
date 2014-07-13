@@ -39,7 +39,7 @@ define(function(require) {
             onStart: function() {},
             onDone: function(app) {
                 console.log(app);
-                _.each(["version", "name", "apk", "size"], function(field) {
+                _.each(["version", "name", "apk", "size", "sdk_version", "permissions"], function(field) {
                     $(form[field]).val(app[field]).trigger('change');
                 });
 

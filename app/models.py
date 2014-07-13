@@ -3,6 +3,8 @@ import logging
 import os.path
 from datetime import datetime
 
+from taggit.managers import TaggableManager
+
 from django.db import models, transaction, connection
 from django.contrib.auth.models import User
 from django.core.cache import cache
@@ -15,7 +17,6 @@ class UploadApk(models.Model):
     file = models.FileField(upload_to='apks/%Y/%m/%d', max_length=1024)
     md5 = models.CharField(max_length=32, null=True)
 
-
 class App(models.Model):
     PACKAGE_LENGTH_LIMIT = 100
     apk = models.ForeignKey(UploadApk)
@@ -24,11 +25,13 @@ class App(models.Model):
     package = models.CharField(verbose_name=u'应用包名', max_length=PACKAGE_LENGTH_LIMIT, unique=True)
     app_icon = models.CharField(verbose_name=u'应用图标', max_length=255)
     version = models.CharField(verbose_name=u'版本号', max_length=255)
+    sdk_version = models.CharField(verbose_name=u'系统最低版本', max_length=255)
     version_code = models.IntegerField(verbose_name=u'版本代码')
     create_date = models.DateTimeField(verbose_name=u'创建时间', auto_now_add=True)
     update_date = models.DateTimeField(verbose_name=u'更新时间', auto_now=True)
     desc = models.CharField(verbose_name=u'编辑点评', max_length=255)
     longDesc = models.TextField(verbose_name=u'应用描述')
+    permissions = models.TextField(verbose_name=u'应用权限列表')
 
     screen1 = models.CharField(verbose_name=u'应用截图1', max_length=255)
     screen2 = models.CharField(verbose_name=u'应用截图2', null=True, max_length=255)
@@ -36,6 +39,7 @@ class App(models.Model):
     screen4 = models.CharField(verbose_name=u'应用截图4', null=True, max_length=255)
     screen5 = models.CharField(verbose_name=u'应用截图5', null=True, max_length=255)
     screen6 = models.CharField(verbose_name=u'应用截图6', null=True, max_length=255)
+    tags = TaggableManager()
 
     def available(self):
         return True

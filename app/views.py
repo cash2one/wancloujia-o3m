@@ -245,7 +245,9 @@ def upload(request):
         'version': apk_info.versionName,
 		'versionCode': apk_info.versionCode or 0,
         'size': apk_info.packageSize,
-        'icon': holder['icon_url']
+        'icon': holder['icon_url'],
+        'sdk_version': apk.apiLevelToAndroidVersion(apk_info.sdkVersion),
+        'permissions': "\n".join(apk_info.permissions),
     }
 
     apps = App.objects.filter(package=apk_info.getPackageName())

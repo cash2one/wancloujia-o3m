@@ -5,6 +5,7 @@ import logging
 from django import forms
 from parsley.decorators import parsleyfy
 from ajax_upload.widgets import AjaxClearableFileInput
+from taggit.forms import TagField
 
 from models import *
 
@@ -16,6 +17,7 @@ class AppForm(forms.ModelForm):
     screen4 = forms.CharField(label=u'应用截图4', required=False, widget=AjaxClearableFileInput(attrs={'class': 'form-control'}))
     screen5 = forms.CharField(label=u'应用截图5', required=False, widget=AjaxClearableFileInput(attrs={'class': 'form-control'}))
     screen6 = forms.CharField(label=u'应用截图6', required=False, widget=AjaxClearableFileInput(attrs={'class': 'form-control'}))
+    tags = TagField(label=u'标签', required=False, help_text=u"以英文逗号分隔的字符串")
 
     class Meta:
         model = App
@@ -24,6 +26,10 @@ class AppForm(forms.ModelForm):
             'screen1': AjaxClearableFileInput(attrs={'class': 'form-control'}),
             'slogan': forms.TextInput(attrs={'class': 'form-control'}),
             'version': forms.TextInput(attrs={
+                'readonly': 'readonly', 
+                'class': 'form-control'
+            }),
+            'sdk_version': forms.TextInput(attrs={
                 'readonly': 'readonly', 
                 'class': 'form-control'
             }),
@@ -37,6 +43,12 @@ class AppForm(forms.ModelForm):
                 'maxlength': 50,
                 'class': 'form-control'
             }),
+            'permissions': forms.Textarea(attrs={
+                'readonly': 'readonly', 
+                'rows': 3, 
+                'maxlength': 50,
+                'class': 'form-control'
+            }),
             'version': forms.TextInput(attrs={
                 'readonly': 'readonly', 
                 'class': 'form-control'
@@ -46,7 +58,7 @@ class AppForm(forms.ModelForm):
                 'class': 'form-control'
             }),
             'apk': forms.HiddenInput,
-            'version_code': forms.HiddenInput
+            'version_code': forms.HiddenInput,
         }
 
 
