@@ -60,6 +60,16 @@
                 </div>
                 <div class="form-group">
                     <label class="field control-label required">
+                        {{ form.sdk_version.label }}
+                    </label>
+                    <div class="value">
+                        {{ form.sdk_version }}
+                        {{ form.sdk_version.errors }}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="field control-label required">
                         {{ form.package.label }}
                     </label>
                     <div class="value">
@@ -99,6 +109,16 @@
                         {{ form.slogan.errors }}
                     </div>
                 </div>
+                <div class="form-group">
+                    <label class="field control-label">
+                        {{ form.tags.label }}
+                    </label>
+                    <div class="value">
+                        {{ form.tags }}<span class="help-inline">{{ form.tags.help_text }}</span>
+                        {{ form.tags.errors }}
+                    </div>
+                </div>
+
 
                 <div class="form-group">
                     <label class="field control-label required">
@@ -117,6 +137,16 @@
                     <div class="value">
                         {{ form.longDesc }}
                         {{ form.longDesc.errors }}
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="field control-label required">
+                        {{ form.permissions.label }}
+                    </label>
+                    <div class="value">
+                        {{ form.permissions }}
+                        {{ form.permissions.errors }}
                     </div>
                 </div>
 

@@ -18,4 +18,4 @@ django-upload-path-generator
 django-render-json
 django-render-csv
 django-auth-json
-
+django-taggit

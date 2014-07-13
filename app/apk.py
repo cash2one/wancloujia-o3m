@@ -12,6 +12,7 @@ _target_sdk_version_pattern = re.compile("targetSdkVersion:'(\d+)'")
 _application_info_pattern = re.compile("(label|icon)='(.+?)'")
 _application_label_pattern = re.compile("application-label:'(.+)'")
 _application_icon_pattern = re.compile("application-icon-\d+?:'(res/drawable-((l|m|tv|h|xh|xx)dpi)/icon.png)'")
+_permission_pattern = re.compile("permission: (.+)")
 
 def _first(*args):
     for arg in args:
@@ -37,6 +38,7 @@ class ApkInfo():
         self.hdpiIcon = None
         self.xhdpiIcon = None
         self.xxdpiIcon = None
+        self.permissions = []
 
     def getAppName(self):
         return _first(self.appName, self.applicationLabel)
@@ -78,6 +80,11 @@ def _parsePkgInfo(apk_info, text):
 def _parseSdkVersion(apk_info, text):
     result = _sdk_version_pattern.search(text)
     apk_info.sdkVersion = int(result.group(1)) if result else None
+
+def _parsePermissions(apk_info, text):
+    result = _permission_pattern.search(text)
+    if result:
+        apk_info.permissions.append(result.group(1))
 
 
 def _parseTargetSdkVersion(apk_info, text):
@@ -173,6 +180,14 @@ def inspect(path):
         raise InspectFailedException(err)
 
     apk_info = _parse(out)
+    pipe = Popen(["android/aapt", "dump", "permissions", path], stdout=PIPE, stderr=PIPE)
+    out, err = pipe.communicate()
+    if pipe.returncode != 0:
+        raise InspectFailedException(err)
+
+    for line in out.splitlines():
+        _parsePermissions(apk_info, line)
+
     apk_info.packageSize = os.path.getsize(path)
     return apk_info
 
@@ -183,3 +198,11 @@ def read_icon(path, cb):
         with zip.open(name) as f:
             cb(name, f) 
         
+
+if __name__ == '__main__':
+    import sys
+    info = inspect(sys.argv[1])
+    print info.permissions 
+
+    
+    

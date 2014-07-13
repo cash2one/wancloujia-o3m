@@ -3,6 +3,12 @@
 import os
 #import mongoengine
 #from pyhdfs import hdfs
+try: 
+    #load custom configuration
+    import config
+except:
+    config = {}
+
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -82,7 +88,7 @@ PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.normpath(os.path.abspath(
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/var/www/example.com/media/"
-MEDIA_ROOT = '/opt/og.proj/media'
+MEDIA_ROOT = getattr(config, "MEDIA_ROOT", '/data/og.proj/media')
 #MEDIA_ROOT = '/home/yangchen/media' # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
 # Examples: "http://example.com/media/", "http://media.example.com/"
@@ -184,7 +190,8 @@ INSTALLED_APPS = (
     'ajax_upload',
     'django_select2',
     'parsley',
-    'auth_remember'
+    'auth_remember',
+    'taggit',
 )
 
 AUTH_REMEMBER_COOKIE_NAME = 'remember_token'
