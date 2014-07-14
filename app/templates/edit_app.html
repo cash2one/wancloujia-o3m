@@ -8,6 +8,7 @@
 {% endblock %}
 {% block css %}
 <link rel="stylesheet" href="{{ STATIC_URL }}css/app.css">
+<link rel="stylesheet" href="{{ STATIC_URL }}css/select2.css">
 {% endblock %}
 
 {% block sidebar %}
@@ -114,7 +115,7 @@
                         {{ form.tags.label }}
                     </label>
                     <div class="value">
-                        {{ form.tags }}<span class="help-inline">{{ form.tags.help_text }}</span>
+                        {{ form.tags }}<input type="hidden" id="id_select_tags" style="width:300px;"/>
                         {{ form.tags.errors }}
                     </div>
                 </div>

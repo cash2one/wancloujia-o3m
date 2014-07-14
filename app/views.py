@@ -27,6 +27,8 @@ from og.decorators import active_tab
 from django_render_json import json as as_json
 from django_render_json import render_json
 
+from taggit.models import Tag
+
 import apk
 import os
 
@@ -157,7 +159,7 @@ def editApp(request):
         else:
             size = app.size()
             form = AppForm(initial={
-                "size": size
+                "size": size, "tags":",".join(app.tags.names())
             }, instance=app)
 
         return render(request, "edit_app.html", {
@@ -175,10 +177,14 @@ def editApp(request):
             logger.warn(form.errors)
             return render(request, "edit_app.html", {
                 "form": form,
-                "action": u"编辑" if app else u"添加"
+                "action": u"编辑" if app else u"添加",
             });
-            
-        form.save()
+        app = form.save(commit=False)
+        app.save()
+        tags_str = form.cleaned_data["tags"]
+        tag_names = tags_str.split(",")
+        logger.debug("tags: %s" % str(tag_names))
+        app.tags.set(*tag_names)
         return render(request, "close_page.html")
 
 

@@ -2,6 +2,7 @@ define(function(require) {
     require("jquery");
     require("underscore");
     require("ajax_upload");
+    require("select2");
     var csrf_token = require("django-csrf-support");
 
 
@@ -52,5 +53,12 @@ define(function(require) {
             onCancel: function() {},
             onFailed: function() {}
         });
+        var tag_str = $("#id_tags").val();
+        $("#id_select_tags").on("change", function(e) {
+            var temp_attr = $("#id_select_tags").val().split(",");
+            $("#id_tags").val(temp_attr.join(","));
+        });
+        $("#id_select_tags").select2({tags: []});
+        $("#id_select_tags").select2('val', tag_str.split(","));
     });
 });

@@ -6,8 +6,10 @@ from django import forms
 from parsley.decorators import parsleyfy
 from ajax_upload.widgets import AjaxClearableFileInput
 from taggit.forms import TagField
+from taggit.models import Tag
 
 from models import *
+
 
 
 class AppForm(forms.ModelForm):
@@ -17,7 +19,7 @@ class AppForm(forms.ModelForm):
     screen4 = forms.CharField(label=u'应用截图4', required=False, widget=AjaxClearableFileInput(attrs={'class': 'form-control'}))
     screen5 = forms.CharField(label=u'应用截图5', required=False, widget=AjaxClearableFileInput(attrs={'class': 'form-control'}))
     screen6 = forms.CharField(label=u'应用截图6', required=False, widget=AjaxClearableFileInput(attrs={'class': 'form-control'}))
-    tags = TagField(label=u'标签', required=False, help_text=u"以英文逗号分隔的字符串")
+    tags = forms.CharField(label=u'标签', widget=forms.HiddenInput)
 
     class Meta:
         model = App
