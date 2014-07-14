@@ -41,8 +41,8 @@ def add_edit_app(request, form):
     app.package = form["package"]
     app.app_icon = form["app_icon"]
     if form["id"] == "":
-        if models.App.objects.filter(package=app.package).exists():
-            return simplejson.dumps({'ret_code': 1000, 'ret_msg': u'应用已存在'})
+        if models.App.objects.filter(package=app.package, name=app.name).exists():
+            return simplejson.dumps({'ret_code': 1000, 'ret_msg': u'相同名称的应用已存在'})
         __add_app(app, request.user.username)
     else:
         app.pk = form["id"]

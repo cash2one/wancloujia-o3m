@@ -62,6 +62,7 @@
                                     data-package="{{ app.package }}" 
                                     data-name="{{ app.name }}"
                                     data-icon="http://{{ request.META.HTTP_HOST }}{{ app.icon }}"
+                                    data-open_after_install="{{ app.open_after_install }}"
                                     href="http://{{ request.META.HTTP_HOST }}{{ MEDIA_URL }}{{ app.apk }}?md5={{ app.md5 }}#name={{ app.name }}&icon=http://{{ request.META.HTTP_HOST }}{{ app.icon }}&content-type=application" >安装</a>
                             </span>    
                         </div>
