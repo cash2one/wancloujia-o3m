@@ -58,6 +58,11 @@ $(function() {
             form.popularize[i].checked = form.popularize[i].value == value;
         }
     }
+    function set_open_after_install(value) {
+        for (var i = 0; i < form.open_after_install.length; i++) {
+            form.open_after_install[i].checked = form.open_after_install[i].value == value;
+        }
+    }
 
     function set_app_icon(value) {
         $(form.app_icon).val(value || "").trigger('change');
@@ -78,6 +83,7 @@ $(function() {
         set_app_icon();
         set_category();
         set_popularize("False");
+        set_open_after_install("False");
     }
 
     function bindForm() {
@@ -93,6 +99,7 @@ $(function() {
 
         set_app_icon(app.icon)
         if (app.popularize) set_popularize(app.popularize);
+        if (app.open_after_install) set_open_after_install(app.open_after_install);
         if (app.category) set_category(app.category);
     }
 
@@ -120,6 +127,7 @@ $(function() {
 
             desc: data.desc || "",
             popularize: data.popularize || "",
+            open_after_install: data.open_after_install|| "",
             category: data.category || "",
             id: data.id || "",
 			old_version_code: data.oldVersionCode || "",
