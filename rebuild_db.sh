@@ -9,7 +9,7 @@ EOF
 )
 
 echo "clear database" && 
-echo $sql | mysql --user=root --password=nameLR9969 &&
+echo $sql | mysql --user=tianyinuser --password=14A0420S &&
 
 echo "synchroize db" &&
 ./manage.py syncdb --noinput --traceback &&

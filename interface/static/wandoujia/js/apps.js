@@ -142,8 +142,16 @@ var deviceid = "";
 var imei = "";
 var connected = false;
 
+function valid(value) {
+	return value !== "" && value !== undefined && value !== null;
+}
+
+function isDeviceInfoReady() {
+	return valid(model) && valid(brand) && valid(imei) && valid(deviceid);
+}
+
 setTimeout(function() {
-    if (model === "" || brand === "" || imei === "") {
+    if (!isDeviceInfoReady()) {
         return $(".alert").html("手机连接异常，请重试").fadeIn();
     }
 }, 10 * 1000);
@@ -158,7 +166,7 @@ $(function() {
             return;
         }
 
-        if (model === "" || brand === "" || imei === "") {
+        if (!isDeviceInfoReady()) {
             __log("device info not ready");
             return;
         }
@@ -169,6 +177,7 @@ $(function() {
         }
 
         __log("---connected, devcie info read, installer idle, start install!!!");
+	$(".alert").hide();
         install();
     }
 
@@ -185,16 +194,32 @@ $(function() {
             ensureToInstall();
         }
 
-        if (model !== "" && brand !== "" && imei !== "") {
+        if (isDeviceInfoReady()) {
+	    __log("ignore device info change");	
             return;
         }
 
-        model = deviceInfo.model;
-        brand = deviceInfo.brand;
-        deviceid = deviceInfo.device_id;
-        imei = deviceInfo.imei;
-        __log("device info ready!!!");
-        ensureToInstall();
+	__log("model: " + model + " brand: " + brand + " imei: " + imei + " deviceid: " + deviceid);
+	if (!valid(model)) {
+        	model = deviceInfo.model;
+	}
+
+	if (!valid(brand)) {
+		brand = deviceInfo.brand;
+	}
+
+	if (!valid(imei)) {
+		imei = deviceInfo.imei;
+	}
+
+	if (!valid(deviceid)) {
+		deviceid = deviceInfo.device_id;
+	}
+
+        if (isDeviceInfoReady()) {
+        	__log("device info ready!!!");
+        	ensureToInstall();
+	}
     });
 
     function StatusBar(el) {
@@ -311,7 +336,7 @@ $(function() {
             imei: imei,
             model: model
         };
-        console.log(log);
+	__log("model: " + model + " brand: " + brand + " imei: " + imei + " deviceid: " + deviceid);
         sendLog($.toJSON(log));
     };
 
@@ -323,7 +348,6 @@ $(function() {
     };
 
     var $install = $("#install");
-    $install.removeAttr("disabled", "disabled");
     $install.click(function() {
         if (installer.status === self.PROCESSING) {
             return console.log("installer is processing tasks now, ignore it!");
