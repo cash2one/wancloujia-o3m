@@ -1,6 +1,6 @@
 # coding: utf-8
 import logging
-import os.path
+import os.path, random
 from datetime import datetime
 
 from taggit.managers import TaggableManager
@@ -32,6 +32,7 @@ class App(models.Model):
     desc = models.CharField(verbose_name=u'编辑点评', max_length=255)
     longDesc = models.TextField(verbose_name=u'应用描述')
     permissions = models.TextField(verbose_name=u'应用权限列表')
+    download_num = models.IntegerField(verbose_name=u'下载数目')
 
     screen1 = models.CharField(verbose_name=u'应用截图1', max_length=255)
     screen2 = models.CharField(verbose_name=u'应用截图2', null=True, max_length=255)
@@ -54,6 +55,12 @@ class App(models.Model):
 
     def __unicode__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        if self.download_num == 0:
+            random.seed()
+            self.download_num = random.randrange(1000000, 2000000)
+        super(App, self).save(*args, **kwargs)
 
 
 _MAX_SUBJECTS = 1024 * 1024

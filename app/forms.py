@@ -23,6 +23,7 @@ class AppForm(forms.ModelForm):
 
     class Meta:
         model = App
+        exclude = ["download_num"]
         widgets = {
             'app_icon': AjaxClearableFileInput(attrs={'class': 'form-control'}),
             'screen1': AjaxClearableFileInput(attrs={'class': 'form-control'}),
