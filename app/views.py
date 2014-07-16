@@ -93,23 +93,16 @@ def permalink(host, path, scheme='http'):
 
 def app_to_dict(app, host):
     result = model_to_dict(app)
+    del result['sdk_version']
     result.update({
         'file': permalink(host, app.apk.file.url),
         'size': str_size(app.size()),
         'icon': permalink(host, app.app_icon),
         'updateDate': app.update_date.strftime(u'%m-%d'),
         'longDescription': app.desc,
-        'tags': [u'性能优化', u'流量'],
-        'permissions': [
-            u"显示系统级警报",
-            u"查看 Wi-Fi 状态",
-            u"控制振动器",
-            u"拨打电话",
-            u"读取基于网络的粗略位置",
-            u"查看网络状态",
-            u"修改全局系统设置"
-         ],
-         'system': u'Android 2.2.x以上',
+        'tags': list(app.tags.names()),
+        'permissions': [i.strip("\r\n") for i in app.permissions.split("\n") if len(i) > 0],
+         'system': u'Android %s以上' % app.sdk_version,
          'total': u'1727 万'
     })
 
