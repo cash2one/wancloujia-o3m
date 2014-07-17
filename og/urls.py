@@ -3,7 +3,6 @@ from django.conf.urls import patterns, include, url
 from django.conf.urls.static import static
 from django.views.generic.base import RedirectView 
 from django.conf import settings
-import taggit_autosuggest_select2
 
 from app.views import category
 
