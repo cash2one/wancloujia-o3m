@@ -204,8 +204,13 @@ def filter_flow_logs(user, form):
         logs = UserFilter(logs, user_id).filter()
         org = user.org()
         orgs = org.descendants_and_self()
+        res_logs = None
         for org in orgs:
-            logs.filter_by_organization(org)
+            if res_logs:
+                res_logs |= logs.filter_by_organization(org)
+            else:
+                res_logs = logs.filter_by_organization(org)
+        logs = res_logs
     else:
         user_id = user.pk
         logs = UserFilter(logs, user_id).filter()
