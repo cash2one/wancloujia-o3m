@@ -198,6 +198,14 @@ def filter_flow_logs(user, form):
         user_id = form.cleaned_data["user"]
         logs = UserFilter(logs, user_id).filter()
         logger.debug("logs filtered by user info: %d" % len(logs))
+    elif user.has_perm('interface.view_organization_statistics'):
+        logger.debug("logs filtered by organization")
+        user_id = form.cleaned_data["user"]
+        logs = UserFilter(logs, user_id).filter()
+        org = user.org()
+        orgs = org.descendants_and_self()
+        for org in orgs:
+            logs.filter_by_organization(org)
     else:
         user_id = user.pk
         logs = UserFilter(logs, user_id).filter()
