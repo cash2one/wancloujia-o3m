@@ -7,9 +7,9 @@ debug = True  # True->windows2x.log, false->windows2x.log.<lastday>
 #server_id是一个用来标识上传到hdfs的本机已处理好的日志的id,免得跟其他节点上传的日志名字重复
 server_id = "1"
 #logdir是log产生的目录位置
-logdir = "/data/tianyin.proj/tianyin/logs"
+logdir = "/opt/tianyin/logs"
 #tmpdir是用来指定在本机过滤日志的地方(目录)
-tmpdir = "/data/tianyin.proj/tianyin/logs"
+tmpdir = "/opt/tianyin/logs"
 remove_old_log = False
 #最终放置此节点log的地方
 targetdir = "/data/logs"

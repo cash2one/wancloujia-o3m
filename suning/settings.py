@@ -11,7 +11,7 @@ except:
 
 DEBUG = getattr(config, 'DEBUG', True)
 
-TEMPLATE_DEBUG = DEBUG
+TEMPLATE_DEBUG = False#DEBUG
 
 ADMINS = (
     ('yangchen', 'yuhan534@126.com'),
@@ -24,8 +24,8 @@ MANAGERS = ADMINS
 DATABASE_ENGINE = 'mysql'
 DATABASE_HOST = 'localhost'
 DATABASE_PORT = '3306'
-DATABASE_USER = 'root'
-DATABASE_PASSWORD = 'nameLR9969'
+DATABASE_USER = 'tianyinuser'
+DATABASE_PASSWORD = '14A0420S'
 DATABASE_NAME = 'tianyin'
 
 DATABASES = {
@@ -64,7 +64,7 @@ FROM_EMAIL = "491320274@qq.com"
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = getattr(config, 'ALLOWED_HOSTS', ["tianyin.wandou.in"])
+ALLOWED_HOSTS = getattr(config, 'ALLOWED_HOSTS', ["*"])
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.ikipedia.org/wiki/List_of_tz_zones_by_name

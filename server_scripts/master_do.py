@@ -3,12 +3,12 @@
 #数据库的配置
 dbhost = 'localhost'
 dbport = 3306
-dbuser = 'root'
-dbpass = 'nameLR9969'
+dbuser = 'tianyinuser'
+dbpass = '14A0420S'
 dbname = 'tianyin'
 
 #设置脚本的目录，末尾带斜杠
-jobpath = '/data/tianyin.proj/tianyin/server_scripts/'
+jobpath = '/opt/tianyin/server_scripts/'
 
 #是否删除hdfs上各个机器保留的日志拼接文件,建议False
 remove_logs = False
@@ -22,9 +22,9 @@ if last_day:
 else:
     lastDay = datetime.date.today()
 #是否清理垃圾文件
-auto_remove_files = False
+auto_remove_files = True
 #用于临时进行日志合并的目录
-tmpdir = "/data/tianyin.proj/tianyin/logs"
+tmpdir = "/opt/tianyin/logs"
 
 #这里记录了hadoop需要执行的脚本以及结果存放的位置
 jobs = [
