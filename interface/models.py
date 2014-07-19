@@ -4,6 +4,7 @@ from django.db.models.query import QuerySet
 
 from mgr.models import Company, Store, Employee
 from app.models import App
+import logging
 
 class LogEntity(models.Model):
     content = models.CharField(max_length=10240, default='')

@@ -202,15 +202,11 @@ def filter_flow_logs(user, form):
         logger.debug("logs filtered by organization")
         user_id = form.cleaned_data["user"]
         logs = UserFilter(logs, user_id).filter()
+        logger.debug("before organization statistics log len %d" % len(logs))
         org = user.org()
-        orgs = org.descendants_and_self()
-        res_logs = None
-        for org in orgs:
-            if res_logs:
-                res_logs |= logs.filter_by_organization(org)
-            else:
-                res_logs = logs.filter_by_organization(org)
-        logs = res_logs
+        logger.debug("user org pk %d" % org.pk)
+        logs = logs.filter_by_organization(org)
+        logger.debug("after organization statistics log len %d" % len(logs))
     else:
         user_id = user.pk
         logs = UserFilter(logs, user_id).filter()
