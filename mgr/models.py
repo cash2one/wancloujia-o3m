@@ -4,6 +4,7 @@ from django.db.models import Q
 from django.db.models.query import QuerySet
 from django.contrib.auth.models import User, Group, Permission
 from django.contrib.contenttypes.models import ContentType
+import logging
 
 
 def get_built_in_group_names():
@@ -165,7 +166,11 @@ class Store(Organization, NodeMixin):
 class EmployeeQuerySet(QuerySet):
     def filter_by_organization(self, org):
         orgs = org.descendants_and_self()
-        return self.filter(organization__in=orgs)
+        logger = logging.getLogger('default')
+        logger.debug("orgs %s" % str(orgs.values_list('pk', flat=True)))
+        emps = self.filter(organization__in=orgs)
+        logger.debug("emps %s" % str(emps.values_list('pk', flat=True)))
+        return emps
         
 
 class EmployeeManager(models.Manager):
