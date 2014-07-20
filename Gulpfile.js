@@ -3,7 +3,7 @@ var less = require("gulp-less");
 
 
 gulp.task("less", function() {
-    return gulp.src("assets/less/{login,app,subject}.less")
+    return gulp.src("assets/less/{login,app,subject,download}.less")
         .pipe(less({
             paths: [
                 "assets/less",

@@ -119,7 +119,8 @@ PERMISSION_DENIED_JSON_URL = "/permission_denied_json"
 # various locations.
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
-    'django.contrib.staticfiles.finders.AppDirectoriesFinder'
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'dajaxice.finders.DajaxiceFinder'
 #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
@@ -178,20 +179,20 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'framework',
-    'ajax_upload',
     'interface',
     'ad',
     'mgr',
     'app',
     'rest_framework',
-    'statistics',
     'feedback',
     'django_tables2',
     'ajax_upload',
     'django_select2',
+	'dajaxice',
     'parsley',
     'auth_remember',
     'taggit',
+    'statistics',
 )
 
 AUTH_REMEMBER_COOKIE_NAME = 'remember_token'

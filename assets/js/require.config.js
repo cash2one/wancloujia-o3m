@@ -5,9 +5,18 @@ require.config({
         "app": "js/app",
         "ad": "js/ad",
         "edit_app": "js/edit_app",
+        "dajaxice": "dajaxice/dajaxice.core",
+        "download": "js/download",
+        "statistics": "js/statistics",
+        "datef": "js/datef",
+        "datetimepicker": "js/bootstrap-datetimepicker.min",
+        "locale-datetimepicker": "js/locales/bootstrap-datetimepicker.zh-CN",
+        "datatables": "js/jquery.dataTables.min",
+        "bootstrap-datatables": "js/bootstrap.datatables",
         "subject": "js/subject",
         "jquery.pnotify": "js/jquery.pnotify.min",
         "toast": "js/toast",
+        "suning_helper": "js/suning_helper",
 
         'jquery.ui.core': 'components/jqueryui/ui/jquery.ui.core',
         'jquery.ui.mouse': 'components/jqueryui/ui/jquery.ui.mouse',
@@ -68,6 +77,18 @@ require.config({
         },
         'jquery.ui.sortable': {
             deps: ['jquery', 'jquery.ui.core', 'jquery.ui.mouse', 'jquery.ui.widget']
+        },
+        'datatables' : {
+            deps: ['jquery']
+        },
+        'bootstrap-datatables': {
+            deps: ['jquery', 'bootstrap']
+        },
+        'locale-datetimepicker': {
+            deps: ['datetimepicker']
+        },
+        'datetimepicker': {
+            deps: ['bootstrap', 'jquery']
         }
     }
 });

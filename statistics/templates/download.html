@@ -1,0 +1,80 @@
+{% extends "base.html" %} 
+{% load django_select2_tags %}
+{% load perm_filters %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ STATIC_URL }}css/download.css" />
+<link rel="stylesheet" href="{{ STATIC_URL }}css/bootstrap-datetimepicker.min.css" />
+<link rel="stylesheet" href="{{ STATIC_URL }}css/bootstrap-datetimepicker.bs3-fix.css" />
+<link rel="stylesheet" href="{{ STATIC_URL }}css/form_filter.css"/>
+<link rel="stylesheet" href="{{ STATIC_URL }}css/statistics.css"/>
+<link rel="stylesheet" href="{{ STATIC_URL }}css/datatables.css"/>
+{% endblock %}
+
+{% block main %}
+<div class="main">
+    <div class="panel panel-default">
+        <div class="panel-heading">筛选条件</div>
+        <div class="panel-body" style="padding: 0px"> 
+            {% with select_empty_option='---------' %}
+            <form class="form-filter">
+                <div class="filters-wrap">
+                    <div class="filter-group">
+                        <div class="filter">
+                            <label for="filter_app">{{ filter.appNameOrPkg.label }}：</label>
+                            <input type="hidden" id="filter_app" name="appNameOrPkg"/>
+                        </div>
+                    </div>
+                    <div class="filter-group">
+                        <div class="filter">
+                            <label for="filter_model">{{ filter.downloadModel.label }}：</label>
+                            <input type='hidden' id="filter_model" name="downloadModel"/>
+                        </div>
+                    </div>
+                    <div class="filter-group last">
+                        {% include "period.html" %}
+                    </div>
+                </div>
+                <div class="submit">
+                    <input type='submit'  class="btn btn-primary" value='筛选'</>
+                </div>
+            </form>
+            {% endwith %}
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            共<span class='total'>0</span>次安装
+            ，共<span class='brands'>0</span>台手机
+            {% if not request.session.wandoujia %}
+            <button class='btn btn-default btn-xs pull-right' id="export-data">导出数据</button>
+            {% endif %}
+        </div>
+        <div class="panel-body"> 
+            <table class="table table-hover table-bordered">
+                <thead>
+                    <!--
+                    <tr>
+                        <th>应用名称</th>
+                        <th>包名</th>
+                        <th>列表页下载次数</th>
+                        <th>详情页下载次数</th>
+                        <th>总下载次数</th>
+                    </tr>
+                    -->
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block js %}
+<script type="text/javascript" src="{{ STATIC_URL }}components/requirejs/require.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/require.config.js"></script>
+<script>
+    require(["download"]);
+</script>
+
+{% endblock %}
