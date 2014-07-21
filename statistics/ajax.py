@@ -10,12 +10,15 @@ from dajaxice.utils import deserialize_form
 
 from interface.models import LogMeta, InstalledAppLogEntity, DeviceLogEntity
 from interface.models import UserDeviceLogEntity
+from interface.models import DownloadLogEntity
+
 from app.models import App
 from mgr.models import Employee, Organization, cast_staff, Region, Company, Store
 from statistics.forms import LogMetaFilterForm, InstalledCapacityFilterForm
 from statistics.forms import DeviceStatForm, OrganizationStatForm
-from suning import utils
+from og import utils
 from og.decorators import *
+from forms import DownloadFilterForm
 
 
 logger = logging.getLogger(__name__)
@@ -210,6 +213,49 @@ def get_flow_logs(request, form, offset, length):
         'total': total,
         'brands': brands
     })           
+
+@dajaxice_register(method='POST')
+def get_download_logs(request, form, offset, length):
+    form = deserialize_form(form)
+    filter_form = DownloadFilterForm(form)
+    if not filter_form.is_valid():
+        logger.warn("form is invalid")
+        logger.warn(filter_form.errors)
+        return _invalid_data_json
+    dict_list = []
+    from_date = filter_form.cleaned_data['from_date']
+    to_date = filter_form.cleaned_data['to_date']
+    logs = DownloadLogEntity.objects.all()
+    logs = logs.filter(datetime__gte=from_date)
+    logs = logs.filter(datetime__lte=to_date)
+    if filter_form.cleaned_data['appNameOrPkg']:
+        logs = logs.filter(Q(appName=filter_form.cleaned_data['appNameOrPkg']) | Q(appPkg=filter_form.cleaned_data['appNameOrPkg']))
+    if filter_form.cleaned_data['downloadModel']:
+        logs = logs.filter(module=filter_form.cleaned_data['downloadModel'])
+    results = {}
+    for log in logs:
+        if log.appName not in results:
+            results[log.appName] = [log.appPkg, 0, 0, 0]
+        if log.srcPage == 'detail':
+            results[log.appName][2] += 1
+        else:
+            results[log.appName][1] += 1
+        results[log.appName][3] += 1
+    
+    for k, v in results.iteritems():
+        dict_list.append({'appName':k,
+            'appPkg':v[0],
+            'listDownloadNum': v[1],
+            'detailDownloadNum': v[2],
+            'allDownloadNum': v[3]})
+
+    return simplejson.dumps({
+        'ret_code': 0,
+        'logs': dict_list,
+        'total': len(dict_list),
+    });
+
+
 
 
 def filter_installed_capacity_logs(user, form):

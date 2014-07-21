@@ -30,6 +30,8 @@ from app.tables import bitsize
 from ad.models import AD
 import json
 import re
+from models import DownloadLogEntity
+from og.utils import render_json
 
 import zlib
 from django.core.cache import cache
@@ -170,8 +172,8 @@ def welcome(request):
 '''
 @require_POST
 def login(request):
-    username = request.POST["username"]
-    password = request.POST["password"]
+    username = info["username"]
+    password = info["password"]
     form = LoginForm({'username': username, 'password': password})
     if not form.is_valid():
         logger.debug("form is invalid")    
@@ -276,3 +278,21 @@ def apps(request, id):
     })
 
 
+def add_download(request):
+    entity = DownloadLogEntity()
+    entity.datetime = datetime.datetime.now()
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        entity.ip = x_forwarded_for.split(',')[0]
+    else:
+        entity.ip = request.META.get('REMOTE_ADDR')
+    info = request.GET;
+    entity.appPkg = info['appPkg']
+    entity.appId = info['appId']
+    entity.appName = info['appName']
+    entity.module = info['module']
+    entity.srcPage = info['srcPage']
+    entity.save()
+
+    return render_json({'ret_code':0})
+    

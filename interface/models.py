@@ -122,3 +122,18 @@ class DeviceLogEntity(models.Model):
     popularizeAppCount = models.IntegerField()
     appCount = models.IntegerField()
 
+class DownloadLogEntity(models.Model):
+    u"""
+    下载统计
+    """
+    datetime = models.DateTimeField(db_index=True, editable=False)
+    ip = models.CharField(max_length=20)
+    appPkg = models.CharField(max_length=App.PACKAGE_LENGTH_LIMIT, editable=False)
+    appId = models.CharField(max_length=16, editable=False)
+    appName = models.CharField(max_length=24, editable=False)
+    module = models.CharField(max_length=30, editable=False)
+    srcPage = models.CharField(max_length=30, editable=False)
+
+    class Meta:
+        app_label = "interface"
+

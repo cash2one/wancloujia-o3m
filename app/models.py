@@ -25,7 +25,7 @@ class App(models.Model):
     package = models.CharField(verbose_name=u'应用包名', max_length=PACKAGE_LENGTH_LIMIT, unique=True)
     app_icon = models.CharField(verbose_name=u'应用图标', max_length=255)
     version = models.CharField(verbose_name=u'版本号', max_length=255)
-    sdk_version = models.CharField(verbose_name=u'系统最低版本', max_length=255)
+    sdk_version = models.CharField(verbose_name=u'系统最低版本', max_length=255, default="", blank=True)
     version_code = models.IntegerField(verbose_name=u'版本代码')
     create_date = models.DateTimeField(verbose_name=u'创建时间', auto_now_add=True)
     update_date = models.DateTimeField(verbose_name=u'更新时间', auto_now=True)
@@ -57,7 +57,7 @@ class App(models.Model):
         return self.name
 
     def save(self, *args, **kwargs):
-        if self.download_num == 0:
+        if self.download_num is None:
             random.seed()
             self.download_num = random.randrange(1000000, 2000000)
         super(App, self).save(*args, **kwargs)

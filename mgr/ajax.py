@@ -2,7 +2,6 @@
 import logging
 import random
 
-import redis
 from django.utils import simplejson
 from django.contrib.auth.models import User, Group, Permission
 from dajaxice.decorators import dajaxice_register
@@ -10,7 +9,6 @@ from dajaxice.utils import deserialize_form
 from suning import settings
 
 from og.decorators import *
-from suning.service import notify
 from forms import *
 from models import *
 
