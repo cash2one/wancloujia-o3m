@@ -94,6 +94,10 @@ def permalink(host, path, scheme='http'):
 def app_to_dict(app, host):
     result = model_to_dict(app)
     del result['sdk_version']
+    if app.download_num > 10000:
+        total = str(int(app.download_num / 10000)) + u" 万"
+    else:
+        total = str(app.download_num)
     result.update({
         'file': permalink(host, app.apk.file.url),
         'size': str_size(app.size()),
@@ -103,8 +107,9 @@ def app_to_dict(app, host):
         'tags': list(app.tags.names()),
         'permissions': [i.strip("\r\n") for i in app.permissions.split("\n") if len(i) > 0],
          'system': u'Android %s以上' % app.sdk_version,
-         'total': u'1727 万'
+         'total': total
     })
+    del result['download_num']
 
     screens = []
     for i in range(1, 7):
@@ -248,6 +253,8 @@ def upload(request):
         'sdk_version': apk.apiLevelToAndroidVersion(apk_info.sdkVersion),
         'permissions': "\n".join(apk_info.permissions),
     }
+    if app_dict['sdk_version'] == None:
+        app_dict['sdk_version'] = ""
 
     apps = App.objects.filter(package=apk_info.getPackageName())
     if len(apps) > 0:
