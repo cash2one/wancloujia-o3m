@@ -1,6 +1,6 @@
 # coding: utf-8
 import logging
-from datetime import datetime
+import datetime
 
 from django.utils import simplejson
 from django.contrib.auth.models import User
@@ -19,7 +19,7 @@ from statistics.forms import DeviceStatForm, OrganizationStatForm
 from og import utils
 from og.decorators import *
 from forms import DownloadFilterForm
-
+from django.db.models import Q
 
 logger = logging.getLogger(__name__)
 _invalid_data_msg = u'数据出错，请检查'
@@ -225,13 +225,15 @@ def get_download_logs(request, form, offset, length):
     dict_list = []
     from_date = filter_form.cleaned_data['from_date']
     to_date = filter_form.cleaned_data['to_date']
+    to_date = datetime.datetime(to_date.year, to_date.month, to_date.day, 23, 59, 59) 
+    logger.debug("%s offset %d length %d from_date %s to_date %s appname %s downloadModule %s" % (str(type(to_date)), offset, length, str(from_date), str(to_date), filter_form.cleaned_data['appNameOrPkg'], filter_form.cleaned_data['downloadModule']))
     logs = DownloadLogEntity.objects.all()
     logs = logs.filter(datetime__gte=from_date)
     logs = logs.filter(datetime__lte=to_date)
     if filter_form.cleaned_data['appNameOrPkg']:
-        logs = logs.filter(Q(appName=filter_form.cleaned_data['appNameOrPkg']) | Q(appPkg=filter_form.cleaned_data['appNameOrPkg']))
-    if filter_form.cleaned_data['downloadModel']:
-        logs = logs.filter(module=filter_form.cleaned_data['downloadModel'])
+        logs = logs.filter(appId=filter_form.cleaned_data['appNameOrPkg'])
+    if filter_form.cleaned_data['downloadModule']:
+        logs = logs.filter(module=filter_form.cleaned_data['downloadModule'])
     results = {}
     for log in logs:
         if log.appName not in results:
@@ -241,18 +243,28 @@ def get_download_logs(request, form, offset, length):
         else:
             results[log.appName][1] += 1
         results[log.appName][3] += 1
-    
+    all_download_num = 0
+    list_download_num = 0
+    detail_download_num = 0
     for k, v in results.iteritems():
+        all_download_num += v[3]
+        list_download_num += v[1]
+        detail_download_num += v[2]
         dict_list.append({'appName':k,
             'appPkg':v[0],
             'listDownloadNum': v[1],
             'detailDownloadNum': v[2],
             'allDownloadNum': v[3]})
 
+    dict_list = dict_list[offset:offset+length]
+
     return simplejson.dumps({
         'ret_code': 0,
         'logs': dict_list,
         'total': len(dict_list),
+        "all_num" : all_download_num,
+        "list_num" : list_download_num,
+        "detail_num" : detail_download_num
     });
 
 

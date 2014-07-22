@@ -91,15 +91,16 @@ def permalink(host, path, scheme='http'):
     return scheme + '://' + host + path
 
 
-def app_to_dict(app, host):
+def app_to_dict(app, host, module, page_type):
     result = model_to_dict(app)
+    logger.debug("apk file path %s" % app.apk.file.url)
     del result['sdk_version']
     if app.download_num > 10000:
         total = str(int(app.download_num / 10000)) + u" 万"
     else:
         total = str(app.download_num)
     result.update({
-        'file': permalink(host, app.apk.file.url),
+        'file': permalink(host, "/interface/download?app_id=%d&module=%s&page_type=%s" % (app.pk, module, page_type)),
         'size': str_size(app.size()),
         'icon': permalink(host, app.app_icon),
         'updateDate': app.update_date.strftime(u'%m-%d'),
@@ -133,7 +134,7 @@ def app(request, package):
     apps = App.objects.filter(package=package)
     data = apps[0] if apps.exists() else None
     if data is not None: 
-        instance = app_to_dict(data, host)
+        instance = app_to_dict(data, host, '', 'detail')
     else:
         instance = data
 
@@ -330,7 +331,7 @@ def category(code):
         callback = request.GET.get('callback', None)
         subject = Subject.objects.get(code=code)
         return render_jsonp({
-            'apps': map(lambda item: app_to_dict(item, request.META['HTTP_HOST']), subject.apps())
+            'apps': map(lambda item: app_to_dict(item, request.META['HTTP_HOST'], code, 'list'), subject.apps())
         }, callback)
         
     return handler

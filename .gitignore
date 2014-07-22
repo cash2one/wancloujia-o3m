@@ -65,3 +65,4 @@ assets/components
 node_modules
 *.swp
 *.pid
+config.py
