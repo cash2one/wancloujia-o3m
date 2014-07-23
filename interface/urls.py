@@ -14,5 +14,6 @@ urlpatterns = patterns('interface.views',
     #url(r'^(?P<addr>/\S+)', 'get_hdfs_file'),
     url(r'^feedback', 'feedback'),
     url(r'^add_download_log$', 'add_download'),
-    url(r'^download', "download")
+    url(r'^download', "download"),
+    url('^add_ad_log$', 'add_ad_log')
 )

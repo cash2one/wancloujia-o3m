@@ -137,3 +137,14 @@ class DownloadLogEntity(models.Model):
     class Meta:
         app_label = "interface"
 
+class AdsLogEntity(models.Model):
+    u"""
+    广告统计
+    """
+    datetime = models.DateTimeField(db_index=True)
+    ip = models.CharField(max_length=20)
+    adTitle = models.CharField(max_length=20)
+    op = models.CharField(max_length=10)
+
+    class Meta:
+        app_label = "interface"

@@ -30,7 +30,7 @@ from app.tables import bitsize
 from ad.models import AD
 import json
 import re
-from models import DownloadLogEntity
+from models import DownloadLogEntity, AdsLogEntity
 from og.utils import render_json
 
 import zlib
@@ -325,5 +325,17 @@ def download(request):
 
     return redirect("http://%s%s" % (request.META['HTTP_HOST'], app.apk.file.url))
 
+def add_ad_log(request):
+    entity = AdsLogEntity()
+    entity.datetime = datetime.datetime.now()
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        entity.ip = x_forwarded_for.split(',')[0]
+    else:
+        entity.ip = request.META.get('REMOTE_ADDR')
+    entity.adTitle = request.REQUEST['title']
+    entity.op = request.REQUEST['op']
+    entity.save()
+    return render_json({'ret_code':0})
 
     

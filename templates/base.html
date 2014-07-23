@@ -77,6 +77,9 @@
                     <li {% if request.nav.active_tab == "statistics" and request.nav.sub_active_tab == "download" %} class= "active" {% endif %}>
                         <a href="/statistics/download">下载统计</a>
                     </li>
+                    <li {% if request.nav.active_tab == "statistics" and request.nav.sub_active_tab == "ad" %} class= "active" {% endif %}>
+                        <a href="/statistics/ad">广告统计</a>
+                    </li>
                 </ul>
             </li>
 

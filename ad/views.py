@@ -1,5 +1,5 @@
 #coding: utf-8
-import logging
+import logging, datetime
 from django import forms
 
 from django.shortcuts import render, redirect
@@ -19,6 +19,7 @@ from og.decorators import active_tab
 
 from django_render_json import json as as_json
 from django_render_json import render_json
+from interface.models import AdsLogEntity
 
 
 logger = logging.getLogger(__name__)
@@ -73,6 +74,26 @@ def ads(request):
     ads = AD.objects.all().order_by('pk');
     main = ads[0]
     side = ads[1]
+    entity = AdsLogEntity()
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        entity.ip = x_forwarded_for.split(',')[0]
+    else:
+        entity.ip = request.META.get('REMOTE_ADDR')
+    entity.datetime = datetime.datetime.now()
+    entity.adTitle = u"主广告位"
+    entity.op = "view"
+    entity.save()
+    entity = AdsLogEntity()
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        entity.ip = x_forwarded_for.split(',')[0]
+    else:
+        entity.ip = request.META.get('REMOTE_ADDR')
+    entity.datetime = datetime.datetime.now()
+    entity.adTitle = u"副广告位"
+    entity.op = "view"
+    entity.save()
 
     return render_jsonp({
         "main": {
