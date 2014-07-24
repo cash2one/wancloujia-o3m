@@ -95,6 +95,10 @@ def app_to_dict(app, host, module, page_type):
     result = model_to_dict(app)
     logger.debug("apk file path %s" % app.apk.file.url)
     del result['sdk_version']
+    if app.download_num == 0:
+        app.download_num = 100000
+    if app.sdk_version == "":
+        app.sdk_version = "1.5"
     if app.download_num > 10000:
         total = str(int(app.download_num / 10000)) + u" 万"
     else:
@@ -255,7 +259,7 @@ def upload(request):
         'permissions': "\n".join(apk_info.permissions),
     }
     if app_dict['sdk_version'] == None:
-        app_dict['sdk_version'] = ""
+        app_dict['sdk_version'] = "1.5"
 
     apps = App.objects.filter(package=apk_info.getPackageName())
     if len(apps) > 0:
