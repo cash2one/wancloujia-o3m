@@ -5,7 +5,7 @@ from interface.models import LogMeta
 from app.models import App
 
 class DownloadFilterForm(forms.Form):
-    appNameOrPkg = forms.CharField(label=u'应用名称或者包名', max_length=App.PACKAGE_LENGTH_LIMIT, required=False)
+    appNameOrPkg = forms.CharField(label=u'应用名称', max_length=App.PACKAGE_LENGTH_LIMIT, required=False)
     downloadModule = forms.CharField(label=u'版块', required=False)
 
     from_date = forms.DateField(label=u'开始时间', required=False)

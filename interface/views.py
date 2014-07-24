@@ -338,4 +338,22 @@ def add_ad_log(request):
     entity.save()
     return render_json({'ret_code':0})
 
+def ad_click(request, id):
+    entity = AdsLogEntity()
+    entity.datetime = datetime.datetime.now()
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        entity.ip = x_forwarded_for.split(',')[0]
+    else:
+        entity.ip = request.META.get('REMOTE_ADDR')
+    try:
+        ad = AD.objects.get(pk=id)
+    except:
+        return redirect(request.META['HTTP_HOST'])
+    entity.adTitle = ad.title
+    entity.op = 'click'
+    entity.save()
+    return redirect(ad.link)
+    
+
     
