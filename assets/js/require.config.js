@@ -3,10 +3,12 @@ require.config({
     paths: {
         "login": "js/login",
         "app": "js/app",
-        "ad": "js/ad",
+        "sta_ad": "js/sta_ad",
+        "highcharts": "js/highcharts",
         "edit_app": "js/edit_app",
         "dajaxice": "dajaxice/dajaxice.core",
         "download": "js/download",
+        "download": "js/sta_ad",
         "statistics": "js/statistics",
         "datef": "js/datef",
         "datetimepicker": "js/bootstrap-datetimepicker.min",
@@ -89,6 +91,9 @@ require.config({
         },
         'datetimepicker': {
             deps: ['bootstrap', 'jquery']
+        },
+        'highcharts': {
+            deps: ['jquery']
         }
     }
 });

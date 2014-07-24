@@ -6,10 +6,16 @@ from app.models import App
 
 class DownloadFilterForm(forms.Form):
     appNameOrPkg = forms.CharField(label=u'应用名称或者包名', max_length=App.PACKAGE_LENGTH_LIMIT, required=False)
-    downloadModel = forms.CharField(label=u'版块', required=False)
+    downloadModule = forms.CharField(label=u'版块', required=False)
 
     from_date = forms.DateField(label=u'开始时间', required=False)
     to_date = forms.DateField(label=u'结束时间', required=False)
+
+class AdFilterForm(forms.Form):
+
+    from_date = forms.DateField(label=u'开始时间', required=False)
+    to_date = forms.DateField(label=u'结束时间', required=False)
+
 
 
 class LogMetaFilterForm(forms.Form):

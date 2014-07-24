@@ -27,8 +27,8 @@
                     </div>
                     <div class="filter-group">
                         <div class="filter">
-                            <label for="filter_model">{{ filter.downloadModel.label }}：</label>
-                            <input type='hidden' id="filter_model" name="downloadModel"/>
+                            <label for="filter_module">{{ filter.downloadModule.label }}：</label>
+                            <input type='hidden' id="filter_module" name="downloadModule"/>
                         </div>
                     </div>
                     <div class="filter-group last">
@@ -45,8 +45,10 @@
 
     <div class="panel panel-default">
         <div class="panel-heading">
-            共<span class='total'>0</span>次安装
-            ，共<span class='brands'>0</span>台手机
+            共<span class='total'>0</span>个应用
+            ，累计下载<span class='all_num'>0</span>次
+            ，其中来源列表页<span class="list_num">0</span>次
+            ，来源详情页<span class="detail_num">0</span>次
             {% if not request.session.wandoujia %}
             <button class='btn btn-default btn-xs pull-right' id="export-data">导出数据</button>
             {% endif %}

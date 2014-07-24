@@ -131,9 +131,20 @@ class DownloadLogEntity(models.Model):
     appPkg = models.CharField(max_length=App.PACKAGE_LENGTH_LIMIT, editable=False)
     appId = models.CharField(max_length=16, editable=False)
     appName = models.CharField(max_length=24, editable=False)
-    module = models.CharField(max_length=30, editable=False)
+    module = models.CharField(max_length=30, editable=False, default="")
     srcPage = models.CharField(max_length=30, editable=False)
 
     class Meta:
         app_label = "interface"
 
+class AdsLogEntity(models.Model):
+    u"""
+    广告统计
+    """
+    datetime = models.DateTimeField(db_index=True)
+    ip = models.CharField(max_length=20)
+    adTitle = models.CharField(max_length=20)
+    op = models.CharField(max_length=10)
+
+    class Meta:
+        app_label = "interface"

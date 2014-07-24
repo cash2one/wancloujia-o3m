@@ -29,12 +29,18 @@ define(function(require) {
                         if (query.page == 1) data.results.unshift(EMPTY_SELECTION);
                         result = data;
                     }
-                    alert(result);
                     query.callback(result);
                 });
             }}));
-        $("#filter_model").select2($.extend({}, select2_tip_options, {
-            data: [{"id": "1", "text":"排行榜"}, {"id":"2", "text":"编辑推荐"}]
+        $("#filter_module").select2($.extend({}, select2_tip_options, {
+            data: [{"id": "weekrank", "text":"周排行榜"},
+            {"id":"recommends", "text":"编辑推荐"},
+            {"id":"onlinegames", "text":"热门网游"},
+            {"id":"gifts", "text":"礼包放送"},
+            {"id":"games", "text":"单机游戏"},
+            {"id":"gamerank", "text":"游戏排行榜"},
+            {"id":"apprank", "text":"应用排行榜"}
+            ]
         }));
         var periodFilter = new statistics.PeriodFilter("#filter_from_date", "#filter_to_date");
         var $form = $(".form-filter");
@@ -45,6 +51,8 @@ define(function(require) {
                 sTitle: '包名'
             }, {
                 sTitle: '列表页下载次数'
+            }, {
+                sTitle: '详情页下载次数'
             }, {
                 sTitle: '总下载次数'
             }],
@@ -71,6 +79,10 @@ define(function(require) {
                         iTotalDisplayRecords: data.total,
                         aaData: aaData
                     });
+                    $(".total").html(data.total || 0);
+                    $(".all_num").html(data.all_num || 0);
+                    $(".list_num").html(data.list_num || 0);
+                    $(".detail_num").html(data.detail_num || 0);
                 })), {
                     form: $form.serialize(true),
                     offset: values.iDisplayStart,

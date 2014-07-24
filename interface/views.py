@@ -1,5 +1,5 @@
 # coding: utf-8
-import logging
+import logging, traceback
 import datetime
 import re
 from functools import wraps
@@ -30,7 +30,7 @@ from app.tables import bitsize
 from ad.models import AD
 import json
 import re
-from models import DownloadLogEntity
+from models import DownloadLogEntity, AdsLogEntity
 from og.utils import render_json
 
 import zlib
@@ -295,4 +295,47 @@ def add_download(request):
     entity.save()
 
     return render_json({'ret_code':0})
+
+def download(request):
+    logger = logging.getLogger('default')
+    module = request.GET['module']
+    page_type = request.GET['page_type']
+    app_id = int(request.GET['app_id'])
+    try:
+        app = App.objects.get(pk=app_id)
+    except App.DoesNotExist:
+        return render_json({'msg':"not exist"})
+    entity = DownloadLogEntity()
+    try:
+        entity.datetime = datetime.datetime.now()
+        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+        if x_forwarded_for:
+            entity.ip = x_forwarded_for.split(',')[0]
+        else:
+            entity.ip = request.META.get('REMOTE_ADDR')
+        entity.appPkg = app.package
+        entity.appId = str(app.pk)
+        entity.appName = app.name
+        entity.module = module
+        entity.srcPage = page_type
+
+        entity.save()
+    except:
+        logger.error(traceback.format_exc())
+
+    return redirect("http://%s%s" % (request.META['HTTP_HOST'], app.apk.file.url))
+
+def add_ad_log(request):
+    entity = AdsLogEntity()
+    entity.datetime = datetime.datetime.now()
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        entity.ip = x_forwarded_for.split(',')[0]
+    else:
+        entity.ip = request.META.get('REMOTE_ADDR')
+    entity.adTitle = request.REQUEST['title']
+    entity.op = request.REQUEST['op']
+    entity.save()
+    return render_json({'ret_code':0})
+
     
