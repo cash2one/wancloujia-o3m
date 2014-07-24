@@ -98,11 +98,11 @@ def ads(request):
     return render_jsonp({
         "main": {
             "cover": permalink(host, main.cover or '/static/img/main_ad.png'),
-            "url": main.link
+            "url": permalink(host, "/interface/ad_click/%d" % main.pk),
         },
         "side": {
             "cover": permalink(host, side.cover or '/static/img/side_ad.png'),
-            "url": side.link
+            "url": permalink(host, "/interface/ad_click/%d" % side.pk),
         }
     }, request.GET.get('callback'))
 

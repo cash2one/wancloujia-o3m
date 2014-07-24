@@ -15,5 +15,6 @@ urlpatterns = patterns('interface.views',
     url(r'^feedback', 'feedback'),
     url(r'^add_download_log$', 'add_download'),
     url(r'^download', "download"),
-    url('^add_ad_log$', 'add_ad_log')
+    url('^add_ad_log$', 'add_ad_log'),
+    url('^ad_click/(?P<id>\d+)$', 'ad_click'),
 )

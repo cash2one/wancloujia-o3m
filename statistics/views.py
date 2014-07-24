@@ -82,21 +82,38 @@ def ad_log(request):
     while True:
         if tmp_date > to_date:
             break
-        tmp_str = tmp_date.strftime("%Y%m%d")
+        tmp_str = tmp_date.strftime("%Y-%m-%d")
         resp['main']['view'][tmp_str] = 0
         resp['side']['view'][tmp_str] = 0
         resp['main']['click'][tmp_str] = 0
         resp['side']['click'][tmp_str] = 0
         tmp_date += datetime.timedelta(days=1)
+    main_view = 0
+    main_click = 0
+    side_view = 0
+    side_click = 0
     for log in logs:
-        date_str = log.datetime.strftime("%Y%m%d")
+        date_str = log.datetime.strftime("%Y-%m-%d")
         if log.adTitle == u"主广告位":
             resp['main'][log.op][date_str] += 1
+            if log.op == 'view':
+                main_view += 1
+            else:
+                main_click += 1
         else:
             resp['side'][log.op][date_str] += 1
+            if log.op == 'view':
+                side_view += 1
+            else:
+                side_click += 1
 
             
     return render_json({
         'ret_code': 0,
-        'logs': resp})
+        'logs': resp,
+        'main_view': main_view,
+        'main_click': main_click,
+        'side_view': side_view,
+        'side_click': side_click
+        })
 
