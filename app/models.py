@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 
 
 class UploadApk(models.Model):
-    file = models.FileField(upload_to='apks/%Y/%m/%d', max_length=1024)
+    file = models.FileField(upload_to=generate_path("apks"), max_length=1024)
     md5 = models.CharField(max_length=32, null=True)
 
 class App(models.Model):
