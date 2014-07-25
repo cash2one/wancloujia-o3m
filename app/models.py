@@ -33,6 +33,8 @@ class App(models.Model):
     longDesc = models.TextField(verbose_name=u'应用描述')
     permissions = models.TextField(verbose_name=u'应用权限列表')
     download_num = models.IntegerField(verbose_name=u'下载数目')
+    comment_num = models.IntegerField(verbose_name=u'评价数目')
+    like_num = models.IntegerField(verbose_name=u'喜欢数目')
 
     screen1 = models.CharField(verbose_name=u'应用截图1', max_length=255)
     screen2 = models.CharField(verbose_name=u'应用截图2', null=True, max_length=255)
@@ -60,6 +62,12 @@ class App(models.Model):
         if self.download_num is None:
             random.seed()
             self.download_num = random.randrange(1000000, 2000000)
+        if self.like_num is None:
+            random.seed()
+            self.like_num = random.randrange(1000, 20000)
+        if self.comment_num is None:
+            random.seed()
+            self.comment_num = random.randrange(1000, 20000)
         super(App, self).save(*args, **kwargs)
 
 
