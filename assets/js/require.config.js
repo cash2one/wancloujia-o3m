@@ -19,6 +19,7 @@ require.config({
         "jquery.pnotify": "js/jquery.pnotify.min",
         "toast": "js/toast",
         "suning_helper": "js/suning_helper",
+        "ad": "js/ad",
 
         'jquery.ui.core': 'components/jqueryui/ui/jquery.ui.core',
         'jquery.ui.mouse': 'components/jqueryui/ui/jquery.ui.mouse',
