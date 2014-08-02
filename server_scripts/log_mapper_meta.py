@@ -1,10 +1,19 @@
 #!/usr/bin/env python
-dbhost = '10.19.221.11'
-dbport = 3306
-dbuser = 'suningwdj'
-dbpass = 'suningwdj'
-dbname = 'suningwdj'
-debug = True  #true->today false->last day 
+test = False
+if test:
+    dbhost = 'localhost'
+    dbport = 3306
+    dbuser = 'root'
+    dbpass = 'nameLR9969'
+    dbname = 'looyu'
+else:
+    dbhost = '10.19.221.11'
+    dbport = 3306
+    dbuser = 'suningwdj'
+    dbpass = 'suningwdj'
+    dbname = 'suningwdj'
+
+debug = False #true->today false->last day 
 import _mysql
 import sys
 import HTMLParser
@@ -127,7 +136,11 @@ map = map_staff(staffs, regions, companys, stores)
 brandmodel = read_brand_model()
 import datetime
 
-lastDay = datetime.date.today() - datetime.timedelta(days=0 if debug else 1)
+if len(sys.argv) < 2:
+    lastDay = datetime.date.today() - datetime.timedelta(days=0 if debug else 1)
+    datestr = lastDay.strftime("%Y-%m-%d")
+else:
+    datestr = sys.argv[1]
 for line in sys.stdin:
     try:
         j = json.loads(line)
@@ -146,11 +159,6 @@ for line in sys.stdin:
               ( brand, model )
             brandmodel.add((brand, model,))
         print "INSERT INTO interface_logmeta(date, uid, did, brand, model, appID, appPkg) VALUES('%s', '%s', '%s', '%s', '%s', %s, '%s');" % \
-              ( lastDay.isoformat(), map[user][0], did, brand, model, appid, pkg )
+              ( datestr, map[user][0], did, brand, model, appid, pkg )
     except:
         pass
-#for line in sys.stdin:
-#    line = line.strip()
-#    line.split(',')
-#    print "INSERT INTO interface_logmeta(date, uid, did, brand, model, appID, appPkg) VALUES('%s', %d, %d, '%s', '%s', %d, '%s');" % \
-#        ( '2013-1-2', 12, 34, 'brand', 'model', 56, 'pkg' )

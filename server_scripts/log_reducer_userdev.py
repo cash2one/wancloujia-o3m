@@ -1,11 +1,17 @@
 #!/usr/bin/env python
-dbhost = '10.19.221.11'
-dbport = 3306
-dbuser = 'suningwdj'
-dbpass = 'suningwdj'
-dbname = 'suningwdj'
-debug = True
-
+debug = False
+test = False
+if test:
+    dbhost = 'localhost'
+    dbport = 3306
+    dbuser = 'root'
+    dbpass = 'nameLR9969'
+    dbname = 'looyu'
+else:
+    dbhost = '10.19.221.11'
+    dbport = 3306
+    dbuser = 'suningwdj'
+    dbpass = 'suningwdj'
 import _mysql
 import sys
 import HTMLParser
@@ -108,27 +114,30 @@ stores = read_store()
 map = map_staff(staffs, regions, companys, stores)
 apps = read_app()
 #print map
-import datetime
-lastDay = datetime.date.today() - datetime.timedelta(days=0 if debug else 1)
+if len(sys.argv) < 2:
+    import datetime
+    lastDay = datetime.date.today() - datetime.timedelta(days=0 if debug else 1)
+    datestr = lastDay.strftime("%Y-%m-%d")
+else:
+    datestr = sys.argv[1]
 
 existed = set()
 existed2 = set()
-#db.query("DELETE FROM interface_userdevicelogentity WHERE date ='%s';" % (lastDay.isoformat()))
-#r = db.store_result()
+db.query("DELETE FROM interface_userdevicelogentity WHERE date ='%s';" % (datestr))
+r = db.store_result()
 for line in sys.stdin:
-	#print line
 	try:
 		user, did, appid = line.strip().split(',')
 		if (user, did,) in existed:
 			print "UPDATE interface_userdevicelogentity SET popularizeAppCount = popularizeAppCount + %s , appCount = appCount + 1 WHERE date = '%s' AND uid =%s;" \
-				% (apps[appid][2], lastDay.isoformat(), map[user][0])
+				% (apps[appid][2], datestr, map[user][0])
 		else:
 			if user in existed2:
 				print "UPDATE interface_userdevicelogentity SET deviceCount = deviceCount + 1, popularizeAppCount = popularizeAppCount + %s , appCount = appCount + 1 WHERE date = '%s' AND uid =%s;" \
-					% (apps[appid][2], lastDay.isoformat(), map[user][0])
+					% (apps[appid][2], datestr, map[user][0])
 			else:
 				print "INSERT INTO interface_userdevicelogentity(date, region, company, store, uid , deviceCount , popularizeAppCount, appCount, appPkg) VALUES('%s', %s , %s, %s, %s, %s, %s, %s, '%s');" \
-					% ( lastDay.isoformat(), map[user][1], map[user][2], map[user][3], map[user][0], '1', apps[appid][2] , '1', apps[appid][0])
+					% ( datestr, map[user][1], map[user][2], map[user][3], map[user][0], '1', apps[appid][2] , '1', apps[appid][0])
 				existed2.add(user)
 			existed.add((user, did,))
 	except:

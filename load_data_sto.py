@@ -1,6 +1,6 @@
 # encoding: utf-8
 #Full path and name to your csv file
-csv_filepathname = '/data/looyu/test_store.csv'
+csv_filepathname = '/data/looyu/store.csv'
 #Full path to your django project directory
 djangoproject_home = '/data/looyu/suning/'
 import logging
@@ -34,10 +34,12 @@ def _verify(index,row):
 def _get_Company(storeName):
     #有就查没有就跳过
     if Company.objects.filter(name=unicode(storeName,"utf-8")).exists():
-        logger.info('查到门店')
+        logger.info('查到公司')
         return Company.objects.get(name=unicode(storeName,"utf-8")).pk
     else:
-        logger.info('没有查到门店')
+        logger.info(storeName)
+        logger.info(unicode(storeName,"utf-8"))
+        logger.info('没有查到公司')
         return -1
 try:
     dataReader = csv.reader(open(csv_filepathname),delimiter=',',quotechar='"')

@@ -115,7 +115,7 @@ def upload(request):
                 j["log_type"] = 'install'
                 encodedjson = json.dumps(j)
                 entity = LogEntity()
-                entity.create = datetime.date.today()
+                entity.create = datetime.datetime.now()
                 entity.content = encodedjson
                 entity.save()
         logger.info(log)

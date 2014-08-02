@@ -1,7 +1,6 @@
-
 # encoding: utf-8
 #Full path and name to your csv file
-csv_filepathname = '/data/looyu/test_company.csv'
+csv_filepathname = '/data/looyu/company.csv'
 #Full path to your django project directory
 djangoproject_home = '/data/looyu/suning/'
 import logging

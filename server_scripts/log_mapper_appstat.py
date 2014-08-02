@@ -1,9 +1,18 @@
 #!/usr/bin/env python
-dbhost = '10.19.221.11'
-dbport = 3306
-dbuser = 'suningwdj'
-dbpass = 'suningwdj'
-dbname = 'suningwdj'
+test = False 
+if test:
+    dbhost = 'localhost'
+    dbport = 3306
+    dbuser = 'root'
+    dbpass = 'nameLR9969'
+    dbname = 'looyu'
+else:
+    dbhost = '10.19.221.11'
+    dbport = 3306
+    dbuser = 'suningwdj'
+    dbpass = 'suningwdj'
+    dbname = 'suningwdj'
+
 
 import _mysql
 import sys
@@ -93,9 +102,6 @@ companys = read_company()
 stores = read_store()
 map = map_staff(staffs, regions, companys, stores)
 
-#import datetime
-#import HTMLParser
-#lastDay = datetime.date.today() - datetime.timedelta(days=0)
 
 existed = set()
 

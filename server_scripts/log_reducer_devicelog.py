@@ -1,10 +1,18 @@
 #!/usr/bin/env python
-dbhost = '10.19.221.11'
-dbport = 3306
-dbuser = 'suningwdj'
-dbpass = 'suningwdj'
-dbname = 'suningwdj'
-debug = True
+test = False
+if test:
+    dbhost = 'localhost'
+    dbport = 3306
+    dbuser = 'root'
+    dbpass = 'nameLR9969'
+    dbname = 'looyu'
+else:
+    dbhost = '10.19.221.11'
+    dbport = 3306
+    dbuser = 'suningwdj'
+    dbpass = 'suningwdj'
+    dbname = 'suningwdj'
+debug = False 
 import _mysql
 import sys
 import HTMLParser
@@ -107,22 +115,26 @@ stores = read_store()
 map = map_staff(staffs, regions, companys, stores)
 apps = read_app()
 #print map
-import datetime
-lastDay = datetime.date.today() - datetime.timedelta(days=0 if debug else 1)
+if len(sys.argv) < 2:
+    import datetime
+    lastDay = datetime.date.today() - datetime.timedelta(days=0 if debug else 1)
+    datestr = lastDay.strftime("%Y-%m-%d")
+else:
+    datestr = sys.argv[1]
 
 existed = set()
-#db.query("DELETE FROM interface_devicelogentity WHERE date ='%s';" % (lastDay.isoformat()))
-#r = db.store_result()
+db.query("DELETE FROM interface_devicelogentity WHERE date ='%s';" % (datestr))
+r = db.store_result()
 for line in sys.stdin:
 	#print line
 	try:
 		user, did, appid, brand, model = line.strip().split(',')
 		if line in existed:
 			print "UPDATE interface_devicelogentity SET appCount = appCount + 1 %s WHERE date = '%s' AND uid =%s AND did = '%s' AND appID=%s;" \
-			% ( ',popularizeAppCount = popularizeAppCount + 1' if apps[appid][2] == '1' else '' ,lastDay.isoformat(), map[user][0], did, appid)
+			% ( ',popularizeAppCount = popularizeAppCount + 1' if apps[appid][2] == '1' else '' , datestr, map[user][0], did, appid)
 		else:
 			existed.add(line)
-			print """INSERT INTO interface_devicelogentity(date, region, company, store, uid , did , brand, model, appID, appPkg, appName, popularizeAppCount, appCount) VALUES('%s', %s , %s, %s, %s, '%s', '%s', '%s', %s, '%s', '%s', %s, %s);""" % (  lastDay.isoformat(), #
+			print """INSERT INTO interface_devicelogentity(date, region, company, store, uid , did , brand, model, appID, appPkg, appName, popularizeAppCount, appCount) VALUES('%s', %s , %s, %s, %s, '%s', '%s', '%s', %s, '%s', '%s', %s, %s);""" % (  datestr, #
 				map[user][1], map[user][2], map[user][3], map[user][0], 
 				did, brand, model, 
 				appid , apps[appid][0], apps[appid][1], 

@@ -1,14 +1,30 @@
 #!/usr/bin/env python
-dbhost = '10.19.221.11'
-dbport = 3306
-dbuser = 'suningwdj'
-dbpass = 'suningwdj'
-dbname = 'suningwdj'
+test = False
+if test:
+    dbhost = 'localhost'
+    dbport = 3306
+    dbuser = 'root'
+    dbpass = 'nameLR9969'
+    dbname = 'looyu'
+else:
+    dbhost = '10.19.221.11'
+    dbport = 3306
+    dbuser = 'suningwdj'
+    dbpass = 'suningwdj'
+    dbname = 'suningwdj'
+
 
 import _mysql
 import sys
 import HTMLParser
 import json
+
+if len(sys.argv) == 2:
+    datestr = sys.argv[1]
+else:
+    import datetime
+    lastDay = datetime.date.today() - datetime.timedelta(days=1)
+    datestr = lastDay.strftime("%Y-%m-%d")
 
 db = _mysql.connect(host=dbhost, user=dbuser, passwd=dbpass, db=dbname)
 
@@ -93,8 +109,6 @@ companys = read_company()
 stores = read_store()
 map = map_staff(staffs, regions, companys, stores)
 
-#import datetime
-#lastDay = datetime.date.today() - datetime.timedelta(days=0)
 
 existed = set()
 
@@ -110,7 +124,5 @@ for line in sys.stdin:
         if not brand or not model:
             continue
         print ("%s,%s,%s" % (user, did, appid)).strip()
-        #print "INSERT INTO interface_installedapplogentity(date, region, company, store, uid, appName, appID, appPkg, installedTimes) VALUES('%d-%d-%d', '%s', '%s', '%s', '%s', %s, '%s');" % \
-        #	( lastDay.year, lastDay.month, lastDay.day, map[user][1], map[user][2], map[user][3], map[user][0], did, brand, model, appid, pkg )
     except:
         pass

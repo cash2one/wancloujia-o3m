@@ -1,14 +1,24 @@
 #coding: utf-8
 # config begin
-#数据库的配置
-dbhost = '192.168.150.12'
-dbport = 3306
-dbuser = 'suningwdj'
-dbpass = 'suningwdj'
-dbname = 'suningwdj'
 
-#设置脚本的目录，末尾带斜杠
-jobpath = '/opt/suning/server_scripts/'
+test = False
+#数据库的配置
+if test:
+    dbhost = 'localhost'
+    dbport = 3306
+    dbuser = 'root'
+    dbpass = 'nameLR9969'
+    dbname = 'looyu'
+    jobpath = '/data/looyu/server_scripts/'
+else:
+    dbhost = '192.168.150.12'
+    dbport = 3306
+    dbuser = 'suningwdj'
+    dbpass = 'suningwdj'
+    dbname = 'suningwdj'
+    jobpath = '/opt/suning/server_scripts/'
+
+
 
 #是否删除hdfs上各个机器保留的日志拼接文件
 remove_logs = False
@@ -131,7 +141,7 @@ print "config hadoop"
 filename = targetdir + "/windows2x.log.%s" % (lastDay.isoformat(),)
 #dump 数据库到本地文件
 fp = open(filename, "w")
-db.query("SELECT content FROM interface_logentity;" )
+db.query("SELECT content FROM interface_logentity where `create` > '%s';" % lastDay.strftime("%Y-%m-%d"))
 r = db.store_result()
 n = r.num_rows()
 for i in range(0, n):
@@ -154,6 +164,7 @@ print "begin hadoop"
 for map, red, output in jobs:
     cmd = "cat %s | /usr/local/bin/python2.7 %s%s | /usr/local/bin/python2.7 %s%s | %s" % \
           (filename, jobpath, map, jobpath, red, sqlexe  )
+    print cmd
     os.popen(cmd)
 if remove_logs:
 	cmd = "rm -f %s.*" % (filename,)

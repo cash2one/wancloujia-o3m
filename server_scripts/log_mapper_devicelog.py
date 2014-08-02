@@ -1,14 +1,21 @@
 #!/usr/bin/env python
-dbhost = '10.19.221.11'
-dbport = 3306
-dbuser = 'suningwdj'
-dbpass = 'suningwdj'
-dbname = 'suningwdj'
-
+test = False
+if test:
+    dbhost = 'localhost'
+    dbport = 3306
+    dbuser = 'root'
+    dbpass = 'nameLR9969'
+    dbname = 'looyu'
+else:
+    dbhost = '10.19.221.11'
+    dbport = 3306
+    dbuser = 'suningwdj'
+    dbpass = 'suningwdj'
+    dbname = 'suningwdj'
 import _mysql
 import sys
 import HTMLParser
-import json
+import json, traceback
 
 db = _mysql.connect(host=dbhost, user=dbuser, passwd=dbpass, db=dbname)
 
@@ -93,8 +100,6 @@ companys = read_company()
 stores = read_store()
 map = map_staff(staffs, regions, companys, stores)
 
-#import datetime
-#lastDay = datetime.date.today() - datetime.timedelta(days=0)
 
 existed = set()
 
@@ -103,14 +108,12 @@ for line in sys.stdin:
         j =json.loads(line)
         appid = _mysql.escape_string(j["app"].strip())
         brand = _mysql.escape_string(j["brand"].strip().upper())
-        did = _mysql.escape_string(j["deviceId"].strip().upper())[-8:]
+        did = _mysql.escape_string(j["deviceId"].strip().upper())[-16:]
         model = _mysql.escape_string(j["model"].strip().upper())
         pkg = _mysql.escape_string(j["package"].strip())
         user = _mysql.escape_string(str(j["user"]).strip())
         if not brand or not model:
             continue
         print "%s,%s,%s,%s,%s" % (user, did, appid, brand, model)
-        #print "INSERT INTO interface_installedapplogentity(date, region, company, store, uid, appName, appID, appPkg, installedTimes) VALUES('%d-%d-%d', '%s', '%s', '%s', '%s', %s, '%s');" % \
-        #	( lastDay.year, lastDay.month, lastDay.day, map[user][1], map[user][2], map[user][3], map[user][0], did, brand, model, appid, pkg )
     except:
         pass
