@@ -31,7 +31,7 @@ class App(models.Model):
     update_date = models.DateTimeField(verbose_name=u'更新时间', auto_now=True)
     desc = models.CharField(verbose_name=u'编辑点评', max_length=255)
     longDesc = models.TextField(verbose_name=u'应用描述')
-    permissions = models.TextField(verbose_name=u'应用权限列表')
+    permissions = models.TextField(verbose_name=u'应用权限列表', default="", blank=True)
     download_num = models.IntegerField(verbose_name=u'下载数目')
     comment_num = models.IntegerField(verbose_name=u'评价数目')
     like_num = models.IntegerField(verbose_name=u'喜欢数目')
