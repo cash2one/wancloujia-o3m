@@ -1,3 +1,4 @@
+#coding: utf-8
 #!/usr/bin/env python
 debug = False
 test = False
@@ -8,10 +9,12 @@ if test:
     dbpass = 'nameLR9969'
     dbname = 'looyu'
 else:
-    dbhost = '10.19.221.11'
+    dbhost = '172.31.21.201'
     dbport = 3306
-    dbuser = 'suningwdj'
-    dbpass = 'suningwdj'
+    dbuser = 'wdj'
+    dbpass = 'wdj'
+    dbname = 'looyu'
+    jobpath = '/opt/funtalk/server_scripts/'
 import _mysql
 import sys
 import HTMLParser

@@ -1,6 +1,7 @@
+#coding: utf-8
 #!/usr/bin/env python
 debug = False 
-test = True
+test = False
 if test:
     dbhost = 'localhost'
     dbport = 3306
@@ -8,18 +9,22 @@ if test:
     dbpass = 'nameLR9969'
     dbname = 'looyu'
 else:
-    dbhost = '10.19.221.11'
+    dbhost = '172.31.21.201'
     dbport = 3306
-    dbuser = 'suningwdj'
-    dbpass = 'suningwdj'
-    dbname = 'suningwdj'
+    dbuser = 'wdj'
+    dbpass = 'wdj'
+    dbname = 'looyu'
+    jobpath = '/opt/funtalk/server_scripts/'
 import _mysql
 import sys
 import HTMLParser
 import json
 
 db = _mysql.connect(host=dbhost, user=dbuser, passwd=dbpass, db=dbname)
-db.query("SET charset utf8")
+#db.query("SET charset utf8")
+db.query("SET NAMES utf8")
+db.query("SET CHARACTER_SET_CLIENT=utf8")
+db.query("SET CHARACTER_SET_RESULTS=utf8")
 
 
 def read_region():

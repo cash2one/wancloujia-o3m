@@ -11,12 +11,12 @@ if test:
     dbname = 'looyu'
     jobpath = '/data/looyu/server_scripts/'
 else:
-    dbhost = '192.168.150.12'
+    dbhost = '172.31.21.201'
     dbport = 3306
-    dbuser = 'suningwdj'
-    dbpass = 'suningwdj'
-    dbname = 'suningwdj'
-    jobpath = '/opt/suning/server_scripts/'
+    dbuser = 'wdj'
+    dbpass = 'wdj'
+    dbname = 'looyu'
+    jobpath = '/opt/funtalk/server_scripts/'
 
 
 

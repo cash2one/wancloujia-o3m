@@ -256,7 +256,7 @@ def installed_capacity_to_dict(capacity):
     dict["app"] = {
         'id': capacity['appID'],
         'package': capacity['appPkg'],
-        'name': capacity['appName'],
+        'name': app.name if app else capacity['appName'],
     }
     emp = utils.get_model_by_pk(Employee.objects, capacity['uid'])
     organizations = [None, None, None]
@@ -286,7 +286,8 @@ def get_installed_capacity(request, form, offset, length):
         return _invalid_data_json
 
     results = filter_installed_capacity_logs(user, filter_form)
-    total = results.count()
+    appIDs = set([i['appID'] for i in results])
+    total = len(appIDs)
     brands = sum([i['count'] for i in results])
     results = results[offset: offset + length]
     dict_list = []
@@ -383,8 +384,7 @@ def get_device_stat(request, form, offset, length):
 
     results = stat_device(user, filter_form)
     total = len(results)
-    lst = [i['total_device_count'] for i in results if i['total_device_count']]
-    brands = sum(lst)
+    brands = 0
     capacity = count_device(user, filter_form)
     results = results[offset: offset + length]
     dict_list = []

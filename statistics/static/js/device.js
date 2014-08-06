@@ -78,8 +78,6 @@ $(function() {
                         item.total_app_count
                     ]);
                 });
-                $(".total").html(data.capacity || 0);
-                $(".brands").html(data.brands || 0);
                 callback({
                     sEcho: values.sEcho,
                     iTotalRecords: data.total,
@@ -127,8 +125,8 @@ $(function() {
                         item.total_app_count
                     ]);
                 });
-                $(".detail_total").html(data.capacity || 0);
-                $(".detail_brands").html(data.brands || 0);
+                $(".total").html(data.capacity || 0);
+                $(".brands").html(data.brands || 0);
                 callback({
                     sEcho: values.sEcho,
                     iTotalRecords: data.total,

@@ -1,3 +1,4 @@
+#coding: utf-8
 #!/usr/bin/env python
 test = False
 if test:
@@ -7,11 +8,12 @@ if test:
     dbpass = 'nameLR9969'
     dbname = 'looyu'
 else:
-    dbhost = '10.19.221.11'
+    dbhost = '172.31.21.201'
     dbport = 3306
-    dbuser = 'suningwdj'
-    dbpass = 'suningwdj'
-    dbname = 'suningwdj'
+    dbuser = 'wdj'
+    dbpass = 'wdj'
+    dbname = 'looyu'
+    jobpath = '/opt/funtalk/server_scripts/'
 import _mysql
 import sys
 import HTMLParser
@@ -108,7 +110,7 @@ for line in sys.stdin:
         j =json.loads(line)
         appid = _mysql.escape_string(j["app"].strip())
         brand = _mysql.escape_string(j["brand"].strip().upper())
-        did = _mysql.escape_string(j["deviceId"].strip().upper())[-16:]
+        did = _mysql.escape_string(j["deviceId"].strip().upper())[-16:0]
         model = _mysql.escape_string(j["model"].strip().upper())
         pkg = _mysql.escape_string(j["package"].strip())
         user = _mysql.escape_string(str(j["user"]).strip())
