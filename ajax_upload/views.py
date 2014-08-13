@@ -17,6 +17,7 @@ def upload(request):
         #dfs.create(uploaded_file.file.path, uploaded_file.file.path)
         data = {
             'path': uploaded_file.file.url,
+            'size': request.FILES['file'].size,
         }
         return HttpResponse(simplejson.dumps(data))
     else:

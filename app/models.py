@@ -23,7 +23,7 @@ class App(models.Model):
     slogan = models.CharField(verbose_name=u'标语', max_length=30)
     name = models.CharField(verbose_name=u'应用名称', max_length=20)
     package = models.CharField(verbose_name=u'应用包名', max_length=PACKAGE_LENGTH_LIMIT, unique=True)
-    app_icon = models.CharField(verbose_name=u'应用图标', max_length=255)
+    app_icon = models.CharField(verbose_name=u'应用图标', max_length=255, help_text=u'图标大小限制10k以下,尺寸为72*72px')
     version = models.CharField(verbose_name=u'版本号', max_length=255)
     sdk_version = models.CharField(verbose_name=u'系统最低版本', max_length=255, default="", blank=True)
     version_code = models.IntegerField(verbose_name=u'版本代码')
@@ -36,12 +36,12 @@ class App(models.Model):
     comment_num = models.IntegerField(verbose_name=u'评价数目')
     like_num = models.IntegerField(verbose_name=u'喜欢数目')
 
-    screen1 = models.CharField(verbose_name=u'应用截图1', max_length=255)
-    screen2 = models.CharField(verbose_name=u'应用截图2', null=True, max_length=255)
-    screen3 = models.CharField(verbose_name=u'应用截图3', null=True, max_length=255)
-    screen4 = models.CharField(verbose_name=u'应用截图4', null=True, max_length=255)
-    screen5 = models.CharField(verbose_name=u'应用截图5', null=True, max_length=255)
-    screen6 = models.CharField(verbose_name=u'应用截图6', null=True, max_length=255)
+    screen1 = models.CharField(verbose_name=u'应用截图1', max_length=255, help_text=u'限制100k以下,尺寸为160*265px')
+    screen2 = models.CharField(verbose_name=u'应用截图2', null=True, max_length=255, help_text=u'图片大小限制160*265px')
+    screen3 = models.CharField(verbose_name=u'应用截图3', null=True, max_length=255, help_text=u'图片大小限制160*265px')
+    screen4 = models.CharField(verbose_name=u'应用截图4', null=True, max_length=255, help_text=u'图片大小限制160*265px')
+    screen5 = models.CharField(verbose_name=u'应用截图5', null=True, max_length=255, help_text=u'图片大小限制160*265px')
+    screen6 = models.CharField(verbose_name=u'应用截图6', null=True, max_length=255, help_text=u'图片大小限制160*265px')
     tags = TaggableManager()
 
     def available(self):

@@ -109,20 +109,32 @@
     AjaxUploadWidget.prototype.uploadDone = function(data) {
         // This handles errors as well because iframe transport does not
         // distinguish between 200 response and other errors
-        if (data.errors) {
-            if (this.options.onError) {
-                this.options.onError.call(this, data);
+        // 根据id限制上传图片的大小
+        var inputId = this.$element.attr('id');
+        var ids = ['id_screen1','id_screen2','id_screen3','id_screen4','id_screen5','id_screen6']
+        if (inputId === 'id_app_icon' && data.size > 10 * 1024) {
+            this.$element.val("");
+            alert("图片超过限制，上传失败！");
+        }else if (ids.indexOf(inputId) != -1 && data.size > 15 * 10 * 1024) {
+            this.$element.val("");
+            alert("图片超过限制，上传失败！");
+        }else {
+
+            if (data.errors) {
+                if (this.options.onError) {
+                    this.options.onError.call(this, data);
+                } else {
+                    console.log('Upload failed:');
+                    console.log(data);
+                }
             } else {
-                console.log('Upload failed:');
-                console.log(data);
+                this.$hiddenElement.val(data.path);
+                var tmp = this.$element;
+                this.$element = this.$element.clone(true).val('');
+                tmp.replaceWith(this.$element);
+                this.displaySelection();
+                if (this.options.onComplete) this.options.onComplete.call(this, data.path);
             }
-        } else {
-            this.$hiddenElement.val(data.path);
-            var tmp = this.$element;
-            this.$element = this.$element.clone(true).val('');
-            tmp.replaceWith(this.$element);
-            this.displaySelection();
-            if (this.options.onComplete) this.options.onComplete.call(this, data.path);
         }
     };
 

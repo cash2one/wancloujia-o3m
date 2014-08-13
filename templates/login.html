@@ -9,7 +9,7 @@
 
 {% block content %}
 <div class="container" style="width: 520px;">
-    <form class='form' role='form' method='POST'>
+    <form class='form' role='form' method='POST'>{%csrf_token%}
         <input type="hidden" name='next' value="{{ request.GET.next }}"/>
         <div class="form-group" id="username-wrap">
             <label class="sr-only" for="username">用户名</label>
