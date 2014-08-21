@@ -108,7 +108,7 @@ def app_to_dict(app, host, module, page_type):
         'size': str_size(app.size()),
         'icon': permalink(host, app.app_icon),
         'updateDate': app.update_date.strftime(u'%m-%d'),
-        'longDescription': app.desc,
+        'longDescription': app.longDesc,
         'tags': list(app.tags.names()),
         'permissions': [i.strip("\r\n") for i in app.permissions.split("\n") if len(i) > 0],
          'system': u'Android %s以上' % app.sdk_version,

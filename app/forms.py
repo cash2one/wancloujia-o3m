@@ -42,8 +42,8 @@ class AppForm(forms.ModelForm):
                 'class': 'form-control'
             }),
             'longDesc': forms.Textarea(attrs={
-                'rows': 3, 
-                'maxlength': 50,
+                'rows': 8, 
+                'maxlength': 1000,
                 'class': 'form-control'
             }),
             'permissions': forms.Textarea(attrs={
