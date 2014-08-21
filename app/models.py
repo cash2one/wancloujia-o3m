@@ -85,7 +85,7 @@ class Subject(models.Model):
         return True
 
     def apps(self):
-        return map(lambda item: item.app, AppGroup.objects.filter(subject=self))
+        return map(lambda item: item.app, AppGroup.objects.filter(subject=self).order_by('position'))
 
     def appPks(self):
         arr = []
@@ -111,6 +111,7 @@ def _publish_subject(pk):
 
 def _set_included_apps(subject, apps):
     AppGroup.objects.filter(subject=subject).delete()
+    print apps
     for i in range(0, len(apps)):
         app = App.objects.get(pk=apps[i])
         AppGroup(subject=subject, app=app, position=i+1).save()
