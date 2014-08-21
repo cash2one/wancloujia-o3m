@@ -2,13 +2,14 @@ define(function(require) {
     require("jquery");
     require("bootstrap");
     require("select2");
-    //require("jquery.ui.sortable");
+    require("jquery.ui.sortable");
     require("django-csrf-support");
     var toast = require("toast");
 
-    function editSubject(pk, apps) {
+    function editSubject(pk,name,apps) {
         return $.post("/app/subject/edit", {
             pk: pk,
+            name: name,
             apps: apps
         }, "json");
     }
@@ -78,7 +79,6 @@ define(function(require) {
         };
 
         $apps.select2(select2_options);
-        /*
         $apps.select2("container").find("ul.select2-choices").sortable({
             containment: 'parent',
             start: function() {
@@ -88,7 +88,6 @@ define(function(require) {
                 $apps.select2("onSortEnd");
             }
         });
-        */
 
         $("table").on("click", ".edit", function() {
             var subject = $(this.parentNode).data();
@@ -129,7 +128,7 @@ define(function(require) {
 
             console.log("apps: ", form.apps.value);
             $modal.find(".save").button("loading");
-            editSubject(form.id.value, form.apps.value).done(function(data) {
+            editSubject(form.id.value,form.name.value,form.apps.value).done(function(data) {
                 if(data.ret_code !== 0) {
                     toast('error', '操作失败');
                     return;

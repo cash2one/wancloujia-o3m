@@ -29,6 +29,9 @@
     "jqueryui": "1.10.4",
     "jquery.iframe-transport": "~1.0.0",
     "console-polyfill": "~0.1.1",
-    "datatables" :"1.9.4"
+    "datatables": "1.9.4"
+  },
+  "resolutions": {
+    "jquery": ">= 1.9.0"
   }
 }

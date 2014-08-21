@@ -67,12 +67,12 @@ class AppForm(forms.ModelForm):
 
 @parsleyfy
 class SubjectForm(forms.ModelForm):
-    name = forms.CharField(label=u'专题名称', max_length=20, widget=forms.TextInput(attrs={
-                    'class': 'form-control', 
-                    'readonly': 'readonly'
+    name = forms.CharField(label=u'专题名称', max_length=20,  widget=forms.TextInput(attrs={
+                    'class': 'form-control' 
+                    #'readonly': 'readonly'
             }))
 
     class Meta:
         model = Subject
-        exclude = ('name', )
+        #exclude = ('name', )
 

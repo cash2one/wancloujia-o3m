@@ -322,6 +322,11 @@ def search_apps(request):
 def add_edit_subject(request):
     pk = request.POST["pk"]
     subject = Subject.objects.get(pk=int(pk))
+    name = request.POST["name"]
+    if name == '':
+        return {'ret_code': 10001}
+    subject.name=name
+    subject.save()
 
     apps = request.POST.get("apps", None)
     apps = [] if not apps else [int(item) for item in apps.split(",")]
@@ -335,6 +340,7 @@ def category(code):
         callback = request.GET.get('callback', None)
         subject = Subject.objects.get(code=code)
         return render_jsonp({
+            'subject_name': subject.name,
             'apps': map(lambda item: app_to_dict(item, request.META['HTTP_HOST'], code, 'list'), subject.apps())
         }, callback)
         
