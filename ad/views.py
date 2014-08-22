@@ -20,6 +20,7 @@ from og.decorators import active_tab
 from django_render_json import json as as_json
 from django_render_json import render_json
 from interface.models import AdsLogEntity
+from django.core.cache import cache
 
 
 logger = logging.getLogger(__name__)
@@ -51,6 +52,7 @@ def edit_ad(request):
     cover = request.POST.get('cover')
     link = request.POST.get('link');
     AD.objects.filter(pk=pk).update(cover=cover, link=link);
+    cache.delete('ad')
     return {
         'ret_code': 0
     }
@@ -95,7 +97,12 @@ def ads(request):
     entity.op = "view"
     entity.save()
 
-    return render_jsonp({
+    #cache
+    cache_data = cache.get('ad')
+    if cache_data is not None:
+        print cache_data
+        return render_jsonp(cache_data, request.GET.get('callback')) 
+    data = {
         "main": {
             "cover": permalink(host, main.cover or '/static/img/main_ad.png'),
             "url": permalink(host, "/interface/ad_click/%d" % main.pk),
@@ -104,5 +111,8 @@ def ads(request):
             "cover": permalink(host, side.cover or '/static/img/side_ad.png'),
             "url": permalink(host, "/interface/ad_click/%d" % side.pk),
         }
-    }, request.GET.get('callback'))
+    }
+    cache.set('ad', data)
+
+    return render_jsonp(data, request.GET.get('callback'))
 

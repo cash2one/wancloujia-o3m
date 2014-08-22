@@ -20,17 +20,25 @@ from django.forms.models import model_to_dict
 from django_tables2.config import RequestConfig
 
 from app import models
-from app.models import App, UploadApk, Subject
+from app.models import App, UploadApk, Subject, AppGroup
 from app.forms import AppForm, SubjectForm
 from app.tables import AppTable, SubjectTable
 from og.decorators import active_tab
 from django_render_json import json as as_json
 from django_render_json import render_json
+from django.core.cache import cache
 
 from taggit.models import Tag
 
 import apk
 import os
+
+def _clear_cache(app):
+    query_set = map(lambda item: item.subject_id, AppGroup.objects.filter(app=app))
+    for i in query_set:
+        cache.delete(Subject.objects.get(pk=i).code)
+
+
 
 def _file_md5(path):
      with open(path, 'rb') as f:
@@ -184,6 +192,7 @@ def editApp(request):
             });
         app = form.save(commit=False)
         app.save()
+        _clear_cache(app)
         tags_str = form.cleaned_data["tags"]
         tag_names = tags_str.split(",")
         logger.debug("tags: %s" % str(tag_names))
@@ -195,6 +204,7 @@ def editApp(request):
 @active_tab("app")
 def deleteApp(request):
     id = request.GET.get("id", -1);
+    _clear_cache(App.objects.filter(pk=id))
     App.objects.filter(pk=id).delete();
     return redirect("/app");
 
@@ -229,6 +239,7 @@ def upload(request):
     logger.debug("md5");
     uploaded_file.save();
     logger.debug("save md5");
+    print uploaded_file.file.path
     
     try:
         apk_info = apk.inspect(uploaded_file.file.path)
@@ -332,6 +343,8 @@ def add_edit_subject(request):
     apps = [] if not apps else [int(item) for item in apps.split(",")]
     models.edit_subject(subject, apps, request.user)
 
+    cache.delete(subject.code)
+
     return {'ret_code': 0}
 
  
@@ -339,10 +352,15 @@ def category(code):
     def handler(request):
         callback = request.GET.get('callback', None)
         subject = Subject.objects.get(code=code)
-        return render_jsonp({
+        cache_data = cache.get(code)
+        if cache_data is not None:
+            return render_jsonp(cache_data, callback)
+        data = {
             'subject_name': subject.name,
             'apps': map(lambda item: app_to_dict(item, request.META['HTTP_HOST'], code, 'list'), subject.apps())
-        }, callback)
+        }
+        cache.set(code, data)
+        return render_jsonp(data, callback)
         
     return handler
 
