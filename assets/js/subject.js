@@ -31,7 +31,7 @@ define(function(require) {
                 results.push(arr[i]);
                 apps_cache.push({
                     id: arr[i],
-                    text: arr[i + 1]
+                    text: arr[i + 1] + '(' + arr[i] + ')'
                 });
             }
             return results;

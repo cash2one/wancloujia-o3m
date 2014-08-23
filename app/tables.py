@@ -30,7 +30,7 @@ class AppTable(tables.Table):
 
     class Meta:
         model = App
-        fields = ('name', 'version', 'create_date')
+        fields = ('id', 'name', 'version', 'create_date')
         orderable = False
         attrs = {'class': 'table table-hover table-bordered'}
         empty_text = u'暂无应用'
