@@ -148,3 +148,15 @@ class AdsLogEntity(models.Model):
 
     class Meta:
         app_label = "interface"
+
+class AdsStaEntity(models.Model):
+    """
+    新的广告统计---以前的统计量大了撑不住！
+    """
+    datetime = models.DateField(db_index=True)
+    view = models.IntegerField(default=0)
+    main_click = models.IntegerField(default=0)
+    side_click = models.IntegerField(default=0)
+
+    class Meta:
+        app_label = "interface"

@@ -30,10 +30,11 @@ from app.tables import bitsize
 from ad.models import AD
 import json
 import re
-from models import DownloadLogEntity, AdsLogEntity
+from models import DownloadLogEntity, AdsLogEntity, AdsStaEntity
 from og.utils import render_json
 
 import zlib
+from django.db.models import Q, F
 from django.core.cache import cache
 from interface.models import LogEntity
 
@@ -339,20 +340,33 @@ def add_ad_log(request):
     return render_json({'ret_code':0})
 
 def ad_click(request, id):
-    entity = AdsLogEntity()
-    entity.datetime = datetime.datetime.now()
-    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
-    if x_forwarded_for:
-        entity.ip = x_forwarded_for.split(',')[0]
-    else:
-        entity.ip = request.META.get('REMOTE_ADDR')
+    # entity = AdsLogEntity()
+    # entity.datetime = datetime.datetime.now()
+    # x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    # if x_forwarded_for:
+    #     entity.ip = x_forwarded_for.split(',')[0]
+    # else:
+    #     entity.ip = request.META.get('REMOTE_ADDR')
+    # try:
+    #     ad = AD.objects.get(pk=id)
+    # except:
+    #     return redirect(request.META['HTTP_HOST'])
+    # entity.adTitle = ad.title
+    # entity.op = 'click'
+    # entity.save()
     try:
         ad = AD.objects.get(pk=id)
     except:
         return redirect(request.META['HTTP_HOST'])
-    entity.adTitle = ad.title
-    entity.op = 'click'
-    entity.save()
+    today = datetime.date.today()
+    obj, created = AdsStaEntity.objects.get_or_create(datetime=today) 
+    if ad.title == u'主广告位':
+        obj.main_click = F('main_click') + 1
+        obj.save()
+    else:
+        obj.side_click = F('side_click') + 1
+        obj.save()
+
     return redirect(ad.link)
     
 

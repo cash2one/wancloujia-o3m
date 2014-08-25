@@ -6,7 +6,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.http import HttpResponseBadRequest, HttpResponse, Http404
 from django.db.models.query import QuerySet
-from django.db.models import Q
+from django.db.models import Q, F
 from django.views.decorators.http import require_GET, require_POST
 from django_tables2.config import RequestConfig
 from app.models import Subject
@@ -19,7 +19,7 @@ from og.decorators import active_tab
 
 from django_render_json import json as as_json
 from django_render_json import render_json
-from interface.models import AdsLogEntity
+from interface.models import AdsLogEntity, AdsStaEntity
 from django.core.cache import cache
 
 
@@ -76,26 +76,32 @@ def ads(request):
     ads = AD.objects.all().order_by('pk');
     main = ads[0]
     side = ads[1]
-    entity = AdsLogEntity()
-    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
-    if x_forwarded_for:
-        entity.ip = x_forwarded_for.split(',')[0]
-    else:
-        entity.ip = request.META.get('REMOTE_ADDR')
-    entity.datetime = datetime.datetime.now()
-    entity.adTitle = u"主广告位"
-    entity.op = "view"
-    entity.save()
-    entity = AdsLogEntity()
-    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
-    if x_forwarded_for:
-        entity.ip = x_forwarded_for.split(',')[0]
-    else:
-        entity.ip = request.META.get('REMOTE_ADDR')
-    entity.datetime = datetime.datetime.now()
-    entity.adTitle = u"副广告位"
-    entity.op = "view"
-    entity.save()
+    # entity = AdsLogEntity()
+    # x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    # if x_forwarded_for:
+    #     entity.ip = x_forwarded_for.split(',')[0]
+    # else:
+    #     entity.ip = request.META.get('REMOTE_ADDR')
+    # entity.datetime = datetime.datetime.now()
+    # entity.adTitle = u"主广告位"
+    # entity.op = "view"
+    # entity.save()
+    # entity = AdsLogEntity()
+    # x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    # if x_forwarded_for:
+    #     entity.ip = x_forwarded_for.split(',')[0]
+    # else:
+    #     entity.ip = request.META.get('REMOTE_ADDR')
+    # entity.datetime = datetime.datetime.now()
+    # entity.adTitle = u"副广告位"
+    # entity.op = "view"
+    # entity.save()
+
+    #statistic
+    today = datetime.date.today()
+    obj, created = AdsStaEntity.objects.get_or_create(datetime=today)
+    obj.view = F('view') + 1
+    obj.save()
 
     #cache
     cache_data = cache.get('ad')

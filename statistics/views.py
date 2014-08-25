@@ -20,7 +20,7 @@ from og.decorators import active_tab
 from app.models import App
 from forms import DownloadFilterForm, AdFilterForm
 
-from interface.models import AdsLogEntity
+from interface.models import AdsLogEntity, AdsStaEntity
 from forms import AdFilterForm
 
 from og.utils import render_json
@@ -71,7 +71,8 @@ def ad_log(request):
     to_date = filter_form.cleaned_data['to_date']
     to_datetime = datetime.datetime(to_date.year, to_date.month, to_date.day, 23, 59, 59) 
 
-    logs = AdsLogEntity.objects.all()
+    #logs = AdsLogEntity.objects.all()
+    logs = AdsStaEntity.objects.all()
     logs = logs.filter(datetime__gte=from_date)
     logs = logs.filter(datetime__lte=to_datetime)
     
@@ -94,18 +95,26 @@ def ad_log(request):
     side_click = 0
     for log in logs:
         date_str = log.datetime.strftime("%Y-%m-%d")
-        if log.adTitle == u"主广告位":
-            resp['main'][log.op][date_str] += 1
-            if log.op == 'view':
-                main_view += 1
-            else:
-                main_click += 1
-        else:
-            resp['side'][log.op][date_str] += 1
-            if log.op == 'view':
-                side_view += 1
-            else:
-                side_click += 1
+        resp['main']['view'][date_str] = log.view
+        resp['main']['click'][date_str] = log.main_click
+        resp['side']['view'][date_str] = log.view
+        resp['side']['click'][date_str] = log.side_click
+        main_view += log.view
+        main_click += log.main_click
+        side_click += log.side_click     
+
+        # if log.adTitle == u"主广告位":
+        #     resp['main'][log.op][date_str] += 1
+        #     if log.op == 'view':
+        #         main_view += 1
+        #     else:
+        #         main_click += 1
+        # else:
+        #     resp['side'][log.op][date_str] += 1
+        #     if log.op == 'view':
+        #         side_view += 1
+        #     else:
+        #         side_click += 1
 
             
     return render_json({
@@ -113,7 +122,7 @@ def ad_log(request):
         'logs': resp,
         'main_view': main_view,
         'main_click': main_click,
-        'side_view': side_view,
+        'side_view': main_view,
         'side_click': side_click
         })
 
