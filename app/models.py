@@ -22,7 +22,7 @@ class App(models.Model):
     apk = models.ForeignKey(UploadApk)
     slogan = models.CharField(verbose_name=u'标语', max_length=30)
     name = models.CharField(verbose_name=u'应用名称', max_length=20)
-    package = models.CharField(verbose_name=u'应用包名', max_length=PACKAGE_LENGTH_LIMIT, unique=True)
+    package = models.CharField(verbose_name=u'应用包名', max_length=PACKAGE_LENGTH_LIMIT)
     app_icon = models.CharField(verbose_name=u'应用图标', max_length=255, help_text=u'图标大小限制10k以下，尺寸为72*72px')
     version = models.CharField(verbose_name=u'版本号', max_length=255)
     sdk_version = models.CharField(verbose_name=u'系统最低版本', max_length=255, default="", blank=True)

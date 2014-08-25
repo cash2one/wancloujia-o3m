@@ -112,6 +112,7 @@ def app_to_dict(app, host, module, page_type):
     else:
         total = str(app.download_num)
     result.update({
+        'appId': app.pk,
         'file': permalink(host, "/interface/download?app_id=%d&module=%s&page_type=%s" % (app.pk, module, page_type)),
         'size': str_size(app.size()),
         'icon': permalink(host, app.app_icon),
@@ -141,9 +142,12 @@ def app_to_dict(app, host, module, page_type):
 
 @require_GET
 def app(request, package):
+    param = package.split('/')
+    package = param[0]
+    appId = param[1]
     host = request.META['HTTP_HOST']
     callback = request.GET.get('callback', None)
-    apps = App.objects.filter(package=package)
+    apps = App.objects.filter(package=package).filter(pk=appId)
     data = apps[0] if apps.exists() else None
     if data is not None: 
         instance = app_to_dict(data, host, '', 'detail')
