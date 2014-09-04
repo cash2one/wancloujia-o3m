@@ -94,10 +94,35 @@ class Subject(models.Model):
 
         return ",".join(arr)
 
+class Plate(models.Model):
+    position = models.CharField(verbose_name=u'位置', max_length=20, unique=True)
+    name = models.CharField(verbose_name=u'名称', max_length=20, unique=True)
+    cover = models.CharField(verbose_name=u'图片', max_length=1024)
+    #code = models.CharField(max_length=20, unique=True)
+
+    def __unicode__(self):
+        return self.name
+
+    def apps(self):
+        return map(lambda item: item.app, AppGroupPlate.objects.filter(plate=self).order_by('position'))
+
+    def appPks(self):
+        arr = []
+        for app in self.apps():
+            arr = arr + [str(app.pk), app.name]
+
+        return ",".join(arr)
+
+
 
 class AppGroup(models.Model):
     app = models.ForeignKey(App, verbose_name=u'应用')
     subject = models.ForeignKey(Subject, verbose_name=u'专题')
+    position = models.IntegerField(editable=False)
+
+class AppGroupPlate(models.Model):
+    app = models.ForeignKey(App, verbose_name=u'应用')
+    plate = models.ForeignKey(Plate, verbose_name=u'集合页')
     position = models.IntegerField(editable=False)
 
 
@@ -125,7 +150,7 @@ def add_subject(subject, apps, user):
         subject.updator = user
         subject.update_date = datetime.now()
         subject.save()
-        _set_included_apps(subject, apps) 
+        _set_included_apps(subject, apps)
         _publish_subject(subject.pk)
     except Exception as e:
         transaction.rollback()
@@ -141,7 +166,7 @@ def edit_subject(subject, apps, user):
         subject.updator = user
         subject.update_date = datetime.now();
         subject.save()
-        _set_included_apps(subject, apps) 
+        _set_included_apps(subject, apps)
     except Exception as e:
         transaction.rollback()
         logger.exception(e)
@@ -149,6 +174,19 @@ def edit_subject(subject, apps, user):
     else:
         transaction.commit()
 
+@transaction.commit_manually
+def edit_plate(plate, apps):
+    try:
+        AppGroupPlate.objects.filter(plate=plate).delete()
+        for i in range(0, len(apps)):
+            app = App.objects.get(pk=apps[i])
+            AppGroupPlate(plate=plate, app=app, position=i+1).save()
+    except Exception as e:
+        transaction.rollback()
+        logger.exception(e)
+        raise e
+    else:
+        transaction.commit()
 
 def _drop_subject(id):
     subject = Subject.objects.get(pk=id)
@@ -166,7 +204,7 @@ def _drop_subject(id):
 @transaction.commit_manually
 def drop_subject(id):
     try:
-        _drop_subject(id)    
+        _drop_subject(id)
     except Exception as e:
         transaction.rollback()
         logger.exception(e)
@@ -177,7 +215,7 @@ def drop_subject(id):
 
 @transaction.commit_manually
 def publish_subject(id):
-    try: 
+    try:
         _publish_subject(id)
     except Exception as e:
         logger.exception(e)
@@ -189,7 +227,7 @@ def publish_subject(id):
 
 @transaction.commit_manually
 def sort_subjects(pks):
-    try: 
+    try:
         Subject.objects.exclude(pk__in=pks).update(position=_MAX_SUBJECTS, online=False)
         Subject.objects.filter(pk__in=pks).update(online=True)
         for i in range(0, len(pks)):
@@ -206,7 +244,7 @@ def sort_subjects(pks):
 
 @transaction.commit_manually
 def delete_subject(pk):
-    try: 
+    try:
         _drop_subject(pk)
         Subject.objects.get(pk=pk).delete()
     except Exception as e:

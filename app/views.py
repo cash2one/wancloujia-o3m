@@ -7,7 +7,7 @@ from hashlib import md5
 from django.shortcuts import render, redirect
 from django.conf import settings
 from django.core.files.images import ImageFile
-from django.core.files.storage import default_storage        
+from django.core.files.storage import default_storage
 from django.utils import simplejson
 from django.http import HttpResponseBadRequest, HttpResponse, Http404
 from django.contrib.auth.decorators import login_required, user_passes_test
@@ -20,9 +20,9 @@ from django.forms.models import model_to_dict
 from django_tables2.config import RequestConfig
 
 from app import models
-from app.models import App, UploadApk, Subject, AppGroup
-from app.forms import AppForm, SubjectForm
-from app.tables import AppTable, SubjectTable
+from app.models import App, UploadApk, Subject, AppGroup, Plate
+from app.forms import AppForm, SubjectForm, PlateForm
+from app.tables import AppTable, SubjectTable, PlateTable
 from og.decorators import active_tab
 from django_render_json import json as as_json
 from django_render_json import render_json
@@ -144,12 +144,19 @@ def app_to_dict(app, host, module, page_type):
 def app(request, package):
     param = package.split('/')
     package = param[0]
-    appId = param[1]
+    if len(param) == 2:
+        appId = param[1]
+    else:
+        appId = None
     host = request.META['HTTP_HOST']
     callback = request.GET.get('callback', None)
-    apps = App.objects.filter(package=package).filter(pk=appId)
+    if appId:
+        apps = App.objects.filter(package=package).filter(pk=appId)
+    else:
+        apps = App.objects.filter(package=package)
+
     data = apps[0] if apps.exists() else None
-    if data is not None: 
+    if data is not None:
         instance = app_to_dict(data, host, '', 'detail')
     else:
         instance = data
@@ -244,7 +251,7 @@ def upload(request):
     uploaded_file.save();
     logger.debug("save md5");
     print uploaded_file.file.path
-    
+
     try:
         apk_info = apk.inspect(uploaded_file.file.path)
     except Exception as e:
@@ -283,8 +290,8 @@ def upload(request):
         app_dict["desc"] = app.desc
         app_dict["oldVersionCode"] = app.version_code
         app_dict["oldVersion"] = app.version
-	
-    return HttpResponse(simplejson.dumps(app_dict), 
+
+    return HttpResponse(simplejson.dumps(app_dict),
                         mimetype='application/json')
 
 
@@ -296,7 +303,7 @@ def can_view_subject(user):
             user.has_perm('app.delete_subject') or \
             user.has_perm('app.publish_subject') or \
             user.has_perm('app.drop_subject') or \
-            user.has_perm('app.sort_subject') 
+            user.has_perm('app.sort_subject')
 
 
 @require_GET
@@ -312,6 +319,31 @@ def subject(request):
         'form': SubjectForm()
     })
 
+@require_GET
+@login_required
+@user_passes_test(can_view_subject, login_url=settings.PERMISSION_DENIED_URL)
+@active_tab("plate")
+def plate(request):
+    query_set = Plate.objects.order_by('pk');
+    table = PlateTable(query_set)
+    RequestConfig(request, paginate={"per_page": 13}).configure(table)
+    return render(request, "plate.html", {
+        "table": table,
+        'form': PlateForm()
+    })
+
+def plates(request):
+    plates = Plate.objects.all().order_by('pk')
+    cache_data = cache.get('plates')
+    if cache_data is not None:
+        return render_jsonp(cache_data, requeset.GET.get('callback'))
+
+    data = {}
+    for plate in plates:
+        data[plate.position] = {'name':plate.name,'cover':plate.cover}
+    cache.set('plates', data)
+    return render_jsonp(data, request.GET.get('callback'))
+
 
 @require_GET
 @as_json
@@ -323,11 +355,11 @@ def search_apps(request):
     apps = App.objects.filter(name__contains=query)
     total = apps.count()
     apps = apps[(page-1)*page_limit:page*page_limit]
-    results = [{'id': app.pk, 'text': app.name} for app in apps]
+    results = [{'id': app.pk, 'text': app.name + '(' + str(app.pk) + ')'} for app in apps]
 
     return {
-        'ret_code': 0, 
-        'results': results, 
+        'ret_code': 0,
+        'results': results,
         'total': total
     }
 
@@ -351,7 +383,29 @@ def add_edit_subject(request):
 
     return {'ret_code': 0}
 
- 
+@require_POST
+@as_json
+def add_edit_plate(request):
+    pk = request.POST["pk"]
+    plate = Plate.objects.get(pk=int(pk))
+    name = request.POST["name"]
+    cover = request.POST["cover"]
+    if name == '':
+        return {'ret_code': 10001}
+    if cover == '':
+        return {'ret_code': 10001}
+    plate.name=name
+    plate.cover=cover
+    plate.save()
+
+    apps = request.POST.get("apps", None)
+    apps = [] if not apps else [int(item) for item in apps.split(",")]
+    models.edit_plate(plate, apps)
+
+    cache.delete('plates')
+
+    return {'ret_code': 0}
+
 def category(code):
     def handler(request):
         callback = request.GET.get('callback', None)
@@ -365,6 +419,23 @@ def category(code):
         }
         cache.set(code, data)
         return render_jsonp(data, callback)
-        
+
     return handler
+
+def plate_list(position):
+    def handler(request):
+        callback = request.GET.get('callback', None)
+        plate = Plate.objects.get(position=position)
+        cache_data = cache.get(position)
+        if cache_data is not None:
+            return render_jsonp(cache_data, callback)
+        data = {
+            'plate_name': plate.name,
+            'apps': map(lambda item: app_to_dict(item, request.META['HTTP_HOST'], position, 'list'), plate.apps())
+        }
+        cache.set(position, data)
+        return render_jsonp(data, callback)
+
+    return handler
+
 

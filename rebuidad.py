@@ -9,12 +9,16 @@ if __name__ == "__main__":
 
     from interface.models import AdsLogEntity, AdsStaEntity
     import datetime
+    import logging
+    logger = logging.getLogger(__name__)
+
     index = 1
     while(index <= 14484947):
         log = AdsLogEntity.objects.get(pk=index)
         index += 1
         print log.datetime.date()
         print log.id
+        logger.info(log.id)
         date = log.datetime.date()
         obj, created = AdsStaEntity.objects.get_or_create(datetime=date)
         op = log.op

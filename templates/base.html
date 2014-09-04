@@ -64,6 +64,12 @@
                 </a>
             </li>
 
+            <li {% if request.nav.active_tab == "plate" %}class="active"{% endif %}>
+                <a href="/app/plate/">
+                    <span class="glyphicon glyphicon-facetime-video"></span>&nbsp;&nbsp;集合页管理
+                </a>
+            </li>
+
             <li {% if request.nav.active_tab == "ad" %}class="active"{% endif %}>
                 <a href="/ad/">
                     <span class="glyphicon glyphicon-facetime-video"></span>&nbsp;&nbsp;广告管理

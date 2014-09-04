@@ -16,6 +16,7 @@ require.config({
         "datatables": "js/jquery.dataTables.min",
         "bootstrap-datatables": "js/bootstrap.datatables",
         "subject": "js/subject",
+        "plate": "js/plate",
         "jquery.pnotify": "js/jquery.pnotify.min",
         "toast": "js/toast",
         "suning_helper": "js/suning_helper",

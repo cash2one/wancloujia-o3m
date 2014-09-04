@@ -6,6 +6,11 @@ suning.zip
 dump.rdb
 .idea/
 .cache
+django.log.1
+django.log.2
+django.log.3
+django.log.4
+django.log.5
 
 # wandoujia extension
 *.wdx

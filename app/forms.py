@@ -29,35 +29,35 @@ class AppForm(forms.ModelForm):
             'screen1': AjaxClearableFileInput(attrs={'class': 'form-control'}),
             'slogan': forms.TextInput(attrs={'class': 'form-control'}),
             'version': forms.TextInput(attrs={
-                'readonly': 'readonly', 
+                'readonly': 'readonly',
                 'class': 'form-control'
             }),
             'sdk_version': forms.TextInput(attrs={
-                'readonly': 'readonly', 
+                'readonly': 'readonly',
                 'class': 'form-control'
             }),
             'desc': forms.TextInput(attrs={'class': 'form-control'}),
             'package': forms.TextInput(attrs={
-                'readonly': 'readonly', 
+                'readonly': 'readonly',
                 'class': 'form-control'
             }),
             'longDesc': forms.Textarea(attrs={
-                'rows': 8, 
+                'rows': 8,
                 'maxlength': 1000,
                 'class': 'form-control'
             }),
             'permissions': forms.Textarea(attrs={
-                'readonly': 'readonly', 
-                'rows': 3, 
+                'readonly': 'readonly',
+                'rows': 3,
                 'maxlength': 50,
                 'class': 'form-control'
             }),
             'version': forms.TextInput(attrs={
-                'readonly': 'readonly', 
+                'readonly': 'readonly',
                 'class': 'form-control'
             }),
             'name': forms.TextInput(attrs={
-                'readonly': 'readonly', 
+                'readonly': 'readonly',
                 'class': 'form-control'
             }),
             'apk': forms.HiddenInput,
@@ -68,7 +68,7 @@ class AppForm(forms.ModelForm):
 @parsleyfy
 class SubjectForm(forms.ModelForm):
     name = forms.CharField(label=u'专题名称', max_length=20,  widget=forms.TextInput(attrs={
-                    'class': 'form-control' 
+                    'class': 'form-control'
                     #'readonly': 'readonly'
             }))
 
@@ -76,3 +76,17 @@ class SubjectForm(forms.ModelForm):
         model = Subject
         #exclude = ('name', )
 
+@parsleyfy
+class PlateForm(forms.ModelForm):
+    position = forms.CharField(label=u'位置', max_length=20,  widget=forms.TextInput(attrs={
+                    'class': 'form-control',
+                    'readonly': 'readonly'
+            }))
+    name = forms.CharField(label=u'名称', max_length=20,  widget=forms.TextInput(attrs={
+                    'class': 'form-control',
+            }))
+    cover = forms.CharField(label=u'图片',  widget=AjaxClearableFileInput(attrs={'class': 'form-control'}))
+
+    class Meta:
+        model = Plate
+        #exclude = ('position', )
