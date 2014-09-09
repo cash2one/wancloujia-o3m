@@ -18,7 +18,7 @@ class LogQuerySet(QuerySet):
         emps = Employee.objects.filter_by_organization(organization)
         pks = emps.values_list('pk', flat=True)
         return self.filter(uid__in=pks)
-        
+
 
 class LogManager(models.Manager):
     def get_query_set(self):
@@ -73,7 +73,7 @@ class InstalledAppLogEntity(models.Model):
 
     objects = LogManager()
 
-    
+
 class UserDeviceLogEntity(models.Model):
     u"""
     手机安装统计
@@ -157,6 +157,30 @@ class AdsStaEntity(models.Model):
     view = models.IntegerField(default=0)
     main_click = models.IntegerField(default=0)
     side_click = models.IntegerField(default=0)
+
+    class Meta:
+        app_label = "interface"
+
+class PlateStaEntity(models.Model):
+    u"""
+    模板统计
+    """
+    datetime = models.DateField(db_index=True)
+    view = models.IntegerField(default=0)
+    click = models.IntegerField(default=0)
+    top1 = models.IntegerField(default=0)
+    top2 = models.IntegerField(default=0)
+    top3 = models.IntegerField(default=0)
+    top4 = models.IntegerField(default=0)
+    top5 = models.IntegerField(default=0)
+    top6 = models.IntegerField(default=0)
+    top7 = models.IntegerField(default=0)
+    top8 = models.IntegerField(default=0)
+    top9 = models.IntegerField(default=0)
+    middle = models.IntegerField(default=0)
+    bottom1 = models.IntegerField(default=0)
+    bottom2 = models.IntegerField(default=0)
+    bottom3 = models.IntegerField(default=0)
 
     class Meta:
         app_label = "interface"

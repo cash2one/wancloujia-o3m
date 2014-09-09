@@ -12,7 +12,6 @@ class DownloadFilterForm(forms.Form):
     to_date = forms.DateField(label=u'结束时间', required=False)
 
 class AdFilterForm(forms.Form):
-
     from_date = forms.DateField(label=u'开始时间', required=False)
     to_date = forms.DateField(label=u'结束时间', required=False)
 

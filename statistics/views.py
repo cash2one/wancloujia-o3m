@@ -2,7 +2,7 @@
 import logging
 import datetime
 import math
-import HTMLParser 
+import HTMLParser
 
 from django.db.models import Q
 
@@ -21,14 +21,13 @@ from app.models import App
 from forms import DownloadFilterForm, AdFilterForm
 
 from interface.models import AdsLogEntity, AdsStaEntity
-from forms import AdFilterForm
 
 from og.utils import render_json
 
 from dajaxice.utils import deserialize_form
 
 logger = logging.getLogger(__name__)
-
+DEFAULT_PLATES=['top1', 'top2','top3','top4','top5','top6','top7','top8','top9','middle','bottom1','bottom2','bottom3']
 
 @active_tab("statistics", "download")
 def download(request):
@@ -42,6 +41,11 @@ def ad(request):
         'filter': AdFilterForm()
         })
 
+@active_tab("statistics", "plates")
+def plates(request):
+    return render(request, "plates.html", {
+        'filter': AdFilterForm()
+        })
 
 @require_GET
 def apps(request):
@@ -59,7 +63,7 @@ def apps(request):
 
     return render_json({'more': total > page * APPS_PER_PAGE, 'results': results})
 
-    
+
 def ad_log(request):
     form = deserialize_form(request.GET['f'])
     filter_form = AdFilterForm(form)
@@ -69,13 +73,13 @@ def ad_log(request):
 
     from_date = filter_form.cleaned_data['from_date']
     to_date = filter_form.cleaned_data['to_date']
-    to_datetime = datetime.datetime(to_date.year, to_date.month, to_date.day, 23, 59, 59) 
+    to_datetime = datetime.datetime(to_date.year, to_date.month, to_date.day, 23, 59, 59)
 
     #logs = AdsLogEntity.objects.all()
     logs = AdsStaEntity.objects.all()
     logs = logs.filter(datetime__gte=from_date)
     logs = logs.filter(datetime__lte=to_datetime)
-    
+
     resp = {}
     resp['main'] = {'view':{}, 'click':{}}
     resp['side'] = {'view':{}, 'click':{}}
@@ -101,7 +105,7 @@ def ad_log(request):
         resp['side']['click'][date_str] = log.side_click
         main_view += log.view
         main_click += log.main_click
-        side_click += log.side_click     
+        side_click += log.side_click
 
         # if log.adTitle == u"主广告位":
         #     resp['main'][log.op][date_str] += 1
@@ -116,7 +120,7 @@ def ad_log(request):
         #     else:
         #         side_click += 1
 
-            
+
     return render_json({
         'ret_code': 0,
         'logs': resp,

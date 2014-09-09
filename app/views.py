@@ -1,6 +1,6 @@
 #coding: utf-8
 import math
-from datetime import datetime
+from datetime import datetime, date
 import logging
 from itertools import chain
 from hashlib import md5
@@ -12,7 +12,7 @@ from django.utils import simplejson
 from django.http import HttpResponseBadRequest, HttpResponse, Http404
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.db.models.query import QuerySet
-from django.db.models import Q
+from django.db.models import Q, F
 from django.views.decorators.http import require_GET, require_POST
 from django import forms
 from django.forms.models import model_to_dict
@@ -29,6 +29,7 @@ from django_render_json import render_json
 from django.core.cache import cache
 
 from taggit.models import Tag
+from interface.models import PlateStaEntity
 
 import apk
 import os
@@ -335,13 +336,15 @@ def plate(request):
 def plates(request):
     plates = Plate.objects.all().order_by('pk')
     cache_data = cache.get('plates')
+    _plates_sta('view')
     if cache_data is not None:
-        return render_jsonp(cache_data, requeset.GET.get('callback'))
+        return render_jsonp(cache_data, request.GET.get('callback'))
 
     data = {}
     for plate in plates:
         data[plate.position] = {'name':plate.name,'cover':plate.cover}
     cache.set('plates', data)
+
     return render_jsonp(data, request.GET.get('callback'))
 
 
@@ -427,6 +430,7 @@ def plate_list(position):
         callback = request.GET.get('callback', None)
         plate = Plate.objects.get(position=position)
         cache_data = cache.get(position)
+        _plates_sta(position)
         if cache_data is not None:
             return render_jsonp(cache_data, callback)
         data = {
@@ -438,4 +442,15 @@ def plate_list(position):
 
     return handler
 
+def _plates_sta(way):
+    #统计点击量
+    try:
+        today = date.today()
+        obj, created = PlateStaEntity.objects.get_or_create(datetime=today)
+        setattr(obj, way, F(way)+1)
+        if way != 'view':
+            obj.click = F('click') + 1
+        obj.save()
+    except:
+        logger.info('plates sta fail')
 

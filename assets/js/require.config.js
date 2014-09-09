@@ -9,6 +9,7 @@ require.config({
         "dajaxice": "dajaxice/dajaxice.core",
         "download": "js/download",
         "sta_ad": "js/sta_ad",
+        "plates_sta": "js/plates_sta",
         "statistics": "js/statistics",
         "datef": "js/datef",
         "datetimepicker": "js/bootstrap-datetimepicker.min",
