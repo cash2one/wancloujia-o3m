@@ -9,6 +9,7 @@ from django.db import models, transaction, connection
 from django.contrib.auth.models import User
 from django.core.cache import cache
 import generate_path
+import urllib
 
 logger = logging.getLogger(__name__)
 
@@ -68,6 +69,25 @@ class App(models.Model):
         if self.comment_num is None:
             random.seed()
             self.comment_num = random.randrange(1000, 20000)
+        try:
+            if self.app_icon:
+                convert_img(self.app_icon,'icon')
+            if self.screen1:
+                convert_img(self.screen1,'app_img')
+            if self.screen2:
+                convert_img(self.screen2,'app_img')
+            if self.screen3:
+                convert_img(self.screen3,'app_img')
+            if self.screen4:
+                convert_img(self.screen4,'app_img')
+            if self.screen5:
+                convert_img(self.screen5,'app_img')
+            if self.screen6:
+                convert_img(self.screen6,'app_img')
+            print 'success'
+        except:
+            logger.debug('covert fail')
+            print 'fail'
         super(App, self).save(*args, **kwargs)
 
 
@@ -98,7 +118,6 @@ class Plate(models.Model):
     position = models.CharField(verbose_name=u'位置', max_length=20, unique=True)
     name = models.CharField(verbose_name=u'名称', max_length=20, unique=True)
     cover = models.CharField(verbose_name=u'图片', max_length=1024)
-    #code = models.CharField(max_length=20, unique=True)
 
     def __unicode__(self):
         return self.name
@@ -113,7 +132,20 @@ class Plate(models.Model):
 
         return ",".join(arr)
 
+    def save(self, *args, **kwargs):
+        try:
+            if self.position.find('top') != -1:
+                convert_img(self.cover, 'plate_top')
+            elif self.position.find('middle') != -1:
+                convert_img(self.cover, 'plate_middle')
+            elif self.position.find('bottom') != -1:
+                convert_img(self.cover, 'plate_bottom')
+            else: 
+                logger.debug('plate wrong type')
+        except:
+            logger.debug('plate convert fail')
 
+        super(Plate, self).save(*args, **kwargs)
 
 class AppGroup(models.Model):
     app = models.ForeignKey(App, verbose_name=u'应用')
@@ -253,3 +285,23 @@ def delete_subject(pk):
         raise e
     else:
         transaction.commit()
+
+def convert_img(img, type):
+    img_path = urllib.unquote(str(img))
+    if type == 'icon':
+        os.system("convert -resize 70x70 -strip -quality 80% " + '/data/og.proj' + img_path + ' /data/og.proj' + img_path)
+        logger.debug('icon success')
+    elif type == 'app_img':
+        os.system("convert -resize 160x265 -strip -quality 80% " + '/data/og.proj' + img_path + ' /data/og.proj' + img_path)
+        logger.debug('app_img success')
+    elif type == 'plate_top':
+        os.system("convert -resize 300x200 -strip -quality 80% " + '/data/og.proj' + img_path + ' /data/og.proj' + img_path)
+        logger.debug('top success')
+    elif type == 'plate_middle':
+        os.system("convert -resize 724x166 -strip -quality 80% " + '/data/og.proj' + img_path + ' /data/og.proj' + img_path)
+        logger.debug('middle success')
+    elif type == 'plate_bottom':
+        os.system("convert -resize 219x210 -strip -quality 80% " + '/data/og.proj' + img_path + ' /data/og.proj' + img_path)
+        logger.debug('bottom success')
+    else:
+        logger.debug('wrong type')

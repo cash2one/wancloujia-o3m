@@ -342,7 +342,7 @@ def plates(request):
 
     data = {}
     for plate in plates:
-        data[plate.position] = {'name':plate.name,'cover':plate.cover}
+        data[plate.position] = {'name':plate.name,'cover':permalink(request.META['HTTP_HOST'], plate.cover)}
     cache.set('plates', data)
 
     return render_jsonp(data, request.GET.get('callback'))
@@ -406,6 +406,7 @@ def add_edit_plate(request):
     models.edit_plate(plate, apps)
 
     cache.delete('plates')
+    cache.delete(plate.position)
 
     return {'ret_code': 0}
 

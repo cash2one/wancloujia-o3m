@@ -21,6 +21,7 @@ define(function(require) {
             }, {
                 sTitle: '点击数'
             }],
+            bPaginate: false,
             fnServerData: function(source, data, callback, settings) {
                 var values = statistics.table_map(data,
                     ["sEcho", "iDisplayLength", "iDisplayStart"]);

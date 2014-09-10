@@ -70,11 +70,6 @@
                 </a>
             </li>
 
-            <li {% if request.nav.active_tab == "ad" %}class="active"{% endif %}>
-                <a href="/ad/">
-                    <span class="glyphicon glyphicon-facetime-video"></span>&nbsp;&nbsp;广告管理
-                </a>
-            </li>
             <li {% if request.nav.active_tab == "statistics" %}class="active"{% endif %}>
                 <a href="/statistics/">
                     <span class="glyphicon glyphicon-th"></span>&nbsp;&nbsp;数据统计
@@ -82,9 +77,6 @@
                 <ul class="nav collapse in" id="sub_statistics">
                     <li {% if request.nav.active_tab == "statistics" and request.nav.sub_active_tab == "download" %} class= "active" {% endif %}>
                         <a href="/statistics/download">下载统计</a>
-                    </li>
-                    <li {% if request.nav.active_tab == "statistics" and request.nav.sub_active_tab == "ad" %} class= "active" {% endif %}>
-                        <a href="/statistics/ad">广告统计</a>
                     </li>
                     <li {% if request.nav.active_tab == "statistics" and request.nav.sub_active_tab == "plates" %} class= "active" {% endif %}>
                         <a href="/statistics/plates">集合页统计</a>
