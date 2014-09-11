@@ -12,6 +12,13 @@ import generate_path
 import urllib
 
 logger = logging.getLogger(__name__)
+try: 
+    #load custom configuration
+    import config
+except:
+    config = {}
+DEFAUTL_IMG_ROOT = '/data/og.proj'
+MEDIA_IMG_ROOT = getattr(config,'MEDIR_PATH',DEFAUTL_IMG_ROOT)
 
 
 class UploadApk(models.Model):
@@ -289,19 +296,19 @@ def delete_subject(pk):
 def convert_img(img, type):
     img_path = urllib.unquote(str(img))
     if type == 'icon':
-        os.system("convert -resize 70x70 -strip -quality 80% " + '/data/og.proj' + img_path + ' /data/og.proj' + img_path)
+        os.system("convert -resize 70x70 -strip -quality 80% " + MEDIA_IMG_ROOT + img_path + ' ' + MEDIA_IMG_ROOT + img_path)
         logger.debug('icon success')
     elif type == 'app_img':
-        os.system("convert -resize 160x265 -strip -quality 80% " + '/data/og.proj' + img_path + ' /data/og.proj' + img_path)
+        os.system("convert -resize 160x265 -strip -quality 80% " + MEDIA_IMG_ROOT + img_path + ' ' + MEDIA_IMG_ROOT + img_path)
         logger.debug('app_img success')
     elif type == 'plate_top':
-        os.system("convert -resize 300x200 -strip -quality 80% " + '/data/og.proj' + img_path + ' /data/og.proj' + img_path)
+        os.system("convert -resize 300x200 -strip -quality 80% " + MEDIA_IMG_ROOT + img_path + ' ' + MEDIA_IMG_ROOT + img_path)
         logger.debug('top success')
     elif type == 'plate_middle':
-        os.system("convert -resize 724x166 -strip -quality 80% " + '/data/og.proj' + img_path + ' /data/og.proj' + img_path)
+        os.system("convert -resize 724x166 -strip -quality 80% " + MEDIA_IMG_ROOT + img_path + ' ' + MEDIA_IMG_ROOT + img_path)
         logger.debug('middle success')
     elif type == 'plate_bottom':
-        os.system("convert -resize 219x210 -strip -quality 80% " + '/data/og.proj' + img_path + ' /data/og.proj' + img_path)
+        os.system("convert -resize 219x210 -strip -quality 80% " + MEDIA_IMG_ROOT + img_path + ' ' + MEDIA_IMG_ROOT + img_path)
         logger.debug('bottom success')
     else:
         logger.debug('wrong type')
