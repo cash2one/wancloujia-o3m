@@ -106,7 +106,7 @@ define(function(require) {
                 $('.cover-tip').text('图片限制大小150k，尺寸为300x200px');
             }else if (plate.position.indexOf('middle') !== -1){
                 $('.cover-tip').text('图片限制大小150k，尺寸为724x166px');
-            }else if (plate.position.indexOf('buttom') !== -1){
+            }else if (plate.position.indexOf('bottom') !== -1){
                 $('.cover-tip').text('图片限制大小150k，尺寸为219x210px');
             }else{
             }
