@@ -381,4 +381,5 @@ def __remove_admin(model, username):
     oplogtrack(33, username, model)
 
 def __mod_adminpass(model, username):
+    model.save()
     oplogtrack(34, username, model)
