@@ -355,7 +355,7 @@ def search_apps(request):
     page = int(request.GET.get("p"))
     page_limit = int(request.GET.get("page_limit"))
 
-    apps = App.objects.filter(name__contains=query)
+    apps = App.objects.filter(name__contains=query).order_by('-pk')
     total = apps.count()
     apps = apps[(page-1)*page_limit:page*page_limit]
     results = [{'id': app.pk, 'text': app.name + '(' + str(app.pk) + ')'} for app in apps]
