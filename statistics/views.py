@@ -250,6 +250,16 @@ def user_filter(user):
 
 @require_GET
 @login_required
+@active_tab("statistics", "user")
+def user(request):
+    return render(request, "user_sta.html", {
+        'user_filter': user_filter(cast_staff(request.user)),
+        'filter': LogMetaFilterForm()
+    })
+
+
+@require_GET
+@login_required
 @active_tab("statistics", "flow")
 def flow(request):
     return render(request, "flow.html", {

@@ -1,4 +1,7 @@
+--index-url http://pypi.douban.com/simple
+
 Django==1.5.2
+Mysql-python
 django_select2
 django-tables2
 django-dajaxice

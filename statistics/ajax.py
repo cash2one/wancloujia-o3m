@@ -1,6 +1,7 @@
 # coding: utf-8
 import logging
 from datetime import datetime
+import datetime as mydatetime
 
 from django.utils import simplejson
 from django.contrib.auth.models import User
@@ -8,12 +9,12 @@ from django.db.models import Sum, Count
 from dajaxice.decorators import dajaxice_register
 from dajaxice.utils import deserialize_form
 
-from interface.models import LogMeta, InstalledAppLogEntity, DeviceLogEntity
+from interface.models import LogMeta, InstalledAppLogEntity, DeviceLogEntity, UserOnline
 from interface.models import UserDeviceLogEntity
 from app.models import App
 from mgr.models import Employee, Organization, cast_staff, Region, Company, Store
 from statistics.forms import LogMetaFilterForm, InstalledCapacityFilterForm
-from statistics.forms import DeviceStatForm, OrganizationStatForm
+from statistics.forms import DeviceStatForm, OrganizationStatForm, FilterUserForm
 from suning import utils
 from suning.decorators import *
 
@@ -153,6 +154,89 @@ def log_to_dict(log):
 
     return dict;
 
+def user_to_dict(log, form):
+    hour = datetime.now().hour
+    dict = {}
+    emp = utils.get_model_by_pk(Employee.objects, log.staff_ptr_id)
+    organizations = [None, None, None]
+    if emp:
+        dict["emp"] = emp.username
+        dict["realname"] = emp.realname
+        for i, item in enumerate(emp.organizations()):
+            organizations[i] = item.name
+    else:
+        dict["emp"] = None
+    dict["region"], dict["company"], dict["store"] = organizations
+    dict["isonline"] = u"否"
+    dict["duration"] = 0
+
+    #统计在线时长
+    today = mydatetime.date.today()
+    from_date = form.cleaned_data["from_date"]
+    to_date = form.cleaned_data["to_date"]
+    
+    onlines = UserOnline.objects.filter(username=emp.username)
+    onlines = PeriodFilter(onlines, from_date, to_date).filter()
+
+    for online in onlines:
+        dict["duration"] += online.duration
+         
+    online, created = UserOnline.objects.get_or_create(date=today, username=emp.username)
+    
+    if hour == online.isOnline:
+        dict["isonline"] = u"是"
+    else:
+        dict["isonline"] = u"否"
+
+    return dict;
+
+def _filter_users(user, form):
+    users = Employee.objects.all()
+
+    region_id = form.cleaned_data["region"]
+    company_id = form.cleaned_data["company"]
+    store_id = form.cleaned_data["store"]
+    emp_id = form.cleaned_data["emp"]
+
+    if region_id:
+        org = Organization.objects.get(pk=region_id)
+        users = Employee.objects.filter_by_organization(org.cast())
+    if company_id:
+        org = Organization.objects.get(pk=company_id)
+        users = Employee.objects.filter_by_organization(org.cast())
+    if store_id:
+        org = Organization.objects.get(pk=store_id)
+        users = Employee.objects.filter_by_organization(org.cast())
+    if emp_id:
+        users = users.filter(staff_ptr_id=emp_id)
+
+    return users
+
+#用户统计
+@dajaxice_register(method='POST')
+@check_login
+def filter_users(request, form, offset, length):
+    user = cast_staff(request.user)
+    form = deserialize_form(form)
+
+    filter_form = FilterUserForm(form)
+    if not filter_form.is_valid():
+        logger.warn("form is invalid")
+        logger.warn(filter_form.errors)
+        return _invalid_data_json
+
+    logs = _filter_users(user, filter_form)
+    total = logs.count()
+    logs = logs[offset: offset + length]
+    dict_list = []
+    for log in logs:
+        dict_list.append(user_to_dict(log, filter_form))
+
+    return simplejson.dumps({
+        'ret_code': 0,
+        'logs': dict_list,
+        'total': total,
+    })
     
 def filter_flow_logs(user, form):
     logs = LogMeta.objects.all().order_by('-date')

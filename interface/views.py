@@ -11,6 +11,7 @@ from django.shortcuts import render, redirect
 from django.views.decorators.http import require_GET, require_POST
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import auth
+from django.db.models import F
 
 from rest_framework import status
 from rest_framework.renderers import JSONRenderer
@@ -20,7 +21,7 @@ from rest_framework.decorators import api_view, parser_classes, renderer_classes
 
 from serializers import AppSerializer, SubjectSerializer
 from suning import settings
-from interface.models import LogEntity
+from interface.models import LogEntity, UserOnline
 from interface.serializer import LogSerializer
 #from interface.storage import hdfs_storage
 from framework.forms import LoginForm
@@ -277,4 +278,25 @@ def apps(request, id):
         "apps": apps
     })
 
+@require_POST
+@login_required(login_url='/interface/welcome')
+@csrf_exempt
+def online(request):
+    response_data = {}
+    now = datetime.datetime.now()
+    today = datetime.date.today()
+    username = request.POST['username']
+    hour = datetime.datetime.now().hour
+    
+    if username and username != 'root':
+        obj, created = UserOnline.objects.get_or_create(date=today,username=username) 
+        if obj.isOnline == hour:
+            response_data['message'] = now.strftime("%Y-%m-%d %H:%M:%S")
+            return HttpResponse(json.dumps(response_data), content_type="application/json")
+        else:
+            obj.isOnline = hour
+            obj.duration = F('duration') + 1
+            obj.save()
+    response_data['message'] = now.strftime("%Y-%m-%d %H:%M:%S") 
+    return HttpResponse(json.dumps(response_data), content_type="application/json")
 

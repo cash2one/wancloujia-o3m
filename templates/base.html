@@ -127,6 +127,11 @@
                     <span class="glyphicon glyphicon-th"></span>&nbsp;&nbsp;数据统计
                 </a>
                 <ul class="nav collapse in" id="sub_statistics">
+                    <li {% if request.nav.active_tab == "statistics" and request.nav.sub_active_tab == "user" %}
+                        class="active"
+                        {% endif %}>
+                        <a href="/statistics/user">用户统计</a>
+                    </li>
                     <li {% if request.nav.active_tab == "statistics" and request.nav.sub_active_tab == "flow" %}
                         class="active"
                         {% endif %}>

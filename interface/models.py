@@ -122,3 +122,11 @@ class DeviceLogEntity(models.Model):
     popularizeAppCount = models.IntegerField()
     appCount = models.IntegerField()
 
+class UserOnline(models.Model):
+    u"""
+    用户在线统计
+    """
+    date = models.DateField(db_index=True, editable=False)
+    username = models.CharField(max_length=50, db_index=True, editable=False)
+    isOnline = models.IntegerField(default = 0)
+    duration = models.IntegerField(default = 0)

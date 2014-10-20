@@ -124,6 +124,16 @@
             $desc.html(ad.desc);
         });
     });
+	$(document).ready(function(){
+        var username = $(".user-area > .username").html();
+		function online(){
+            $.post('/interface/online',{ username : username },function(result){
+			    console.log(result['message']);
+		    });
+	    };
+        online();
+        var myVar = setInterval(function(){online()}, 1000 * 60 * 10);
+    });
     </script>
 <!--
 	<script type="text/javascript">

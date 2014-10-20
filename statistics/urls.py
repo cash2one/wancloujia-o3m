@@ -1,6 +1,7 @@
 from django.conf.urls import patterns, url
 
 urlpatterns = patterns('statistics.views',
+    url(r'^user$', 'user'),
     url(r'^flow$', 'flow'),
     url(r'^flow/excel$', 'flow_excel'),
     url(r'^capacity$', 'capacity'),
