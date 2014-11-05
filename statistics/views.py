@@ -22,10 +22,10 @@ from suning.utils import render_json, first_valid, get_model_by_pk
 from suning.decorators import active_tab
 from mgr.models import cast_staff, Region, Company, Store, Organization, Employee
 from app.models import App
-from interface.models import LogMeta, InstalledAppLogEntity, DeviceLogEntity
-from forms import LogMetaFilterForm, InstalledCapacityFilterForm
-from forms import OrganizationStatForm, DeviceStatForm
-from ajax import filter_flow_logs, log_to_dict, device_record_to_dict
+from interface.models import LogMeta, InstalledAppLogEntity, DeviceLogEntity, UserOnline
+from forms import LogMetaFilterForm, InstalledCapacityFilterForm, FilterUserForm
+from forms import OrganizationStatForm, DeviceStatForm, UserOnlineForm
+from ajax import filter_flow_logs, log_to_dict, device_record_to_dict, _filter_users, user_to_dict
 from ajax import filter_installed_capacity_logs, installed_capacity_to_dict
 from statistics.models import BrandModel
 from ajax import stat_device, filter_org_logs, org_record_to_dict, available_levels
@@ -267,10 +267,51 @@ def flow(request):
         'filter': LogMetaFilterForm()
     })
 
+@require_GET
+@login_required
+def user_excel(request):
+    filter_form = FilterUserForm(request.GET)
+    if not filter_form.is_valid():
+        logger.warn("form is invalid")
+        logger.warn(filter_form.errors)
+        raise Http404
+
+    book = xlwt.Workbook(encoding='utf8')
+    sheet = book.add_sheet(u'用户统计')
+    default_style = xlwt.Style.default_style
+    titles = [u'大区', u'公司', u'门店', u'员工', u'真实姓名', u'当前在线', u'在线时长']
+    for i, title in enumerate(titles):
+        sheet.write(0, i, title, style=default_style)
+
+    user = cast_staff(request.user)
+    logs = _filter_users(user, filter_form)
+    h = HTMLParser.HTMLParser()
+    for row, log in enumerate(logs):
+        logger.debug(log)
+        dict = user_to_dict(log,filter_form)
+
+        rowdata = [
+            dict['region'] or h.unescape(EMPTY_VALUE),
+            dict['company'] or h.unescape(EMPTY_VALUE),
+            dict['store'] or h.unescape(EMPTY_VALUE),
+            dict['emp'] or h.unescape(EMPTY_VALUE),
+	    dict['realname'] or h.unescape(EMPTY_VALUE),
+	    dict['isonline'] or h.unescape(EMPTY_VALUE),
+	    dict['duration'] or h.unescape(EMPTY_VALUE)
+        ]
+        for col, val in enumerate(rowdata):
+            style = default_style
+            sheet.write(row+1, col, val, style=style)
+
+    response = HttpResponse(mimetype='application/vnd.ms-excel')
+    response['Content-Disposition'] = 'attachment; filename=user_statistics.xls'
+    book.save(response)
+    return response
 
 @require_GET
 @login_required
 def flow_excel(request):
+    logger.debug('params: %s', str(request.GET))
     filter_form = LogMetaFilterForm(request.GET)
     if not filter_form.is_valid():
         logger.warn("form is invalid")
@@ -288,6 +329,7 @@ def flow_excel(request):
 
     user = cast_staff(request.user)
     logs = filter_flow_logs(user, filter_form)
+    logger.debug('logs count: %d', len(logs))
     h = HTMLParser.HTMLParser()
     for row, log in enumerate(logs):
         logger.debug(log)

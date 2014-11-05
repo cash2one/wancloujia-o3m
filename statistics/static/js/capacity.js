@@ -58,7 +58,7 @@ $(function() {
                 }
             }
         },*/ {
-            sTitle: '下载次数'
+            sTitle: '安装次数'
         }],
         fnDrawCallback: function() {
             $table.find(".app-name").popover();

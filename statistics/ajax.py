@@ -273,6 +273,7 @@ def filter_flow_logs(user, form):
 def get_flow_logs(request, form, offset, length):
     user = cast_staff(request.user)
     form = deserialize_form(form)
+    logger.debug('form : %s', str(form))
 
     filter_form = LogMetaFilterForm(form)
     if not filter_form.is_valid():

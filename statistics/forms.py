@@ -61,4 +61,13 @@ class FilterUserForm(forms.Form):
 
     from_date = forms.DateField(label=u'开始时间', required=False)
     to_date = forms.DateField(label=u'结束时间', required=False)
-    
+
+class UserOnlineForm(forms.Form):
+    region = forms.DecimalField(label=u'大区', required=False, min_value=1)
+    company = forms.DecimalField(label=u'公司', required=False, min_value=1)
+    store = forms.DecimalField(label=u'门店', required=False, min_value=1)
+    emp = forms.DecimalField(label=u'员工', required=False, min_value=1)
+
+    name = forms.CharField(label=u'真实姓名', max_length=50, required=False)
+    isOnline = forms.DecimalField(label=u'当前在线', required=False, min_value=1)
+    duration = forms.DecimalField(label=u'在线时长', required=False, min_value=1)    
