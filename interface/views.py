@@ -262,7 +262,7 @@ def getSubjects(request):
         if len(maps) != 0:
             subjects = [maps[0].subject]
 
-    if subjects is None and bits != None:
+    if bits != None:
         maps = SubjectMap.objects.filter(mem_size=SubjectMap.getMemSize(bits))
         logger.debug("subject maps count: " + str(len(maps)))
         if len(maps) != 0:
