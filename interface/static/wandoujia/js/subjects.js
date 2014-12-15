@@ -176,7 +176,7 @@
                     internalSDCapacity = parseInt(info.available_size, 10);
                 }
 
-                if (info.type === 2 && extenalSDCapacity === 0) {
+                if (info.type === 2 && externalSDCapacity === 0) {
                     externalSDCapacity = parseInt(info.available_size, 10);
                 }
             });
