@@ -8,36 +8,19 @@ body {
 }
 
 .navbar .navbar-brand {
-    background: url(../img/tianyin_logo_navigation.png) no-repeat center;
-    min-width: 175px;
-}
-
-.navbar.navbar-fixed-top {
-    background: #355ba5;
-}
-
-.navbar {
-    border-color: #355ba5;
+    margin-left: 20px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: transparent;
+    width: 40px;
+    background-size: contain;
+    -webkit-background-size: contain;
 }
 
 .navbar {
-    color: #ccc;
 }
 
 .navbar .nav > li > a {
-    color: #ccc;
-}
-
-.navbar .nav .open>li>a, .navbar .nav .open>li>a:hover, .navbar .nav .open>li>a:focus {
-    background: #355ba5;
-}
-
-.navbar .nav>li>a, .navbar .nav>li>a:hover, .navbar .nav>li>a:focus {
-    background: #355ba5;
-}
-
-.open>a:hover, .open>a:focus {
-    background: #355ba5;
 }
 
 .nav .caret,
@@ -45,8 +28,6 @@ body {
 .nav a:focus .caret,
 .nav .open>a:focus .caret,
 .nav .open>a:hover .caret {
-    border-top-color: #CCC;
-    border-bottom-color: #CCC;
 }
 
 .sidebar {
@@ -77,8 +58,6 @@ body {
 
 .sidebar li.active>a {
     font-weight: bold;
-    color: #355ba5;
-    border-right: 1px solid #355ba5;
 }
 
 .nav .nav {
@@ -155,7 +134,8 @@ td.ops, td.ops_2, td.ops_3 {
     color:#555;
     vertical-align:middle;
     background-color:#fff;
-    border:1px solid #ccc;
+    border-width: 1px;
+    border-style: solid;
     border-radius:4px;
     -webkit-box-shadow:inset 0 1px 1px rgba(0,0,0,0.075);
     box-shadow:inset 0 1px 1px rgba(0,0,0,0.075);
@@ -173,7 +153,8 @@ td.ops, td.ops_2, td.ops_3 {
 
 .form-horizontal .form-group>div>input[type=password]:focus, 
 .form-horizontal .form-group>div>input[type=text]:focus {
-    border-color: #355ba5;
+    border-width: 1px;
+    border-style: solid;
     outline: 0;
     -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
@@ -210,7 +191,6 @@ table.table-bordered>thead>tr>th {
 
 
 .search input[type=text]:focus {
-    border: 1px solid #355ba5;
     background: #fff;
     outline: none;
 }

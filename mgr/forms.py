@@ -9,6 +9,8 @@ from parsley.decorators import parsleyfy
 from models import *
 from suning.permissions import *
 from suning.user_constraits import PWD_MAX_LEN, PWD_MIN_LEN
+from ajax_upload.widgets import AjaxClearableFileInput
+
 
 
 @parsleyfy
@@ -123,3 +125,19 @@ class GroupForm(forms.ModelForm):
         model = Group
         fields = ('permissions',)
 
+
+class PreferenceForm(forms.ModelForm):
+    logo = forms.ImageField(required=False, widget=AjaxClearableFileInput())
+    color = forms.CharField(required=False, widget=forms.TextInput(attrs={
+        'class': 'form-control pick-a-color'
+    }))
+    navbar_color = forms.CharField(required=False, widget=forms.TextInput(attrs={
+        'class': 'form-control pick-a-color'
+    }))
+
+    vendor_prefix = forms.CharField(required=False, widget=forms.TextInput(attrs={
+        'class': 'form-control pick-a-color'
+    }))
+
+    class Meta:
+        model = Preference

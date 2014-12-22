@@ -43,7 +43,10 @@ class AppForm(forms.ModelForm):
 
 @parsleyfy
 class SubjectForm(forms.ModelForm):
-    name = forms.CharField(label=u'专题名称', max_length=20)
+    name = forms.CharField(label=u'专题名称', max_length=20, 
+                            widget=forms.TextInput(attrs={
+                                'class': 'form-control'
+                            }))
     desc = forms.CharField(label=u'专题描述', max_length=100, required=False, 
                             widget=forms.Textarea(attrs={
                                 'rows': 4, 

@@ -7,13 +7,14 @@
 <link rel="stylesheet" href="{{ STATIC_URL }}css/base.css" />
 {% import_django_select2_css %}
 <link rel="stylesheet" href="{{ STATIC_URL }}css/select2-adaptation.css" />
+
 {% endblock %}
 
 {% block content %}
 
 {% block navbar %}
-<div class="navbar navbar-fixed-top" role="navigation">
-    <div class="navbar-header" style="width:140px;">
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="navbar-header">
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
             <span class="sr-only">Toggle navigation</span>
             <span class="icon-bar"></span>
@@ -102,6 +103,10 @@
                     <span class="glyphicon glyphicon-wrench"></span>&nbsp;&nbsp;系统管理
                 </a>
                 <ul id="sub_system" class="nav collapse in">
+                    <li {% if request.nav.active_tab == "system" and request.nav.sub_active_tab == "appearance" %}class="active"{% endif %}>
+                        <a href="/mgr/appearance/">基础设置</a>
+                    </li>
+
                     {% if request.user|can_view_organization %}
                     <li {% if request.nav.active_tab == "system" and request.nav.sub_active_tab == "organization" %}class="active"{% endif %}>
                         <a href="/mgr/organization/">组织管理</a>

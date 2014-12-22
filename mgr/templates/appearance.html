@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block css %}
+{{ block.super }}
+<link rel="stylesheet" href="{{ STATIC_URL }}css/pick-a-color-1.2.3.min.css"/>
+<link rel="stylesheet" href="{{ STATIC_URL }}ajax_upload/css/ajax-upload-widget.css"/>
+<style>
+    .form-label {
+        text-align: right;
+    }
+</style>
+{% endblock %}
+
+{% block main %}
+<div class="main">
+    <div class="panel panel-default">
+        <div class="panel-heading">基础配置</div>
+        <div class="panel-body">
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.pk }}
+                <table class="table table-bordered">
+                    <tr>
+                        <td style="width: 200px">
+                            <label for="id_logo">logo</label>
+                        </td>
+                        <td>
+                            {{ form.logo }}
+                            {{ form.errors.logo }}
+                            <!-- <input id="id_logo" name="logo"  -->
+                                <!-- type="file" data-upload-url="/ajax-upload/"  -->
+                                <!-- data-filename="" data-required=""/> -->
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="brand_color">品牌色</label>
+                        </td>
+                        <td>
+                            <div style="width: 150px;">
+                                {{ form.color }}
+                                <!-- <input id="brand_color" type="text"  -->
+                                    <!-- value="" name="color" -->
+                                    <!-- class="pick-a-color form-control"> -->
+                            </div>
+                            {{ form.errors.color }}
+                        </td>
+                    </tr>
+                     <tr>
+                        <td>
+                            <label for="brand_color">导航条字体颜色</label>
+                        </td>
+                        <td>
+                            <div style="width: 150px;">
+                                {{ form.navbar_color }}
+                                <!-- <input id="brand_color" type="text"  -->
+                                    <!-- value="" name="color" -->
+                                    <!-- class="pick-a-color form-control"> -->
+                            </div>
+                            {{ form.errors.navbar_color }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>操作</td>
+                        <td>
+                            <input type="submit" value="提交修改" class="btn btn-primary">
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block js %}
+{{ block.super }}
+<script type="text/javascript" src="{{ STATIC_URL }}js/tinycolor.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/pick-a-color-1.2.3.min.js"></script>
+
+<script type="text/javascript" src="{{ STATIC_URL }}ajax_upload/js/jquery.iframe-transport.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}ajax_upload/js/ajax-upload-widget.js"></script>
+
+<script>
+$(function() {
+    $(".pick-a-color").pickAColor();
+
+    new AjaxUploadWidget($("#id_logo"), {
+        changeButtonText: 'Click to change',
+        onError: function(data) { alert('Error!'); }
+    });
+});
+</script>
+{% endblock %}

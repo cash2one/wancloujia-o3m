@@ -12,7 +12,7 @@ from django_tables2.config import RequestConfig
 from suning import settings
 from suning import permissions
 from suning.decorators import active_tab
-from mgr.models import cast_staff, Staff, Company, Store, Region
+from mgr.models import cast_staff, Staff, Company, Store, Region, Preference, PREFERENCE_DEFAULT_COLOR, PREFERENCE_DEFAULT_NAVBAR_COLOR
 from mgr.forms import *
 from mgr.tables import *
 
@@ -35,6 +35,10 @@ def can_view_organization(user):
     return user.has_perm('mgr.add_organization') or \
             user.has_perm('mgr.change_organization') or \
             user.has_perm('mgr.delete_organization')
+
+
+def can_view_appearance(user):
+    return user.is_superuser;
 
 
 def can_add_organization(user):
@@ -223,3 +227,35 @@ def user(request):
         "resetPasswordForm": resetPasswordForm,
     })
 
+
+@login_required
+@user_passes_test(can_view_appearance, login_url=settings.PERMISSION_DENIED_URL)
+@active_tab("system", "appearance")
+def appearance(request):
+    try:
+        preference = Preference.objects.get(pk=1)
+    except:
+        preference = Preference()
+        preference.pk = 1
+        preference.save()
+
+    if request.method == 'GET':
+        return render(request, "appearance.html", {
+            "form": PreferenceForm(instance=preference)
+        });
+    else:
+        form = PreferenceForm(request.POST, request.FILES, instance=preference)
+        if form.is_valid():
+            if form.cleaned_data['color'] == '':
+                form.cleaned_data['color'] == PREFERENCE_DEFAULT_COLOR
+
+            if form.cleaned_data['navbar_color'] == '':
+                form.cleaned_data['navbar_color'] == PREFERENCE_DEFAULT_NAVBAR_COLOR
+
+            form.save()
+        else:
+            logger.debug(form.errors)
+
+        return render(request, "appearance.html", {
+            "form": form
+        });

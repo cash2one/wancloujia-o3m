@@ -9,6 +9,7 @@ from django.views.decorators.http import require_GET, require_POST
 
 from suning.decorators import active_tab
 from suning.utils import render_json
+from mgr.models import Preference
 
 logger = logging.getLogger(__name__)
 
@@ -18,7 +19,9 @@ def welcome(request):
     if request.user.is_authenticated():
         return redirect("/mgr/account/")
     else:
-        return render(request, "login.html") 
+        return render(request, "login.html", {
+            'preference': Preference.getPreference()
+        }) 
 
 
 @require_GET

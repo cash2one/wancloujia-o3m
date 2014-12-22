@@ -4,6 +4,7 @@ from django.db.models import Q
 from django.db.models.query import QuerySet
 from django.contrib.auth.models import User, Group, Permission
 from django.contrib.contenttypes.models import ContentType
+from django.conf import settings
 import logging
 
 
@@ -244,3 +245,32 @@ class SuperUser(Staff):
     def __unicode__(self):
         return self.username
 
+
+PREFERENCE_DEFAULT_COLOR = '328f1e'
+PREFERENCE_DEFAULT_NAVBAR_COLOR = '777777'
+PREFERENCE_DEFAULT_LOGO = settings.STATIC_URL + 'img/default_logo.png'
+
+class Preference(models.Model):
+
+    vendor_prefix = models.CharField(verbose_name=u'厂商前缀', default="", blank=True, null=True, max_length=10)
+    logo = models.ImageField(verbose_name=u'logo', blank=True, null=True, upload_to="logos")
+    color = models.CharField(verbose_name=u'品牌色', default=PREFERENCE_DEFAULT_COLOR, blank=True, max_length=20)
+    navbar_color = models.CharField(verbose_name=u'导航条字体颜色', default=PREFERENCE_DEFAULT_NAVBAR_COLOR, blank=True, max_length=20)
+
+    @classmethod
+    def getPreference(cls):
+        try:
+            data = Preference.objects.get(pk=1)
+            preference = {
+                'color': data.color,
+                'navbar_color': data.navbar_color,
+                'logo': data.logo.url if data.logo else PREFERENCE_DEFAULT_LOGO,
+                'vendor_prefix': data.vendor_prefix or None
+            }
+            return preference
+        except:
+            return {
+                'logo': PREFERENCE_DEFAULT_LOGO,
+                'color': PREFERENCE_DEFAULT_COLOR,
+                'navbar_color': PREFERENCE_DEFAULT_NAVBAR_COLOR
+            }

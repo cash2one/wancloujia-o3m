@@ -6,12 +6,13 @@ django-parsley
 django-crontab
 django-auth-remember
 python-memcached
-pil
-djangorestframework
+pillow
+djangorestframework==2.4.2
 redis
 jinja2
 django-filter
 #pysqlite
 xlwt
-django-mysqlpool
+#django-mysqlpool
 httplib2
+lesscpy
