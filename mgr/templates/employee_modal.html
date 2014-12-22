@@ -13,6 +13,7 @@
         </label>
         <div class="col-lg-8"> 
             <input id="id_username" maxlength="30" name="username" 
+                    class="form-control"
                     parsley-maxlength="30" 
                     parsley-required="true" 
                     parsley-required-message="这个字段是必填项。" 
@@ -40,10 +41,8 @@
             <span class="required">*</span>{{ f.phone.label }}
         </label>
         <div class="col-lg-8">
-            <input data-maxlength="20" 
-                   data-required="true" 
-                   parsley-phone=""
-                   id="id_phone" maxlength="20" 
+            <input data-maxlength="20" class="form-control" data-required="true" 
+                   parsley-phone="" id="id_phone" maxlength="20" 
                    name="phone" type="text" class="parsley-validated">
         </div>
     </div>

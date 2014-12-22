@@ -20,6 +20,7 @@
                 {% csrf_token %}
                 {{ form.pk }}
                 <table class="table table-bordered">
+					
                     <tr>
                         <td style="width: 200px">
                             <label for="id_logo">logo</label>
@@ -32,6 +33,31 @@
                                 <!-- data-filename="" data-required=""/> -->
                         </td>
                     </tr>
+                    <tr>
+                        <td style="width: 200px">
+                            <label for="id_favicon">favicon</label>
+                        </td>
+                        <td>
+                            {{ form.favicon }}
+                            {{ form.errors.favicon }}
+                            <!-- <input id="id_logo" name="logo"  -->
+                                <!-- type="file" data-upload-url="/ajax-upload/"  -->
+                                <!-- data-filename="" data-required=""/> -->
+                        </td>
+                    </tr>
+
+					<tr>
+                        <td>
+                            <label for="id_vendor_prefix">厂商名称</label>
+                        </td>
+                        <td>
+                            <div style="width: 250px;">
+                                {{ form.vendor_prefix }}
+                            </div>
+                            {{ form.errors.vendor_prefix }}
+                        </td>
+                    </tr>
+
                     <tr>
                         <td>
                             <label for="brand_color">品牌色</label>
@@ -86,6 +112,11 @@ $(function() {
     $(".pick-a-color").pickAColor();
 
     new AjaxUploadWidget($("#id_logo"), {
+        changeButtonText: 'Click to change',
+        onError: function(data) { alert('Error!'); }
+    });
+
+    new AjaxUploadWidget($("#id_favicon"), {
         changeButtonText: 'Click to change',
         onError: function(data) { alert('Error!'); }
     });

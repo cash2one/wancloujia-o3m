@@ -1,4 +1,4 @@
-Django==1.5.2
+Django==1.5
 django_select2
 django-tables2
 django-dajaxice
@@ -6,13 +6,14 @@ django-parsley
 django-crontab
 django-auth-remember
 python-memcached
+mysql-python
 pillow
 djangorestframework==2.4.2
 redis
 jinja2
 django-filter
-#pysqlite
+pysqlite
 xlwt
-#django-mysqlpool
+django-mysqlpool
 httplib2
 lesscpy

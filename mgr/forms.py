@@ -16,12 +16,19 @@ from ajax_upload.widgets import AjaxClearableFileInput
 @parsleyfy
 class ModifyPasswordForm(forms.Form):
     origin = forms.CharField(label=u'旧密码', max_length=16, min_length=6,
-                             widget=forms.PasswordInput())
+                             widget=forms.PasswordInput(attrs={
+                                 'class': 'form-control'
+                             }))
     password = forms.CharField(label=u'新密码', help_text='6~16个字符，区分大小写', 
                                max_length=PWD_MAX_LEN, min_length=PWD_MIN_LEN, 
-                               widget=forms.PasswordInput())
+                               widget=forms.PasswordInput(attrs={
+                                   'class': 'form-control'
+                               }))
     confirm = forms.CharField(label=u'确认密码', max_length=PWD_MAX_LEN, min_length=PWD_MIN_LEN,
-                              widget=forms.PasswordInput(attrs={'data-equal': 'password'}))
+                              widget=forms.PasswordInput(attrs={
+                                   'data-equal': 'password',
+                                   'class': 'form-control'
+                              }))
 
     def clean(self):
         data = super(ModifyPasswordForm, self).clean()
@@ -54,7 +61,10 @@ class TextInput(forms.TextInput):
 class EmployeeForm(forms.ModelForm):
     user_permissions = forms.MultipleChoiceField(label=u'授权权限', required=False, 
                                                  choices=get_available_permissions())
-    email = forms.EmailField(label=u'邮箱', required=True)
+    email = forms.EmailField(label=u'邮箱', required=True, 
+            widget=forms.TextInput(attrs={
+                'class': 'form-control'
+            }))
 
     def clean_phone(self):
         phone = self.cleaned_data["phone"]
@@ -65,7 +75,13 @@ class EmployeeForm(forms.ModelForm):
     class Meta:
         model = Employee
         widgets = {
-            'introduce': forms.Textarea(attrs={'class': 'form-control', 'rows': 4})
+            'introduce': forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
+            'realname': forms.TextInput(attrs={
+                'class': 'form-control'
+            }),
+            'tel': forms.TextInput(attrs={
+                'class': 'form-control'
+            })
         }
         fields = ('id', 'username', 'realname', 'organization', 
                     'phone', 'email', 'tel', 'introduce')
@@ -73,7 +89,10 @@ class EmployeeForm(forms.ModelForm):
 
 @parsleyfy
 class AdminForm(forms.ModelForm):
-    email = forms.EmailField(label=u'邮箱', required=True)
+    email = forms.EmailField(label=u'邮箱', required=True, 
+            widget=forms.TextInput(attrs={
+                'class': 'form-control'
+            }))
 
     def clean_phone(self):
         phone = self.cleaned_data["phone"]
@@ -84,21 +103,33 @@ class AdminForm(forms.ModelForm):
     class Meta:
         model = Administrator
         widgets = {
-            'introduce': forms.Textarea(attrs={'class': 'form-control', 'rows': 4})
+            'introduce': forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
+            'realname': forms.TextInput(attrs={
+                'class': 'form-control'
+            }),
+            'tel': forms.TextInput(attrs={
+                'class': 'form-control'
+            })
         }
         fields = ('username', 'realname', 'phone', 'email', 'tel', 'introduce')
 
 
 @parsleyfy
 class RegionForm(forms.Form):
-    name = forms.CharField(label=u'名称', max_length=Organization.NAME_LENGTH_LIMIT) 
+    name = forms.CharField(label=u'名称', max_length=Organization.NAME_LENGTH_LIMIT,
+            widget=forms.TextInput(attrs={
+                'class': 'form-control'
+            })) 
 
 
 @parsleyfy
 class CompanyForm(forms.ModelForm):
     code = forms.CharField(label=u'编码', max_length=Organization.CODE_LENGTH_LIMIT, 
-                            widget=forms.TextInput(attrs={"parsley-type": "digits"}))
-    name = forms.CharField(label=u'名称', max_length=Organization.NAME_LENGTH_LIMIT)
+                            widget=forms.TextInput(attrs={"parsley-type": "digits", 'class': 'form-control'}))
+    name = forms.CharField(label=u'名称', max_length=Organization.NAME_LENGTH_LIMIT, 
+            widget=forms.TextInput(attrs={
+                'class': 'form-control'
+            }))
 
     class Meta:
         model = Company
@@ -108,8 +139,11 @@ class CompanyForm(forms.ModelForm):
 @parsleyfy
 class StoreForm(forms.ModelForm):
     code = forms.CharField(label=u'编码', max_length=Organization.CODE_LENGTH_LIMIT, 
-                            widget=forms.TextInput(attrs={"parsley-type": "digits"}))
-    name = forms.CharField(label=u'名称', max_length=Organization.NAME_LENGTH_LIMIT)
+                            widget=forms.TextInput(attrs={"parsley-type": "digits", 'class': 'form-control'}))
+    name = forms.CharField(label=u'名称', max_length=Organization.NAME_LENGTH_LIMIT,
+            widget=forms.TextInput(attrs={
+                'class': 'form-control'
+            }))
     
     class Meta:
         model = Store
@@ -119,7 +153,10 @@ class StoreForm(forms.ModelForm):
 @parsleyfy
 class GroupForm(forms.ModelForm):
     permissions = forms.MultipleChoiceField(label=u'授权权限', choices=get_available_permissions())
-    name = forms.CharField(label=u'用户组名', max_length=80)
+    name = forms.CharField(label=u'用户组名', max_length=80, 
+            widget=forms.TextInput(attrs={
+                'class': 'form-control'
+            }))
 
     class Meta:
         model = Group
@@ -128,14 +165,14 @@ class GroupForm(forms.ModelForm):
 
 class PreferenceForm(forms.ModelForm):
     logo = forms.ImageField(required=False, widget=AjaxClearableFileInput())
+    favicon = forms.ImageField(required=False, widget=AjaxClearableFileInput())
+    vendor_prefix = forms.CharField(required=False, widget=forms.TextInput(attrs={
+        'class': 'form-control'
+    }))
     color = forms.CharField(required=False, widget=forms.TextInput(attrs={
         'class': 'form-control pick-a-color'
     }))
     navbar_color = forms.CharField(required=False, widget=forms.TextInput(attrs={
-        'class': 'form-control pick-a-color'
-    }))
-
-    vendor_prefix = forms.CharField(required=False, widget=forms.TextInput(attrs={
         'class': 'form-control pick-a-color'
     }))
 

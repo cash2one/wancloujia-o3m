@@ -22,8 +22,6 @@ CSS_SOURCE = '''
 def preference():
     preference = Preference.getPreference()
 
-    logger.debug(preference)
-    source = CSS_SOURCE % (preference.get('logo', '../img/tianyin_logo_navigation.png'), 
+    source = CSS_SOURCE % (preference.get('favicon'), 
                 preference.get('color'), preference.get('navbar_color'))
-    logger.debug(source)
     return source

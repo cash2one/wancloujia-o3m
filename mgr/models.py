@@ -247,15 +247,19 @@ class SuperUser(Staff):
 
 
 PREFERENCE_DEFAULT_COLOR = '328f1e'
-PREFERENCE_DEFAULT_NAVBAR_COLOR = '777777'
+PREFERENCE_DEFAULT_NAVBAR_COLOR = 'ffffff'
 PREFERENCE_DEFAULT_LOGO = settings.STATIC_URL + 'img/default_logo.png'
+PREFERENCE_DEFAULT_FAVICON = settings.STATIC_URL + 'img/default_favicon.png'
 
 class Preference(models.Model):
-
-    vendor_prefix = models.CharField(verbose_name=u'厂商前缀', default="", blank=True, null=True, max_length=10)
+    vendor_prefix = models.CharField(verbose_name=u'厂商前缀', default="", 
+            blank=True, null=True, max_length=10)
     logo = models.ImageField(verbose_name=u'logo', blank=True, null=True, upload_to="logos")
-    color = models.CharField(verbose_name=u'品牌色', default=PREFERENCE_DEFAULT_COLOR, blank=True, max_length=20)
-    navbar_color = models.CharField(verbose_name=u'导航条字体颜色', default=PREFERENCE_DEFAULT_NAVBAR_COLOR, blank=True, max_length=20)
+    favicon = models.ImageField(verbose_name=u'faveicon', blank=True, null=True, upload_to='favicons')
+    color = models.CharField(verbose_name=u'品牌色', 
+        default=PREFERENCE_DEFAULT_COLOR, blank=True, max_length=20)
+    navbar_color = models.CharField(verbose_name=u'导航条字体颜色', 
+            default=PREFERENCE_DEFAULT_NAVBAR_COLOR, blank=True, max_length=20)
 
     @classmethod
     def getPreference(cls):
@@ -265,12 +269,14 @@ class Preference(models.Model):
                 'color': data.color,
                 'navbar_color': data.navbar_color,
                 'logo': data.logo.url if data.logo else PREFERENCE_DEFAULT_LOGO,
+                'favicon': data.favicon.url if data.favicon else PREFERENCE_DEFAULT_FAVICON,
                 'vendor_prefix': data.vendor_prefix or None
             }
             return preference
         except:
             return {
                 'logo': PREFERENCE_DEFAULT_LOGO,
+                'favicon': PREFERENCE_DEFAULT_FAVICON,
                 'color': PREFERENCE_DEFAULT_COLOR,
                 'navbar_color': PREFERENCE_DEFAULT_NAVBAR_COLOR
             }

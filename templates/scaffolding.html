@@ -6,9 +6,18 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 
     <!--<meta name="viewport" content="width=device-width, initial-scale=1.0">-->
-    <title>{% block title %}天音豌豆荚手机助手管理后台{% endblock %}</title>
+    <title>
+	{% block title %}
+		{% if preference.vendor_prefix %}
+			{{ preference.vendor_prefix|default:"" }}-豌豆荚手机助手管理后台
+		{% else %}
+			豌豆荚手机助手管理后台
+		{% endif %}
+	{% endblock %}
+	</title>
 
-    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="shortcut icon" href="{{ preference.favicon }}" />
+
     {% block css %}
     <!-- <link rel="stylesheet" href="{{ STATIC_URL }}css/bootstrap.min.css" /> -->
     {#<link rel="stylesheet" href="{{ STATIC_URL }}css/bootstrap-theme.min.css" />#}

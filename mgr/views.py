@@ -235,8 +235,8 @@ def appearance(request):
     try:
         preference = Preference.objects.get(pk=1)
     except:
-        preference = Preference()
-        preference.pk = 1
+        preference = Preference(pk=1, color=PREFERENCE_DEFAULT_COLOR,
+                    navbar_color=PREFERENCE_DEFAULT_NAVBAR_COLOR)
         preference.save()
 
     if request.method == 'GET':
@@ -244,14 +244,15 @@ def appearance(request):
             "form": PreferenceForm(instance=preference)
         });
     else:
-        form = PreferenceForm(request.POST, request.FILES, instance=preference)
+        data = request.POST.copy()
+        if not data['color']:
+            data['color'] = PREFERENCE_DEFAULT_COLOR
+
+        if not data['navbar_color']:
+            data['navbar_color'] = PREFERENCE_DEFAULT_NAVBAR_COLOR
+
+        form = PreferenceForm(data, request.FILES, instance=preference)
         if form.is_valid():
-            if form.cleaned_data['color'] == '':
-                form.cleaned_data['color'] == PREFERENCE_DEFAULT_COLOR
-
-            if form.cleaned_data['navbar_color'] == '':
-                form.cleaned_data['navbar_color'] == PREFERENCE_DEFAULT_NAVBAR_COLOR
-
             form.save()
         else:
             logger.debug(form.errors)

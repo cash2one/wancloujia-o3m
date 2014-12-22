@@ -23,7 +23,15 @@
         </button>
         <a class="navbar-brand" href="#">&nbsp;</a>
     </div>
-    <p class="navbar-text">天音豌豆荚手机助手管理后台</p>
+
+    <p class="navbar-text">
+		{% if preference.vendor_prefix %}
+			{{ preference.vendor_prefix|default:"" }}-豌豆荚手机助手管理后台
+		{% else %}
+			豌豆荚手机助手管理后台
+		{% endif %}
+	</p>
+
     <div class="collapse navbar-collapse navbar-ex1-collapse">
         <ul class="nav navbar-nav navbar-right">
             {% if False %}
@@ -103,9 +111,11 @@
                     <span class="glyphicon glyphicon-wrench"></span>&nbsp;&nbsp;系统管理
                 </a>
                 <ul id="sub_system" class="nav collapse in">
+                    {% if request.user.is_superuser %}
                     <li {% if request.nav.active_tab == "system" and request.nav.sub_active_tab == "appearance" %}class="active"{% endif %}>
                         <a href="/mgr/appearance/">基础设置</a>
                     </li>
+                    {% endif %}
 
                     {% if request.user|can_view_organization %}
                     <li {% if request.nav.active_tab == "system" and request.nav.sub_active_tab == "organization" %}class="active"{% endif %}>
