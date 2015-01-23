@@ -2,6 +2,23 @@ all: run
 
 TEST_APPS:=mgr statistics
 PORT:=13010
+activate_venv=. venv/bin/activate
+
+start-uwsgi:
+	$(activate_venv) \
+		&& uwsgi --socket 127.0.0.1:$(PORT) \
+		--chdir $(shell pwd) \
+		--wsgi-file suning/wsgi.py \
+		--master \
+		--process 4 \
+		--daemonize $(shell pwd)/logs/uwsgi.log \
+		--pidfile $(shell pwd)/uwsgi.pid  
+
+stop-uwsgi:
+	$(activate_venv) && uwsgi --stop uwsgi.pid
+  
+reload-uwsgi: 
+	$(activate_venv) && uwsgi --reload uwsgi.pid
 
 debug:
 	nohup ./manage.py runserver 0.0.0.0:$(PORT) &
@@ -19,7 +36,7 @@ rebuild_db:
 	./rebuild_db.sh
 
 collectstatic:
-	./manage.py collectstatic --noinput
+	$(activate_venv) && ./manage.py collectstatic --noinput
 
 restart_nginx:
 	sudo /sbin/service nginx restart

@@ -17,3 +17,4 @@ xlwt
 django-mysqlpool
 httplib2
 lesscpy
+uwsgi

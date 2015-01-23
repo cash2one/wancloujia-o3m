@@ -64,3 +64,5 @@ nosetests.xml
 bower_components
 venv
 mydatabase
+
+*.pid
