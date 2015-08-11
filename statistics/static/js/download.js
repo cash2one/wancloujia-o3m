@@ -36,10 +36,22 @@ define(function(require) {
             data: [{"id": "weekrank", "text":"周排行榜"},
             {"id":"recommends", "text":"编辑推荐"},
             {"id":"onlinegames", "text":"热门网游"},
-            {"id":"gifts", "text":"礼包放送"},
             {"id":"games", "text":"单机游戏"},
             {"id":"gamerank", "text":"游戏排行榜"},
-            {"id":"apprank", "text":"应用排行榜"}
+            {"id":"apprank", "text":"应用排行榜"},
+            {"id":"top1", "text":"top1"},
+            {"id":"top2", "text":"top2"},
+            {"id":"top3", "text":"top3"},
+            {"id":"top4", "text":"top4"},
+            {"id":"top5", "text":"top5"},
+            {"id":"top6", "text":"top6"},
+            {"id":"top7", "text":"top7"},
+            {"id":"top8", "text":"top8"},
+            {"id":"top9", "text":"top9"},
+            {"id":"middle", "text":"middle"},
+            {"id":"bottom1", "text":"bottom1"},
+            {"id":"bottom2", "text":"bottom2"},
+            {"id":"bottom3", "text":"bottom3"},
             ]
         }));
         var periodFilter = new statistics.PeriodFilter("#filter_from_date", "#filter_to_date");

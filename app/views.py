@@ -312,7 +312,7 @@ def can_view_subject(user):
 @user_passes_test(can_view_subject, login_url=settings.PERMISSION_DENIED_URL)
 @active_tab("subject")
 def subject(request):
-    query_set = Subject.objects.order_by('pk').exclude(code='zone1').exclude(code='zone2');
+    query_set = Subject.objects.order_by('pk').exclude(code='zone1').exclude(code='zone2').exclude(code='gifts');
     table = SubjectTable(query_set)
     RequestConfig(request, paginate={"per_page": settings.PAGINATION_PAGE_SIZE}).configure(table)
     return render(request, "subject.html", {
@@ -355,7 +355,7 @@ def search_apps(request):
     page = int(request.GET.get("p"))
     page_limit = int(request.GET.get("page_limit"))
 
-    apps = App.objects.filter(name__contains=query)
+    apps = App.objects.filter(name__contains=query).order_by('-pk')
     total = apps.count()
     apps = apps[(page-1)*page_limit:page*page_limit]
     results = [{'id': app.pk, 'text': app.name + '(' + str(app.pk) + ')'} for app in apps]

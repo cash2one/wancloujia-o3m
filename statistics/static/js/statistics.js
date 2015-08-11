@@ -97,8 +97,9 @@ define(function(require) {
 
             var today = new Date();
             var first_day = new Date();
+	    var yesterday = today.getDate() > 1 ? today.getDate() -1 : 1; 
             first_day.setFullYear(today.getFullYear());
-            first_day.setMonth(today.getMonth(), 1);
+            first_day.setMonth(today.getMonth(), yesterday);
             first_day.setHours(0);
             first_day.setMinutes(0);
             first_day.setSeconds(0);

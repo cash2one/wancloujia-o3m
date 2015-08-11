@@ -52,6 +52,7 @@ define(function(require) {
 
         $form.submit(function(e) {
             e.preventDefault();
+            $table.fnDraw();
         });
     })
 })

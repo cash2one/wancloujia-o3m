@@ -2,7 +2,7 @@
 #coding: utf-8
 import os
 import sys
-DEFAULT_IMAGE = 'http://placehold.it/350x150'
+DEFAULT_IMAGE = '/media/ajax_uploads/fdcd031ecdbf4d208ca0018afb63d44c-jt5.jpg'
 
 
 if __name__ == "__main__":
